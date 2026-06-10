@@ -313,7 +313,7 @@
       /* ---- home: big hero + category cards + learning tools ---- */
       home: function (p) {
         var cats = window.SITE_CATEGORIES || [];
-        var products = L.pages.filter(function (q) { return q.layout === "lesson" && q.category && q.category !== "start"; });
+        var products = L.pages.filter(function (q) { return q.nav === false && q.category && q.category !== "start"; });
         var catCards = cats.map(function (c) {
           var prods = products.filter(function (q) { return q.category === c.key; });
           var MAXCHIPS = 6;
@@ -359,14 +359,15 @@
 
       /* ---- category: product/guide cards filtered by category, optionally grouped ---- */
       category: function (p) {
-        var products = L.pages.filter(function (q) { return q.layout === "lesson" && q.category === p.key; });
+        var products = L.pages.filter(function (q) { return q.nav === false && q.layout !== "category" && q.category === p.key; });
         var EN = L.state.lang === "en";
+        var cta = p.key === "arcade" ? (EN ? "Play" : "開始玩") : (EN ? "Learn" : "開始學");
         function prodCard(q) {
           return '<a class="prod-card reveal" data-item href="' + esc(q.slug) + '.html">' +
             '<div class="prod-card__head"><span class="prod-card__icon"><span class="material-symbols-rounded">' + esc(q.icon || "label") + "</span></span>" +
             '<h3 class="prod-card__name">' + esc(t(q.title)) + "</h3></div>" +
             '<p class="prod-card__sub">' + esc(t(q.subtitle)) + "</p>" +
-            '<span class="prod-card__go">' + (EN ? "Learn" : "開始學") + ' <span class="material-symbols-rounded">arrow_forward</span></span></a>';
+            '<span class="prod-card__go">' + cta + ' <span class="material-symbols-rounded">arrow_forward</span></span></a>';
         }
         var intro = t(p.intro) ? '<p class="lead reveal">' + esc(t(p.intro)) + "</p>" : "";
         var body;
@@ -439,7 +440,16 @@
           '<p class="fc-tip"><span class="material-symbols-rounded">touch_app</span>' +
             (EN ? "Tap a card to flip it." : "點一下卡片就會翻面。") + "</p>" +
           '<div class="fc-grid">' + cards + "</div>";
-      }
+      },
+
+      /* ---- arcade mini-games (built by their WIRE entry) ---- */
+      "game-match":     function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="matchRoot"></div>'; },
+      "game-memory":    function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="memRoot"></div>'; },
+      "game-sort":      function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="sortRoot"></div>'; },
+      "game-pick":      function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="pickRoot"></div>'; },
+      "game-order":     function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="orderRoot"></div>'; },
+      "game-truefalse": function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="tfRoot"></div>'; },
+      "game-build":     function (p) { return lheroHTML(p) + '<div class="gamebox" data-item id="buildRoot"></div>'; }
     };
 
     /* =====================================================================
@@ -846,12 +856,342 @@
           });
         }
         renderQ();
+      },
+
+      /* ===================== ARCADE MINI-GAMES ===================== */
+      "game-match": function (p) {
+        var root = document.getElementById("matchRoot");
+        var EN = L.state.lang === "en";
+        var pairs = p.pairs || [];
+        var rights = shuffle(pairs.map(function (pr, i) { return { id: i, txt: t(pr.right) }; }));
+        var st = { sel: null, matched: {}, tries: 0 };
+        function paint() {
+          var leftCol = pairs.map(function (pr, i) {
+            var cls = "match-item" + (st.matched[i] ? " is-done" : "") + (st.sel === i ? " is-sel" : "");
+            return '<button class="' + cls + '" type="button" data-side="L" data-id="' + i + '"' + (st.matched[i] ? " disabled" : "") + ">" + esc(t(pr.left)) + "</button>";
+          }).join("");
+          var rightCol = rights.map(function (r) {
+            var cls = "match-item" + (st.matched[r.id] ? " is-done" : "");
+            return '<button class="' + cls + '" type="button" data-side="R" data-id="' + r.id + '"' + (st.matched[r.id] ? " disabled" : "") + ">" + esc(r.txt) + "</button>";
+          }).join("");
+          var d = Object.keys(st.matched).length;
+          var status = d === pairs.length
+            ? '<span class="game-win"><span class="material-symbols-rounded">celebration</span>' + (EN ? "Solved in " + st.tries + " tries!" : "用 " + st.tries + " 次完成！") + "</span>"
+            : '<span class="game-stat">' + d + "/" + pairs.length + (EN ? " matched · " : " 對 · ") + st.tries + (EN ? " tries" : " 次") + "</span>";
+          root.innerHTML = '<div class="game-bar">' + status +
+            '<button class="game-btn game-btn--ghost" type="button" data-reset><span class="material-symbols-rounded">replay</span>' + (EN ? "Restart" : "重來") + "</button></div>" +
+            '<div class="match"><div class="match-col">' + leftCol + '</div><div class="match-col">' + rightCol + "</div></div>";
+          [].forEach.call(root.querySelectorAll(".match-item:not([disabled])"), function (b) {
+            b.addEventListener("click", function () { click(b.dataset.side, parseInt(b.dataset.id, 10)); });
+          });
+          root.querySelector("[data-reset]").addEventListener("click", function () { st = { sel: null, matched: {}, tries: 0 }; rights = shuffle(rights); paint(); });
+        }
+        function click(side, id) {
+          if (side === "L") { st.sel = (st.sel === id ? null : id); paint(); return; }
+          if (st.sel === null) return;
+          st.tries++;
+          if (st.sel === id) { st.matched[id] = true; st.sel = null; paint(); }
+          else {
+            var lb = root.querySelector('.match-item[data-side="L"][data-id="' + st.sel + '"]');
+            var rb = root.querySelector('.match-item[data-side="R"][data-id="' + id + '"]');
+            if (lb) lb.classList.add("is-wrong"); if (rb) rb.classList.add("is-wrong");
+            setTimeout(function () { st.sel = null; paint(); }, 550);
+          }
+        }
+        paint();
+      },
+
+      "game-memory": function (p) {
+        var root = document.getElementById("memRoot");
+        var EN = L.state.lang === "en";
+        var tiles = p.tiles || [];
+        var deck = shuffle([].concat(
+          tiles.map(function (tl, i) { return { id: i, kind: "icon", v: tl.icon }; }),
+          tiles.map(function (tl, i) { return { id: i, kind: "label", v: t(tl.label) }; })
+        ));
+        var st = { up: [], matched: {}, moves: 0, lock: false };
+        function paint() {
+          var mc = Object.keys(st.matched).length;
+          var grid = deck.map(function (c, idx) {
+            var faceUp = st.up.indexOf(idx) !== -1 || st.matched[c.id];
+            var inner = c.kind === "icon"
+              ? '<span class="material-symbols-rounded mem-icon">' + esc(c.v) + "</span>"
+              : '<span class="mem-text">' + esc(c.v) + "</span>";
+            return '<button class="mem-card' + (faceUp ? " is-up" : "") + (st.matched[c.id] ? " is-matched" : "") + '" type="button" data-idx="' + idx + '"' + (faceUp ? " disabled" : "") + ">" +
+              '<span class="mem-face mem-back"><span class="material-symbols-rounded">cloud</span></span>' +
+              '<span class="mem-face mem-front">' + inner + "</span></button>";
+          }).join("");
+          var status = mc === tiles.length
+            ? '<span class="game-win"><span class="material-symbols-rounded">celebration</span>' + (EN ? "Cleared in " + st.moves + " moves!" : st.moves + " 步全配對！") + "</span>"
+            : '<span class="game-stat">' + mc + "/" + tiles.length + (EN ? " pairs · " : " 對 · ") + st.moves + (EN ? " moves" : " 步") + "</span>";
+          root.innerHTML = '<div class="game-bar">' + status +
+            '<button class="game-btn game-btn--ghost" type="button" data-reset><span class="material-symbols-rounded">replay</span>' + (EN ? "Restart" : "重來") + "</button></div>" +
+            '<div class="mem-grid">' + grid + "</div>";
+          [].forEach.call(root.querySelectorAll(".mem-card:not([disabled])"), function (b) {
+            b.addEventListener("click", function () { flip(parseInt(b.dataset.idx, 10)); });
+          });
+          root.querySelector("[data-reset]").addEventListener("click", function () { deck = shuffle(deck); st = { up: [], matched: {}, moves: 0, lock: false }; paint(); });
+        }
+        function flip(idx) {
+          if (st.lock || st.up.indexOf(idx) !== -1 || st.matched[deck[idx].id]) return;
+          st.up.push(idx);
+          if (st.up.length === 2) {
+            st.moves++;
+            var a = deck[st.up[0]], b = deck[st.up[1]];
+            if (a.id === b.id) { st.matched[a.id] = true; st.up = []; paint(); }
+            else { st.lock = true; paint(); setTimeout(function () { st.up = []; st.lock = false; paint(); }, 800); }
+          } else { paint(); }
+        }
+        paint();
+      },
+
+      "game-sort": function (p) {
+        var root = document.getElementById("sortRoot");
+        var EN = L.state.lang === "en";
+        var buckets = p.buckets || [];
+        var items = shuffle(p.items || []);
+        var st = { i: 0, score: 0, answered: false, picked: null };
+        function bucketLabel(key) { var b = buckets.filter(function (x) { return x.key === key; })[0]; return b ? esc(t(b.label)) : esc(key); }
+        function render() {
+          if (st.i >= items.length) { result(); return; }
+          var it = items[st.i];
+          var bucketsHtml = buckets.map(function (b) {
+            var cls = "sort-bucket";
+            if (st.answered) { if (b.key === it.bucket) cls += " is-correct"; else if (b.key === st.picked) cls += " is-wrong"; }
+            return '<button class="' + cls + '" type="button" data-key="' + esc(b.key) + '"' + (st.answered ? " disabled" : "") + ">" +
+              '<span class="material-symbols-rounded">' + esc(b.icon || "category") + "</span><span>" + esc(t(b.label)) + "</span></button>";
+          }).join("");
+          var fb = "";
+          if (st.answered) {
+            var ok = st.picked === it.bucket;
+            fb = '<div class="sort-fb ' + (ok ? "sort-fb--ok" : "sort-fb--no") + '"><span class="material-symbols-rounded">' + (ok ? "check_circle" : "cancel") + "</span>" +
+              (ok ? (EN ? "Correct!" : "答對了！") : (EN ? "Belongs to " : "正解：") + bucketLabel(it.bucket)) + "</div>" +
+              '<div class="quiz-nav"><button class="game-btn" type="button" data-next>' + (st.i === items.length - 1 ? (EN ? "See result" : "看結果") : (EN ? "Next" : "下一個")) + ' <span class="material-symbols-rounded">arrow_forward</span></button></div>';
+          }
+          root.innerHTML = '<div class="game-bar"><span class="game-stat">' + (EN ? "Item " : "第 ") + (st.i + 1) + "/" + items.length + "</span>" +
+            '<span class="quiz-score">' + (EN ? "Score " : "得分 ") + st.score + "</span></div>" +
+            '<div class="sort-card"><span class="material-symbols-rounded sort-card__icon">' + esc(it.icon || "label") + "</span>" +
+            '<span class="sort-card__label">' + esc(t(it.label)) + "</span></div>" +
+            '<p class="sort-q">' + (EN ? "Which group does it belong to?" : "它屬於哪一組？") + "</p>" +
+            '<div class="sort-buckets">' + bucketsHtml + "</div>" + fb;
+          if (!st.answered) {
+            [].forEach.call(root.querySelectorAll(".sort-bucket"), function (b) {
+              b.addEventListener("click", function () { st.answered = true; st.picked = b.dataset.key; if (b.dataset.key === it.bucket) st.score++; render(); });
+            });
+          } else { root.querySelector("[data-next]").addEventListener("click", function () { st.i++; st.answered = false; st.picked = null; render(); }); }
+        }
+        function result() {
+          root.innerHTML = '<div class="game-result"><span class="material-symbols-rounded game-result__icon">sort</span><div class="game-result__big">' + st.score + "/" + items.length + "</div>" +
+            "<p>" + (EN ? "Nice sorting!" : "分類完成！") + "</p>" +
+            '<button class="game-btn" type="button" data-restart><span class="material-symbols-rounded">replay</span>' + (EN ? "Play again" : "再玩一次") + "</button></div>";
+          root.querySelector("[data-restart]").addEventListener("click", function () { items = shuffle(items); st = { i: 0, score: 0, answered: false, picked: null }; render(); });
+        }
+        render();
+      },
+
+      "game-pick": function (p) {
+        var root = document.getElementById("pickRoot");
+        var EN = L.state.lang === "en";
+        var rounds = p.rounds || [];
+        var TIME = 12;
+        var st = { i: 0, score: 0, streak: 0, best: 0, lives: 3, answered: false, picked: -1 };
+        var timer = null, tleft = 0;
+        teardowns.push(function () { if (timer) clearInterval(timer); });
+        function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+        function startTimer() {
+          tleft = TIME * 10; stopTimer();
+          timer = setInterval(function () {
+            tleft--; var bar = document.getElementById("pickTimer");
+            if (bar) bar.style.width = Math.max(0, tleft / (TIME * 10) * 100) + "%";
+            if (tleft <= 0) { stopTimer(); if (!st.answered) { st.answered = true; st.picked = -1; st.lives--; st.streak = 0; render(); } }
+          }, 100);
+        }
+        function hearts() { var s = ""; for (var k = 0; k < 3; k++) s += '<span class="material-symbols-rounded heart' + (k < st.lives ? "" : " heart--lost") + '">favorite</span>'; return s; }
+        function render() {
+          if (st.lives <= 0 || st.i >= rounds.length) { stopTimer(); result(); return; }
+          var q = rounds[st.i];
+          var opts = (q.options || []).map(function (o, idx) {
+            var cls = "quiz-opt";
+            if (st.answered) { if (idx === q.answer) cls += " quiz-opt--correct"; else if (idx === st.picked) cls += " quiz-opt--wrong"; }
+            return '<button class="' + cls + '" type="button" data-opt="' + idx + '"' + (st.answered ? " disabled" : "") + ">" +
+              '<span class="quiz-opt__mark">' + String.fromCharCode(65 + idx) + "</span><span>" + esc(t(o)) + "</span></button>";
+          }).join("");
+          var why = st.answered ? '<div class="quiz-explain"><b>' + (st.picked === q.answer ? (EN ? "Correct! " : "答對了！") : (EN ? "Nope. " : "可惜。")) + "</b>" + esc(t(q.why)) + "</div>" : "";
+          var nextBtn = st.answered ? '<div class="quiz-nav"><button class="game-btn" type="button" data-next>' + (st.i === rounds.length - 1 || st.lives <= 0 ? (EN ? "Finish" : "結束") : (EN ? "Next" : "下一題")) + ' <span class="material-symbols-rounded">arrow_forward</span></button></div>' : "";
+          root.innerHTML = '<div class="game-bar"><span class="hearts">' + hearts() + "</span>" +
+            '<span class="game-stat">' + (EN ? "Streak " : "連勝 ") + st.streak + " · " + (EN ? "Q " : "第 ") + (st.i + 1) + "/" + rounds.length + "</span>" +
+            '<span class="quiz-score">' + st.score + "</span></div>" +
+            '<div class="timer-track"><span class="timer-fill" id="pickTimer" style="width:100%"></span></div>' +
+            '<div class="quiz-card"><p class="quiz-q">' + esc(t(q.scenario)) + '</p><div class="quiz-opts">' + opts + "</div>" + why + nextBtn + "</div>";
+          if (!st.answered) {
+            [].forEach.call(root.querySelectorAll("[data-opt]"), function (b) { b.addEventListener("click", function () { answer(parseInt(b.dataset.opt, 10)); }); });
+            startTimer();
+          } else { var nb = root.querySelector("[data-next]"); if (nb) nb.addEventListener("click", function () { st.i++; st.answered = false; st.picked = -1; render(); }); }
+        }
+        function answer(idx) {
+          if (st.answered) return; stopTimer();
+          st.answered = true; st.picked = idx;
+          if (idx === rounds[st.i].answer) { st.score++; st.streak++; if (st.streak > st.best) st.best = st.streak; } else { st.lives--; st.streak = 0; }
+          render();
+        }
+        function result() {
+          var win = st.lives > 0;
+          root.innerHTML = '<div class="game-result"><span class="material-symbols-rounded game-result__icon">' + (win ? "emoji_events" : "sentiment_dissatisfied") + "</span>" +
+            '<div class="game-result__big">' + st.score + "/" + rounds.length + "</div>" +
+            "<p>" + (win ? (EN ? "You survived! Best streak " + st.best : "你撐過去了！最佳連勝 " + st.best) : (EN ? "Out of lives. Best streak " + st.best : "生命用完了。最佳連勝 " + st.best)) + "</p>" +
+            '<button class="game-btn" type="button" data-restart><span class="material-symbols-rounded">replay</span>' + (EN ? "Play again" : "再玩一次") + "</button></div>";
+          root.querySelector("[data-restart]").addEventListener("click", function () { st = { i: 0, score: 0, streak: 0, best: 0, lives: 3, answered: false, picked: -1 }; render(); });
+        }
+        render();
+      },
+
+      "game-order": function (p) {
+        var root = document.getElementById("orderRoot");
+        var EN = L.state.lang === "en";
+        var puzzles = p.puzzles || [];
+        var st = { p: 0, order: [], checked: false, solved: false };
+        function load() {
+          var steps = puzzles[st.p].steps || [];
+          var idx = steps.map(function (_, i) { return i; });
+          do { st.order = shuffle(idx); } while (steps.length > 1 && st.order.every(function (v, i) { return v === i; }));
+          st.checked = false; st.solved = false; render();
+        }
+        function render() {
+          var pz = puzzles[st.p]; var steps = pz.steps || [];
+          var list = st.order.map(function (orig, pos) {
+            var sc = st.checked ? (orig === pos ? " is-right" : " is-wrong") : "";
+            return '<li class="order-step' + sc + '"><span class="order-num">' + (pos + 1) + "</span>" +
+              '<span class="order-text">' + esc(t(steps[orig])) + "</span><span class=\"order-moves\">" +
+              '<button class="order-mv" type="button" data-mv="up" data-pos="' + pos + '"' + (pos === 0 ? " disabled" : "") + ' aria-label="move up"><span class="material-symbols-rounded">arrow_upward</span></button>' +
+              '<button class="order-mv" type="button" data-mv="down" data-pos="' + pos + '"' + (pos === st.order.length - 1 ? " disabled" : "") + ' aria-label="move down"><span class="material-symbols-rounded">arrow_downward</span></button></span></li>';
+          }).join("");
+          var foot;
+          if (st.solved) {
+            foot = '<div class="game-win"><span class="material-symbols-rounded">check_circle</span>' + (EN ? "Correct order!" : "順序正確！") + "</div>" +
+              (st.p < puzzles.length - 1
+                ? '<button class="game-btn" type="button" data-next>' + (EN ? "Next puzzle" : "下一題") + ' <span class="material-symbols-rounded">arrow_forward</span></button>'
+                : '<button class="game-btn" type="button" data-restart><span class="material-symbols-rounded">replay</span>' + (EN ? "Play again" : "再玩一次") + "</button>");
+          } else {
+            foot = (st.checked ? '<p class="order-hint">' + (EN ? "Not yet — green rows are in the right spot." : "還沒——綠色那幾列位置正確。") + "</p>" : "") +
+              '<button class="game-btn" type="button" data-check><span class="material-symbols-rounded">fact_check</span>' + (EN ? "Check order" : "檢查順序") + "</button>";
+          }
+          root.innerHTML = '<div class="game-bar"><span class="game-stat">' + (EN ? "Puzzle " : "第 ") + (st.p + 1) + "/" + puzzles.length + "</span></div>" +
+            '<p class="order-prompt">' + esc(t(pz.prompt)) + "</p><ol class=\"order-list\">" + list + "</ol><div class=\"order-foot\">" + foot + "</div>";
+          [].forEach.call(root.querySelectorAll(".order-mv:not([disabled])"), function (b) { b.addEventListener("click", function () { move(parseInt(b.dataset.pos, 10), b.dataset.mv === "up" ? -1 : 1); }); });
+          var cb = root.querySelector("[data-check]"); if (cb) cb.addEventListener("click", check);
+          var nb = root.querySelector("[data-next]"); if (nb) nb.addEventListener("click", function () { st.p++; load(); });
+          var rb = root.querySelector("[data-restart]"); if (rb) rb.addEventListener("click", function () { st.p = 0; load(); });
+        }
+        function move(pos, dir) { var j = pos + dir; if (j < 0 || j >= st.order.length) return; var tmp = st.order[pos]; st.order[pos] = st.order[j]; st.order[j] = tmp; st.checked = false; render(); }
+        function check() { st.checked = true; st.solved = st.order.every(function (v, i) { return v === i; }); render(); }
+        load();
+      },
+
+      "game-truefalse": function (p) {
+        var root = document.getElementById("tfRoot");
+        var EN = L.state.lang === "en";
+        var qs = p.statements || [];
+        var TIME = 8;
+        var st = { i: 0, score: 0, streak: 0, best: 0, lives: 3, answered: false, picked: null };
+        var timer = null, tleft = 0;
+        teardowns.push(function () { if (timer) clearInterval(timer); });
+        function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+        function startTimer() {
+          tleft = TIME * 10; stopTimer();
+          timer = setInterval(function () {
+            tleft--; var bar = document.getElementById("tfTimer");
+            if (bar) bar.style.width = Math.max(0, tleft / (TIME * 10) * 100) + "%";
+            if (tleft <= 0) { stopTimer(); if (!st.answered) answer(null); }
+          }, 100);
+        }
+        function hearts() { var s = ""; for (var k = 0; k < 3; k++) s += '<span class="material-symbols-rounded heart' + (k < st.lives ? "" : " heart--lost") + '">favorite</span>'; return s; }
+        function render() {
+          if (st.lives <= 0 || st.i >= qs.length) { stopTimer(); result(); return; }
+          var q = qs[st.i];
+          function tfBtn(val, label, icon) {
+            var cls = "tf-btn tf-btn--" + (val ? "true" : "false");
+            if (st.answered) { if (val === q.answer) cls += " is-correct"; else if (val === st.picked) cls += " is-wrong"; }
+            return '<button class="' + cls + '" type="button" data-val="' + val + '"' + (st.answered ? " disabled" : "") + '><span class="material-symbols-rounded">' + icon + "</span>" + label + "</button>";
+          }
+          var why = st.answered ? '<div class="quiz-explain"><b>' + (st.picked === q.answer ? (EN ? "Correct! " : "答對了！") : (EN ? "Actually " : "其實是") + (q.answer ? (EN ? "true. " : "真。") : (EN ? "false. " : "假。"))) + "</b>" + esc(t(q.explain)) + "</div>" : "";
+          var nextBtn = st.answered ? '<div class="quiz-nav"><button class="game-btn" type="button" data-next>' + (st.i === qs.length - 1 || st.lives <= 0 ? (EN ? "Finish" : "結束") : (EN ? "Next" : "下一題")) + ' <span class="material-symbols-rounded">arrow_forward</span></button></div>' : "";
+          root.innerHTML = '<div class="game-bar"><span class="hearts">' + hearts() + "</span>" +
+            '<span class="game-stat">' + (EN ? "Streak " : "連勝 ") + st.streak + " · " + (st.i + 1) + "/" + qs.length + "</span>" +
+            '<span class="quiz-score">' + st.score + "</span></div>" +
+            '<div class="timer-track"><span class="timer-fill" id="tfTimer" style="width:100%"></span></div>' +
+            '<div class="quiz-card"><p class="quiz-q tf-statement">' + esc(t(q.text)) + '</p><div class="tf-btns">' + tfBtn(true, (EN ? "True" : "真"), "check") + tfBtn(false, (EN ? "False" : "假"), "close") + "</div>" + why + nextBtn + "</div>";
+          if (!st.answered) {
+            [].forEach.call(root.querySelectorAll(".tf-btn"), function (b) { b.addEventListener("click", function () { answer(b.dataset.val === "true"); }); });
+            startTimer();
+          } else { var nb = root.querySelector("[data-next]"); if (nb) nb.addEventListener("click", function () { st.i++; st.answered = false; st.picked = null; render(); }); }
+        }
+        function answer(val) {
+          if (st.answered) return; stopTimer();
+          st.answered = true; st.picked = val;
+          if (val === qs[st.i].answer) { st.score++; st.streak++; if (st.streak > st.best) st.best = st.streak; } else { st.lives--; st.streak = 0; }
+          render();
+        }
+        function result() {
+          var win = st.lives > 0;
+          root.innerHTML = '<div class="game-result"><span class="material-symbols-rounded game-result__icon">' + (win ? "emoji_events" : "sentiment_dissatisfied") + "</span>" +
+            '<div class="game-result__big">' + st.score + "/" + qs.length + "</div><p>" + (EN ? "Best streak " + st.best : "最佳連勝 " + st.best) + "</p>" +
+            '<button class="game-btn" type="button" data-restart><span class="material-symbols-rounded">replay</span>' + (EN ? "Play again" : "再玩一次") + "</button></div>";
+          root.querySelector("[data-restart]").addEventListener("click", function () { st = { i: 0, score: 0, streak: 0, best: 0, lives: 3, answered: false, picked: null }; render(); });
+        }
+        render();
+      },
+
+      "game-build": function (p) {
+        var root = document.getElementById("buildRoot");
+        var EN = L.state.lang === "en";
+        var rounds = p.rounds || [];
+        var st = { r: 0, sel: {}, checked: false, score: 0 };
+        function render() {
+          if (st.r >= rounds.length) { result(); return; }
+          var rd = rounds[st.r];
+          var ans = {}; (rd.answer || []).forEach(function (i) { ans[i] = true; });
+          var perfect = (rd.palette || []).every(function (_, i) { return !!ans[i] === !!st.sel[i]; });
+          var chips = (rd.palette || []).map(function (it, i) {
+            var cls = "build-chip" + (st.sel[i] ? " is-sel" : "");
+            if (st.checked) { if (ans[i] && st.sel[i]) cls += " is-right"; else if (ans[i] && !st.sel[i]) cls += " is-missing"; else if (!ans[i] && st.sel[i]) cls += " is-extra"; }
+            return '<button class="' + cls + '" type="button" data-i="' + i + '"' + (st.checked ? " disabled" : "") + '><span class="material-symbols-rounded">' + esc(it.icon || "widgets") + "</span><span>" + esc(t(it.label)) + "</span>" +
+              '<span class="material-symbols-rounded build-chip__tick">' + (st.sel[i] ? "check_circle" : "radio_button_unchecked") + "</span></button>";
+          }).join("");
+          var foot;
+          if (st.checked) {
+            foot = '<div class="build-fb ' + (perfect ? "build-fb--ok" : "build-fb--no") + '"><span class="material-symbols-rounded">' + (perfect ? "verified" : "info") + "</span>" +
+              (perfect ? (EN ? "Perfect stack! " : "完美組合！") : (EN ? "Close — green=right, dashed=missing, red=not needed. " : "接近了——綠＝對、虛線＝漏掉、紅＝不需要。")) + esc(t(rd.note)) + "</div>" +
+              '<div class="quiz-nav"><button class="game-btn" type="button" data-next>' + (st.r === rounds.length - 1 ? (EN ? "See result" : "看結果") : (EN ? "Next build" : "下一題")) + ' <span class="material-symbols-rounded">arrow_forward</span></button></div>';
+          } else {
+            foot = '<button class="game-btn" type="button" data-check><span class="material-symbols-rounded">fact_check</span>' + (EN ? "Check my stack" : "檢查我的組合") + "</button>";
+          }
+          root.innerHTML = '<div class="game-bar"><span class="game-stat">' + (EN ? "Build " : "第 ") + (st.r + 1) + "/" + rounds.length + "</span>" +
+            '<span class="quiz-score">' + (EN ? "Score " : "得分 ") + st.score + "</span></div>" +
+            '<div class="build-goal"><span class="material-symbols-rounded">flag</span>' + esc(t(rd.goal)) + "</div>" +
+            '<p class="build-hint">' + (EN ? "Pick exactly the products you need:" : "挑出剛好需要的產品：") + '</p><div class="build-palette">' + chips + "</div><div class=\"build-foot\">" + foot + "</div>";
+          if (!st.checked) {
+            [].forEach.call(root.querySelectorAll(".build-chip"), function (b) { b.addEventListener("click", function () { var i = b.dataset.i; st.sel[i] = !st.sel[i]; render(); }); });
+            root.querySelector("[data-check]").addEventListener("click", function () { st.checked = true; if (perfect) st.score++; render(); });
+          } else { root.querySelector("[data-next]").addEventListener("click", function () { st.r++; st.sel = {}; st.checked = false; render(); }); }
+        }
+        function result() {
+          root.innerHTML = '<div class="game-result"><span class="material-symbols-rounded game-result__icon">architecture</span>' +
+            '<div class="game-result__big">' + st.score + "/" + rounds.length + "</div><p>" + (EN ? "Stacks built!" : "架構組裝完成！") + "</p>" +
+            '<button class="game-btn" type="button" data-restart><span class="material-symbols-rounded">replay</span>' + (EN ? "Play again" : "再玩一次") + "</button></div>";
+          root.querySelector("[data-restart]").addEventListener("click", function () { st = { r: 0, sel: {}, checked: false, score: 0 }; render(); });
+        }
+        render();
       }
     };
 
     /* =====================================================================
        shared builders + helpers for the learning layouts
        ===================================================================== */
+    function shuffle(a) {
+      var arr = a.slice();
+      for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t2 = arr[i]; arr[i] = arr[j]; arr[j] = t2; }
+      return arr;
+    }
     function lheroHTML(p) {
       var badge = p.hero && t(p.hero.badge)
         ? '<span class="lhero__badge"><span class="material-symbols-rounded">sell</span>' + esc(t(p.hero.badge)) + "</span>" : "";

@@ -13,6 +13,7 @@ DATA = ROOT / "data"
 PRODUCTS = DATA / "products"
 EXTRA = DATA / "extra"
 GUIDES = DATA / "guides"
+GAMES = DATA / "games"
 
 CATEGORY_ORDER = ["compute", "ai", "storage", "media", "security", "performance"]
 PRODUCT_ORDER = {
@@ -36,8 +37,21 @@ GUIDE_ORDER = [
     "request-lifecycle", "auth-flow-diagram", "cache-flow", "event-driven-queues",
 ]
 GUIDE_SLUGS = set(GUIDE_ORDER)
-ALL_SLUGS_REL = ALL_SLUGS | GUIDE_SLUGS                      # related may link to products OR guides
-VALID_CATEGORIES = set(CATEGORY_ORDER) | {"integrations", "start"}
+
+# Arcade mini-games (category "arcade"), in display order grouped by mechanic.
+GAME_ORDER = [
+    "match-products", "match-usecase", "match-terms",
+    "memory-products",
+    "sort-families", "sort-storage",
+    "pick-storage", "pick-security", "pick-compute-ai",
+    "order-request", "order-deploy",
+    "truefalse-basics", "truefalse-myths",
+    "build-blueprints",
+]
+GAME_SLUGS = set(GAME_ORDER)
+
+ALL_SLUGS_REL = ALL_SLUGS | GUIDE_SLUGS | GAME_SLUGS          # related may link to products / guides / games
+VALID_CATEGORIES = set(CATEGORY_ORDER) | {"integrations", "arcade", "start"}
 
 warnings = []
 
@@ -83,6 +97,19 @@ def validate_product(p, slug):
         if r.get("slug") not in ALL_SLUGS_REL:
             warn(f"{slug}: related slug {r.get('slug')!r} is not a known product/guide slug")
     if not p.get("icon"):
+        warn(f"{slug}: missing icon")
+
+
+def validate_game(g, slug):
+    if g.get("slug") != slug:
+        warn(f"{slug}: slug field is {g.get('slug')!r} (file name mismatch)")
+    if g.get("category") != "arcade":
+        warn(f"{slug}: category {g.get('category')!r} should be 'arcade'")
+    if not str(g.get("layout", "")).startswith("game-"):
+        warn(f"{slug}: layout {g.get('layout')!r} is not a game-* engine")
+    for f in ("title", "subtitle"):
+        check_bilingual(g.get(f), f"{slug}.{f}")
+    if not g.get("icon"):
         warn(f"{slug}: missing icon")
 
 
@@ -150,6 +177,22 @@ def main():
     for missing in sorted(GUIDE_SLUGS - seen_g):
         warn(f"guide {missing} declared but not assembled")
 
+    # ----- arcade mini-games (category "arcade", nav:false; reached via its category page) -----
+    games = []
+    seen_gm = set()
+    for slug in GAME_ORDER:
+        f = GAMES / f"{slug}.json"
+        if not f.exists():
+            warn(f"MISSING game file: {f.name}")
+            continue
+        gm = declutter(load(f))
+        validate_game(gm, slug)
+        gm["nav"] = False
+        games.append(gm)
+        seen_gm.add(slug)
+    for missing in sorted(GAME_SLUGS - seen_gm):
+        warn(f"game {missing} declared but not assembled")
+
     # ----- assemble SITE_PAGES (nav order first, then product lessons) -----
     pages = [home, start]
     for cp in category_pages:
@@ -160,6 +203,7 @@ def main():
     for cat in CATEGORY_ORDER:
         pages += products_by_cat[cat]
     pages += guides
+    pages += games
 
     # slug uniqueness
     slugs = [p["slug"] for p in pages]
@@ -185,6 +229,7 @@ def main():
     print(f"  nav order: {nav_pages}")
     print(f"  products: {sum(len(v) for v in products_by_cat.values())}/28")
     print(f"  guides: {len(guides)}/24")
+    print(f"  games: {len(games)}/14")
     print(f"  glossary terms: {len(glossary['terms'])}, quiz Q: {len(quiz['questions'])}, flashcards: {len(flashcards['cards'])}")
     if warnings:
         print(f"\n{len(warnings)} WARNING(S):")

@@ -62,9 +62,11 @@
     return PAGES[0] || null;
   }
 
-  /* ---------- onLang callback registry (app.js plugs in here) ---------- */
+  /* ---------- onLang / onTheme callback registries (app.js plugs in here) ---------- */
   var langSubscribers = [];
   function onLang(fn) { if (typeof fn === "function") langSubscribers.push(fn); }
+  var themeSubscribers = [];
+  function onTheme(fn) { if (typeof fn === "function") themeSubscribers.push(fn); }
 
   /* =======================================================================
      CHROME INJECTION — app bar, nav, footer, dialog around <main id="page">
@@ -206,6 +208,7 @@
     document.getElementById("themeToggle").addEventListener("click", function () {
       state.theme = state.theme === "dark" ? "light" : "dark";
       applyTheme();
+      themeSubscribers.forEach(function (fn) { try { fn(state.theme); } catch (e) {} });
     });
     document.getElementById("langToggle").addEventListener("click", function () {
       state.lang = state.lang === "en" ? "zh" : "en";
@@ -242,7 +245,7 @@
     lsGet: lsGet, lsSet: lsSet,
     pages: PAGES, meta: META,
     currentPage: currentPage, currentSlug: currentSlug, pageHref: pageHref,
-    onLang: onLang,
+    onLang: onLang, onTheme: onTheme,
     refreshChrome: refreshChrome,
     dialog: function () { return document.getElementById("dialog"); }
   };

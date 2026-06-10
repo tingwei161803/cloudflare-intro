@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 PRODUCTS = DATA / "products"
 EXTRA = DATA / "extra"
+GUIDES = DATA / "guides"
 
 CATEGORY_ORDER = ["compute", "ai", "storage", "media", "security", "performance"]
 PRODUCT_ORDER = {
@@ -23,6 +24,20 @@ PRODUCT_ORDER = {
     "performance": ["dns", "cdn", "speed", "smart-shield", "web-analytics"],
 }
 ALL_SLUGS = {s for slugs in PRODUCT_ORDER.values() for s in slugs}
+
+# Integration guides (category "integrations"), in display order grouped by sub-theme.
+GUIDE_ORDER = [
+    "fullstack-overview", "frontend-worker-d1-crud", "rest-api-worker", "form-to-database",
+    "auth-fullstack", "file-upload-r2", "pages-functions-fullstack",
+    "choose-your-database", "d1-schema-design", "d1-relationships", "kv-cache-layer",
+    "durable-objects-state", "hyperdrive-postgres",
+    "blueprint-blog-cms", "blueprint-ecommerce", "blueprint-saas", "blueprint-ai-rag",
+    "blueprint-realtime-chat", "blueprint-image-pipeline", "blueprint-url-shortener",
+    "request-lifecycle", "auth-flow-diagram", "cache-flow", "event-driven-queues",
+]
+GUIDE_SLUGS = set(GUIDE_ORDER)
+ALL_SLUGS_REL = ALL_SLUGS | GUIDE_SLUGS                      # related may link to products OR guides
+VALID_CATEGORIES = set(CATEGORY_ORDER) | {"integrations", "start"}
 
 warnings = []
 
@@ -58,15 +73,15 @@ def check_bilingual(d, where):
 def validate_product(p, slug):
     if p.get("slug") != slug:
         warn(f"{slug}: slug field is {p.get('slug')!r} (file name mismatch)")
-    if p.get("category") not in CATEGORY_ORDER:
-        warn(f"{slug}: category {p.get('category')!r} not in {CATEGORY_ORDER}")
+    if p.get("category") not in VALID_CATEGORIES:
+        warn(f"{slug}: category {p.get('category')!r} not in {sorted(VALID_CATEGORIES)}")
     for f in ("title", "subtitle"):
         check_bilingual(p.get(f), f"{slug}.{f}")
     if not p.get("sections"):
         warn(f"{slug}: no sections")
     for r in p.get("related", []):
-        if r.get("slug") not in ALL_SLUGS:
-            warn(f"{slug}: related slug {r.get('slug')!r} is not a real product slug")
+        if r.get("slug") not in ALL_SLUGS_REL:
+            warn(f"{slug}: related slug {r.get('slug')!r} is not a known product/guide slug")
     if not p.get("icon"):
         warn(f"{slug}: missing icon")
 
@@ -118,6 +133,23 @@ def main():
     quiz = tool_page("quiz", "quiz", "questions", "questions")
     flashcards = tool_page("flashcards", "flashcards", "cards", "cards")
 
+    # ----- integration guides (category "integrations", nav:false; reached via its category page) -----
+    guides = []
+    seen_g = set()
+    for slug in GUIDE_ORDER:
+        f = GUIDES / f"{slug}.json"
+        if not f.exists():
+            warn(f"MISSING guide file: {f.name}")
+            continue
+        g = declutter(load(f))
+        validate_product(g, slug)
+        g["layout"] = "lesson"
+        g["nav"] = False
+        guides.append(g)
+        seen_g.add(slug)
+    for missing in sorted(GUIDE_SLUGS - seen_g):
+        warn(f"guide {missing} declared but not assembled")
+
     # ----- assemble SITE_PAGES (nav order first, then product lessons) -----
     pages = [home, start]
     for cp in category_pages:
@@ -127,6 +159,7 @@ def main():
     pages += [glossary, quiz, flashcards]
     for cat in CATEGORY_ORDER:
         pages += products_by_cat[cat]
+    pages += guides
 
     # slug uniqueness
     slugs = [p["slug"] for p in pages]
@@ -151,6 +184,7 @@ def main():
     print(f"Wrote data/data.js: {len(pages)} pages total, {len(nav_pages)} in nav.")
     print(f"  nav order: {nav_pages}")
     print(f"  products: {sum(len(v) for v in products_by_cat.values())}/28")
+    print(f"  guides: {len(guides)}/24")
     print(f"  glossary terms: {len(glossary['terms'])}, quiz Q: {len(quiz['questions'])}, flashcards: {len(flashcards['cards'])}")
     if warnings:
         print(f"\n{len(warnings)} WARNING(S):")

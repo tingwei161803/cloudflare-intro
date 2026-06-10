@@ -316,10 +316,14 @@
         var products = L.pages.filter(function (q) { return q.layout === "lesson" && q.category && q.category !== "start"; });
         var catCards = cats.map(function (c) {
           var prods = products.filter(function (q) { return q.category === c.key; });
-          var chips = prods.map(function (q) {
+          var MAXCHIPS = 6;
+          var chips = prods.slice(0, MAXCHIPS).map(function (q) {
             return '<a class="prodchip" href="' + esc(q.slug) + '.html">' + esc(t(q.title)) + "</a>";
           }).join("");
-          var countLabel = prods.length + (L.state.lang === "en" ? " products" : " 個產品");
+          if (prods.length > MAXCHIPS) {
+            chips += '<a class="prodchip prodchip--more" href="' + esc(c.key) + '.html">+' + (prods.length - MAXCHIPS) + (L.state.lang === "en" ? " more" : " 篇") + "</a>";
+          }
+          var countLabel = prods.length + (L.state.lang === "en" ? " topics" : " 篇");
           var more = L.state.lang === "en" ? "Explore" : "看這一類";
           return '<div class="cat-card reveal" data-item>' +
             '<a class="cat-card__head" href="' + esc(c.key) + '.html" aria-label="' + esc(t(c.title)) + '">' +
@@ -353,19 +357,36 @@
           '<div class="tools-grid">' + tools + "</div>";
       },
 
-      /* ---- category: product cards filtered by this category ---- */
+      /* ---- category: product/guide cards filtered by category, optionally grouped ---- */
       category: function (p) {
         var products = L.pages.filter(function (q) { return q.layout === "lesson" && q.category === p.key; });
         var EN = L.state.lang === "en";
-        var cards = products.map(function (q) {
+        function prodCard(q) {
           return '<a class="prod-card reveal" data-item href="' + esc(q.slug) + '.html">' +
             '<div class="prod-card__head"><span class="prod-card__icon"><span class="material-symbols-rounded">' + esc(q.icon || "label") + "</span></span>" +
             '<h3 class="prod-card__name">' + esc(t(q.title)) + "</h3></div>" +
             '<p class="prod-card__sub">' + esc(t(q.subtitle)) + "</p>" +
             '<span class="prod-card__go">' + (EN ? "Learn" : "開始學") + ' <span class="material-symbols-rounded">arrow_forward</span></span></a>';
-        }).join("");
+        }
         var intro = t(p.intro) ? '<p class="lead reveal">' + esc(t(p.intro)) + "</p>" : "";
-        return lheroHTML(p) + intro + '<div class="grid">' + cards + "</div>";
+        var body;
+        if (products.some(function (q) { return q.group; })) {
+          var order = [], buckets = {};
+          products.forEach(function (q) {
+            var key = q.group ? t(q.group) : (EN ? "More" : "其他");
+            if (!buckets[key]) { buckets[key] = []; order.push(key); }
+            buckets[key].push(q);
+          });
+          body = order.map(function (key) {
+            return '<div class="home-section"><h2 class="home-section__title">' +
+              '<span class="material-symbols-rounded">folder_open</span>' + esc(key) +
+              ' <span class="group-count">' + buckets[key].length + "</span></h2></div>" +
+              '<div class="grid">' + buckets[key].map(prodCard).join("") + "</div>";
+          }).join("");
+        } else {
+          body = '<div class="grid">' + products.map(prodCard).join("") + "</div>";
+        }
+        return lheroHTML(p) + intro + body;
       },
 
       /* ---- lesson: hero + sticky TOC + sectioned beginner content ---- */
@@ -727,6 +748,7 @@
         lessonScrollspy();
         wireCopy();
         revealAll();
+        renderMermaid();
       },
 
       glossary: function (p) {
@@ -899,6 +921,13 @@
           return '<ol class="steps">' + ss + "</ol>";
         }
         if (b.type === "code") return codeHTML(b);
+        if (b.type === "mermaid") {
+          var src = t(b.code);
+          var dtitle = t(b.title)
+            ? '<figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>' + esc(t(b.title)) + "</figcaption>" : "";
+          return '<figure class="diagram" data-item>' + dtitle +
+            '<div class="mermaid-block" data-mermaid="' + esc(src) + '"></div></figure>';
+        }
         return "";
       }).join("");
     }
@@ -970,6 +999,65 @@
       }
     }
 
+    /* ---- mermaid diagrams: lazy-load from CDN, theme-aware, fail-soft ---- */
+    var mermaidSeq = 0;
+    function ensureMermaid(cb) {
+      if (window.mermaid) { cb(); return; }
+      if (window.__ldwMermaidPending) { window.__ldwMermaidPending.push(cb); return; }
+      window.__ldwMermaidPending = [cb];
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+      s.async = true;
+      s.onload = function () {
+        var q = window.__ldwMermaidPending || []; window.__ldwMermaidPending = null;
+        q.forEach(function (f) { try { f(); } catch (e) {} });
+      };
+      s.onerror = function () { window.__ldwMermaidPending = null; };
+      document.head.appendChild(s);
+    }
+    function renderMermaid() {
+      var blocks = [].slice.call(pageEl.querySelectorAll(".mermaid-block[data-mermaid]"));
+      if (!blocks.length) return;
+      ensureMermaid(function () {
+        if (!window.mermaid) return;
+        var dark = document.documentElement.getAttribute("data-theme") === "dark";
+        try {
+          window.mermaid.initialize({
+            startOnLoad: false, securityLevel: "strict", logLevel: "fatal",
+            theme: dark ? "dark" : "default",
+            themeVariables: {
+              fontFamily: '"Roboto Flex","Noto Sans TC",sans-serif',
+              primaryColor: dark ? "#3a2a1d" : "#FFDBC8",
+              primaryBorderColor: "#F6821F",
+              primaryTextColor: dark ? "#EFE0D6" : "#211A15",
+              lineColor: dark ? "#A08D81" : "#85736A"
+            }
+          });
+        } catch (e) {}
+        blocks.forEach(function (el) {
+          var src = el.getAttribute("data-mermaid");
+          if (!src) return;
+          var gid = "mmd-" + (mermaidSeq++);
+          var done = function (svg) { el.innerHTML = svg; };
+          var fail = function () { el.innerHTML = '<pre class="diagram-fallback">' + esc(src) + "</pre>"; };
+          var go = function () {
+            try {
+              var out = window.mermaid.render(gid, src);
+              if (out && typeof out.then === "function") out.then(function (r) { done(r.svg); }, fail);
+              else if (out && out.svg) done(out.svg);
+              else fail();
+            } catch (e) { fail(); }
+          };
+          try {
+            var pv = window.mermaid.parse(src, { suppressErrors: true });
+            if (pv && typeof pv.then === "function") pv.then(function (ok) { ok === false ? fail() : go(); }, fail);
+            else if (pv === false) fail();
+            else go();
+          } catch (e) { fail(); }
+        });
+      });
+    }
+
     /* ---- hero count-up (shared by hub) ---- */
     function animateCounters() {
       var els = [].slice.call(pageEl.querySelectorAll(".hero__stat-value[data-count]"));
@@ -1008,6 +1096,7 @@
     }
 
     L.onLang(render);
+    if (typeof L.onTheme === "function") L.onTheme(function () { renderMermaid(); });
     render();
   }
 

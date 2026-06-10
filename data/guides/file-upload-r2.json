@@ -1,0 +1,383 @@
+{
+  "slug": "file-upload-r2",
+  "category": "integrations",
+  "group": { "en": "Full-stack Basics", "zh": "全端串接基礎" },
+  "icon": "upload_file",
+  "title": {
+    "en": "File uploads: front-end → Worker → R2",
+    "zh": "檔案上傳：前端 → Worker → R2"
+  },
+  "subtitle": {
+    "en": "Let users upload images and docs from a web page, store them in R2, serve them back, and keep the metadata in D1.",
+    "zh": "讓使用者從網頁上傳圖片與文件，存進 R2，再提供下載，並把中繼資料（檔案的描述資料）記在 D1。"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Three layers, one flow: the browser picks a file, the Worker stores it in R2, and D1 remembers the details.",
+      "zh": "三層、一條流程：瀏覽器選檔案、Worker 存進 R2、D1 記住所有細節。"
+    }
+  },
+  "stats": [
+    { "value": "3", "label": { "en": "Layers wired", "zh": "層串接" } },
+    { "value": "$0", "label": { "en": "R2 egress fees", "zh": "R2 流出費" } },
+    { "value": "100 MB", "label": { "en": "Free-plan upload limit", "zh": "免費方案上傳上限" } },
+    { "value": "5 TiB", "label": { "en": "Max R2 object size", "zh": "R2 單一物件上限" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring up?", "zh": "我們要串什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "We will build a tiny page with a file input, send the chosen file to a Worker, store the raw bytes in R2 (object storage = a service for keeping whole files like images and PDFs), record its details in D1 (a SQL database), and then serve the file back by a public URL.",
+            "zh": "我們會做一個很小的網頁，上面有一個檔案輸入框（file input）。使用者選好檔案後送到 Worker，Worker 把原始檔案內容存進 R2（物件儲存，object storage，就是專門存放整份檔案如圖片、PDF 的服務），把檔案細節寫進 D1（一種 SQL 資料庫），之後再用一個公開網址把檔案提供回去。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "warehouse",
+          "title": { "en": "Think of it like a coat check", "zh": "把它想成寄物櫃" },
+          "text": {
+            "en": "The Worker is the coat-check desk. You hand over your coat (the file); it stores the coat in the back room (R2) and writes a ticket number in its logbook (D1). Later you show the ticket (the key) and it fetches your coat.",
+            "zh": "Worker 就像寄物櫃的櫃台。你把外套（檔案）交給它，它把外套放進後方倉庫（R2），並在登記簿（D1）寫下一個號碼牌。之後你出示號碼牌（也就是 key），它就能把外套拿回給你。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Architecture at a glance", "zh": "架構一眼看懂" },
+          "code": {
+            "en": "flowchart LR\n  B[\"Browser (file input)\"] -->|\"POST multipart\"| W[\"Worker\"]\n  W -->|\"put object\"| R[\"R2 bucket\"]\n  W -->|\"save metadata\"| D[\"D1 database\"]\n  R -->|\"stream bytes\"| W\n  W -->|\"file URL\"| B",
+            "zh": "flowchart LR\n  B[\"瀏覽器（檔案輸入框）\"] -->|\"POST 上傳\"| W[\"Worker\"]\n  W -->|\"存入物件\"| R[\"R2 儲存桶\"]\n  W -->|\"寫入中繼資料\"| D[\"D1 資料庫\"]\n  R -->|\"串流位元組\"| W\n  W -->|\"檔案網址\"| B"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "各層的職責" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Each layer has one clear job. Keeping bytes (R2) separate from facts about the bytes (D1) is what makes the system easy to query, list, and clean up later.",
+            "zh": "每一層只負責一件事。把「檔案內容」（放 R2）和「關於檔案的資料」（放 D1）分開，之後要查詢、列出清單、清理檔案時都會輕鬆很多。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": { "en": "Front-end", "zh": "前端網頁" },
+              "text": {
+                "en": "Shows a file picker and POSTs the chosen file as multipart/form-data using fetch.",
+                "zh": "顯示檔案選擇器，用 fetch 把選到的檔案以 multipart/form-data 格式 POST 出去。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Worker", "zh": "Worker" },
+              "text": {
+                "en": "Receives the upload, writes bytes to R2, records a row in D1, and streams files back on request.",
+                "zh": "接收上傳、把內容寫進 R2、在 D1 新增一筆資料，並在被請求時把檔案串流回去。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "R2 (bytes)", "zh": "R2（檔案內容）" },
+              "text": {
+                "en": "Object storage that holds the actual file bytes. Reading them back out costs $0 in egress.",
+                "zh": "物件儲存，存放真正的檔案內容。把它讀出來給使用者完全不收流出（egress）費用。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "D1 (facts)", "zh": "D1（檔案資料）" },
+              "text": {
+                "en": "A SQL database that stores who uploaded what, the filename, type, size, and time.",
+                "zh": "一個 SQL 資料庫，記錄誰上傳了什麼、檔名、類型、大小與時間。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Upload path vs serve path", "zh": "上傳路徑 vs 提供路徑" },
+          "code": {
+            "en": "flowchart TD\n  subgraph CLIENT[\"Front-end\"]\n    F[\"File input + fetch\"]\n  end\n  subgraph EDGE[\"Cloudflare Worker\"]\n    UP[\"POST /upload handler\"]\n    DL[\"GET /files/:key handler\"]\n  end\n  F -->|\"upload\"| UP\n  UP -->|\"put\"| R2[\"R2 bucket\"]\n  UP -->|\"insert\"| D1[\"D1 metadata\"]\n  F -->|\"view\"| DL\n  DL -->|\"get\"| R2\n  D1 -.->|\"lookup\"| DL",
+            "zh": "flowchart TD\n  subgraph CLIENT[\"前端\"]\n    F[\"檔案輸入框＋fetch\"]\n  end\n  subgraph EDGE[\"Cloudflare Worker\"]\n    UP[\"POST /upload 處理器\"]\n    DL[\"GET /files/:key 處理器\"]\n  end\n  F -->|\"上傳\"| UP\n  UP -->|\"存物件\"| R2[\"R2 儲存桶\"]\n  UP -->|\"寫入\"| D1[\"D1 中繼資料\"]\n  F -->|\"檢視\"| DL\n  DL -->|\"讀取\"| R2\n  D1 -.->|\"查詢\"| DL"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The metadata table", "zh": "中繼資料表" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "R2 only stores bytes under a key (key = the unique name/path of an object). To list a user's uploads or show a filename, we keep a small row of metadata in D1 for every object.",
+            "zh": "R2 只會把檔案內容存在一個 key（key＝物件的唯一名稱／路徑）底下。但要列出某位使用者的上傳清單、或顯示原始檔名，就得在 D1 裡為每個物件保留一小筆中繼資料。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Users and their files", "zh": "使用者與檔案" },
+          "code": {
+            "en": "erDiagram\n  USERS ||--o{ FILES : \"uploads\"\n  USERS {\n    int id PK\n    text email\n  }\n  FILES {\n    text key PK\n    int user_id FK\n    text filename\n    text content_type\n    int size_bytes\n    text uploaded_at\n  }",
+            "zh": "erDiagram\n  USERS ||--o{ FILES : \"上傳\"\n  USERS {\n    int id PK\n    text email\n  }\n  FILES {\n    text key PK\n    int user_id FK\n    text filename\n    text content_type\n    int size_bytes\n    text uploaded_at\n  }"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": { "en": "schema.sql", "zh": "schema.sql" },
+          "body": "CREATE TABLE IF NOT EXISTS files (\n  key          TEXT PRIMARY KEY,   -- R2 object key, e.g. uploads/172...-photo.jpg\n  filename     TEXT NOT NULL,      -- original name the user picked\n  content_type TEXT,               -- MIME type, e.g. image/png\n  size_bytes   INTEGER,            -- file size, for quotas and display\n  uploaded_at  TEXT NOT NULL       -- ISO timestamp\n);"
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "Why store the key as the primary key?", "zh": "為什麼用 key 當主鍵？" },
+          "text": {
+            "en": "The R2 key is already unique and is exactly what you need to fetch the object later, so it makes a clean primary key that ties the D1 row to the R2 object one-to-one.",
+            "zh": "R2 的 key 本來就是唯一的，而且正是日後取回物件所需的名稱，因此用它當主鍵（primary key）最乾淨，能把 D1 的資料列和 R2 的物件一對一綁在一起。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Request flows", "zh": "請求流程" },
+      "blocks": [
+        {
+          "type": "h3",
+          "text": { "en": "1) Uploading a file", "zh": "1）上傳檔案" }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Upload flow", "zh": "上傳流程" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant R as R2\n  participant D as D1\n  U->>U: pick a file\n  U->>W: POST /upload (multipart)\n  W->>R: env.BUCKET.put(key, body)\n  R-->>W: stored ok\n  W->>D: INSERT file metadata\n  D-->>W: row saved\n  W-->>U: 200 JSON url and key",
+            "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as Worker\n  participant R as R2\n  participant D as D1\n  U->>U: 選擇檔案\n  U->>W: POST /upload（multipart）\n  W->>R: env.BUCKET.put(key, body)\n  R-->>W: 已存好物件\n  W->>D: 寫入檔案中繼資料\n  D-->>W: 已新增資料列\n  W-->>U: 200 JSON 回傳網址與 key"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The browser bundles the file into a multipart body (multipart/form-data = the standard way browsers package one or more files plus form fields). The Worker reads it, writes the bytes to R2 with put(), saves a row to D1, and returns a URL the page can link to.",
+            "zh": "瀏覽器會把檔案打包成 multipart 內容（multipart/form-data＝瀏覽器把一個或多個檔案連同表單欄位一起打包的標準格式）。Worker 讀取後用 put() 把內容寫進 R2，再把一筆資料寫進 D1，最後回傳一個網頁可以連結的網址。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "2) Serving a file back", "zh": "2）把檔案提供回去" }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Download / serve flow", "zh": "下載／提供流程" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant R as R2\n  U->>W: GET /files/:key\n  W->>R: env.BUCKET.get(key)\n  R-->>W: object body and headers\n  W-->>U: 200 stream file bytes",
+            "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as Worker\n  participant R as R2\n  U->>W: GET /files/:key\n  W->>R: env.BUCKET.get(key)\n  R-->>W: 物件內容與標頭\n  W-->>U: 200 串流檔案位元組"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "To view a file, the page just requests /files/<key>. The Worker calls get(), copies the stored Content-Type onto the response, and streams the bytes straight to the browser — no copy is loaded fully into memory.",
+            "zh": "要看檔案時，網頁只要請求 /files/<key>。Worker 呼叫 get()，把儲存時記下的 Content-Type 複製到回應的標頭上，然後把位元組直接串流給瀏覽器——過程中不會把整份檔案一次塞進記憶體。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it step by step", "zh": "動手一步步串起來" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Wrangler is Cloudflare's command-line tool (CLI = a program you type commands into). Make sure you have run npm install -g wrangler and wrangler login first.",
+            "zh": "Wrangler 是 Cloudflare 的命令列工具（CLI＝你在終端機輸入指令操作的程式）。開始前請先執行過 npm install -g wrangler 與 wrangler login。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the R2 bucket and D1 database", "zh": "建立 R2 儲存桶與 D1 資料庫" },
+              "text": {
+                "en": "Run both creates. Copy the database_id that wrangler prints for the D1 database — you will paste it next.",
+                "zh": "兩個都建立。把 wrangler 為 D1 資料庫印出的 database_id 複製下來，下一步要貼上。"
+              },
+              "code": { "lang": "bash", "body": "# Bucket that will hold the file bytes\nwrangler r2 bucket create user-uploads\n\n# Database that will hold the metadata (copy the printed database_id)\nwrangler d1 create uploads-meta" }
+            },
+            {
+              "title": { "en": "Add both bindings in wrangler.toml", "zh": "在 wrangler.toml 加上兩個綁定" },
+              "text": {
+                "en": "A binding gives your code a variable to reach a resource. Here [[r2_buckets]] exposes env.BUCKET and [[d1_databases]] exposes env.DB.",
+                "zh": "「綁定（binding）」會讓你的程式碼多一個變數來操作某個資源。這裡 [[r2_buckets]] 會給你 env.BUCKET，[[d1_databases]] 會給你 env.DB。"
+              },
+              "code": { "lang": "toml", "body": "name = \"file-uploader\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-09-23\"\n\n# R2 binding -> reachable as env.BUCKET in your Worker\n[[r2_buckets]]\nbinding = \"BUCKET\"\nbucket_name = \"user-uploads\"\n\n# D1 binding -> reachable as env.DB in your Worker\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"uploads-meta\"\ndatabase_id = \"paste-the-id-from-wrangler-d1-create\"" }
+            },
+            {
+              "title": { "en": "Create the metadata table", "zh": "建立中繼資料表" },
+              "text": {
+                "en": "Run the CREATE TABLE against the real (remote) D1 database. You can also save it as schema.sql and use --file=./schema.sql instead.",
+                "zh": "對真正（remote）的 D1 資料庫執行 CREATE TABLE。你也可以把它存成 schema.sql，改用 --file=./schema.sql 來執行。"
+              },
+              "code": { "lang": "bash", "body": "wrangler d1 execute uploads-meta --remote --command \"CREATE TABLE IF NOT EXISTS files (key TEXT PRIMARY KEY, filename TEXT NOT NULL, content_type TEXT, size_bytes INTEGER, uploaded_at TEXT NOT NULL);\"" }
+            },
+            {
+              "title": { "en": "Front-end: file input + fetch", "zh": "前端：檔案輸入框 + fetch" },
+              "text": {
+                "en": "FormData tells the browser to build a multipart/form-data body for us, so we never assemble the upload by hand.",
+                "zh": "FormData 會請瀏覽器幫我們組好 multipart/form-data 內容，所以我們完全不用自己手動拼裝上傳資料。"
+              },
+              "code": { "lang": "html", "body": "<!-- index.html (front-end) -->\n<input type=\"file\" id=\"file\" accept=\"image/*,.pdf\" />\n<button id=\"send\">Upload</button>\n<p id=\"status\"></p>\n\n<script>\n  const fileInput = document.getElementById(\"file\");\n  const statusEl = document.getElementById(\"status\");\n\n  document.getElementById(\"send\").addEventListener(\"click\", async () => {\n    const file = fileInput.files[0];\n    if (!file) {\n      statusEl.textContent = \"Pick a file first.\";\n      return;\n    }\n\n    // FormData makes the browser send a multipart/form-data body for us\n    const form = new FormData();\n    form.append(\"file\", file);\n\n    statusEl.textContent = \"Uploading...\";\n    const res = await fetch(\"/upload\", { method: \"POST\", body: form });\n    const data = await res.json();\n\n    statusEl.innerHTML = `Done! <a href=\"${data.url}\">${data.filename}</a>`;\n  });\n</script>" }
+            },
+            {
+              "title": { "en": "Worker: store in R2 + record in D1 + serve", "zh": "Worker：存進 R2 + 記到 D1 + 提供下載" },
+              "text": {
+                "en": "One handler does both jobs: POST /upload writes to R2 and D1; GET /files/<key> reads from R2 and streams it back.",
+                "zh": "同一個處理器負責兩件事：POST /upload 寫進 R2 和 D1；GET /files/<key> 從 R2 讀出來並串流回去。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // 1) UPLOAD: POST /upload  (multipart/form-data)\n    if (request.method === \"POST\" && url.pathname === \"/upload\") {\n      const form = await request.formData();\n      const file = form.get(\"file\");\n      if (!(file instanceof File)) {\n        return Response.json({ error: \"No file field\" }, { status: 400 });\n      }\n\n      // Build a unique key so two uploads never collide\n      const key = `uploads/${Date.now()}-${crypto.randomUUID()}-${file.name}`;\n\n      // Store the raw bytes in R2 (reading them back out is free)\n      await env.BUCKET.put(key, file.stream(), {\n        httpMetadata: { contentType: file.type },\n      });\n\n      // Remember the details in D1 (bound params = no SQL injection)\n      await env.DB.prepare(\n        \"INSERT INTO files (key, filename, content_type, size_bytes, uploaded_at) VALUES (?, ?, ?, ?, ?)\"\n      )\n        .bind(key, file.name, file.type, file.size, new Date().toISOString())\n        .run();\n\n      return Response.json({\n        key,\n        filename: file.name,\n        url: `${url.origin}/files/${encodeURIComponent(key)}`,\n      });\n    }\n\n    // 2) SERVE: GET /files/<key>\n    if (request.method === \"GET\" && url.pathname.startsWith(\"/files/\")) {\n      const key = decodeURIComponent(url.pathname.slice(\"/files/\".length));\n      const object = await env.BUCKET.get(key);\n      if (object === null) {\n        return new Response(\"Not found\", { status: 404 });\n      }\n\n      // Copy the stored content-type etc. onto the response, then stream it\n      const headers = new Headers();\n      object.writeHttpMetadata(headers);\n      headers.set(\"etag\", object.httpEtag);\n      return new Response(object.body, { headers });\n    }\n\n    return new Response(\"Not found\", { status: 404 });\n  },\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish the Worker to Cloudflare's global network. Your upload page and /files/ endpoint go live worldwide.",
+                "zh": "把 Worker 發布到 Cloudflare 的全球網路。你的上傳頁面與 /files/ 端點會在全球同時上線。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "inventory_2",
+              "title": { "en": "Object storage", "zh": "物件儲存 (Object storage)" },
+              "text": {
+                "en": "A service for keeping whole files (objects) instead of rows or blocks. Great for images, PDFs, and video.",
+                "zh": "專門存放「整份檔案（物件）」的服務，而不是資料列或磁碟區塊。最適合圖片、PDF、影片。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "Key", "zh": "鍵 (Key)" },
+              "text": {
+                "en": "The unique name/path of an object, like uploads/2026/photo.jpg. You read an object back by its key.",
+                "zh": "物件的唯一名稱／路徑，例如 uploads/2026/photo.jpg。之後就是用這個 key 把物件讀回來。"
+              }
+            },
+            {
+              "icon": "folder",
+              "title": { "en": "Bucket", "zh": "儲存桶 (Bucket)" },
+              "text": {
+                "en": "A named container that holds many objects, like a top-level folder for your app's files.",
+                "zh": "裝著很多物件、有名字的容器，可以想成你 App 檔案的最上層資料夾。"
+              }
+            },
+            {
+              "icon": "upload_file",
+              "title": { "en": "multipart/form-data", "zh": "multipart/form-data" },
+              "text": {
+                "en": "The standard request format browsers use to send files. FormData builds it for you automatically.",
+                "zh": "瀏覽器傳送檔案時使用的標準請求格式。FormData 會自動幫你組好它。"
+              }
+            },
+            {
+              "icon": "description",
+              "title": { "en": "Content-Type (MIME)", "zh": "Content-Type（MIME 類型）" },
+              "text": {
+                "en": "A label like image/png that tells browsers how to display a file. Store it on upload and set it on serve.",
+                "zh": "像 image/png 這樣的標籤，告訴瀏覽器該如何顯示檔案。上傳時記下、提供時設回去。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "Presigned URL", "zh": "預簽網址 (Presigned URL)" },
+              "text": {
+                "en": "A temporary signed link that lets the browser upload or download directly from R2, bypassing the Worker for large files.",
+                "zh": "一個有時效、帶簽章的連結，讓瀏覽器直接對 R2 上傳或下載，遇到大檔案時就能繞過 Worker。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips, pitfalls & pricing", "zh": "小提示、陷阱與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Big files? Use presigned URLs", "zh": "大檔案？改用預簽網址" },
+          "text": {
+            "en": "Uploading through the Worker is simplest, but a single request body is capped (about 100 MB on the Free plan). For large files, have the Worker mint a presigned URL so the browser uploads multipart directly to R2, then save the metadata afterwards.",
+            "zh": "讓檔案經過 Worker 上傳最簡單，但單一請求內容有大小上限（免費方案約 100 MB）。遇到大檔案時，請改由 Worker 產生一個「預簽網址（presigned URL）」，讓瀏覽器以分段（multipart）方式直接傳給 R2，之後再回頭把中繼資料存起來。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "Zero egress is the headline", "zh": "零流出費是最大賣點" },
+          "text": {
+            "en": "However many times users download a file from R2, serving it out to the internet costs $0 in egress — unlike most clouds, where a popular file can run up a surprise bill.",
+            "zh": "不論使用者從 R2 下載一個檔案幾次，把它傳給網路上的使用者一律 0 元流出費——不像多數雲端，一個熱門檔案就可能讓帳單暴增。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Always make keys unique (timestamp + random id) so a new upload never overwrites an old one.",
+              "Validate file size and type on the Worker before put() — never trust the browser alone.",
+              "Store and re-apply Content-Type, or browsers may download files instead of showing them.",
+              "Add CORS headers on /upload if your page is served from a different origin than the Worker.",
+              "Avoid putting the raw user filename directly in the key; encode it or strip unusual characters."
+            ],
+            "zh": [
+              "key 一定要唯一（時間戳 + 隨機 id），新的上傳才不會覆蓋舊檔。",
+              "在 Worker 端、put() 之前就驗證檔案大小與類型——絕不能只信任瀏覽器。",
+              "務必記下並重新套用 Content-Type，否則瀏覽器可能會下載檔案而不是直接顯示。",
+              "若網頁與 Worker 不在同一個來源（origin），記得在 /upload 加上 CORS 標頭。",
+              "別把使用者的原始檔名直接塞進 key，請先編碼或去掉特殊字元。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } }
+  ],
+  "docs": "https://developers.cloudflare.com/r2/"
+}

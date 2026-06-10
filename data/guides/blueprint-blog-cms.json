@@ -1,0 +1,377 @@
+{
+  "slug": "blueprint-blog-cms",
+  "category": "integrations",
+  "group": { "en": "Architecture Blueprints", "zh": "架構藍圖" },
+  "icon": "rss_feed",
+  "title": { "en": "Blueprint: a blog / CMS", "zh": "架構藍圖：部落格 / CMS" },
+  "subtitle": {
+    "en": "A reference architecture for a blog or CMS built entirely on Cloudflare",
+    "zh": "一套完全建在 Cloudflare 上的部落格／CMS 參考架構"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "See how Pages, Workers, D1, R2, KV and Images fit together to power a real content site.",
+      "zh": "看 Pages、Workers、D1、R2、KV 與 Images 如何拼成一個真正的內容網站。"
+    }
+  },
+  "stats": [
+    { "value": "6", "label": { "en": "Cloudflare products", "zh": "Cloudflare 產品" } },
+    { "value": "4", "label": { "en": "Database tables", "zh": "資料表" } },
+    { "value": "1", "label": { "en": "Worker API", "zh": "Worker API" } },
+    { "value": "~0ms", "label": { "en": "Cache reads at the edge", "zh": "邊緣快取讀取" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we building?", "zh": "我們要蓋什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A blog or CMS (Content Management System = the software that stores and serves your articles) needs four jobs done: show pages to readers, run an API, store the text, and store the images. Instead of one big server doing everything, Cloudflare splits these jobs across small, focused services that all run at the edge (the edge = data centres close to your readers).",
+            "zh": "一個部落格或 CMS（內容管理系統，就是負責存放與供應文章的軟體）要做好四件事：把頁面顯示給讀者、跑一個 API、存放文字、存放圖片。Cloudflare 不是用一台大伺服器全包，而是把這些工作拆給數個小而專一的服務，全部都跑在邊緣（edge，指離讀者很近的資料中心）。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "This page is a 'see the whole system' map. The diagram below wires every piece together: the reader's browser talks to Pages (the front-end) and to a Worker (the API); the Worker reads articles from D1, images from R2, and a fast cache from KV; and the browser pulls optimised pictures through Images.",
+            "zh": "這一頁是「一眼看懂整個系統」的地圖。下面這張圖把每個零件串起來：讀者的瀏覽器同時跟 Pages（前端）和 Worker（API）對話；Worker 從 D1 讀文章、從 R2 讀圖片、從 KV 拿快取；而瀏覽器則透過 Images 抓最佳化過的圖片。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "System architecture", "zh": "系統架構" },
+          "code": {
+            "en": "flowchart TD\n  B[\"Browser\"] -->|\"page HTML\"| P[\"Pages front-end\"]\n  B -->|\"fetch /api\"| W[\"Worker API\"]\n  P -->|\"calls\"| W\n  W -->|\"SQL query\"| D[\"D1 posts and authors\"]\n  W -->|\"cache get/put\"| K[\"KV cache\"]\n  W -->|\"object key\"| R[\"R2 images\"]\n  B -->|\"img src\"| I[\"Images resize\"]\n  I -->|\"origin pull\"| R",
+            "zh": "flowchart TD\n  B[\"瀏覽器\"] -->|\"頁面 HTML\"| P[\"Pages 前端\"]\n  B -->|\"fetch /api\"| W[\"Worker API\"]\n  P -->|\"呼叫\"| W\n  W -->|\"SQL 查詢\"| D[\"D1 文章與作者\"]\n  W -->|\"快取讀寫\"| K[\"KV 快取\"]\n  W -->|\"物件鍵\"| R[\"R2 圖片\"]\n  B -->|\"img src\"| I[\"Images 縮圖\"]\n  I -->|\"回源讀取\"| R"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "restaurant",
+          "title": { "en": "Think of it like a restaurant", "zh": "把它想成一間餐廳" },
+          "text": {
+            "en": "Pages is the dining room (what guests see), the Worker is the waiter (takes orders, brings food), D1 is the recipe book (structured text), R2 is the pantry (raw ingredients / files), KV is the dish kept warm on the pass (instant re-serve), and Images is the plating station (resizes each photo to order).",
+            "zh": "Pages 是用餐區（客人看到的），Worker 是服務生（接單、上菜），D1 是食譜本（結構化的文字），R2 是儲藏室（原始食材／檔案），KV 是出餐檯上保溫的菜（馬上再上一份），而 Images 是擺盤台（依需求把每張照片調整大小）。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "各零件的職責" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Each Cloudflare product has one clear role. Keeping them separate is what makes the system cheap, fast, and easy to reason about — you can change the cache without touching the database, or swap the front-end without rewriting the API.",
+            "zh": "每個 Cloudflare 產品都只扮演一個明確的角色。把它們分開，正是讓系統便宜、快、又好理解的關鍵——你可以只動快取而不碰資料庫，或換掉前端卻不用重寫 API。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": { "en": "Pages — front-end", "zh": "Pages — 前端" },
+              "text": {
+                "en": "Hosts your HTML, CSS and JavaScript and serves the blog UI globally. This is what readers actually open in the browser.",
+                "zh": "託管你的 HTML、CSS 與 JavaScript，把部落格介面送到全球。這就是讀者實際在瀏覽器裡打開的東西。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Workers — the API", "zh": "Workers — API" },
+              "text": {
+                "en": "The brain. It receives /api requests, decides what to read or write, talks to D1, R2 and KV, and returns JSON. All your business logic lives here.",
+                "zh": "大腦。它接收 /api 請求，決定要讀或寫什麼，跟 D1、R2、KV 對話，最後回傳 JSON。你所有的商業邏輯都住在這裡。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "D1 — structured data", "zh": "D1 — 結構化資料" },
+              "text": {
+                "en": "A SQL database holding posts, authors and tags — anything with relationships you query with SELECT/INSERT. The source of truth for text.",
+                "zh": "一個 SQL 資料庫，存放文章、作者與標籤——凡是有關聯、要用 SELECT／INSERT 查詢的資料都放這。文字的真實來源。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "R2 — file storage", "zh": "R2 — 檔案儲存" },
+              "text": {
+                "en": "Object storage for big binary files: cover photos, uploads, attachments. The database only stores the object key; the bytes live here.",
+                "zh": "存放大型二進位檔案的物件儲存：封面照、上傳檔、附件。資料庫只存物件鍵（key），真正的位元組住在這裡。"
+              }
+            },
+            {
+              "icon": "cached",
+              "title": { "en": "KV — read cache", "zh": "KV — 讀取快取" },
+              "text": {
+                "en": "A super-fast key→value store used to remember the JSON of popular posts, so repeat reads skip the database entirely. Cleared when a post changes.",
+                "zh": "一個超快的鍵值（key→value）儲存，用來記住熱門文章的 JSON，讓重複讀取完全跳過資料庫。文章一變更就清掉。"
+              }
+            },
+            {
+              "icon": "auto_fix_high",
+              "title": { "en": "Images — optimisation", "zh": "Images — 圖片最佳化" },
+              "text": {
+                "en": "Resizes, crops and re-formats photos on the fly from a URL, so every device gets the right size without you storing many copies.",
+                "zh": "直接從一個網址即時縮放、裁切、轉檔照片，讓每台裝置都拿到合適的尺寸，你不必自己存好幾份副本。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The data model", "zh": "資料模型" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Four tables describe a blog. One author writes many posts. One post can carry many tags, and one tag can appear on many posts — that 'many-to-many' relationship needs a join table called post_tags. Notice posts only stores cover_key (a pointer into R2), not the image bytes themselves.",
+            "zh": "四張表就能描述一個部落格。一位作者寫多篇文章。一篇文章可以掛多個標籤，一個標籤也能出現在多篇文章上——這種「多對多」關係需要一張中介表，叫 post_tags。注意 posts 只存 cover_key（指向 R2 的指標），不存圖片本身的位元組。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Entity relationship diagram", "zh": "實體關聯圖" },
+          "code": {
+            "en": "erDiagram\n  AUTHORS ||--o{ POSTS : writes\n  POSTS ||--o{ POST_TAGS : has\n  TAGS ||--o{ POST_TAGS : labels\n  AUTHORS {\n    int id PK\n    text name\n    text email\n  }\n  POSTS {\n    int id PK\n    int author_id FK\n    text title\n    text slug\n    text cover_key\n    int published\n  }\n  TAGS {\n    int id PK\n    text name\n    text slug\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }",
+            "zh": "erDiagram\n  AUTHORS ||--o{ POSTS : \"撰寫\"\n  POSTS ||--o{ POST_TAGS : \"擁有\"\n  TAGS ||--o{ POST_TAGS : \"標記\"\n  AUTHORS {\n    int id PK\n    text name\n    text email\n  }\n  POSTS {\n    int id PK\n    int author_id FK\n    text title\n    text slug\n    text cover_key\n    int published\n  }\n  TAGS {\n    int id PK\n    text name\n    text slug\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": { "en": "schema.sql", "zh": "schema.sql" },
+          "body": "CREATE TABLE authors (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  email TEXT UNIQUE\n);\n\nCREATE TABLE posts (\n  id INTEGER PRIMARY KEY,\n  author_id INTEGER NOT NULL REFERENCES authors(id),\n  title TEXT NOT NULL,\n  slug TEXT UNIQUE NOT NULL,\n  body TEXT NOT NULL,\n  cover_key TEXT,\n  published INTEGER NOT NULL DEFAULT 0,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);\n\nCREATE TABLE tags (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  slug TEXT UNIQUE NOT NULL\n);\n\nCREATE TABLE post_tags (\n  post_id INTEGER NOT NULL REFERENCES posts(id),\n  tag_id INTEGER NOT NULL REFERENCES tags(id),\n  PRIMARY KEY (post_id, tag_id)\n);"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Reading & publishing", "zh": "讀取與發布流程" },
+      "blocks": [
+        {
+          "type": "h3",
+          "text": { "en": "Reading a post (with cache)", "zh": "讀一篇文章（含快取）" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "When someone opens an article, the Worker checks KV first. If the JSON is already there (a cache hit), it returns instantly and never touches the database. If not (a cache miss), it queries D1, builds the response, and saves it to KV for next time. This is why a popular post stays fast and cheap.",
+            "zh": "有人打開一篇文章時，Worker 會先看 KV。如果 JSON 已經在那裡（命中快取），就立刻回傳、完全不碰資料庫。如果不在（未命中），就去查 D1、組好回應，再存進 KV 給下次用。這就是為什麼熱門文章能一直又快又便宜。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Read flow: KV cache hit vs miss", "zh": "讀取流程：KV 命中 vs 未命中" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker API\"\n  participant K as \"KV cache\"\n  participant D as \"D1\"\n  U->>W: GET /api/posts/hello\n  W->>K: read cache key\n  alt cache hit\n    K-->>W: cached JSON\n    W-->>U: JSON x-cache=HIT\n  else cache miss\n    K-->>W: empty\n    W->>D: SELECT post + author\n    D-->>W: row\n    W->>K: write cache TTL=300s\n    W-->>U: JSON x-cache=MISS\n  end",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker API\"\n  participant K as \"KV 快取\"\n  participant D as \"D1\"\n  U->>W: GET /api/posts/hello\n  W->>K: 讀取快取鍵\n  alt 命中快取\n    K-->>W: 已快取 JSON\n    W-->>U: JSON x-cache=HIT\n  else 未命中\n    K-->>W: 空值\n    W->>D: 查詢文章與作者\n    D-->>W: 資料列\n    W->>K: 寫入快取 TTL=300s\n    W-->>U: JSON x-cache=MISS\n  end"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Publishing a post", "zh": "發布一篇文章" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Writing goes the other way. The author submits text plus a cover image; the Worker stores the file in R2, saves the row (and its tags) in D1, then deletes the cached copy in KV so readers immediately see the new version.",
+            "zh": "寫入則是反方向。作者送出文字加上一張封面圖；Worker 把檔案存進 R2、把資料列（和它的標籤）寫進 D1，然後刪掉 KV 裡的快取副本，讓讀者馬上看到新版本。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Publish flow", "zh": "發布流程" },
+          "code": {
+            "en": "sequenceDiagram\n  participant A as \"Author\"\n  participant W as \"Worker API\"\n  participant R as \"R2\"\n  participant D as \"D1\"\n  participant K as \"KV cache\"\n  A->>W: POST /api/posts + image\n  W->>R: store cover image\n  R-->>W: object key\n  W->>D: INSERT post and post_tags\n  D-->>W: new post id\n  W->>K: delete cached post\n  W-->>A: 201 Created",
+            "zh": "sequenceDiagram\n  participant A as \"作者\"\n  participant W as \"Worker API\"\n  participant R as \"R2\"\n  participant D as \"D1\"\n  participant K as \"KV 快取\"\n  A->>W: POST /api/posts + 圖片\n  W->>R: 儲存封面圖片\n  R-->>W: 物件鍵\n  W->>D: 寫入 post 與 post_tags\n  D-->>W: 新文章 id\n  W->>K: 刪除快取文章\n  W-->>A: 201 Created"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it: bindings & code", "zh": "動手做：綁定與程式碼" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A binding is a named connector (like DB or CACHE) that you declare in wrangler.jsonc so your Worker can reach a resource as env.<NAME> — no connection strings or secrets in code. Below: create the resources, declare the bindings, define the schema, then the Worker and the front-end.",
+            "zh": "綁定（binding）是一個有名字的連接器（例如 DB 或 CACHE），你在 wrangler.jsonc 裡宣告它，Worker 就能用 env.<名稱> 存取資源——程式碼裡不用放連線字串或密鑰。以下：建立資源、宣告綁定、定義結構，再寫 Worker 與前端。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the storage resources", "zh": "建立儲存資源" },
+              "text": {
+                "en": "One command each for the database, the cache namespace, and the image bucket. Copy the IDs Wrangler prints.",
+                "zh": "資料庫、快取命名空間、圖片桶各一條指令。把 Wrangler 印出的 ID 複製起來。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 create blog\nnpx wrangler kv namespace create CACHE\nnpx wrangler r2 bucket create blog-images" }
+            },
+            {
+              "title": { "en": "Declare the bindings", "zh": "宣告綁定" },
+              "text": {
+                "en": "Put all three bindings in wrangler.jsonc. Now env.DB, env.CACHE and env.BUCKET are available inside the Worker.",
+                "zh": "把三個綁定都放進 wrangler.jsonc。這樣 Worker 裡就能用 env.DB、env.CACHE 與 env.BUCKET。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"name\": \"blog-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"blog\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"kv_namespaces\": [\n    { \"binding\": \"CACHE\", \"id\": \"<your-kv-id>\" }\n  ],\n  \"r2_buckets\": [\n    { \"binding\": \"BUCKET\", \"bucket_name\": \"blog-images\" }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Apply the database schema", "zh": "套用資料庫結構" },
+              "text": {
+                "en": "Run the schema.sql from the data-model section against the real cloud database with --remote.",
+                "zh": "用 --remote 把「資料模型」段落裡的 schema.sql 套到雲端上真正的資料庫。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 execute blog --remote --file=./schema.sql" }
+            },
+            {
+              "title": { "en": "Write the Worker API (read path)", "zh": "寫 Worker API（讀取路徑）" },
+              "text": {
+                "en": "This handler is the heart of the blueprint: KV first, then D1, then write back to KV. It also builds the Images URL from the R2 cover_key.",
+                "zh": "這個 handler 是整張藍圖的核心：先 KV、再 D1、最後寫回 KV。它也用 R2 的 cover_key 組出 Images 網址。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const slug = url.pathname.split(\"/\").pop();\n    const cacheKey = `post:${slug}`;\n\n    // 1) Try the KV cache first\n    const cached = await env.CACHE.get(cacheKey);\n    if (cached) {\n      return new Response(cached, {\n        headers: { \"content-type\": \"application/json\", \"x-cache\": \"HIT\" },\n      });\n    }\n\n    // 2) Cache miss -> read post + author from D1\n    const post = await env.DB\n      .prepare(\n        \"SELECT p.id, p.title, p.body, p.cover_key, a.name AS author \" +\n        \"FROM posts p JOIN authors a ON a.id = p.author_id \" +\n        \"WHERE p.slug = ? AND p.published = 1\"\n      )\n      .bind(slug)\n      .first();\n\n    if (!post) return new Response(\"Not found\", { status: 404 });\n\n    // 3) Build an optimised image URL (R2 object served via Images)\n    post.cover_url =\n      `https://img.example.com/cdn-cgi/image/width=1200/${post.cover_key}`;\n\n    const json = JSON.stringify(post);\n\n    // 4) Save to KV for 5 minutes so the next read is instant\n    await env.CACHE.put(cacheKey, json, { expirationTtl: 300 });\n\n    return new Response(json, {\n      headers: { \"content-type\": \"application/json\", \"x-cache\": \"MISS\" },\n    });\n  },\n};" }
+            },
+            {
+              "title": { "en": "Wire up the front-end", "zh": "串接前端" },
+              "text": {
+                "en": "On Pages, plain fetch() to the Worker API is all you need. The page renders the title, author and the optimised cover image.",
+                "zh": "在 Pages 上，只要用原生 fetch() 打 Worker API 就夠了。頁面把標題、作者與最佳化過的封面圖渲染出來。"
+              },
+              "code": { "lang": "js", "body": "async function loadPost(slug) {\n  const res = await fetch(`/api/posts/${slug}`);\n  if (!res.ok) throw new Error(\"Post not found\");\n  const post = await res.json();\n\n  document.querySelector(\"#title\").textContent = post.title;\n  document.querySelector(\"#author\").textContent = \"by \" + post.author;\n  document.querySelector(\"#cover\").src = post.cover_url;\n  document.querySelector(\"#body\").innerHTML = post.body;\n}\n\n// Read the slug from the URL, e.g. /blog/hello-world\nloadPost(location.pathname.split(\"/\").pop());" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish the Worker; connect your repo to Pages for the front-end. The whole blog is now live on Cloudflare's edge.",
+                "zh": "發布 Worker；把你的 repo 接上 Pages 做前端。整個部落格就上線在 Cloudflare 的邊緣了。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "cable",
+              "title": { "en": "Bindings, not connection strings", "zh": "用綁定，不用連線字串" },
+              "text": {
+                "en": "You reach D1, KV and R2 as env.DB / env.CACHE / env.BUCKET. There are no passwords in your code to leak.",
+                "zh": "你用 env.DB／env.CACHE／env.BUCKET 存取 D1、KV、R2。程式碼裡沒有任何密碼會外洩。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "Cache key & TTL", "zh": "快取鍵與 TTL" },
+              "text": {
+                "en": "Each post is cached under post:<slug> with a TTL (time-to-live) — it auto-expires after 300 seconds even if nobody clears it.",
+                "zh": "每篇文章以 post:<slug> 為鍵快取，並設定 TTL（存活時間）——就算沒人去清，300 秒後也會自動過期。"
+              }
+            },
+            {
+              "icon": "delete_sweep",
+              "title": { "en": "Invalidate on write", "zh": "寫入時失效" },
+              "text": {
+                "en": "When a post changes, delete its KV key. Otherwise readers keep seeing the stale cached version until the TTL runs out.",
+                "zh": "文章一變更就刪掉它的 KV 鍵。否則在 TTL 到期前，讀者會一直看到過時的快取版本。"
+              }
+            },
+            {
+              "icon": "category",
+              "title": { "en": "Right tool per data type", "zh": "依資料型態選對工具" },
+              "text": {
+                "en": "Relational text → D1; large files → R2; hot read cache → KV. Mixing them up (e.g. images in D1) gets slow and pricey.",
+                "zh": "關聯式文字 → D1；大型檔案 → R2；熱讀快取 → KV。混用（例如把圖片塞進 D1）會又慢又貴。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "Images by URL", "zh": "用網址處理圖片" },
+              "text": {
+                "en": "Adding /cdn-cgi/image/width=1200/ to a URL resizes on the fly — store one original in R2, serve every size from it.",
+                "zh": "在網址加上 /cdn-cgi/image/width=1200/ 就能即時縮放——R2 只存一份原圖，所有尺寸都由它供應。"
+              }
+            },
+            {
+              "icon": "dynamic_feed",
+              "title": { "en": "Pages + Worker split", "zh": "Pages 與 Worker 分工" },
+              "text": {
+                "en": "Pages serves static UI; the Worker serves /api. They deploy independently, so a UI tweak never risks your API.",
+                "zh": "Pages 供應靜態介面；Worker 供應 /api。兩者各自部署，所以調整介面絕不會波及你的 API。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pitfalls", "zh": "小提示與陷阱" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "payments",
+          "title": { "en": "Generous free tiers stack up", "zh": "免費額度疊起來很夠用" },
+          "text": {
+            "en": "D1 (5M rows read/day), KV (100K reads/day), R2 (10GB + zero egress fees) and Pages (unlimited static requests) each have free tiers — a small blog can run at no cost. The cache means most reads never even hit D1's quota.",
+            "zh": "D1（每天 500 萬列讀取）、KV（每天 10 萬次讀取）、R2（10GB 且免下載流量費）與 Pages（無限靜態請求）各自都有免費額度——小型部落格幾乎零成本就能跑。有了快取，大多數讀取根本用不到 D1 的額度。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Always invalidate the KV key when you edit or unpublish a post, or readers see stale content.",
+              "Store only the cover_key in D1 (a short string); keep the actual image bytes in R2.",
+              "Add an index on posts(slug) — it is your main lookup column and keeps reads cheap.",
+              "R2 has no egress fees, so serving images is far cheaper than typical cloud storage.",
+              "Keep secrets (e.g. an admin token) in wrangler secrets, never in wrangler.jsonc."
+            ],
+            "zh": [
+              "編輯或下架文章時一定要讓 KV 鍵失效，否則讀者會看到過時內容。",
+              "D1 裡只存 cover_key（一個短字串）；真正的圖片位元組放在 R2。",
+              "在 posts(slug) 上建索引——它是你主要的查找欄位，能讓讀取一直很便宜。",
+              "R2 沒有下載流量費，所以供應圖片比一般雲端儲存便宜很多。",
+              "密鑰（例如管理者 token）放在 wrangler secrets，千萬別寫進 wrangler.jsonc。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "pages-functions-fullstack", "label": { "en": "Pages Functions full-stack", "zh": "Pages Functions 全端" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } }
+  ],
+  "docs": "https://developers.cloudflare.com/"
+}

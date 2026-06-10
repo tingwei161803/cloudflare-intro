@@ -1,0 +1,549 @@
+{
+  "slug": "blueprint-url-shortener",
+  "category": "integrations",
+  "group": {
+    "en": "Architecture Blueprints",
+    "zh": "架構藍圖"
+  },
+  "icon": "link",
+  "title": {
+    "en": "Blueprint: a URL shortener (your first full-stack app)",
+    "zh": "架構藍圖：短網址服務（你的第一個全端應用）"
+  },
+  "subtitle": {
+    "en": "A form, a Worker, and KV — build a tiny link shortener end to end",
+    "zh": "一個表單、一個 Worker、加上 KV——從頭到尾做出迷你短網址服務"
+  },
+  "hero": {
+    "badge": {
+      "en": "Integration",
+      "zh": "整合實戰"
+    },
+    "tagline": {
+      "en": "Paste a long link, get a short one back, and click it to jump — the perfect first project.",
+      "zh": "貼上一條長網址，換回一條短的，點下去就跳轉——最適合的第一個專案。"
+    }
+  },
+  "stats": [
+    {
+      "value": "3",
+      "label": {
+        "en": "Layers wired",
+        "zh": "層串接"
+      }
+    },
+    {
+      "value": "6",
+      "label": {
+        "en": "Short code length",
+        "zh": "短碼長度"
+      }
+    },
+    {
+      "value": "302",
+      "label": {
+        "en": "Redirect status",
+        "zh": "轉址狀態碼"
+      }
+    },
+    {
+      "value": "1",
+      "label": {
+        "en": "KV namespace",
+        "zh": "KV 命名空間"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": {
+        "en": "What are we building?",
+        "zh": "我們要做什麼？"
+      },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A URL shortener is the classic 'hello world' of full-stack apps. You paste a long, ugly link, the app stores it under a short random code, and visiting that code redirects you to the original link. With Cloudflare you can build the whole thing with one HTML page, one Worker, and one KV namespace — no server to manage.",
+            "zh": "短網址服務是全端應用的經典「Hello World」。你貼上一條又長又醜的連結，應用程式把它存在一個隨機短代碼底下，之後拜訪那個代碼就會把你轉址回原本的連結。用 Cloudflare，你只要一個 HTML 頁面、一個 Worker、一個 KV 命名空間就能做出整套——完全不用管伺服器。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "There are exactly two things the app does: (1) create — turn a long URL into a short code and save it; (2) resolve — take a short code and send the browser to the long URL. Let's see both as a picture.",
+            "zh": "這個應用程式就只做兩件事：(1) 建立——把長網址變成短代碼並存起來；(2) 還原——拿短代碼把瀏覽器送去長網址。我們先用一張圖看懂這兩件事。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "sticky_note_2",
+          "title": {
+            "en": "Think of it like…",
+            "zh": "把它想成…"
+          },
+          "text": {
+            "en": "A coat-check ticket. You hand over a bulky coat (the long URL) and get a tiny numbered ticket (the short code). Later you show the ticket and the attendant brings back exactly your coat. KV is the rack of coats; the code is your ticket number.",
+            "zh": "一張寄物號碼牌。你交出一件笨重的大衣（長網址），換得一張小小的號碼牌（短代碼）。之後你出示號碼牌，服務員就把你那件大衣拿回來。KV 就是那排衣架；代碼就是你的號碼牌號碼。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "The two flows at a glance",
+            "zh": "兩條流程一眼看懂"
+          },
+          "code": {
+            "en": "flowchart LR\n  KV[(\"KV store\")]\n  subgraph s1[\"Create a short link\"]\n    F[\"Browser form\"] -->|\"POST long URL\"| W1[\"Worker create\"]\n    W1 -->|\"return short URL\"| F\n  end\n  subgraph s2[\"Open a short link\"]\n    B[\"Browser /code\"] --> W2[\"Worker lookup\"]\n    W2 -->|\"302 redirect\"| B\n  end\n  W1 -->|\"put(code, url)\"| KV\n  W2 -->|\"get(code)\"| KV",
+            "zh": "flowchart LR\n  KV[(\"KV 儲存\")]\n  subgraph s1[\"建立短網址\"]\n    F[\"瀏覽器表單\"] -->|\"POST 長網址\"| W1[\"Worker 建立\"]\n    W1 -->|\"回傳短網址\"| F\n  end\n  subgraph s2[\"開啟短網址\"]\n    B[\"瀏覽器 /code\"] --> W2[\"Worker 查詢\"]\n    W2 -->|\"302 轉址\"| B\n  end\n  W1 -->|\"put(code, url)\"| KV\n  W2 -->|\"get(code)\"| KV"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": {
+        "en": "How the pieces fit",
+        "zh": "各個元件怎麼搭"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Three small layers, each with one job. Requests flow front-end → Worker → KV and back. Because the Worker also serves the static form, your whole app lives at a single URL.",
+            "zh": "三個小小的層，各司其職。請求的流向是 前端 → Worker → KV，再原路回來。因為 Worker 同時也提供那個靜態表單，你的整個應用就活在同一個網址底下。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": {
+                "en": "1. Front-end form",
+                "zh": "1. 前端表單"
+              },
+              "text": {
+                "en": "A plain HTML page with one input and a fetch() call. No framework needed.",
+                "zh": "一個單純的 HTML 頁面，一個輸入框加一個 fetch() 呼叫。不需要任何框架。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": {
+                "en": "2. Worker (the brain)",
+                "zh": "2. Worker（大腦）"
+              },
+              "text": {
+                "en": "One function that reads the request, decides create vs resolve, and talks to KV.",
+                "zh": "一個函式，讀取請求、判斷是要建立還是要查詢，然後跟 KV 溝通。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": {
+                "en": "3. KV (the memory)",
+                "zh": "3. KV（記憶體）"
+              },
+              "text": {
+                "en": "A global key-value store holding every code → URL pair, read back in milliseconds.",
+                "zh": "一個全球鍵值資料庫，保存每一組 代碼 → 網址 的配對，毫秒內就能讀回。"
+              }
+            },
+            {
+              "icon": "tag",
+              "title": {
+                "en": "The short code",
+                "zh": "短代碼"
+              },
+              "text": {
+                "en": "A tiny random string like abc123 that becomes the key and the last part of the short URL.",
+                "zh": "一段像 abc123 的迷你隨機字串，它同時是 key，也是短網址的結尾。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Inside the Worker: one router, two jobs",
+            "zh": "Worker 內部：一個路由、兩件工作"
+          },
+          "code": {
+            "en": "flowchart TD\n  R[\"Incoming request\"] --> Q{\"Match route\"}\n  Q -->|\"POST /api/shorten\"| C[\"Create handler\"]\n  Q -->|\"GET /code\"| L[\"Lookup handler\"]\n  C -->|\"put(code, url)\"| KV[(\"KV: LINKS\")]\n  C --> J[\"Return JSON short URL\"]\n  L -->|\"get(code)\"| KV\n  L --> RD[\"Return 302 redirect\"]",
+            "zh": "flowchart TD\n  R[\"進來的請求\"] --> Q{\"比對路由\"}\n  Q -->|\"POST /api/shorten\"| C[\"建立處理器\"]\n  Q -->|\"GET /code\"| L[\"查詢處理器\"]\n  C -->|\"put(code, url)\"| KV[(\"KV：LINKS\")]\n  C --> J[\"回傳 JSON 短網址\"]\n  L -->|\"get(code)\"| KV\n  L --> RD[\"回傳 302 轉址\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": {
+        "en": "What happens on each click",
+        "zh": "每次點擊背後發生什麼"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Both flows talk to the same three players: your Browser, the Worker, and KV. Here is the exact back-and-forth for creating a link and then opening it.",
+            "zh": "兩條流程都跟同樣三位角色互動：你的瀏覽器、Worker、以及 KV。以下是「建立連結」再「開啟連結」時，一來一回的確切順序。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Create, then resolve",
+            "zh": "先建立、再還原"
+          },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant K as KV\n  Note over U,K: Create a short link\n  U->>W: POST /api/shorten with long URL\n  W->>W: generate random code\n  W->>K: put(code, longUrl)\n  K-->>W: stored\n  W-->>U: short URL /abc123\n  Note over U,K: Open the short link\n  U->>W: GET /abc123\n  W->>K: get(abc123)\n  K-->>W: long URL\n  W-->>U: 302 redirect to long URL",
+            "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as Worker\n  participant K as KV\n  Note over U,K: 建立短網址\n  U->>W: POST /api/shorten 帶長網址\n  W->>W: 產生隨機代碼\n  W->>K: put(code, longUrl)\n  K-->>W: 已儲存\n  W-->>U: 短網址 /abc123\n  Note over U,K: 開啟短網址\n  U->>W: GET /abc123\n  W->>K: get(abc123)\n  K-->>W: 長網址\n  W-->>U: 302 轉址到長網址"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": {
+        "en": "Build it step by step",
+        "zh": "一步步動手做"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Five steps from empty folder to a live link shortener. Create a project with npm create cloudflare@latest, then follow along — every file you need is below.",
+            "zh": "五個步驟，從空資料夾到上線的短網址服務。先用 npm create cloudflare@latest 建立專案，然後跟著做——你需要的每個檔案都在下面。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": {
+                "en": "Create a KV namespace",
+                "zh": "建立 KV 命名空間"
+              },
+              "text": {
+                "en": "A namespace is one isolated bucket of key-value pairs. Wrangler prints an id — copy it for the next step.",
+                "zh": "命名空間就是一桶獨立的鍵值配對。Wrangler 會印出一組 id——複製起來給下一步用。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "npx wrangler kv namespace create LINKS"
+              }
+            },
+            {
+              "title": {
+                "en": "Bind KV in wrangler.jsonc",
+                "zh": "在 wrangler.jsonc 綁定 KV"
+              },
+              "text": {
+                "en": "This config file names your entry Worker, points at the static files, and makes the namespace available in code as env.LINKS.",
+                "zh": "這個設定檔指定你的進入點 Worker、指向靜態檔，並讓那個命名空間能在程式碼中用 env.LINKS 取用。"
+              },
+              "code": {
+                "lang": "jsonc",
+                "body": "{\n  \"name\": \"url-shortener\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  // Serve everything in ./public as static files (the HTML form lives here)\n  \"assets\": { \"directory\": \"./public\" },\n  // Make the KV namespace available in code as env.LINKS\n  \"kv_namespaces\": [\n    { \"binding\": \"LINKS\", \"id\": \"<paste-your-id-here>\" }\n  ]\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Build the front-end form",
+                "zh": "做出前端表單"
+              },
+              "text": {
+                "en": "Save this as public/index.html. It is served automatically at / and posts the URL to your Worker with fetch().",
+                "zh": "把這個存成 public/index.html。它會自動在 / 被提供，並用 fetch() 把網址 POST 給你的 Worker。"
+              },
+              "code": {
+                "lang": "html",
+                "body": "<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>URL Shortener 短網址</title>\n  </head>\n  <body>\n    <h1>Shorten a URL 縮短網址</h1>\n\n    <form id=\"shorten-form\">\n      <input\n        id=\"long-url\"\n        type=\"url\"\n        placeholder=\"https://example.com/a/very/long/path\"\n        required\n      />\n      <button type=\"submit\">Shorten</button>\n    </form>\n\n    <p id=\"result\"></p>\n\n    <script>\n      const form = document.getElementById(\"shorten-form\");\n\n      form.addEventListener(\"submit\", async (event) => {\n        event.preventDefault();\n        const longUrl = document.getElementById(\"long-url\").value;\n\n        // POST the long URL to our Worker as JSON\n        const response = await fetch(\"/api/shorten\", {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({ url: longUrl }),\n        });\n\n        const data = await response.json();\n        const result = document.getElementById(\"result\");\n\n        if (data.short) {\n          const shortUrl = location.origin + data.short;\n          result.innerHTML =\n            'Short link: <a href=\"' + shortUrl + '\">' + shortUrl + \"</a>\";\n        } else {\n          result.textContent = data.error || \"Something went wrong\";\n        }\n      });\n    </script>\n  </body>\n</html>"
+              }
+            },
+            {
+              "title": {
+                "en": "Write the Worker",
+                "zh": "寫 Worker"
+              },
+              "text": {
+                "en": "Save this as src/index.js. On POST it generates a code and saves it; on GET it looks the code up and redirects. This is the entire back-end.",
+                "zh": "把這個存成 src/index.js。在 POST 時它產生代碼並儲存；在 GET 時查出代碼並轉址。這就是整個後端。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// src/index.js — the entire back-end of the URL shortener\n\n// Build a random short code, e.g. \"a8Kp2Z\", from safe characters.\nfunction makeCode(length = 6) {\n  const chars =\n    \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\n  const bytes = crypto.getRandomValues(new Uint8Array(length));\n  let code = \"\";\n  for (const byte of bytes) {\n    code += chars[byte % chars.length];\n  }\n  return code;\n}\n\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // 1) CREATE a short link:  POST /api/shorten  with { \"url\": \"https://...\" }\n    if (request.method === \"POST\" && url.pathname === \"/api/shorten\") {\n      const body = await request.json();\n      const longUrl = body.url;\n\n      // Validate the input before trusting it.\n      const ok =\n        longUrl &&\n        (longUrl.startsWith(\"http://\") || longUrl.startsWith(\"https://\"));\n      if (!ok) {\n        return Response.json(\n          { error: \"Please send a valid http(s) URL\" },\n          { status: 400 }\n        );\n      }\n\n      const code = makeCode(6);\n      await env.LINKS.put(code, longUrl); // save the pair: code -> long URL\n      return Response.json({ short: \"/\" + code });\n    }\n\n    // 2) RESOLVE a short link:  GET /<code>  ->  302 redirect to the long URL\n    if (request.method === \"GET\") {\n      const code = url.pathname.slice(1); // drop the leading \"/\"\n      const longUrl = await env.LINKS.get(code); // look the code up in KV\n      if (longUrl) {\n        return Response.redirect(longUrl, 302);\n      }\n      return new Response(\"Short link not found\", { status: 404 });\n    }\n\n    return new Response(\"Method not allowed\", { status: 405 });\n  },\n};"
+              }
+            },
+            {
+              "title": {
+                "en": "Run locally, then deploy",
+                "zh": "先在本機跑，再部署"
+              },
+              "text": {
+                "en": "wrangler dev runs it on your machine; wrangler deploy puts it on Cloudflare's global network with a public URL.",
+                "zh": "wrangler dev 在你電腦上跑；wrangler deploy 把它放上 Cloudflare 全球網路，給你一個公開網址。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Run it on your own machine first\nnpx wrangler dev\n# open http://localhost:8787 , paste a URL, then click the short link\n\n# Happy with it? Ship it worldwide:\nnpx wrangler deploy"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": {
+        "en": "Key concepts",
+        "zh": "重點概念"
+      },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": {
+                "en": "KV stores code → URL",
+                "zh": "KV 存的是 代碼 → 網址"
+              },
+              "text": {
+                "en": "Each short code is a key; the long URL is its value. put(code, url) saves the pair, get(code) reads it back. No tables, no SQL.",
+                "zh": "每個短代碼就是一個 key，長網址是它的 value。put(code, url) 存下這組配對，get(code) 再把它讀回來。沒有資料表，也沒有 SQL。"
+              }
+            },
+            {
+              "icon": "subdirectory_arrow_right",
+              "title": {
+                "en": "302 redirect",
+                "zh": "302 轉址"
+              },
+              "text": {
+                "en": "Response.redirect(url, 302) tells the browser 'this link lives somewhere else, go there now'. 302 = a temporary redirect, so you can change the target later.",
+                "zh": "Response.redirect(url, 302) 等於告訴瀏覽器「這個連結其實在別處，現在去那裡吧」。302 代表「暫時轉址」，所以你之後還能改目標網址。"
+              }
+            },
+            {
+              "icon": "casino",
+              "title": {
+                "en": "Random short code",
+                "zh": "隨機短代碼"
+              },
+              "text": {
+                "en": "We pick 6 characters at random from a-z, A-Z, 0-9 — over 56 billion combinations, so collisions are extremely unlikely for a small app.",
+                "zh": "我們從 a-z、A-Z、0-9 裡隨機挑 6 個字元——超過 560 億種組合，所以小型應用幾乎不可能撞碼。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": {
+                "en": "Eventual consistency is fine here",
+                "zh": "最終一致性在這裡剛剛好"
+              },
+              "text": {
+                "en": "A freshly created code can take up to ~60s to appear in every region. For sharing links that is perfectly acceptable.",
+                "zh": "剛建立的代碼可能要約 60 秒才會在每個地區都生效。對「分享連結」這種需求完全沒問題。"
+              }
+            },
+            {
+              "icon": "web",
+              "title": {
+                "en": "Static assets + Worker",
+                "zh": "靜態資源 + Worker"
+              },
+              "text": {
+                "en": "The HTML form is a static file served automatically; any path that is not a file (like /abc123) falls through to your Worker.",
+                "zh": "HTML 表單是一個會被自動提供的靜態檔；任何不是檔案的路徑（像 /abc123）就會落到你的 Worker 處理。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": {
+                "en": "Validate the input",
+                "zh": "驗證輸入"
+              },
+              "text": {
+                "en": "Always check the submitted URL really starts with http:// or https:// before saving it — never trust raw form data.",
+                "zh": "存檔前一定要檢查送來的網址真的以 http:// 或 https:// 開頭——別輕信原始表單資料。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": {
+            "en": "301 vs 302",
+            "zh": "301 與 302 的差別"
+          },
+          "text": {
+            "en": "301 = permanent (browsers and search engines cache it hard); 302 = temporary. Start with 302 while learning so you can freely change where a code points.",
+            "zh": "301 = 永久轉址（瀏覽器和搜尋引擎會用力快取）；302 = 暫時轉址。學習階段先用 302，這樣你隨時能改某個代碼指向哪裡。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "upgrade",
+      "icon": "trending_up",
+      "heading": {
+        "en": "Level it up: count the clicks",
+        "zh": "再升級：統計點擊次數"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Once the basics work, a fun next step is counting how many times each short link is opened. The quick way: keep a counter in KV. The robust way: log each click into a D1 (SQL) table so you can run analytics.",
+            "zh": "基本功能跑起來後，一個好玩的下一步是統計每條短連結被開過幾次。快速做法：在 KV 裡放一個計數器。穩健做法：把每次點擊記進 D1（SQL）資料表，這樣就能做分析。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Quick way — a KV counter",
+            "zh": "快速做法——KV 計數器"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": {
+            "en": "add inside the GET branch",
+            "zh": "加在 GET 分支裡"
+          },
+          "body": "// Inside the GET branch, right after you read longUrl:\nconst key = \"clicks:\" + code;\nconst hits = parseInt((await env.LINKS.get(key)) || \"0\", 10);\nawait env.LINKS.put(key, String(hits + 1)); // best-effort click count"
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Robust way — a D1 table",
+            "zh": "穩健做法——D1 資料表"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "With D1 you keep one row per link and one row per click. The shape looks like this:",
+            "zh": "用 D1，你為每條連結留一列、每次點擊留一列。資料長相如下："
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Click-tracking schema (D1 upgrade)",
+            "zh": "點擊統計資料結構（D1 升級版）"
+          },
+          "code": {
+            "en": "erDiagram\n  LINKS ||--o{ CLICKS : records\n  LINKS {\n    text code PK\n    text long_url\n    int created_at\n  }\n  CLICKS {\n    int id PK\n    text code FK\n    int clicked_at\n  }",
+            "zh": "erDiagram\n  LINKS ||--o{ CLICKS : 記錄\n  LINKS {\n    text code PK\n    text long_url\n    int created_at\n  }\n  CLICKS {\n    int id PK\n    text code FK\n    int clicked_at\n  }"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": {
+            "en": "schema.sql",
+            "zh": "schema.sql"
+          },
+          "body": "-- schema.sql  (run with: npx wrangler d1 execute mydb --file schema.sql)\nCREATE TABLE links (\n  code       TEXT PRIMARY KEY,\n  long_url   TEXT NOT NULL,\n  created_at INTEGER NOT NULL\n);\n\nCREATE TABLE clicks (\n  id         INTEGER PRIMARY KEY,\n  code       TEXT NOT NULL,\n  clicked_at INTEGER NOT NULL\n);"
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "lightbulb",
+          "title": {
+            "en": "KV or D1?",
+            "zh": "KV 還是 D1？"
+          },
+          "text": {
+            "en": "KV is perfect for the code → URL lookup (tons of fast reads). D1 is better for click logs you want to query and aggregate. Many real apps use both together.",
+            "zh": "KV 很適合 代碼 → 網址 的查找（超大量的快速讀取）。D1 比較適合你想查詢、彙總的點擊紀錄。很多真實應用會兩個一起用。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": {
+        "en": "Tips, traps & limits",
+        "zh": "小提示、陷阱與限制"
+      },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": {
+            "en": "Open redirects can be abused",
+            "zh": "開放轉址可能被濫用"
+          },
+          "text": {
+            "en": "Because anyone can shorten any URL, bad actors could hide phishing links behind your domain. For a learning project it's fine; for production, consider a blocklist or only allowing your own URLs.",
+            "zh": "因為任何人都能縮短任何網址，壞人可能把釣魚連結藏在你的網域後面。學習專案沒關係；但要上正式環境，請考慮加黑名單，或只允許縮短你自己的網址。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "KV free tier: 100,000 reads/day and 1,000 writes/day — plenty for a personal shortener.",
+              "Reads are fast and cheap; writes are limited to ~1 per second per key, which is fine since each code is written once.",
+              "Check for an existing code before saving if you want to be extra safe against the tiny collision chance.",
+              "A new code may take up to ~60 seconds to be readable in every region (eventual consistency)."
+            ],
+            "zh": [
+              "KV 免費額度：每天 10 萬次讀取、1,000 次寫入——對個人短網址服務綽綽有餘。",
+              "讀取又快又便宜；同一個 key 寫入限約每秒 1 次，但每個代碼只寫一次，所以沒問題。",
+              "想對極小的撞碼機率再保險一點，可以在儲存前先檢查代碼是否已存在。",
+              "新代碼可能要約 60 秒才會在每個地區都讀得到（最終一致性）。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "slug": "kv",
+      "label": {
+        "en": "Workers KV",
+        "zh": "Workers KV"
+      }
+    },
+    {
+      "slug": "workers",
+      "label": {
+        "en": "Workers",
+        "zh": "Workers"
+      }
+    },
+    {
+      "slug": "d1",
+      "label": {
+        "en": "D1",
+        "zh": "D1"
+      }
+    },
+    {
+      "slug": "kv-cache-layer",
+      "label": {
+        "en": "KV as a cache layer",
+        "zh": "用 KV 當快取層"
+      }
+    }
+  ],
+  "docs": "https://developers.cloudflare.com/kv/"
+}

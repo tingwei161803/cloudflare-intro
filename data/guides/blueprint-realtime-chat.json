@@ -1,0 +1,389 @@
+{
+  "slug": "blueprint-realtime-chat",
+  "category": "integrations",
+  "group": { "en": "Architecture Blueprints", "zh": "架構藍圖" },
+  "icon": "forum",
+  "title": {
+    "en": "Blueprint: a real-time chat room",
+    "zh": "架構藍圖：即時聊天室"
+  },
+  "subtitle": {
+    "en": "A reference architecture for live chat: WebSockets + Durable Objects + D1",
+    "zh": "即時聊天的參考架構：WebSocket + Durable Objects + D1"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "One Durable Object per room holds every open WebSocket and broadcasts messages to everyone; D1 keeps the history.",
+      "zh": "每個房間用一個 Durable Object 握住所有開啟的 WebSocket 連線，把訊息廣播給所有人；D1 負責保存歷史紀錄。"
+    }
+  },
+  "stats": [
+    { "value": "1", "label": { "en": "Durable Object per room", "zh": "每房一個 Durable Object" } },
+    { "value": "∞", "label": { "en": "Concurrent rooms", "zh": "同時房間數" } },
+    { "value": "3", "label": { "en": "Layers wired", "zh": "串接層數" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we building?", "zh": "我們要做什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A real-time chat room where many people in the same room see each other's messages instantly. We use a WebSocket (a connection that stays open both ways) so the server can push new messages down without the browser asking again and again.",
+            "zh": "一個即時聊天室：同一個房間裡的很多人，能「立刻」看到彼此的訊息。我們用 WebSocket（一條持續開啟、雙向的連線），讓伺服器可以主動把新訊息推下來，瀏覽器不必一直重複詢問。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The trick is: who holds all those open connections and makes sure everyone in a room gets every message? The answer is a Durable Object (DO) — a single, always-there mini-server. We give every room its own Durable Object. A small Worker in front just routes each browser to the right room, and D1 (Cloudflare's SQL database) stores the message history.",
+            "zh": "關鍵在於：誰來握住這些開著的連線，並確保房間裡每個人都收到每則訊息？答案是 Durable Object（DO，可譯為「持久物件」）——一個單一、永遠都在的迷你伺服器。我們讓「每個房間」各擁有一個 Durable Object。前面放一個小小的 Worker 負責把每個瀏覽器路由到正確的房間，而 D1（Cloudflare 的 SQL 資料庫）負責保存訊息歷史。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "meeting_room",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "Each chat room is a real meeting room with one dedicated host standing at the door. The host (the Durable Object) keeps a list of everyone inside; when someone speaks, the host repeats it to the whole room and writes it in the room's logbook (D1). Different room name = a different host. There is never any confusion about who is in which room.",
+            "zh": "每個聊天室就像一間真實的會議室，門口站著一位專屬主持人。主持人（也就是 Durable Object）手上有「室內所有人」的名單；有人發言時，主持人就把那句話複誦給整個房間聽，並記在房間的紀錄簿（D1）裡。不同的房間名稱 = 不同的主持人。誰在哪個房間，永遠不會搞混。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "High-level architecture", "zh": "整體架構圖" },
+          "code": {
+            "en": "flowchart TD\n  B1[\"Browser A\"] -->|WebSocket| W[\"Worker (router)\"]\n  B2[\"Browser B\"] -->|WebSocket| W\n  B3[\"Browser C\"] -->|WebSocket| W\n  W -->|\"idFromName(room)\"| DO[\"Room Durable Object (per room)\"]\n  DO -->|\"broadcast\"| B1\n  DO -->|\"broadcast\"| B2\n  DO -->|\"broadcast\"| B3\n  DO -->|\"save history\"| D1[\"D1 (message history)\"]",
+            "zh": "flowchart TD\n  B1[\"瀏覽器 A\"] -->|WebSocket| W[\"Worker（路由）\"]\n  B2[\"瀏覽器 B\"] -->|WebSocket| W\n  B3[\"瀏覽器 C\"] -->|WebSocket| W\n  W -->|\"idFromName(room)\"| DO[\"房間 Durable Object（每房一個）\"]\n  DO -->|\"廣播\"| B1\n  DO -->|\"廣播\"| B2\n  DO -->|\"廣播\"| B3\n  DO -->|\"儲存歷史\"| D1[\"D1（訊息歷史）\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "每個角色負責什麼？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "There are four roles. Each has one clear job — keeping responsibilities separate is what makes the system easy to reason about.",
+            "zh": "總共有四個角色，每個角色只做一件清楚的事——把職責切乾淨，整個系統才好懂、好維護。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "devices",
+              "title": { "en": "Browser (client)", "zh": "瀏覽器（用戶端）" },
+              "text": {
+                "en": "Opens a WebSocket to the server, shows incoming messages, and sends what the user types. It never talks to other browsers directly.",
+                "zh": "對伺服器開一條 WebSocket，顯示收到的訊息，並把使用者輸入的內容送出去。它從不直接和其他瀏覽器溝通。"
+              }
+            },
+            {
+              "icon": "alt_route",
+              "title": { "en": "Worker (router)", "zh": "Worker（路由器）" },
+              "text": {
+                "en": "A stateless front door. It reads the room name from the URL, finds that room's Durable Object by name, and forwards the connection. No chat logic lives here.",
+                "zh": "一道無狀態的前門。它從網址讀出房間名稱，依名稱找到那間房的 Durable Object，再把連線轉送過去。這裡不放任何聊天邏輯。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Room Durable Object", "zh": "房間 Durable Object" },
+              "text": {
+                "en": "The heart of the system. One per room. It holds every open WebSocket for that room, broadcasts each message to all of them, and is the single coordination point.",
+                "zh": "整個系統的核心。每個房間一個。它握住那間房所有開啟的 WebSocket，把每則訊息廣播給全部連線，是唯一的協調點（single coordination point）。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "D1 (history)", "zh": "D1（歷史）" },
+              "text": {
+                "en": "A SQL database that stores every message so the conversation survives reloads and the room object restarting. The DO writes one row per message.",
+                "zh": "一個 SQL 資料庫，把每則訊息存起來，讓對話在重新整理、甚至房間物件重啟後依然存在。DO 每則訊息寫入一列（row）。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Why is a Durable Object the natural \"room\"? Because the same room name always resolves to the exact same single instance, everywhere on Earth. That single instance becomes the one place where all the room's connections and state live — no locks, no message broker, no race conditions.",
+            "zh": "為什麼 Durable Object 天生就是「房間」？因為「相同的房間名稱」永遠會對應到「同一個」單一實例（instance），不管在地球哪個角落都一樣。這個單一實例就成了房間所有連線與狀態唯一的所在——不需要鎖（lock）、不需要訊息中介、也沒有競爭條件（race condition）。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "One name → one room object", "zh": "一個名稱 → 一個房間物件" },
+          "code": {
+            "en": "flowchart LR\n  U1[\"User 1\"] --> R[\"room = general\"]\n  U2[\"User 2\"] --> R\n  U3[\"User 3\"] --> R\n  R -->|\"idFromName(general)\"| DO[\"One Room DO (general)\"]\n  DO --> T[\"single source of truth\"]",
+            "zh": "flowchart LR\n  U1[\"使用者 1\"] --> R[\"房間 = general\"]\n  U2[\"使用者 2\"] --> R\n  U3[\"使用者 3\"] --> R\n  R -->|\"idFromName(general)\"| DO[\"唯一的房間 DO（general）\"]\n  DO --> T[\"單一真相來源\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The message history table", "zh": "訊息歷史資料表" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Live messages flow through the Durable Object in memory; the permanent copy lives in D1. We need just one table, messages, with a row per chat message. room_id ties each message back to the room it belongs to.",
+            "zh": "即時訊息是在 Durable Object 的記憶體裡流動；永久的那一份則存在 D1。我們只需要一張資料表 messages，每則聊天訊息一列。room_id 把每則訊息綁回它所屬的房間。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "messages entity", "zh": "messages 實體關係" },
+          "code": {
+            "en": "erDiagram\n  ROOMS ||--o{ MESSAGES : contains\n  ROOMS {\n    text id PK\n    text name\n  }\n  MESSAGES {\n    int id PK\n    text room_id FK\n    text user\n    text body\n    int created_at\n  }",
+            "zh": "erDiagram\n  ROOMS ||--o{ MESSAGES : 包含\n  ROOMS {\n    text id PK\n    text name\n  }\n  MESSAGES {\n    int id PK\n    text room_id FK\n    text user\n    text body\n    int created_at\n  }"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": { "en": "schema.sql — create the history table", "zh": "schema.sql — 建立歷史資料表" },
+          "body": "CREATE TABLE IF NOT EXISTS messages (\n  id         INTEGER PRIMARY KEY AUTOINCREMENT,\n  room_id    TEXT    NOT NULL,\n  user       TEXT    NOT NULL,\n  body       TEXT    NOT NULL,\n  created_at INTEGER NOT NULL\n);\n\nCREATE INDEX IF NOT EXISTS idx_messages_room\n  ON messages (room_id, created_at);"
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "Why created_at is a number", "zh": "為什麼 created_at 是數字" },
+          "text": {
+            "en": "We store created_at as an integer — milliseconds from Date.now(). Numbers sort cleanly and are easy to turn into any timezone in the browser. The index on (room_id, created_at) makes \"load the last 50 messages for this room\" fast.",
+            "zh": "我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。(room_id, created_at) 這個索引讓「載入這個房間最近 50 則訊息」變得很快。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "The message round-trip", "zh": "訊息往返流程" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the full life of one message — from a browser connecting, to the Durable Object broadcasting it to everyone and saving it to D1.",
+            "zh": "下面是「一則訊息的一生」——從瀏覽器連上線，到 Durable Object 把它廣播給所有人、並存進 D1。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Connect, send, broadcast, persist", "zh": "連線、送出、廣播、保存" },
+          "code": {
+            "en": "sequenceDiagram\n  participant A as \"Client A\"\n  participant B as \"Client B\"\n  participant W as \"Worker\"\n  participant R as \"Room DO\"\n  participant D as \"D1\"\n  A->>W: WebSocket upgrade, room=lobby\n  W->>R: idFromName lobby, forward request\n  R-->>A: 101 accept, connection open\n  Note over B,R: Client B is already connected\n  A->>R: send a chat message\n  R->>D: INSERT INTO messages\n  R-->>A: broadcast to all\n  R-->>B: broadcast to all",
+            "zh": "sequenceDiagram\n  participant A as \"用戶端 A\"\n  participant B as \"用戶端 B\"\n  participant W as \"Worker\"\n  participant R as \"房間 DO\"\n  participant D as \"D1\"\n  A->>W: WebSocket 升級, room=lobby\n  W->>R: idFromName lobby, 轉送請求\n  R-->>A: 101 接受, 連線開啟\n  Note over B,R: 用戶端 B 已經連線\n  A->>R: 送出一則訊息\n  R->>D: INSERT INTO messages\n  R-->>A: 廣播給所有人\n  R-->>B: 廣播給所有人"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "campaign",
+          "title": { "en": "\"Broadcast\" = one in, many out", "zh": "「廣播」= 一進，多出" },
+          "text": {
+            "en": "One client sends a single message in; the Durable Object loops over every open socket and sends it back out to all of them — including the original sender, so their own message appears the same way everyone else sees it.",
+            "zh": "一個用戶端送進「一則」訊息；Durable Object 就走訪每一條開著的連線，把它再送回給「所有人」——包含原本的發送者，這樣他自己的訊息也會用和別人一樣的方式顯示出來。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it step by step", "zh": "一步步動手做" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the project and a D1 database", "zh": "建立專案與一個 D1 資料庫" },
+              "text": {
+                "en": "Scaffold a Worker, then create the D1 database that will hold the history. Note the database_id it prints — you paste it into config next.",
+                "zh": "先建立一個 Worker，再建立用來存歷史的 D1 資料庫。記下它印出的 database_id——下一步要貼進設定檔。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest -- chat-room\ncd chat-room\nnpx wrangler d1 create chat-history" }
+            },
+            {
+              "title": { "en": "Configure wrangler.jsonc", "zh": "設定 wrangler.jsonc" },
+              "text": {
+                "en": "Bind the Durable Object class (ROOMS), register a SQLite migration for it, and bind the D1 database (DB). The migration tells Cloudflare ChatRoom is a new SQLite-backed class.",
+                "zh": "綁定 Durable Object 類別（ROOMS）、為它登記一個 SQLite migration（遷移），再綁定 D1 資料庫（DB）。migration 是在告訴 Cloudflare：ChatRoom 是一個新的、以 SQLite 儲存的類別。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"chat-room\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"durable_objects\": {\n    \"bindings\": [\n      { \"name\": \"ROOMS\", \"class_name\": \"ChatRoom\" }\n    ]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"ChatRoom\"] }\n  ],\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"chat-history\", \"database_id\": \"<your-d1-database-id>\" }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Create the messages table", "zh": "建立 messages 資料表" },
+              "text": {
+                "en": "Run the schema.sql from the data-model section against your D1 database so the messages table exists before you write to it.",
+                "zh": "把前面「資料模型」那段的 schema.sql 套用到你的 D1 資料庫，讓 messages 資料表先存在，之後才寫得進去。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 execute chat-history --remote --file=./schema.sql" }
+            },
+            {
+              "title": { "en": "Write the Worker (the router)", "zh": "寫 Worker（路由器）" },
+              "text": {
+                "en": "The Worker only checks for a WebSocket upgrade, resolves the room's Durable Object by name with env.ROOMS.idFromName(room), and forwards the request. It re-exports ChatRoom so the runtime can find the class.",
+                "zh": "Worker 只做三件事：確認這是 WebSocket 升級請求、用 env.ROOMS.idFromName(room) 依名稱找到房間的 Durable Object、把請求轉送過去。它也把 ChatRoom 重新匯出（re-export），好讓執行環境找得到這個類別。"
+              },
+              "code": { "lang": "js", "body": "import { ChatRoom } from \"./chat-room.js\";\nexport { ChatRoom };\n\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const room = url.searchParams.get(\"room\") || \"lobby\";\n\n    // Only accept WebSocket upgrade requests\n    if (request.headers.get(\"Upgrade\") !== \"websocket\") {\n      return new Response(\"Expected a WebSocket upgrade\", { status: 426 });\n    }\n\n    // Resolve the ONE Durable Object for this room name\n    const id = env.ROOMS.idFromName(room);\n    const stub = env.ROOMS.get(id);\n\n    // Forward the upgrade request to that room object\n    return stub.fetch(request);\n  },\n};" }
+            },
+            {
+              "title": { "en": "Write the Room Durable Object", "zh": "寫房間 Durable Object" },
+              "text": {
+                "en": "The DO completes the WebSocket handshake with acceptWebSocket (hibernation mode). The webSocketMessage handler runs on every incoming message: it saves one row to D1, then broadcasts to every socket returned by getWebSockets().",
+                "zh": "DO 用 acceptWebSocket 完成 WebSocket 握手（採休眠模式）。每當有訊息進來，webSocketMessage 處理器就會執行：先寫一列到 D1，再把訊息廣播給 getWebSockets() 回傳的每一條連線。"
+              },
+              "code": { "lang": "js", "body": "import { DurableObject } from \"cloudflare:workers\";\n\nexport class ChatRoom extends DurableObject {\n  constructor(ctx, env) {\n    super(ctx, env);\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  // Completes the WebSocket handshake and registers the socket\n  async fetch(request) {\n    const url = new URL(request.url);\n    const room = url.searchParams.get(\"room\") || \"lobby\";\n\n    const pair = new WebSocketPair();\n    const client = pair[0];\n    const server = pair[1];\n\n    // Hibernation: let the runtime hold the socket so the DO can sleep\n    this.ctx.acceptWebSocket(server);\n    server.serializeAttachment({ room });\n\n    return new Response(null, { status: 101, webSocket: client });\n  }\n\n  // Runs whenever ANY connected client sends a message\n  async webSocketMessage(ws, raw) {\n    const { user, body } = JSON.parse(raw);\n    const { room } = ws.deserializeAttachment();\n    const created_at = Date.now();\n\n    // 1) Persist to D1 history\n    await this.env.DB\n      .prepare(\"INSERT INTO messages (room_id, user, body, created_at) VALUES (?, ?, ?, ?)\")\n      .bind(room, user, body, created_at)\n      .run();\n\n    // 2) Broadcast to everyone connected to THIS room\n    const payload = JSON.stringify({ user, body, created_at });\n    for (const socket of this.ctx.getWebSockets()) {\n      socket.send(payload);\n    }\n  }\n\n  async webSocketClose(ws, code, reason, wasClean) {\n    ws.close(code, \"room closing socket\");\n  }\n}" }
+            },
+            {
+              "title": { "en": "Connect from the browser", "zh": "從瀏覽器連線" },
+              "text": {
+                "en": "On the front end, open a WebSocket to the Worker with ?room=lobby, render each incoming message, and send the user's text as JSON. Use wss:// (the secure form) in production.",
+                "zh": "在前端，用 ?room=lobby 對 Worker 開一條 WebSocket，把每則進來的訊息畫到畫面上，並把使用者輸入的文字以 JSON 送出。正式環境請用 wss://（加密版）。"
+              },
+              "code": { "lang": "html", "body": "<script>\n  const room = \"lobby\";\n  const ws = new WebSocket(`wss://chat-room.example.workers.dev/?room=${room}`);\n\n  ws.addEventListener(\"open\", () => console.log(\"connected to\", room));\n\n  ws.addEventListener(\"message\", (event) => {\n    const msg = JSON.parse(event.data);\n    addLine(`${msg.user}: ${msg.body}`); // render into your chat list\n  });\n\n  // Call this when the user submits the chat box\n  function send(user, text) {\n    ws.send(JSON.stringify({ user, body: text }));\n  }\n</script>" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署" },
+              "text": {
+                "en": "Publish to Cloudflare's network. Every distinct ?room= value you connect with automatically gets its own Durable Object.",
+                "zh": "發佈到 Cloudflare 的網路。你用每一個不同的 ?room= 值連線，都會自動拿到屬於它自己的 Durable Object。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "cable",
+              "title": { "en": "WebSocket", "zh": "WebSocket" },
+              "text": {
+                "en": "A connection that stays open in both directions. Unlike a normal request-then-response, the server can push data down any time — perfect for chat.",
+                "zh": "一條會持續開啟、且「雙向」的連線。和一般「先請求、再回應」不同，伺服器可以隨時主動把資料推下來——非常適合聊天。"
+              }
+            },
+            {
+              "icon": "swap_horiz",
+              "title": { "en": "WebSocketPair", "zh": "WebSocketPair" },
+              "text": {
+                "en": "On the server you create a pair of linked sockets: you keep one (server) and hand the other (client) back to the browser inside a 101 response.",
+                "zh": "在伺服器端你會建立「一對」互相連動的連線：自己留著一端（server），把另一端（client）放進 101 回應交還給瀏覽器。"
+              }
+            },
+            {
+              "icon": "bedtime",
+              "title": { "en": "Hibernation", "zh": "休眠（Hibernation）" },
+              "text": {
+                "en": "With acceptWebSocket(), the runtime holds the connections for you. An idle room object can be evicted from memory yet keep its sockets alive — so thousands of idle connections cost almost nothing.",
+                "zh": "用 acceptWebSocket() 後，由執行環境替你保管連線。一個閒置的房間物件可以從記憶體被回收，但連線依然活著——所以成千上萬條閒置連線幾乎不花錢。"
+              }
+            },
+            {
+              "icon": "campaign",
+              "title": { "en": "Broadcast", "zh": "廣播（Broadcast）" },
+              "text": {
+                "en": "Loop over ctx.getWebSockets() and send() to each one. That single list of sockets is exactly why one object per room is so convenient — everyone you need is right there.",
+                "zh": "走訪 ctx.getWebSockets()，對每一條 send()。「房間裡所有連線」這份名單就在手上——這正是「一個房間一個物件」如此方便的原因：你要找的人全都在這裡。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "idFromName()", "zh": "idFromName()" },
+              "text": {
+                "en": "Turns a room name into a stable object ID. The same name always maps to the same single instance, anywhere — this is how routing to \"the\" room works.",
+                "zh": "把房間名稱轉成一個穩定的物件 ID。相同名稱永遠對應到同一個單一實例，哪裡都一樣——「路由到那間房」就是靠這個。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Why a DO is the room", "zh": "為什麼用 DO 當房間" },
+              "text": {
+                "en": "A room needs one place that holds all members and agrees on message order. A Durable Object is exactly that: a single coordination point with no locks or extra message broker needed.",
+                "zh": "一個房間需要「一個」地方來握住所有成員、並對訊息順序達成一致。Durable Object 正好就是這個：一個單一協調點，不需要鎖，也不需要額外的訊息中介。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls & tips", "zh": "陷阱與小提示" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "balance",
+          "title": { "en": "One room = one bottleneck", "zh": "一個房間 = 一個瓶頸" },
+          "text": {
+            "en": "All traffic for a room funnels through its single object (a soft limit of about 1,000 requests/second). That's fine for a chat room, but don't try to push the whole site through one DO — split work by room, document, or user.",
+            "zh": "一個房間的所有流量都匯集到它「單一」的物件（軟性上限約每秒 1,000 個請求）。對一個聊天室來說綽綽有餘，但別想把整個網站塞進同一個 DO——請依房間、文件或使用者把工作拆開。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Easy mistakes to avoid", "zh": "容易踩的坑" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Forgetting to re-export the ChatRoom class from your Worker entry file — the runtime won't find it.",
+              "Using ws:// instead of wss:// in production; browsers block insecure WebSockets on HTTPS pages.",
+              "Doing heavy work inside webSocketMessage and blocking the broadcast — keep it: persist, then broadcast.",
+              "Trusting the message body blindly — validate user and body before writing to D1.",
+              "Expecting the DO's memory to last forever — it can hibernate, so treat D1 as the durable history."
+            ],
+            "zh": [
+              "忘了在 Worker 入口檔把 ChatRoom 類別重新匯出（re-export）——執行環境會找不到它。",
+              "正式環境用 ws:// 而非 wss://；在 HTTPS 頁面上瀏覽器會擋掉不安全的 WebSocket。",
+              "在 webSocketMessage 裡做太重的工作，卡住廣播——順序維持簡單：先存檔，再廣播。",
+              "盲目相信訊息內容——寫進 D1 前先驗證 user 與 body。",
+              "以為 DO 的記憶體會永遠存在——它會休眠，所以請把 D1 當成持久的歷史來源。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "history",
+          "title": { "en": "Show history on join", "zh": "加入房間時顯示歷史" },
+          "text": {
+            "en": "When a client connects, run SELECT * FROM messages WHERE room_id = ? ORDER BY created_at DESC LIMIT 50 against D1 and send those rows first — so newcomers instantly see recent chat instead of an empty room.",
+            "zh": "用戶端連上線時，先對 D1 跑 SELECT * FROM messages WHERE room_id = ? ORDER BY created_at DESC LIMIT 50，把這些歷史先送過去——新加入的人就能立刻看到最近的對話，而不是一個空房間。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "realtime", "label": { "en": "Realtime", "zh": "Realtime" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "durable-objects-state", "label": { "en": "Durable Objects: state", "zh": "Durable Objects：狀態" } }
+  ],
+  "docs": "https://developers.cloudflare.com/durable-objects/"
+}

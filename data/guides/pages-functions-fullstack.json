@@ -1,0 +1,371 @@
+{
+  "slug": "pages-functions-fullstack",
+  "category": "integrations",
+  "group": { "en": "Full-stack Basics", "zh": "全端串接基礎" },
+  "icon": "web",
+  "title": {
+    "en": "Deploy a full-stack app with Pages + Functions",
+    "zh": "用 Pages + Functions 部署全端應用"
+  },
+  "subtitle": {
+    "en": "Host your front-end and run your back-end API in one Cloudflare Pages project",
+    "zh": "用同一個 Cloudflare Pages 專案，同時放前端網頁、跑後端 API"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "One git repo, one deploy: static pages and an /api/* backend ship together.",
+      "zh": "一個 git repo、一次部署：靜態網頁和 /api/* 後端一起上線。"
+    }
+  },
+  "stats": [
+    { "value": "1", "label": { "en": "Repo, full-stack", "zh": "個 repo 跑全端" } },
+    { "value": "500", "label": { "en": "Free builds / month", "zh": "每月免費建置" } },
+    { "value": "100", "label": { "en": "Custom domains", "zh": "自訂網域" } },
+    { "value": "25 MiB", "label": { "en": "Max asset size", "zh": "單檔上限" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring together?", "zh": "我們要串什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Pages hosts your front-end (the HTML, CSS, and JavaScript a browser downloads). Pages Functions let that SAME project also run back-end code — your API. You drop files into a functions/ folder, each file becomes an API route, and you bind a D1 database (SQL) or KV store (key-value) so the back-end can read and write data.",
+            "zh": "Cloudflare Pages 負責放你的前端（瀏覽器會下載的 HTML、CSS、JavaScript）。而 Pages Functions（Pages 函式）讓「同一個專案」也能跑後端程式碼——也就是你的 API。你只要把檔案丟進 functions/ 資料夾，每個檔案就會自動變成一條 API 路由，再綁定 D1 資料庫（SQL）或 KV 儲存（鍵值對），後端就能讀寫資料了。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The magic is that the static site and the API live in one repository and deploy together. A request to / returns a static file; a request to /api/hello runs a Function. No separate server, no separate deploy pipeline.",
+            "zh": "重點在於：靜態網站和 API 住在同一個 repository（程式碼倉庫）裡、一起部署。打 / 會回傳靜態檔案；打 /api/hello 則會執行一個 Function。不用另外架伺服器，也不用維護第二條部署流程。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Project layout & request routing", "zh": "專案結構與請求路由" },
+          "code": {
+            "en": "flowchart TD\n  USER[\"Browser\"] --> EDGE[\"Cloudflare edge\"]\n  EDGE -->|\"static path\"| STATIC[\"Static assets (HTML/CSS/JS)\"]\n  EDGE -->|\"/api/*\"| FN[\"functions/api/[[route]].js\"]\n  STATIC -->|\"calls /api/hello\"| FN\n  FN --> DB[\"D1 database (env.DB)\"]\n  FN --> KV[\"KV namespace (env.CACHE)\"]",
+            "zh": "flowchart TD\n  USER[\"瀏覽器\"] --> EDGE[\"Cloudflare 邊緣節點\"]\n  EDGE -->|\"靜態路徑\"| STATIC[\"靜態檔案 (HTML/CSS/JS)\"]\n  EDGE -->|\"/api/*\"| FN[\"functions/api/[[route]].js\"]\n  STATIC -->|\"呼叫 /api/hello\"| FN\n  FN --> DB[\"D1 資料庫 (env.DB)\"]\n  FN --> KV[\"KV 命名空間 (env.CACHE)\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "home_work",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A shop with a storefront and a back office under one roof. The storefront (static pages) is what customers see; the back office (Functions) handles orders and talks to the filing cabinet (D1/KV). One building, one set of keys, one address.",
+            "zh": "一間「前面是店面、後面是辦公室」的店，全在同一個屋簷下。店面（靜態網頁）是客人看到的門面；後台辦公室（Functions）處理訂單、去翻檔案櫃（D1／KV）。一棟建築、一把鑰匙、一個地址。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "各層的職責" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the folder you actually create. Anything in your build output folder (here public/) is served as a static file. Anything in functions/ becomes server-side code mapped to a URL.",
+            "zh": "這是你實際會建立的資料夾。放在「建置輸出資料夾」（這裡是 public/）的東西，都會被當成靜態檔案直接送出；放在 functions/ 裡的，則會變成對應到某個網址的後端程式碼。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "title": { "en": "Folder structure", "zh": "資料夾結構" },
+          "body": "my-fullstack-app/\n├── public/            # static front-end (served as-is)\n│   └── index.html\n├── functions/         # each file = one API route\n│   └── api/\n│       └── hello.js   # -> /api/hello\n├── schema.sql         # D1 table + seed data\n└── wrangler.toml      # bindings + build output dir"
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "html",
+              "title": { "en": "Static front-end", "zh": "靜態前端" },
+              "text": {
+                "en": "Files in public/ (HTML, CSS, JS, images) are cached and served from Cloudflare's edge worldwide.",
+                "zh": "public/ 裡的檔案（HTML、CSS、JS、圖片）會被快取，並從 Cloudflare 全球邊緣節點直接送出。"
+              }
+            },
+            {
+              "icon": "function",
+              "title": { "en": "functions/ = your API", "zh": "functions/ 就是你的 API" },
+              "text": {
+                "en": "functions/api/hello.js automatically answers /api/hello. The file path becomes the URL path.",
+                "zh": "functions/api/hello.js 會自動回應 /api/hello。檔案的路徑，就等於網址的路徑。"
+              }
+            },
+            {
+              "icon": "cable",
+              "title": { "en": "Bindings", "zh": "綁定（Bindings）" },
+              "text": {
+                "en": "A binding is a named handle (e.g. env.DB, env.CACHE) that connects a Function to D1 or KV — no connection strings.",
+                "zh": "綁定就是一個有名字的把手（例如 env.DB、env.CACHE），把 Function 接到 D1 或 KV——不用連線字串、不用密碼。"
+              }
+            },
+            {
+              "icon": "merge",
+              "title": { "en": "One deploy", "zh": "一次部署" },
+              "text": {
+                "en": "Push to git (or run one command) and the static site + Functions go live together at the same domain.",
+                "zh": "推上 git（或跑一行指令），靜態網站和 Functions 就會一起上線、掛在同一個網域下。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "From git push to a live request", "zh": "從 git push 到請求上線" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "When you connect your repo, every push triggers a build. Pages compiles your front-end, bundles the functions/ folder, and deploys both. After that, the edge decides per-request: serve a static file, or run a Function.",
+            "zh": "當你把 repo 連上 Pages 後，每次 push 都會觸發一次建置（build）。Pages 會編譯前端、把 functions/ 資料夾打包起來，然後一起部署。之後邊緣節點會「逐一請求」判斷：要回傳靜態檔案，還是執行一個 Function。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Push, build, deploy, serve", "zh": "推送、建置、部署、回應" },
+          "code": {
+            "en": "sequenceDiagram\n  participant Dev as Developer\n  participant Git as GitHub\n  participant Pages as \"Pages build\"\n  participant Edge as \"Cloudflare edge\"\n  participant User as Browser\n  Dev->>Git: git push\n  Git->>Pages: webhook triggers build\n  Pages->>Pages: run build command\n  Pages->>Edge: deploy assets + Functions\n  User->>Edge: GET /\n  Edge-->>User: index.html (static)\n  User->>Edge: GET /api/hello\n  Edge-->>User: JSON from Function",
+            "zh": "sequenceDiagram\n  participant Dev as \"開發者\"\n  participant Git as GitHub\n  participant Pages as \"Pages 建置\"\n  participant Edge as \"Cloudflare 邊緣\"\n  participant User as \"瀏覽器\"\n  Dev->>Git: git push\n  Git->>Pages: webhook 觸發建置\n  Pages->>Pages: 執行建置指令\n  Pages->>Edge: 部署靜態檔案 + Functions\n  User->>Edge: GET /\n  Edge-->>User: index.html (靜態)\n  User->>Edge: GET /api/hello\n  Edge-->>User: Function 回傳 JSON"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it step by step", "zh": "一步步動手做" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "We'll create a tiny page that fetches /api/hello, a Function that reads a name from D1 and counts hits in KV, the bindings, and the deploy. Three layers — front-end, Function, data — all in one project.",
+            "zh": "我們會做一個小網頁去抓 /api/hello、一個從 D1 讀名字並用 KV 計數的 Function、把綁定設好、再部署。前端、Function、資料層三邊，全部塞進同一個專案。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Write the front-end", "zh": "寫前端" },
+              "text": {
+                "en": "Put this in public/index.html. The fetch('/api/hello') is same-origin — no CORS, no full URL — because the API lives in the same project.",
+                "zh": "把這段放進 public/index.html。fetch('/api/hello') 是同源請求（same-origin）——不用處理 CORS、不用寫完整網址——因為 API 就住在同一個專案裡。"
+              },
+              "code": {
+                "lang": "html",
+                "body": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>Hello Pages</title>\n  </head>\n  <body>\n    <h1 id=\"msg\">Loading…</h1>\n    <script>\n      // Same origin: the Function is at /api/hello in the SAME project\n      fetch(\"/api/hello\")\n        .then((r) => r.json())\n        .then((data) => {\n          document.getElementById(\"msg\").textContent = data.message;\n        })\n        .catch((err) => {\n          document.getElementById(\"msg\").textContent = \"Error: \" + err;\n        });\n    </script>\n  </body>\n</html>"
+              }
+            },
+            {
+              "title": { "en": "Write the Function", "zh": "寫 Function" },
+              "text": {
+                "en": "Create functions/api/hello.js. The export name onRequest handles every HTTP method; context.env holds your bindings. (Use onRequestGet / onRequestPost to handle a single method.)",
+                "zh": "建立 functions/api/hello.js。匯出的 onRequest 會處理所有 HTTP 方法；context.env 就握著你的綁定。（想只處理單一方法，就用 onRequestGet／onRequestPost。）"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// functions/api/hello.js  ->  GET/POST /api/hello\nexport async function onRequest(context) {\n  // context.env carries your bindings (DB, CACHE) + vars + secrets\n  const { env } = context;\n\n  // Read one row from the D1 database bound as DB\n  const { results } = await env.DB\n    .prepare(\"SELECT name FROM greetings WHERE id = ?\")\n    .bind(1)\n    .all();\n  const name = results[0]?.name ?? \"world\";\n\n  // Count visits in the KV namespace bound as CACHE\n  const hits = Number(await env.CACHE.get(\"hits\")) + 1;\n  await env.CACHE.put(\"hits\", String(hits));\n\n  return Response.json({ message: `Hello from ${name}!`, hits });\n}"
+              }
+            },
+            {
+              "title": { "en": "Create the data layer", "zh": "建立資料層" },
+              "text": {
+                "en": "Make a D1 database and a KV namespace, then seed the table. Save the SQL below as schema.sql first.",
+                "zh": "建立一個 D1 資料庫和一個 KV 命名空間，然後把資料表灌進去。先把下面的 SQL 存成 schema.sql。"
+              },
+              "code": {
+                "lang": "sql",
+                "body": "-- schema.sql: create the table the Function reads, then seed one row\nCREATE TABLE IF NOT EXISTS greetings (\n  id   INTEGER PRIMARY KEY,\n  name TEXT NOT NULL\n);\n\nINSERT INTO greetings (id, name) VALUES (1, 'Taipei');"
+              }
+            },
+            {
+              "title": { "en": "Provision D1 + KV", "zh": "開好 D1 + KV" },
+              "text": {
+                "en": "Wrangler prints an id for each — copy them into wrangler.toml in the next step. --remote runs against the real cloud database.",
+                "zh": "Wrangler 會各印出一組 id——把它們複製到下一步的 wrangler.toml。--remote 代表對雲端上真正的資料庫執行。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "npx wrangler d1 create my-app-db\nnpx wrangler kv namespace create CACHE\n\n# seed the D1 table from your SQL file\nnpx wrangler d1 execute my-app-db --remote --file=./schema.sql"
+              }
+            },
+            {
+              "title": { "en": "Bind D1 + KV to the project", "zh": "把 D1 + KV 綁到專案" },
+              "text": {
+                "en": "wrangler.toml tells Pages which storage to expose as env.DB and env.CACHE, and which folder is the static output. pages_build_output_dir is what makes this a Pages config.",
+                "zh": "wrangler.toml 告訴 Pages：要把哪些儲存以 env.DB、env.CACHE 的名字交給 Functions，以及哪個資料夾是靜態輸出。pages_build_output_dir 這一行，正是它被視為 Pages 設定的關鍵。"
+              },
+              "code": {
+                "lang": "toml",
+                "body": "name = \"my-fullstack-app\"\npages_build_output_dir = \"./public\"\ncompatibility_date = \"2025-01-01\"\n\n# D1 -> reachable in Functions as env.DB\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"my-app-db\"\ndatabase_id = \"<paste-your-d1-id>\"\n\n# KV -> reachable in Functions as env.CACHE\n[[kv_namespaces]]\nbinding = \"CACHE\"\nid = \"<paste-your-kv-id>\""
+              }
+            },
+            {
+              "title": { "en": "Configure the build", "zh": "設定建置" },
+              "text": {
+                "en": "For plain HTML there's nothing to compile, so the build command is blank and the output is public/. For a framework (Vite/React) you'd set a build command and point the output at dist/. These live in the Pages dashboard under Settings > Builds, or in wrangler.toml.",
+                "zh": "純 HTML 沒東西要編譯，所以建置指令留空、輸出設成 public/。如果是框架（Vite／React），就設好建置指令、把輸出指向 dist/。這些設定在 Pages 儀表板的 Settings > Builds，或寫在 wrangler.toml 裡。"
+              },
+              "code": {
+                "lang": "text",
+                "body": "# Pages build settings (dashboard, or wrangler.toml)\nBuild command:           (blank for plain static, or: npm run build)\nBuild output directory:  public      # plain HTML/CSS/JS\nRoot directory:          /\n\n# For a Vite / React app instead:\n#   Build command:          npm run build\n#   Build output directory: dist"
+              }
+            },
+            {
+              "title": { "en": "Deploy two ways", "zh": "兩種部署方式" },
+              "text": {
+                "en": "Direct deploy uploads the folder right now. Git-connected is the real workflow: connect the repo once in the dashboard, set the build command + output dir, and every push to your production branch auto-builds and deploys.",
+                "zh": "直接部署（direct deploy）會立刻把資料夾上傳。Git 連動才是正式做法：在儀表板把 repo 連一次、設好建置指令與輸出資料夾，之後每次 push 到正式分支，都會自動建置並部署。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Option A: direct deploy (great for a quick first try)\nnpx wrangler pages deploy ./public\n\n# Option B: git-connected (recommended)\n#   1. Push your repo to GitHub/GitLab\n#   2. Cloudflare dashboard > Workers & Pages > Create > Pages > Connect to Git\n#   3. Set build command + output dir, add D1/KV bindings\n#   4. Every push to main now builds & deploys automatically\ngit push origin main"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A common question: should I use Pages Functions or a standalone Worker? Quick rule below.",
+            "zh": "最常見的疑問：到底該用 Pages Functions，還是獨立的 Worker？下面這張圖給你一個快速判斷準則。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Pages Functions vs standalone Worker", "zh": "Pages Functions 與獨立 Worker 怎麼選" },
+          "code": {
+            "en": "flowchart TD\n  Q[\"Need to host a website too?\"] -->|\"Yes: front-end + API\"| PF[\"Use Pages + Functions\"]\n  Q -->|\"No: API only\"| WK[\"Use a standalone Worker\"]\n  PF --> ONE[\"One repo, one deploy\"]\n  WK --> API[\"Pure backend service\"]",
+            "zh": "flowchart TD\n  Q[\"也要同時架網站嗎？\"] -->|\"要：前端 + API\"| PF[\"用 Pages + Functions\"]\n  Q -->|\"不用：只要 API\"| WK[\"用獨立的 Worker\"]\n  PF --> ONE[\"一個 repo、一次部署\"]\n  WK --> API[\"純後端服務\"]"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "compare_arrows",
+              "title": { "en": "Pages vs Workers", "zh": "Pages 與 Workers 的差別" },
+              "text": {
+                "en": "Pages is front-end hosting with optional Functions bolted on; a Worker is pure code with no built-in static hosting. Pages Functions actually run ON Workers under the hood.",
+                "zh": "Pages 本質是「前端網站托管」，再外掛 Functions 當後端；Worker 則是「純程式碼」、本身不附帶靜態托管。其實 Pages Functions 底層就是跑在 Workers 上的。"
+              }
+            },
+            {
+              "icon": "route",
+              "title": { "en": "File = route", "zh": "檔案即路由" },
+              "text": {
+                "en": "functions/api/hello.js answers /api/hello. [id].js matches one segment (e.g. /users/42); [[route]].js is a catch-all that matches any depth.",
+                "zh": "functions/api/hello.js 對應 /api/hello。[id].js 只接一段路徑（例如 /users/42）；[[route]].js 是 catch-all，後面接幾層都吃得下。"
+              }
+            },
+            {
+              "icon": "api",
+              "title": { "en": "onRequest handlers", "zh": "onRequest 處理器" },
+              "text": {
+                "en": "Export onRequest for all methods, or onRequestGet / onRequestPost / onRequestPut / onRequestDelete to handle just one HTTP verb.",
+                "zh": "匯出 onRequest 處理所有方法；或用 onRequestGet／onRequestPost／onRequestPut／onRequestDelete 各自對應一個 HTTP 動詞。"
+              }
+            },
+            {
+              "icon": "deployed_code",
+              "title": { "en": "The context object", "zh": "context 物件" },
+              "text": {
+                "en": "Each handler gets context with env (bindings), params (dynamic route values), request, next (middleware), and waitUntil (background work).",
+                "zh": "每個處理器都會拿到 context，裡面有 env（綁定）、params（動態路由的值）、request、next（中介層 middleware）和 waitUntil（背景工作）。"
+              }
+            },
+            {
+              "icon": "vpn_key",
+              "title": { "en": "Bindings, not secrets", "zh": "用綁定，不用密碼" },
+              "text": {
+                "en": "Bindings give a Function direct, authenticated access to D1/KV/R2 via env.NAME. No connection strings or passwords in your code.",
+                "zh": "綁定讓 Function 透過 env.NAME 直接、已驗證地存取 D1／KV／R2。程式碼裡不會出現連線字串或密碼。"
+              }
+            },
+            {
+              "icon": "layers",
+              "title": { "en": "Middleware with _middleware.js", "zh": "用 _middleware.js 做中介層" },
+              "text": {
+                "en": "A _middleware.js in a folder runs before its routes — perfect for auth or logging. Call context.next() to continue to the matched Function.",
+                "zh": "資料夾裡的 _middleware.js 會在該層路由之前先跑——很適合做驗證或記錄。呼叫 context.next() 就會繼續往下交給命中的 Function。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips, gotchas & pricing", "zh": "小提示、陷阱與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": { "en": "The functions/ folder is special", "zh": "functions/ 資料夾是特別的" },
+          "text": {
+            "en": "Don't put functions/ inside your build output folder. Pages reads functions/ separately to build routes; if your front-end build wipes or relocates it, your /api/* routes silently vanish.",
+            "zh": "別把 functions/ 放進「建置輸出資料夾」裡。Pages 會「另外」讀 functions/ 來產生路由；如果你的前端建置流程清空或搬動了它，你的 /api/* 路由就會無聲無息地消失。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Bindings must be added for BOTH Production and Preview environments in the dashboard, or your preview deploys will throw 'undefined' on env.DB.",
+              "Run the whole thing locally with: npx wrangler pages dev ./public — it serves static files and Functions together with your bindings.",
+              "Function invocations count toward your Workers quota: the free plan includes 100,000 requests per day.",
+              "Free plan: 500 builds per month, up to 20,000 files per deploy, and 25 MiB per asset.",
+              "Use D1 for relational/SQL data, KV for fast key lookups and caching, and R2 for large files."
+            ],
+            "zh": [
+              "綁定要在儀表板裡幫「正式（Production）」和「預覽（Preview）」兩個環境都各加一次，否則預覽部署在 env.DB 會炸出 undefined。",
+              "用這行在本機整包跑起來：npx wrangler pages dev ./public——它會把靜態檔案、Functions 和你的綁定一起服務。",
+              "Function 的呼叫次數會算進你的 Workers 額度：免費方案每天含 100,000 次請求。",
+              "免費方案：每月 500 次建置、每次部署最多 20,000 個檔案、單一檔案上限 25 MiB。",
+              "關聯式／SQL 資料用 D1；快速鍵值查找與快取用 KV；大型檔案則交給 R2。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "bolt",
+          "title": { "en": "Start static, grow into full-stack", "zh": "先靜態，再長成全端" },
+          "text": {
+            "en": "You can ship a pure static site today and add your first Function later just by creating functions/api/hello.js. Nothing else changes — same project, same deploy.",
+            "zh": "你今天可以先上一個純靜態網站，之後想加第一個後端，只要新增 functions/api/hello.js 就好。其他什麼都不用改——同一個專案、同一條部署。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "rest-api-worker", "label": { "en": "REST API on a Worker", "zh": "用 Worker 做 REST API" } }
+  ],
+  "docs": "https://developers.cloudflare.com/pages/functions/"
+}

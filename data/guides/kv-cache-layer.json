@@ -1,0 +1,500 @@
+{
+  "slug": "kv-cache-layer",
+  "category": "integrations",
+  "group": {
+    "en": "Data & Storage",
+    "zh": "資料庫與儲存"
+  },
+  "icon": "bolt",
+  "title": {
+    "en": "Add a KV cache in front of your database",
+    "zh": "用 KV 在資料庫前面加一層快取"
+  },
+  "subtitle": {
+    "en": "Put a fast key-value cache before D1 to cut latency and cost on read-heavy data",
+    "zh": "在 D1 前面擺一層快速的鍵值快取，替「讀多寫少」的資料降低延遲與成本"
+  },
+  "hero": {
+    "badge": {
+      "en": "Integration",
+      "zh": "整合實戰"
+    },
+    "tagline": {
+      "en": "Check KV first; only touch the database on a miss, then cache the answer with a TTL.",
+      "zh": "先問 KV，沒有才查資料庫，查完順手把答案加上存活時間（TTL）快取起來。"
+    }
+  },
+  "stats": [
+    {
+      "value": "100K",
+      "label": {
+        "en": "Free KV reads / day",
+        "zh": "每日免費 KV 讀取"
+      }
+    },
+    {
+      "value": "~0ms",
+      "label": {
+        "en": "Cached edge read",
+        "zh": "邊緣快取讀取"
+      }
+    },
+    {
+      "value": "300s",
+      "label": {
+        "en": "Example TTL",
+        "zh": "範例 TTL"
+      }
+    },
+    {
+      "value": "2",
+      "label": {
+        "en": "Stores wired (KV + D1)",
+        "zh": "串接的儲存 (KV + D1)"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": {
+        "en": "What are we building?",
+        "zh": "我們要做什麼？"
+      },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "We will put a cache in front of a database. The Worker checks a fast key-value store (Workers KV) first; only when the value is missing does it query the slower database (D1), and it saves that answer back into KV for next time. This pattern is called cache-aside.",
+            "zh": "我們要在資料庫前面加一層快取。Worker 會先去問一個很快的鍵值資料庫（Workers KV）；只有在找不到值的時候，才去查比較慢的資料庫（D1），並把查到的答案存回 KV 供下次使用。這個做法叫做「cache-aside（旁路快取）」。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "For read-heavy data - the same product page, the same config, the same profile fetched thousands of times - this is a huge win: most requests never reach the database, so they are faster and cheaper.",
+            "zh": "對於「讀多寫少」的資料——同一個商品頁、同一份設定、同一個個人檔案被讀取上千次——這個做法效益巨大：大多數請求根本不會打到資料庫，因此更快也更省錢。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_cafe",
+          "title": {
+            "en": "Think of it like…",
+            "zh": "把它想成…"
+          },
+          "text": {
+            "en": "A barista keeps a jug of brewed coffee on the counter (KV). If the jug has coffee, you get a cup instantly. Only when it runs dry do they brew a fresh pot from the machine (D1) - then refill the jug so the next ten customers are served instantly again.",
+            "zh": "咖啡師在櫃台上放了一壺已經煮好的咖啡（KV）。壺裡有咖啡，你馬上就有一杯。只有當壺空了，他們才去用機器重新煮一壺（D1）——然後把壺再裝滿，讓接下來十位客人又能立刻拿到。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Cache-aside read flow",
+            "zh": "Cache-aside 讀取流程"
+          },
+          "code": {
+            "en": "flowchart TD\n  U[\"User request\"] --> W[\"Worker\"]\n  W --> Q{\"Cache hit in KV?\"}\n  Q -->|\"Yes (hit)\"| R[\"Return value to user\"]\n  Q -->|\"No (miss)\"| D[\"Query D1 database\"]\n  D --> P[\"Put result in KV (TTL 300s)\"]\n  P --> R",
+            "zh": "flowchart TD\n  U[\"使用者請求\"] --> W[\"Worker\"]\n  W --> Q{\"KV 有快取嗎?\"}\n  Q -->|\"有 (命中)\"| R[\"把結果回傳給使用者\"]\n  Q -->|\"沒有 (未命中)\"| D[\"查詢 D1 資料庫\"]\n  D --> P[\"把結果寫入 KV (TTL 300 秒)\"]\n  P --> R"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": {
+        "en": "Who does what?",
+        "zh": "每一層各做什麼？"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Three pieces work together. The Worker is the brain that decides; KV is the fast cache; D1 is the source of truth that always holds the correct, latest data.",
+            "zh": "三個角色一起合作。Worker 是負責決策的大腦；KV 是快速的快取；D1 則是「真相來源（source of truth）」，永遠保存正確、最新的資料。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "psychology",
+              "title": {
+                "en": "Worker - the orchestrator",
+                "zh": "Worker - 指揮者"
+              },
+              "text": {
+                "en": "Receives the request, checks KV, decides whether to hit D1, and writes the result back to the cache.",
+                "zh": "接收請求、先查 KV、決定要不要去打 D1，並把結果寫回快取。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": {
+                "en": "KV - the fast cache",
+                "zh": "KV - 快取層"
+              },
+              "text": {
+                "en": "Holds a copy of recent answers near every user. Reads are near-instant; entries auto-expire by TTL.",
+                "zh": "在每位使用者附近保存近期答案的副本。讀取幾乎瞬間完成；每筆資料會依 TTL 自動過期。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": {
+                "en": "D1 - the source of truth",
+                "zh": "D1 - 真相來源"
+              },
+              "text": {
+                "en": "The authoritative SQL database. Slower and pricier per read, but always correct - only queried on a miss.",
+                "zh": "權威的 SQL 資料庫。每次讀取較慢、較貴，但永遠正確——只有在快取未命中時才會被查詢。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": {
+                "en": "The cache key",
+                "zh": "快取鍵 (key)"
+              },
+              "text": {
+                "en": "A stable name like product:42 that maps one DB row to one KV entry. Same input, same key.",
+                "zh": "像 product:42 這種穩定的名稱，把一筆資料列對應到一筆 KV 資料。相同輸入就對應到相同的 key。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": {
+        "en": "Hit vs miss, side by side",
+        "zh": "命中與未命中，並排比較"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "The first request for a key is a MISS: the Worker has to walk all the way to D1 and back, then fill the cache. Every following request (until the TTL expires) is a HIT: it returns from KV without ever touching D1.",
+            "zh": "對某個 key 的第一次請求是「未命中（miss）」：Worker 必須一路走到 D1 再走回來，然後把快取填好。之後的每一次請求（在 TTL 過期前）都是「命中（hit）」：直接從 KV 回傳，完全不碰 D1。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Cache MISS vs cache HIT round trip",
+            "zh": "未命中 vs 命中的往返"
+          },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as User\n  participant W as Worker\n  participant K as \"KV cache\"\n  participant D as D1\n  Note over U,D: First request - cache MISS\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: empty, miss\n  W->>D: SELECT product 42\n  D-->>W: row\n  W->>K: put product:42 with TTL 300\n  W-->>U: JSON, slow path\n  Note over U,D: Next request - cache HIT\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: cached JSON\n  W-->>U: JSON, fast path",
+            "zh": "sequenceDiagram\n  participant U as 使用者\n  participant W as Worker\n  participant K as \"KV 快取\"\n  participant D as D1\n  Note over U,D: 第一次請求 - 未命中\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: 空的, 未命中\n  W->>D: 查詢 product 42\n  D-->>W: 資料列\n  W->>K: put product:42 設定 TTL 300\n  W-->>U: JSON, 慢路徑\n  Note over U,D: 下一次請求 - 命中\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: 快取的 JSON\n  W-->>U: JSON, 快路徑"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "trending_down",
+          "title": {
+            "en": "Why this saves so much",
+            "zh": "為什麼這樣能省這麼多"
+          },
+          "text": {
+            "en": "If 95% of requests are hits, you cut database reads by roughly 20x. Fewer D1 reads means lower bills and lower latency for almost everyone.",
+            "zh": "如果 95% 的請求都命中，你的資料庫讀取量大約只剩 1/20。D1 讀取變少，代表帳單更低、而且幾乎每個人的延遲都更短。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": {
+        "en": "Build it: KV + D1 + Worker",
+        "zh": "動手做：KV + D1 + Worker"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Create the two stores, bind them, seed a row, then write the cache-aside logic. The front end just calls your API - it never knows a cache exists.",
+            "zh": "建立兩個儲存、綁定它們、塞一筆資料，然後寫 cache-aside 邏輯。前端只負責呼叫你的 API——它完全不知道背後有快取。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": {
+                "en": "Create the KV namespace and D1 database",
+                "zh": "建立 KV 命名空間與 D1 資料庫"
+              },
+              "text": {
+                "en": "Each command prints an id - paste them into wrangler.jsonc in the next step.",
+                "zh": "每個指令都會印出一組 id——下一步把它們貼進 wrangler.jsonc。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "npx wrangler kv namespace create CACHE\nnpx wrangler d1 create shop"
+              }
+            },
+            {
+              "title": {
+                "en": "Bind both to your Worker",
+                "zh": "把兩者綁定到 Worker"
+              },
+              "text": {
+                "en": "These bindings make the stores available as env.CACHE (KV) and env.DB (D1) inside your code.",
+                "zh": "這些綁定讓兩個儲存在程式碼裡能用 env.CACHE（KV）和 env.DB（D1）取用。"
+              },
+              "code": {
+                "lang": "json",
+                "body": "{\n  \"name\": \"cache-aside-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"kv_namespaces\": [\n    { \"binding\": \"CACHE\", \"id\": \"<your-kv-namespace-id>\" }\n  ],\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"shop\",\n      \"database_id\": \"<your-d1-database-id>\"\n    }\n  ]\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Create the table and seed a row",
+                "zh": "建立資料表並塞一筆資料"
+              },
+              "text": {
+                "en": "D1 is the source of truth. Run this SQL once to give the cache something to load.",
+                "zh": "D1 是真相來源。執行一次這段 SQL，讓快取有東西可以載入。"
+              },
+              "code": {
+                "lang": "sql",
+                "body": "CREATE TABLE IF NOT EXISTS products (\n  id    INTEGER PRIMARY KEY,\n  name  TEXT NOT NULL,\n  price REAL NOT NULL\n);\n\nINSERT INTO products (id, name, price) VALUES\n  (42, 'Mechanical Keyboard', 89.00);"
+              }
+            },
+            {
+              "title": {
+                "en": "Write the cache-aside read",
+                "zh": "寫 cache-aside 讀取"
+              },
+              "text": {
+                "en": "Ask KV first with get(key, \"json\"). On a hit, return immediately. On a miss, query D1, then put the result back into KV with a 300-second TTL.",
+                "zh": "先用 get(key, \"json\") 問 KV。命中就立刻回傳；未命中就查 D1，再用 300 秒的 TTL 把結果 put 回 KV。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const id = url.pathname.split(\"/\").pop();\n    const key = `product:${id}`;\n\n    // 1) Cache-aside: ask KV first\n    let product = await env.CACHE.get(key, \"json\");\n    if (product) {\n      // HIT: return straight away, no database needed\n      return Response.json({ source: \"cache\", product });\n    }\n\n    // 2) MISS: fall back to D1 (the source of truth)\n    const { results } = await env.DB\n      .prepare(\"SELECT * FROM products WHERE id = ?\")\n      .bind(id)\n      .all();\n    product = results[0] ?? null;\n    if (!product) {\n      return new Response(\"Not found\", { status: 404 });\n    }\n\n    // 3) Re-fill the cache with a 5-minute TTL, then return\n    await env.CACHE.put(key, JSON.stringify(product), {\n      expirationTtl: 300,\n    });\n    return Response.json({ source: \"database\", product });\n  },\n};"
+              }
+            },
+            {
+              "title": {
+                "en": "Invalidate on write",
+                "zh": "寫入時讓快取失效"
+              },
+              "text": {
+                "en": "When data changes, update D1, then delete(key). The cached copy is now gone, so the next read misses and repopulates with fresh data.",
+                "zh": "當資料變動時，先更新 D1，再 delete(key)。快取副本就此消失，所以下一次讀取會未命中，並用最新資料重新填回快取。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// On any write, update D1 first, then invalidate the cached copy.\nasync function updateProduct(env, id, data) {\n  // 1) Write to the source of truth\n  await env.DB\n    .prepare(\"UPDATE products SET name = ?, price = ? WHERE id = ?\")\n    .bind(data.name, data.price, id)\n    .run();\n\n  // 2) Invalidate: delete the stale key so the next read repopulates it\n  await env.CACHE.delete(`product:${id}`);\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Call it from the front end",
+                "zh": "在前端呼叫它"
+              },
+              "text": {
+                "en": "The browser just fetches your API. Caching is entirely a server-side concern.",
+                "zh": "瀏覽器只是 fetch 你的 API。快取完全是伺服器端的事。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// Plain browser fetch - it never talks to KV or D1 directly.\nasync function loadProduct(id) {\n  const res = await fetch(`/api/product/${id}`);\n  const data = await res.json();\n  // data.source tells you whether it came from \"cache\" or \"database\"\n  console.log(\"served from:\", data.source);\n  return data.product;\n}"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Write path: update then invalidate",
+            "zh": "寫入路徑：先更新、再失效"
+          },
+          "code": {
+            "en": "flowchart TD\n  C[\"Client write request\"] --> W[\"Worker\"]\n  W --> U[\"UPDATE row in D1\"]\n  U --> X[\"Delete the KV key\"]\n  X --> A[\"Reply OK to client\"]\n  A --> N[\"Next read misses and refetches fresh data\"]",
+            "zh": "flowchart TD\n  C[\"用戶端寫入請求\"] --> W[\"Worker\"]\n  W --> U[\"在 D1 更新資料\"]\n  U --> X[\"刪除對應的 KV key\"]\n  X --> A[\"回覆 OK 給用戶端\"]\n  A --> N[\"下次讀取會未命中並重新抓最新資料\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": {
+        "en": "Key concepts",
+        "zh": "重點概念"
+      },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "layers",
+              "title": {
+                "en": "Cache-aside (lazy loading)",
+                "zh": "Cache-aside（旁路快取 / 延遲載入）"
+              },
+              "text": {
+                "en": "The app code, not the cache, manages loading: read cache, on miss read the DB, then fill the cache. The cache stays out of the way until asked.",
+                "zh": "由應用程式的程式碼（而不是快取自己）負責載入：先讀快取，未命中就讀資料庫，再把快取填好。快取在被需要之前都不插手。"
+              }
+            },
+            {
+              "icon": "timer",
+              "title": {
+                "en": "TTL (time to live)",
+                "zh": "TTL（存活時間）"
+              },
+              "text": {
+                "en": "expirationTtl: 300 means the entry auto-deletes after 300 seconds. A short TTL keeps data fresher; a long TTL saves more DB reads. It is the dial you tune.",
+                "zh": "expirationTtl: 300 代表這筆資料 300 秒後自動刪除。TTL 越短，資料越新鮮；TTL 越長，越省資料庫讀取。它就是你要調整的旋鈕。"
+              }
+            },
+            {
+              "icon": "compare_arrows",
+              "title": {
+                "en": "Hit vs miss",
+                "zh": "命中 vs 未命中"
+              },
+              "text": {
+                "en": "A hit = the value was in KV (fast, no DB). A miss = it was not, so you pay the full DB round trip once and then cache it. Hit rate is the metric to watch.",
+                "zh": "命中 = 值就在 KV 裡（快、不碰資料庫）。未命中 = 不在，所以要付一次完整的資料庫往返，然後把它快取起來。「命中率」是你要盯的指標。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": {
+                "en": "Eventual consistency",
+                "zh": "最終一致性"
+              },
+              "text": {
+                "en": "KV writes take up to ~60s to spread worldwide, and a cached value can be stale until its TTL expires. Readers see the new value eventually, not instantly.",
+                "zh": "KV 的寫入最多要約 60 秒才會散布全球，而且快取的值在 TTL 過期前可能是舊的。讀取者最終會看到新值，但不是立刻。"
+              }
+            },
+            {
+              "icon": "delete_sweep",
+              "title": {
+                "en": "Invalidation",
+                "zh": "失效處理"
+              },
+              "text": {
+                "en": "Deleting (or overwriting) the key on every write keeps the cache honest. The classic hard problem is remembering every place a piece of data is cached.",
+                "zh": "每次寫入時刪除（或覆寫）對應的 key，能讓快取維持誠實。經典的難題是：要記得某筆資料被快取在哪些地方。"
+              }
+            },
+            {
+              "icon": "menu_book",
+              "title": {
+                "en": "Source of truth",
+                "zh": "真相來源"
+              },
+              "text": {
+                "en": "D1 is authoritative; KV is a disposable copy. If KV and D1 disagree, D1 wins - so it is always safe to delete a KV entry and rebuild it.",
+                "zh": "D1 是權威；KV 是可丟棄的副本。若 KV 與 D1 不一致，以 D1 為準——所以刪掉某筆 KV 再重建永遠是安全的。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": {
+        "en": "Pitfalls & tips",
+        "zh": "陷阱與小提示"
+      },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": {
+            "en": "Stale reads are the price of caching",
+            "zh": "讀到舊資料是快取的代價"
+          },
+          "text": {
+            "en": "Between a write and a cache delete (or before the TTL expires) some users may see old data. For anything that must be exactly correct everywhere - prices at checkout, stock counts, balances - use a short TTL, invalidate on write, or read D1 directly.",
+            "zh": "在「寫入」與「刪除快取」之間（或 TTL 還沒過期前），有些使用者可能看到舊資料。對於必須處處精準的東西——結帳價格、庫存數量、帳戶餘額——請用很短的 TTL、寫入時主動失效，或直接讀 D1。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Pick TTL by how stale you can tolerate: seconds for prices, minutes for product pages, hours for rarely-changing config.",
+              "Always invalidate on write (delete the key), or readers can stay stale for the full TTL.",
+              "Only cache what is actually read often - caching one-off lookups just wastes writes.",
+              "Never cache per-user secrets under a shared key; include the user id in the key, e.g. cart:{userId}.",
+              "Watch your hit rate. A low hit rate means the TTL is too short or the key is too specific to be reused.",
+              "A 'miss storm' (many misses at once on a cold key) can briefly hammer D1 - keep DB queries cheap and indexed."
+            ],
+            "zh": [
+              "依「能容忍多舊」來選 TTL：價格用秒、商品頁用分鐘、很少變的設定用小時。",
+              "寫入時務必失效（刪除 key），否則讀取者可能整段 TTL 都看到舊資料。",
+              "只快取真的常被讀取的東西——快取一次性的查詢只是白白浪費寫入次數。",
+              "絕不要把每位使用者的私密資料存在共用 key 下；把使用者 id 放進 key，例如 cart:{userId}。",
+              "盯著命中率看。命中率太低代表 TTL 太短，或 key 太細而無法被重複使用。",
+              "「未命中風暴」（冷門 key 同時湧入大量未命中）可能短暫衝擊 D1——讓資料庫查詢保持便宜並建好索引。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": {
+            "en": "KV is built for this",
+            "zh": "KV 天生就適合做這件事"
+          },
+          "text": {
+            "en": "Workers KV is read-optimized and globally replicated, which is exactly what a cache wants. Its weakness - slow-to-propagate writes - barely matters here, because a cache is allowed to be slightly behind.",
+            "zh": "Workers KV 是為讀取最佳化、且全球複寫的，這正是快取想要的特性。它的弱點——寫入要時間才會擴散——在這裡幾乎沒差，因為快取本來就允許稍微落後。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "slug": "kv",
+      "label": {
+        "en": "Workers KV",
+        "zh": "Workers KV"
+      }
+    },
+    {
+      "slug": "d1",
+      "label": {
+        "en": "D1",
+        "zh": "D1"
+      }
+    },
+    {
+      "slug": "workers",
+      "label": {
+        "en": "Workers",
+        "zh": "Workers"
+      }
+    },
+    {
+      "slug": "cache-flow",
+      "label": {
+        "en": "Caching flow",
+        "zh": "快取流程"
+      }
+    }
+  ],
+  "docs": "https://developers.cloudflare.com/kv/"
+}

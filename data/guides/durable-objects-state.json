@@ -1,0 +1,407 @@
+{
+  "slug": "durable-objects-state",
+  "category": "integrations",
+  "group": { "en": "Data & Storage", "zh": "資料庫與儲存" },
+  "icon": "hub",
+  "title": {
+    "en": "Strongly-consistent state with Durable Objects",
+    "zh": "用 Durable Objects 管理強一致狀態"
+  },
+  "subtitle": {
+    "en": "Make one Durable Object the single source of truth for a counter, lock, or live room",
+    "zh": "讓單一 Durable Object 成為計數器、鎖、即時房間的唯一真相來源"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "When state MUST be correct, route every request to one instance that handles them one at a time — no locks, no race conditions, no lost updates.",
+      "zh": "當狀態「一定要正確」時，把每個請求都導向同一個實例、一次處理一個——不用鎖、沒有競爭條件、不會遺失更新。"
+    }
+  },
+  "stats": [
+    { "value": "1", "label": { "en": "Instance per name", "zh": "每個名稱一個實例" } },
+    { "value": "Strong", "label": { "en": "Consistency", "zh": "一致性" } },
+    { "value": "0", "label": { "en": "Lost updates", "zh": "遺失的更新" } },
+    { "value": "~1k", "label": { "en": "Req/s per object", "zh": "每物件請求數/秒" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring up?", "zh": "我們要串什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Sometimes you need exactly one place in the whole world to hold a piece of state — a counter that must never miscount, a rate limiter, a game room, or a live document. A Durable Object (DO) gives you that: one instance, addressed by a name, that processes requests one at a time and carries its own storage.",
+            "zh": "有時候你需要全世界「剛好只有一個地方」來保管某份狀態——一個絕不能算錯的計數器、一個流量限制器、一個遊戲房間、或一份即時文件。Durable Object（DO，持久物件）正是為此而生：一個實例，用「名稱」定址，一次處理一個請求，而且自帶儲存。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "In this guide we wire a browser front-end to a Worker, and the Worker forwards every request to one shared Counter Durable Object. Because all traffic for a given name funnels into the same single instance, increments can never collide.",
+            "zh": "這篇教學會把瀏覽器前端串到一個 Worker，再讓 Worker 把每個請求都轉送給「同一個」共享的 Counter Durable Object。因為某個名稱的所有流量都匯流到同一個實例，計數的累加永遠不會互撞。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Many clients, one instance", "zh": "多個用戶端，一個實例" },
+          "code": {
+            "en": "flowchart TD\n  C1[\"Client A\"] --> W[\"Worker\"]\n  C2[\"Client B\"] --> W\n  C3[\"Client C\"] --> W\n  W -->|\"idFromName(global)\"| ID[\"DO ID\"]\n  ID --> DO[\"Counter (one instance)\"]\n  DO --> S[\"Storage (v)\"]",
+            "zh": "flowchart TD\n  C1[\"用戶端 A\"] --> W[\"Worker\"]\n  C2[\"用戶端 B\"] --> W\n  C3[\"用戶端 C\"] --> W\n  W -->|\"idFromName(global)\"| ID[\"DO 識別碼\"]\n  ID --> DO[\"Counter（唯一實例）\"]\n  DO --> S[\"儲存（v）\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "support_agent",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "One ticket counter for a popular event. No matter how many people show up, there is a single clerk handing out numbered tickets one at a time. Nobody gets the same number, and the count is always right — because there is exactly one clerk keeping the tally.",
+            "zh": "想成熱門活動的「單一售票口」。不管來多少人，都只有一位櫃檯人員、一次發一張號碼牌。沒有人會拿到重複的號碼，數量永遠正確——因為計數的就只有這一位櫃檯。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "The pieces & why DO beats KV here", "zh": "各部件，以及為何此處 DO 勝過 KV" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "There are four moving parts. The Worker is the front door; the id is the address of your object; the stub is a remote-control handle; and the instance is the one real object with its own storage.",
+            "zh": "這裡有四個角色。Worker 是大門；id 是物件的「地址」；stub（代理把手）是一支遙控器；instance（實例）則是那個帶著自己儲存的「真正物件」。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "door_front",
+              "title": { "en": "Worker (front door)", "zh": "Worker（大門）" },
+              "text": {
+                "en": "A normal stateless Worker that receives the HTTP request and decides which object to forward it to.",
+                "zh": "一個普通、無狀態的 Worker，負責接住 HTTP 請求，並決定要把它轉給哪個物件。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "id (the address)", "zh": "id（地址）" },
+              "text": {
+                "en": "idFromName(\"global\") turns a human name into a globally unique ID. Same name always maps to the same instance.",
+                "zh": "idFromName(\"global\") 把一個好記的名稱轉成全球唯一的 ID。相同名稱永遠對應到相同的實例。"
+              }
+            },
+            {
+              "icon": "settings_remote",
+              "title": { "en": "stub (remote control)", "zh": "stub（遙控器）" },
+              "text": {
+                "en": "env.COUNTER.get(id) returns a stub. You call stub.fetch() locally; Cloudflare routes it to the real object.",
+                "zh": "env.COUNTER.get(id) 回傳一個 stub。你在本地呼叫 stub.fetch()，Cloudflare 會把它轉送到真正的物件。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "instance (one object)", "zh": "instance（單一物件）" },
+              "text": {
+                "en": "The single live Counter, with its own private storage, that actually mutates and persists the value.",
+                "zh": "那個唯一存活的 Counter，帶著自己專屬的儲存，實際負責修改並保存數值。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Why not just use Workers KV? KV is eventually consistent: a write spreads to edge copies over time, so two readers in different regions can briefly see different values. For a counter that is fatal — both could read 5, both write 6, and you lose a count. A Durable Object is strongly consistent: there is only one copy, and reads always see the latest write.",
+            "zh": "為什麼不直接用 Workers KV？KV 是「最終一致（eventual consistency）」：一次寫入會隨著時間擴散到各邊緣副本，所以不同地區的兩個讀取者可能短暫看到不同的值。對計數器來說這是致命的——兩邊都讀到 5、都寫回 6，你就少算了一次。Durable Object 則是「強一致（strong consistency）」：只有一份副本，讀取永遠看到最新的寫入。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "KV (eventual) vs Durable Object (strong)", "zh": "KV（最終一致）vs Durable Object（強一致）" },
+          "code": {
+            "en": "flowchart LR\n  WR[\"Write v=6\"] --> KV[\"KV (eventual)\"]\n  KV --> R1[\"Edge copy 1 (fresh)\"]\n  KV --> R2[\"Edge copy 2 (stale)\"]\n  WR2[\"Write v=6\"] --> DO[\"Durable Object (strong)\"]\n  DO --> ONE[\"One value, always fresh\"]",
+            "zh": "flowchart LR\n  WR[\"寫入 v=6\"] --> KV[\"KV（最終一致）\"]\n  KV --> R1[\"邊緣副本 1（最新）\"]\n  KV --> R2[\"邊緣副本 2（過時）\"]\n  WR2[\"寫入 v=6\"] --> DO[\"Durable Object（強一致）\"]\n  DO --> ONE[\"唯一數值，永遠最新\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "balance",
+          "title": { "en": "Rule of thumb", "zh": "判斷原則" },
+          "text": {
+            "en": "Use KV when stale reads are fine (config, cached HTML). Use a Durable Object when many writers must agree on one correct, live value.",
+            "zh": "讀到稍舊的資料沒關係時（設定檔、快取 HTML）就用 KV。當很多寫入者必須對齊「同一個正確、即時的值」時，就用 Durable Object。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "consistency",
+      "icon": "swap_vert",
+      "heading": { "en": "One at a time: no lost updates", "zh": "一次一個：不會遺失更新" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the key property: a Durable Object processes incoming requests serially — one fully finishes before the next begins. So even if Client A and Client B hit the counter at the very same millisecond, the object lines them up and runs read → increment → write twice in order. The final value is 2, never 1.",
+            "zh": "這就是關鍵特性：Durable Object 會「序列化（serialize）」處理進來的請求——一個完全做完，下一個才開始。所以就算用戶端 A 和 B 在同一毫秒打到計數器，物件也會把它們排好隊，依序執行「讀取 → 累加 → 寫入」兩次。最後的值是 2，絕不會只是 1。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Two concurrent increments, serialized", "zh": "兩個並行的累加，被序列化處理" },
+          "code": {
+            "en": "sequenceDiagram\n  participant A as \"Client A\"\n  participant B as \"Client B\"\n  participant DO as \"Counter DO\"\n  participant S as \"Storage\"\n  A->>DO: POST /increment\n  B->>DO: POST /increment\n  Note over DO: serialized, one at a time\n  DO->>S: read v = 0\n  S-->>DO: 0\n  DO->>S: write v = 1\n  DO-->>A: 1\n  DO->>S: read v = 1\n  S-->>DO: 1\n  DO->>S: write v = 2\n  DO-->>B: 2",
+            "zh": "sequenceDiagram\n  participant A as \"用戶端 A\"\n  participant B as \"用戶端 B\"\n  participant DO as \"Counter DO\"\n  participant S as \"儲存\"\n  A->>DO: POST /increment\n  B->>DO: POST /increment\n  Note over DO: 序列化，一次處理一個\n  DO->>S: 讀取 v = 0\n  S-->>DO: 0\n  DO->>S: 寫入 v = 1\n  DO-->>A: 1\n  DO->>S: 讀取 v = 1\n  S-->>DO: 1\n  DO->>S: 寫入 v = 2\n  DO-->>B: 2"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "lock",
+          "title": { "en": "You get a lock for free", "zh": "你免費拿到一把鎖" },
+          "text": {
+            "en": "With a normal database you would write a transaction or a lock to stop two requests from clobbering each other. A Durable Object's single-threaded, one-at-a-time execution gives you that mutual exclusion automatically — no locking code to get wrong.",
+            "zh": "用一般資料庫時，你得自己寫交易（transaction）或鎖（lock）來避免兩個請求互相覆蓋。Durable Object 的「單執行緒、一次一個」執行方式，自動就給了你這種互斥（mutual exclusion）——沒有會寫錯的鎖程式碼。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it: front-end + Worker + object storage", "zh": "動手做：前端 + Worker + 物件儲存" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Three layers, one file for the back-end. The Worker (front door) and the Counter class (instance + storage) live in src/index.js; wrangler.toml binds them together; and a tiny browser snippet calls the API. Note the data layer here IS the object's own storage — there is no separate database to set up.",
+            "zh": "三層，後端集中在一個檔案。Worker（大門）和 Counter 類別（實例＋儲存）都放在 src/index.js；wrangler.toml 把它們綁在一起；再用一小段瀏覽器程式碼呼叫 API。請注意：這裡的「資料層」就是物件自己的儲存——不用另外架一個資料庫。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a Worker project", "zh": "建立 Worker 專案" },
+              "text": {
+                "en": "Scaffold a fresh project. We will replace the generated source with our Counter.",
+                "zh": "先建立一個全新專案。等一下我們會用自己的 Counter 取代產生出來的程式碼。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest -- counter-app\ncd counter-app" }
+            },
+            {
+              "title": { "en": "Write the Worker + Durable Object", "zh": "寫 Worker ＋ Durable Object" },
+              "text": {
+                "en": "The Worker resolves the id by name and forwards the request; the Counter class reads, increments, and persists its value. See the full src/index.js below.",
+                "zh": "Worker 用名稱解析出 id 並轉送請求；Counter 類別則讀取、累加、保存它的值。完整的 src/index.js 在下方。"
+              }
+            },
+            {
+              "title": { "en": "Bind & migrate in wrangler.toml", "zh": "在 wrangler.toml 綁定並設定 migration" },
+              "text": {
+                "en": "Add the binding (the name your Worker uses) and a migration (tells Cloudflare Counter is a new SQLite-backed class).",
+                "zh": "加上 binding（Worker 用來呼叫它的名稱）和 migration（告訴 Cloudflare：Counter 是一個新的、用 SQLite 儲存的類別）。"
+              }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署" },
+              "text": {
+                "en": "Publish to Cloudflare's network. The instance for \"global\" is created automatically on first use.",
+                "zh": "發佈到 Cloudflare 的網路。\"global\" 這個名稱的實例，會在第一次使用時自動建立。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            },
+            {
+              "title": { "en": "Test it", "zh": "測試看看" },
+              "text": {
+                "en": "Hit it a few times — the number goes up by exactly one each call, no matter who calls.",
+                "zh": "連打幾次——不管誰來打，數字每次都剛好加一。"
+              },
+              "code": { "lang": "bash", "body": "curl -X POST https://counter-app.<your-subdomain>.workers.dev/\n# 1\ncurl -X POST https://counter-app.<your-subdomain>.workers.dev/\n# 2" }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/index.js — Worker + Counter object", "zh": "src/index.js — Worker ＋ Counter 物件" },
+          "body": "// The Durable Object: one instance holds and mutates the count\nexport class Counter {\n  constructor(state, env) {\n    this.state = state; // gives access to this object's private storage\n    this.env = env;\n  }\n\n  async fetch(req) {\n    // Read the current value from THIS object's own storage (0 if unset)\n    let v = (await this.state.storage.get('v')) || 0;\n    v++;\n    // Persist before responding; the next request will read this value\n    await this.state.storage.put('v', v);\n    return new Response(v.toString(), {\n      headers: { 'content-type': 'text/plain' }\n    });\n  }\n}\n\n// The Worker (front door): forward every request to the ONE instance\nexport default {\n  async fetch(request, env) {\n    // Same name -> same single instance, anywhere on Earth\n    const id = env.COUNTER.idFromName('global');\n    const stub = env.COUNTER.get(id);\n    // Cloudflare routes this call to the real Counter object\n    return stub.fetch(request);\n  }\n};"
+        },
+        {
+          "type": "code",
+          "lang": "toml",
+          "title": { "en": "wrangler.toml — binding + migration", "zh": "wrangler.toml — 綁定 ＋ migration" },
+          "body": "name = \"counter-app\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-06-01\"\n\n# Bind the COUNTER namespace in env to the Counter class\n[[durable_objects.bindings]]\nname = \"COUNTER\"\nclass_name = \"Counter\"\n\n# Register Counter as a new SQLite-backed Durable Object class\n[[migrations]]\ntag = \"v1\"\nnew_sqlite_classes = [\"Counter\"]"
+        },
+        {
+          "type": "code",
+          "lang": "html",
+          "title": { "en": "Front-end — one shared counter for everyone", "zh": "前端 — 大家共用的同一個計數器" },
+          "body": "<button id=\"go\">+1</button>\n<span id=\"count\">0</span>\n\n<script>\n  document.querySelector('#go').addEventListener('click', async () => {\n    // Every click hits the ONE shared Counter behind the Worker\n    const res = await fetch('https://counter-app.example.workers.dev/', {\n      method: 'POST'\n    });\n    document.querySelector('#count').textContent = await res.text();\n  });\n</script>"
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Don't read state from the Worker", "zh": "別在 Worker 裡讀狀態" },
+          "text": {
+            "en": "The Worker is stateless and runs in many places at once. Keep all reads and writes inside the Durable Object's fetch — that is the only place where one-at-a-time ordering and strong consistency are guaranteed.",
+            "zh": "Worker 是無狀態的，而且會同時在很多地方執行。所有的讀寫都要放進 Durable Object 的 fetch 裡——那是唯一能保證「一次一個的順序」與「強一致」的地方。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts & when to reach for it", "zh": "重點概念，以及何時該用它" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "badge",
+              "title": { "en": "Name", "zh": "名稱（Name）" },
+              "text": {
+                "en": "A human-friendly string like \"global\" or \"room-42\" you pass to idFromName. Picks which instance you reach.",
+                "zh": "一個好記的字串，例如 \"global\" 或 \"room-42\"，傳給 idFromName。決定你連到哪個實例。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "id", "zh": "id（識別碼）" },
+              "text": {
+                "en": "The globally unique address derived from the name. Same name always yields the same id.",
+                "zh": "由名稱推導出的全球唯一地址。相同名稱永遠得到相同 id。"
+              }
+            },
+            {
+              "icon": "settings_remote",
+              "title": { "en": "Stub", "zh": "Stub（代理）" },
+              "text": {
+                "en": "A local handle from .get(id). Calling stub.fetch() transparently reaches the real object.",
+                "zh": "由 .get(id) 拿到的本地把手。呼叫 stub.fetch() 會透明地連到真正的物件。"
+              }
+            },
+            {
+              "icon": "looks_one",
+              "title": { "en": "Single instance", "zh": "單一實例" },
+              "text": {
+                "en": "Exactly one live object per name across the whole planet — the single source of truth.",
+                "zh": "全世界每個名稱剛好只有一個存活的物件——唯一的真相來源。"
+              }
+            },
+            {
+              "icon": "format_list_numbered",
+              "title": { "en": "Serialized execution", "zh": "序列化執行" },
+              "text": {
+                "en": "Requests run one at a time inside the object, so no two can interleave and corrupt state.",
+                "zh": "請求在物件內一次跑一個，所以不會有兩個交錯而把狀態弄亂。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "Strong consistency", "zh": "強一致性" },
+              "text": {
+                "en": "One copy of the data; every read sees the most recent write. No stale values, ever.",
+                "zh": "資料只有一份；每次讀取都看到最新的寫入。永遠不會讀到過時的值。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "Storage", "zh": "儲存（Storage）" },
+              "text": {
+                "en": "Each object has private, transactional storage via this.state.storage.get / put.",
+                "zh": "每個物件都有專屬、具交易性的儲存，透過 this.state.storage.get / put 存取。"
+              }
+            },
+            {
+              "icon": "move_up",
+              "title": { "en": "Migration", "zh": "Migration（遷移）" },
+              "text": {
+                "en": "A wrangler.toml entry that registers, renames, or removes an object class.",
+                "zh": "wrangler.toml 裡的一個項目，用來登記、改名或移除某個物件類別。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Not sure which storage to pick? Walk this quick decision tree.",
+            "zh": "不確定該選哪種儲存？跟著這棵小小的決策樹走一遍。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Which storage do I need?", "zh": "我該用哪種儲存？" },
+          "code": {
+            "en": "flowchart TD\n  Q[\"Need shared state?\"] -->|\"No, just cache\"| KV[\"Use KV\"]\n  Q -->|\"Yes, must be consistent\"| Q2[\"One hot key or coordination point?\"]\n  Q2 -->|\"Yes\"| DO[\"Use a Durable Object\"]\n  Q2 -->|\"No, lots of relational data\"| D1[\"Use D1\"]",
+            "zh": "flowchart TD\n  Q[\"需要共享狀態嗎？\"] -->|\"不用，只是快取\"| KV[\"用 KV\"]\n  Q -->|\"需要，而且要一致\"| Q2[\"是單一熱點或協調點嗎？\"]\n  Q2 -->|\"是\"| DO[\"用 Durable Object\"]\n  Q2 -->|\"不是，是大量關聯式資料\"| D1[\"用 D1\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls, limits & pricing", "zh": "陷阱、限制與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "balance",
+          "title": { "en": "One object = one bottleneck", "zh": "一個物件 = 一個瓶頸" },
+          "text": {
+            "en": "All traffic for a name funnels through a single instance (~1,000 req/s soft limit). A global counter is a teaching example; in production, shard hot state across many objects — one per room, user, or document.",
+            "zh": "某個名稱的所有流量都匯集到單一實例（約 1,000 req/s 的軟性上限）。全域計數器是教學範例；正式環境請把熱點狀態切分到很多物件——一個房間、一位使用者、或一份文件各一個。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Common mistakes", "zh": "常見錯誤" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Caching the value in the Worker instead of reading it from the object — the Worker has no shared state.",
+              "Using KV for counters or locks — eventual consistency lets two writers lose an update.",
+              "Forgetting the [[migrations]] entry — the deploy fails until the class is registered.",
+              "Assuming different names share data — \"room-1\" and \"room-2\" are completely separate instances."
+            ],
+            "zh": [
+              "把值快取在 Worker 而不是從物件讀取——Worker 沒有共享狀態。",
+              "拿 KV 來做計數器或鎖——最終一致會讓兩個寫入者遺失一次更新。",
+              "忘了寫 [[migrations]] 項目——在類別登記之前部署都會失敗。",
+              "以為不同名稱會共用資料——\"room-1\" 和 \"room-2\" 是完全分開的兩個實例。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "Free to start", "zh": "免費就能開始" },
+          "text": {
+            "en": "SQLite-backed Durable Objects run on the Workers Free plan with lower limits, so you can build and learn this model without paying. Billing is based on requests, compute duration, and stored data.",
+            "zh": "用 SQLite 儲存的 Durable Objects 在 Workers 免費方案就能跑（限制較低），所以你不用付費就能把這套模型做出來、學起來。計費依據是請求數、運算時間，以及儲存的資料量。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "blueprint-realtime-chat", "label": { "en": "Real-time chat blueprint", "zh": "即時聊天藍圖" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } }
+  ],
+  "docs": "https://developers.cloudflare.com/durable-objects/"
+}

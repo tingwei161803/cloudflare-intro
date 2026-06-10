@@ -82,6 +82,18 @@ window.SITE_CATEGORIES = [
       "en": "Make every site faster with smart DNS, global caching and automatic optimizations — plus privacy-friendly analytics.",
       "zh": "用聰明的 DNS、全球快取與自動最佳化讓每個網站更快——還附上重視隱私的流量分析。"
     }
+  },
+  {
+    "key": "integrations",
+    "icon": "account_tree",
+    "title": {
+      "en": "Integrations",
+      "zh": "整合實戰"
+    },
+    "blurb": {
+      "en": "Connect the pieces — front-end ↔ Worker back-end ↔ database — with real recipes, full-stack code and lots of architecture diagrams.",
+      "zh": "把各塊串起來——前端 ↔ Worker 後端 ↔ 資料庫——用真實範例、全端程式碼與大量架構圖帶你做。"
+    }
   }
 ];
 window.SITE_PAGES = [
@@ -852,6 +864,35 @@ window.SITE_PAGES = [
     "intro": {
       "en": "Speed isn't one feature — it's DNS resolving quickly, content cached close to users, and assets optimized on the fly. These products handle all of that, and Web Analytics lets you measure the result without tracking your visitors.",
       "zh": "速度不是單一功能——它是 DNS 快速解析、內容快取在使用者附近、資源即時最佳化的總和。這些產品把這些都處理好，而 Web Analytics 讓你量測成果，又不會追蹤你的訪客。"
+    },
+    "layout": "category",
+    "nav": true
+  },
+  {
+    "slug": "integrations",
+    "key": "integrations",
+    "icon": "account_tree",
+    "title": {
+      "en": "Integrations",
+      "zh": "整合實戰"
+    },
+    "subtitle": {
+      "en": "Wire products together into real apps",
+      "zh": "把產品串成真正的應用"
+    },
+    "hero": {
+      "badge": {
+        "en": "Category",
+        "zh": "分類"
+      },
+      "tagline": {
+        "en": "Hands-on guides that connect front-end, back-end (Workers) and databases — full CRUD, auth, file uploads, architecture blueprints and request-flow diagrams.",
+        "zh": "把前端、後端（Workers）與資料庫串起來的實作教學——完整 CRUD、認證、檔案上傳、架構藍圖與請求流程圖。"
+      }
+    },
+    "intro": {
+      "en": "Knowing each product is step one; the real magic is connecting them. These guides show how a web page talks to a Worker, how a Worker reads and writes a database, and how to assemble whole systems — each packed with mermaid diagrams.",
+      "zh": "認識每個產品只是第一步，真正的重點是把它們串起來。這些教學示範網頁如何呼叫 Worker、Worker 如何讀寫資料庫，以及怎麼把整套系統組起來——每篇都搭配大量 mermaid 圖解。"
     },
     "layout": "category",
     "nav": true
@@ -15005,6 +15046,13925 @@ window.SITE_PAGES = [
       }
     ],
     "docs": "https://developers.cloudflare.com/web-analytics/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "fullstack-overview",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "account_tree",
+    "title": {
+      "en": "How front-end, back-end and DB connect",
+      "zh": "前端、後端、資料庫是怎麼串起來的"
+    },
+    "subtitle": {
+      "en": "The big-picture mental model of a full-stack app on Cloudflare — and how a single request travels through every layer",
+      "zh": "用一張大局觀地圖，看懂 Cloudflare 上的全端應用——以及一個請求是怎麼穿過每一層的"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "A browser, a Worker, and a database. Three small pieces, wired together with bindings. Once you see how they fit, the whole Integrations section clicks.",
+        "zh": "一個瀏覽器、一個 Worker、一個資料庫。三個小元件，用 bindings（綁定）串在一起。只要看懂它們怎麼接，整個「整合實戰」章節就通了。"
+      }
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": {
+          "en": "Layers to wire",
+          "zh": "要串接的層"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "Command to deploy",
+          "zh": "一行指令部署"
+        }
+      },
+      {
+        "value": "0",
+        "label": {
+          "en": "Servers to manage",
+          "zh": "要管理的伺服器"
+        }
+      },
+      {
+        "value": "330+",
+        "label": {
+          "en": "Cities serving it",
+          "zh": "供應它的城市"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring together?",
+          "zh": "我們到底要把什麼串起來？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Almost every web app is made of three jobs: showing things to a person, running logic and rules, and remembering data. On Cloudflare those three jobs map to three pieces — the browser (front-end), a Worker (your back-end API), and a database (D1, KV, R2, or Durable Objects). This guide gives you the mental map for how they connect.",
+              "zh": "幾乎每個網頁應用都在做三件事：把東西「呈現」給人看、執行「邏輯與規則」、以及「記住」資料。在 Cloudflare 上，這三件事分別對應到三個元件——瀏覽器（前端 front-end）、一個 Worker（你的後端 API）、以及一個資料庫（D1、KV、R2 或 Durable Objects）。這篇就是要給你一張「它們怎麼接」的心智地圖。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Front-end means the part that runs inside the user's browser — the HTML, CSS and JavaScript they actually see and click. Back-end means code that runs on a server (here, a Worker) which the user never sees directly; it does the thinking and talks to the database. A database is just where data is stored so it survives after the request ends.",
+              "zh": "「前端（front-end）」指的是跑在使用者瀏覽器裡的那一部分——也就是使用者真正看到、點得到的 HTML、CSS 和 JavaScript。「後端（back-end）」則是跑在伺服器上的程式碼（這裡就是 Worker），使用者不會直接看到它；它負責「思考」並跟資料庫溝通。「資料庫（database）」就是把資料存起來的地方，讓資料在這次請求結束後還活著。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "restaurant",
+            "title": {
+              "en": "Think of it like a restaurant",
+              "zh": "把它想成一間餐廳"
+            },
+            "text": {
+              "en": "The browser is the dining room where the customer sits and orders. The Worker is the kitchen that receives orders and decides what to do. The database is the pantry where ingredients are stored. The customer never walks into the pantry — they ask the kitchen, and the kitchen fetches from the pantry.",
+              "zh": "瀏覽器是「用餐區」，客人坐在那裡點餐；Worker 是「廚房」，收到點單後決定怎麼處理；資料庫則是放食材的「儲藏室」。客人不會自己跑進儲藏室——他跟廚房點餐，廚房再去儲藏室拿食材。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Big picture: how a full-stack app fits together",
+              "zh": "大局觀：全端應用是怎麼拼起來的"
+            },
+            "code": {
+              "en": "flowchart LR\n  U[\"User\"] --> B[\"Browser (front-end)\"]\n  B -->|\"load page\"| A[\"Static assets: HTML/CSS/JS\"]\n  B -->|\"fetch /api\"| W[\"Worker (back-end API)\"]\n  W -->|\"query\"| D[\"Database: D1/KV/R2\"]\n  D -->|\"data\"| W\n  W -->|\"JSON\"| B",
+              "zh": "flowchart LR\n  U[\"使用者\"] --> B[\"瀏覽器（前端）\"]\n  B -->|\"載入頁面\"| A[\"靜態資源：HTML/CSS/JS\"]\n  B -->|\"fetch /api\"| W[\"Worker（後端 API）\"]\n  W -->|\"查詢\"| D[\"資料庫：D1/KV/R2\"]\n  D -->|\"資料\"| W\n  W -->|\"JSON\"| B"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Notice two different arrows leaving the browser. One loads the static files that make up the page (the look). The other is an API call that asks the Worker for fresh data (the content). Keeping these separate is the heart of the whole model.",
+              "zh": "注意從瀏覽器出發有兩種不同的箭頭：一種去載入組成頁面的靜態檔案（也就是「外觀」）；另一種是 API 呼叫，向 Worker 要最新的資料（也就是「內容」）。把這兩件事分開，正是整個模型的核心。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "layers",
+        "icon": "account_tree",
+        "heading": {
+          "en": "The three layers, and who does what",
+          "zh": "三層各自的職責"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Each layer has one clear job. Mixing the jobs up is the most common beginner mistake (for example, putting your database password in front-end code, where anyone can read it). Keep the responsibilities separated like this:",
+              "zh": "每一層都有一個明確的職責。把職責混在一起，是初學者最常犯的錯（例如把資料庫密碼寫在前端程式碼裡，結果任何人都看得到）。請像下面這樣，把責任分清楚："
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "devices",
+                "title": {
+                  "en": "Front-end — the browser",
+                  "zh": "前端 — 瀏覽器"
+                },
+                "text": {
+                  "en": "Renders the UI and reacts to clicks. It owns nothing secret. It asks the back-end for data using fetch() and shows the result.",
+                  "zh": "負責畫出畫面（UI）並回應點擊。它不掌握任何機密。它用 fetch() 向後端要資料，再把結果顯示出來。"
+                }
+              },
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "Back-end — the Worker",
+                  "zh": "後端 — Worker"
+                },
+                "text": {
+                  "en": "Receives requests, applies your rules and security checks, holds the secrets, and is the only layer allowed to touch the database.",
+                  "zh": "負責接收請求、套用你的規則與安全檢查、保管機密，而且是唯一被允許碰資料庫的那一層。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "Data — the database",
+                  "zh": "資料層 — 資料庫"
+                },
+                "text": {
+                  "en": "Remembers data between requests. On Cloudflare this can be D1 (SQL), KV (key-value), R2 (files), or Durable Objects (live state).",
+                  "zh": "負責在不同請求之間「記住」資料。在 Cloudflare 上可以是 D1（SQL）、KV（鍵值）、R2（檔案）或 Durable Objects（即時狀態）。"
+                }
+              },
+              {
+                "icon": "lock",
+                "title": {
+                  "en": "Why the split matters",
+                  "zh": "為什麼要這樣分"
+                },
+                "text": {
+                  "en": "Anything in the browser is public — users can open dev tools and read it. Secrets and database access must stay in the Worker, never the front-end.",
+                  "zh": "瀏覽器裡的任何東西都是公開的——使用者打開開發者工具就看得到。所以機密和資料庫存取一定要留在 Worker，絕不能放在前端。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Three layers as a stack",
+              "zh": "把三層疊起來看"
+            },
+            "code": {
+              "en": "flowchart TD\n  B[\"Front-end: Browser (HTML/CSS/JS)\"] -->|\"fetch\"| W[\"Back-end: Worker (API)\"]\n  W -->|\"read / write\"| DB[\"Data: D1 / KV / R2 / Durable Objects\"]\n  W -->|\"JSON\"| B",
+              "zh": "flowchart TD\n  B[\"前端：瀏覽器（HTML/CSS/JS）\"] -->|\"fetch\"| W[\"後端：Worker（API）\"]\n  W -->|\"讀 / 寫\"| DB[\"資料層：D1 / KV / R2 / Durable Objects\"]\n  W -->|\"JSON\"| B"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "bolt",
+            "title": {
+              "en": "One Worker can be both",
+              "zh": "一個 Worker 可以身兼兩職"
+            },
+            "text": {
+              "en": "On Cloudflare a single Worker often serves the static front-end files AND runs the back-end API. They live in one project but stay logically separate: static files on most paths, API logic on paths like /api/*.",
+              "zh": "在 Cloudflare 上，常常用「同一個 Worker」同時供應靜態前端檔案、又執行後端 API。它們住在同一個專案，但邏輯上仍然分開：大部分路徑給靜態檔案，像 /api/* 這類路徑則交給 API 邏輯。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Follow one request, end to end",
+          "zh": "跟著一個請求，從頭走到尾"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "The fastest way to understand a full-stack app is to trace a single click. Imagine a page with a \"Load todos\" button. Here is exactly what happens, step by step, when the user presses it.",
+              "zh": "理解全端應用最快的方法，就是「跟著一次點擊走一遍」。想像一個頁面上有一顆「載入待辦」按鈕。下面就是使用者按下去時，一步一步到底發生了什麼事。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Click → fetch → Worker → DB → JSON back",
+              "zh": "點擊 → fetch → Worker → 資料庫 → JSON 回傳"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant D as Database\n  U->>U: user clicks the button\n  U->>W: fetch GET /api/todos\n  W->>D: SELECT id, title FROM todos\n  D-->>W: rows\n  W-->>U: JSON response\n  U->>U: render the list on screen",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant D as \"資料庫\"\n  U->>U: 使用者點擊按鈕\n  U->>W: fetch GET /api/todos\n  W->>D: SELECT id, title FROM todos\n  D-->>W: 資料列\n  W-->>U: JSON 回應\n  U->>U: 把清單畫到畫面上"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "What each step means",
+              "zh": "每一步在做什麼"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Click: the browser's JavaScript reacts to the button press and calls fetch().",
+                "fetch GET /api/todos: an HTTP request leaves the browser and is routed to your Worker.",
+                "SELECT ...: the Worker asks the database for the rows it needs.",
+                "rows: the database hands the matching data back to the Worker.",
+                "JSON response: the Worker turns that data into JSON (a simple text format) and replies.",
+                "render: the browser receives the JSON and updates the page — no full reload needed."
+              ],
+              "zh": [
+                "點擊：瀏覽器的 JavaScript 偵測到按鈕被按下，呼叫 fetch()。",
+                "fetch GET /api/todos：一個 HTTP 請求離開瀏覽器，被導向你的 Worker。",
+                "SELECT ...：Worker 向資料庫要它需要的那些列（rows）。",
+                "資料列：資料庫把符合的資料交還給 Worker。",
+                "JSON 回應：Worker 把資料轉成 JSON（一種簡單的文字格式）回傳。",
+                "畫出來：瀏覽器收到 JSON 後更新頁面——完全不用整頁重新載入。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "data_object",
+            "title": {
+              "en": "Why JSON?",
+              "zh": "為什麼用 JSON？"
+            },
+            "text": {
+              "en": "JSON (JavaScript Object Notation) is a lightweight text format that both the Worker and the browser understand natively. The back-end sends data, not HTML, so the front-end is free to display it however it likes.",
+              "zh": "JSON（JavaScript Object Notation，JavaScript 物件表示法）是一種輕量的文字格式，Worker 和瀏覽器天生都看得懂。後端送的是「資料」而不是 HTML，所以前端可以自由決定要怎麼把它呈現出來。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "bindings",
+        "icon": "cable",
+        "heading": {
+          "en": "Bindings: how a Worker reaches storage",
+          "zh": "Bindings：Worker 怎麼接到儲存"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A Worker doesn't connect to a database with a password and a connection string the way old servers did. Instead you declare a binding — a named, secure connection that Cloudflare wires up for you. In your code the binding appears as a property on the env object, like env.DB.",
+              "zh": "Worker 連資料庫的方式，不像舊式伺服器那樣靠「密碼 + 連線字串」。取而代之的是宣告一個 binding（綁定）——一條有名字、又安全的連線，由 Cloudflare 幫你接好。在程式碼裡，這個 binding 會以 env 物件上的屬性出現，例如 env.DB。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "One Worker, many bindings",
+              "zh": "一個 Worker，多種綁定"
+            },
+            "code": {
+              "en": "flowchart TD\n  CFG[\"wrangler.toml bindings\"] -->|\"wires up\"| W[\"Worker (back-end)\"]\n  W -->|\"env.DB\"| D1[\"D1 (SQL database)\"]\n  W -->|\"env.CACHE\"| KV[\"KV (key-value store)\"]\n  W -->|\"env.BUCKET\"| R2[\"R2 (file storage)\"]\n  W -->|\"env.ROOM\"| DO[\"Durable Objects (live state)\"]",
+              "zh": "flowchart TD\n  CFG[\"wrangler.toml 綁定設定\"] -->|\"接上\"| W[\"Worker（後端）\"]\n  W -->|\"env.DB\"| D1[\"D1（SQL 資料庫）\"]\n  W -->|\"env.CACHE\"| KV[\"KV（鍵值儲存）\"]\n  W -->|\"env.BUCKET\"| R2[\"R2（檔案儲存）\"]\n  W -->|\"env.ROOM\"| DO[\"Durable Objects（即時狀態）\"]"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "table_rows",
+                "title": {
+                  "en": "D1 → env.DB",
+                  "zh": "D1 → env.DB"
+                },
+                "text": {
+                  "en": "A SQL database for structured, related data like users and orders. Query it with SELECT / INSERT / UPDATE.",
+                  "zh": "一個 SQL 資料庫，適合有結構、有關聯的資料，例如使用者和訂單。用 SELECT / INSERT / UPDATE 查詢。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "KV → env.CACHE",
+                  "zh": "KV → env.CACHE"
+                },
+                "text": {
+                  "en": "A key-value store for simple lookups read very often, like settings or cached pages. Super fast reads worldwide.",
+                  "zh": "一個鍵值（key-value）儲存，適合常常被讀取的簡單查找，例如設定值或快取頁面。全球讀取都超快。"
+                }
+              },
+              {
+                "icon": "folder",
+                "title": {
+                  "en": "R2 → env.BUCKET",
+                  "zh": "R2 → env.BUCKET"
+                },
+                "text": {
+                  "en": "Object storage for large files — images, videos, PDFs, backups. Like a folder in the cloud, with no egress fees.",
+                  "zh": "物件儲存，適合大檔案——圖片、影片、PDF、備份。就像雲端上的資料夾，而且沒有流量輸出費用。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Durable Objects → env.ROOM",
+                  "zh": "Durable Objects → env.ROOM"
+                },
+                "text": {
+                  "en": "A single, consistent place to keep live state — perfect for chat rooms, game lobbies, or counters that many users share.",
+                  "zh": "一個單一、一致的地方來保存即時狀態——很適合聊天室、遊戲大廳，或多位使用者共用的計數器。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "settings",
+            "title": {
+              "en": "The name is yours to choose",
+              "zh": "綁定名稱由你自己取"
+            },
+            "text": {
+              "en": "DB, CACHE, BUCKET and ROOM are just names you pick in wrangler.toml. Whatever you write as the binding name is exactly what appears on env in your code. Pick clear names and you'll never get lost.",
+              "zh": "DB、CACHE、BUCKET、ROOM 都只是你在 wrangler.toml 裡自己取的名字。你把 binding 名稱寫成什麼，程式碼裡的 env 上就會出現一模一樣的名字。取清楚一點，你就不會搞混。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Wire it up yourself",
+          "zh": "親手把它串起來"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the smallest possible version of all three layers working together: a front-end that calls fetch, a Worker that returns JSON from D1, the wrangler.toml that binds them, and the SQL that creates the data. Copy these into one project and you have a real full-stack app.",
+              "zh": "下面是三層一起運作的「最小版本」：一段會呼叫 fetch 的前端、一個從 D1 回傳 JSON 的 Worker、把它們綁在一起的 wrangler.toml，以及建立資料的 SQL。把這幾段放進同一個專案，你就有一個真正的全端應用了。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "1. The front-end (runs in the browser)",
+                  "zh": "1. 前端（跑在瀏覽器裡）"
+                },
+                "text": {
+                  "en": "Plain JavaScript that calls your API on click and paints the result. No framework needed to understand the idea.",
+                  "zh": "純 JavaScript，點擊時呼叫你的 API，再把結果畫出來。不用任何框架就能看懂這個概念。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<!-- public/index.html -->\n<button id=\"load\">Load todos</button>\n<ul id=\"list\"></ul>\n\n<script>\n  async function loadTodos() {\n    // Ask the Worker (back-end) for data\n    const res = await fetch(\"/api/todos\");\n    const todos = await res.json();\n    // Paint the result into the page\n    document.querySelector(\"#list\").innerHTML =\n      todos.map((t) => `<li>${t.title}</li>`).join(\"\");\n  }\n  document.querySelector(\"#load\").addEventListener(\"click\", loadTodos);\n</script>"
+                }
+              },
+              {
+                "title": {
+                  "en": "2. The back-end Worker (returns JSON)",
+                  "zh": "2. 後端 Worker（回傳 JSON）"
+                },
+                "text": {
+                  "en": "It serves static files for normal paths, and for /api/todos it reads D1 via env.DB and replies with JSON. Notice the user's request never touches the database directly — only the Worker does.",
+                  "zh": "一般路徑它供應靜態檔案；遇到 /api/todos 時，它透過 env.DB 讀取 D1，再回傳 JSON。注意：使用者的請求從不直接碰資料庫——只有 Worker 會。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/index.js\nexport default {\n  async fetch(request, env, ctx) {\n    const url = new URL(request.url);\n    if (url.pathname === \"/api/todos\") {\n      // env.DB is the D1 binding from wrangler.toml\n      const { results } = await env.DB\n        .prepare(\"SELECT id, title FROM todos\")\n        .all();\n      return Response.json(results);\n    }\n    // Everything else is served as a static asset\n    return env.ASSETS.fetch(request);\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "3. The wrangler.toml (wires the binding)",
+                  "zh": "3. wrangler.toml（接好綁定）"
+                },
+                "text": {
+                  "en": "This config file tells Cloudflare your Worker's entry file, where the static files live, and which database to expose as env.DB.",
+                  "zh": "這個設定檔告訴 Cloudflare：你的 Worker 進入檔在哪、靜態檔案放哪、以及要把哪個資料庫以 env.DB 的名義開放出來。"
+                },
+                "code": {
+                  "lang": "toml",
+                  "body": "name = \"my-fullstack-app\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-01-01\"\n\n# Serve the front-end from ./public, exposed as env.ASSETS\n[assets]\ndirectory = \"./public\"\nbinding = \"ASSETS\"\n\n# Bind a D1 database; reach it in code as env.DB\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"my-app-db\"\ndatabase_id = \"<paste-your-database-id>\""
+                }
+              },
+              {
+                "title": {
+                  "en": "4. The data layer (create the table)",
+                  "zh": "4. 資料層（建立資料表）"
+                },
+                "text": {
+                  "en": "Run this SQL once to create the todos table and add a couple of rows, so your /api/todos endpoint has something to return.",
+                  "zh": "把這段 SQL 跑一次，建立 todos 資料表並塞幾筆資料，這樣你的 /api/todos 端點才有東西可以回傳。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "CREATE TABLE IF NOT EXISTS todos (\n  id INTEGER PRIMARY KEY,\n  title TEXT NOT NULL\n);\n\nINSERT INTO todos (title) VALUES\n  ('Learn the full-stack model'),\n  ('Wire a Worker to D1');"
+                }
+              },
+              {
+                "title": {
+                  "en": "5. Run it, then deploy",
+                  "zh": "5. 先在本機跑，再部署"
+                },
+                "text": {
+                  "en": "wrangler dev starts everything locally at http://localhost:8787. When it looks good, wrangler deploy puts all three layers live on Cloudflare's global network in one shot.",
+                  "zh": "wrangler dev 會在本機把所有東西跑起來，網址是 http://localhost:8787。覺得 OK 後，wrangler deploy 一次就把三層全部部署到 Cloudflare 的全球網路上。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 execute my-app-db --local --file=./schema.sql\nnpx wrangler dev\nnpx wrangler deploy"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "north_east",
+            "title": {
+              "en": "Next step: full CRUD",
+              "zh": "下一步：完整 CRUD"
+            },
+            "text": {
+              "en": "This guide is read-only (it only loads data). To also create, update and delete rows from the browser, follow the companion guide \"Front-end ↔ Worker ↔ D1: full CRUD\".",
+              "zh": "這篇只示範「讀取」資料。如果還想從瀏覽器「新增、更新、刪除」資料，請接著看姊妹篇〈前端 ↔ Worker ↔ D1：完整 CRUD 串接〉。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key terms in one place",
+          "zh": "重點術語一次看懂"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "language",
+                "title": {
+                  "en": "Front-end",
+                  "zh": "前端（Front-end）"
+                },
+                "text": {
+                  "en": "Code that runs in the user's browser: the HTML, CSS and JavaScript they see and interact with.",
+                  "zh": "跑在使用者瀏覽器裡的程式碼：他們看到、會互動的 HTML、CSS 和 JavaScript。"
+                }
+              },
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "Back-end",
+                  "zh": "後端（Back-end）"
+                },
+                "text": {
+                  "en": "Code that runs on a server — here a Worker — handling logic, security, and database access out of the user's sight.",
+                  "zh": "跑在伺服器上的程式碼（這裡是 Worker），在使用者看不到的地方處理邏輯、安全和資料庫存取。"
+                }
+              },
+              {
+                "icon": "http",
+                "title": {
+                  "en": "API",
+                  "zh": "API"
+                },
+                "text": {
+                  "en": "Application Programming Interface — the set of URLs (like /api/todos) the front-end calls to ask the back-end for things.",
+                  "zh": "Application Programming Interface（應用程式介面）——前端用來向後端要東西的一組網址（例如 /api/todos）。"
+                }
+              },
+              {
+                "icon": "sync",
+                "title": {
+                  "en": "fetch()",
+                  "zh": "fetch()"
+                },
+                "text": {
+                  "en": "The built-in browser function for sending an HTTP request to a URL and reading the response — how the front-end talks to the API.",
+                  "zh": "瀏覽器內建的函式，用來向某個網址發 HTTP 請求並讀取回應——這就是前端跟 API 對話的方式。"
+                }
+              },
+              {
+                "icon": "cable",
+                "title": {
+                  "en": "Binding",
+                  "zh": "Binding（綁定）"
+                },
+                "text": {
+                  "en": "A named, secure connection from a Worker to another service (D1, KV, R2, Durable Objects), accessed via the env object.",
+                  "zh": "從 Worker 連到其他服務（D1、KV、R2、Durable Objects）的一條有名字、又安全的連線，透過 env 物件存取。"
+                }
+              },
+              {
+                "icon": "tune",
+                "title": {
+                  "en": "wrangler.toml",
+                  "zh": "wrangler.toml"
+                },
+                "text": {
+                  "en": "The config file where you name your Worker and declare its bindings. Wrangler reads it when you run or deploy.",
+                  "zh": "設定檔，你在裡面替 Worker 取名字並宣告它的 bindings。你執行或部署時，Wrangler 會讀取它。"
+                }
+              },
+              {
+                "icon": "data_object",
+                "title": {
+                  "en": "JSON",
+                  "zh": "JSON"
+                },
+                "text": {
+                  "en": "A lightweight text format for data. The back-end usually replies in JSON so the front-end can easily read it.",
+                  "zh": "一種輕量的資料文字格式。後端通常用 JSON 回應，這樣前端就能輕鬆讀取。"
+                }
+              },
+              {
+                "icon": "storage",
+                "title": {
+                  "en": "Database",
+                  "zh": "資料庫（Database）"
+                },
+                "text": {
+                  "en": "Where data is stored so it survives between requests. On Cloudflare: D1, KV, R2, or Durable Objects.",
+                  "zh": "資料被存放的地方，讓它在不同請求之間還活著。在 Cloudflare 上有：D1、KV、R2、Durable Objects。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Common pitfalls & tips",
+          "zh": "常見陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "vpn_key",
+            "title": {
+              "en": "Never put secrets in the front-end",
+              "zh": "機密絕不能放在前端"
+            },
+            "text": {
+              "en": "API keys, database credentials and tokens belong in the Worker only. Anything shipped to the browser can be read by anyone using dev tools. Keep secrets server-side with Wrangler secrets (wrangler secret put).",
+              "zh": "API 金鑰、資料庫憑證、權杖（token）只能放在 Worker。任何送到瀏覽器的東西，任何人用開發者工具都讀得到。請用 Wrangler 的機密功能（wrangler secret put）把機密留在伺服器端。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Things beginners trip over",
+              "zh": "初學者常踩的雷"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "CORS errors: if your front-end and API are on the same Worker, you usually avoid them entirely — serving both from one origin is the simplest setup.",
+                "Forgetting await: fetch() and D1 queries are asynchronous; always await them or you'll get a Promise instead of data.",
+                "Returning HTML when you meant JSON: use Response.json(data) so the front-end can call res.json() cleanly.",
+                "Binding name mismatch: the name in wrangler.toml must match what you read on env (env.DB needs binding = \"DB\").",
+                "Editing local vs remote DB: --local touches your machine's copy; drop it (or use --remote) to change the deployed database."
+              ],
+              "zh": [
+                "CORS 錯誤：如果前端和 API 在同一個 Worker 上，通常就完全避開了——用同一個來源（origin）供應兩者是最簡單的做法。",
+                "忘了 await：fetch() 和 D1 查詢都是非同步的；一定要 await，不然你拿到的會是 Promise 而不是資料。",
+                "想回 JSON 卻回了 HTML：用 Response.json(data)，前端才能乾淨地呼叫 res.json()。",
+                "綁定名稱對不上：wrangler.toml 裡的名字要和你在 env 上讀的一致（env.DB 就要有 binding = \"DB\"）。",
+                "改到本機還是遠端資料庫：--local 動的是你電腦上的副本；拿掉它（或用 --remote）才會改到已部署的資料庫。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "savings",
+            "title": {
+              "en": "It's cheap to start",
+              "zh": "起步成本很低"
+            },
+            "text": {
+              "en": "Workers' free plan gives 100,000 requests a day and D1 includes a generous free tier — plenty to build and learn a full-stack app before paying anything. Check the docs for current limits before you launch.",
+              "zh": "Workers 免費方案每天有 10 萬次請求，D1 也有大方的免費額度——足夠你開發、學習一個全端應用，完全不用先付費。正式上線前，記得到官方文件確認最新的限制數字。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "frontend-worker-d1-crud",
+        "label": {
+          "en": "Front-end ↔ Worker ↔ D1: full CRUD",
+          "zh": "前端 ↔ Worker ↔ D1：完整 CRUD"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/workers/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "frontend-worker-d1-crud",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "sync_alt",
+    "title": {
+      "en": "Front-end ↔ Worker ↔ D1: full CRUD",
+      "zh": "前端 ↔ Worker ↔ D1：完整 CRUD 串接"
+    },
+    "subtitle": {
+      "en": "Wire a web page to a Worker API backed by a SQL database",
+      "zh": "把網頁串到 Worker API，再接上 SQL 資料庫"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Build a real todo app: an HTML page that creates, reads, updates and deletes rows in a cloud SQL database — all through one Worker.",
+        "zh": "做一個真正能跑的待辦事項 App：用一個 HTML 頁面，透過一個 Worker 對雲端 SQL 資料庫做新增、讀取、更新、刪除。"
+      }
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": {
+          "en": "Layers wired",
+          "zh": "層串接"
+        }
+      },
+      {
+        "value": "4",
+        "label": {
+          "en": "CRUD verbs",
+          "zh": "CRUD 動詞"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "SQL database",
+          "zh": "SQL 資料庫"
+        }
+      },
+      {
+        "value": "0",
+        "label": {
+          "en": "Servers to manage",
+          "zh": "要管的伺服器"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring up?",
+          "zh": "我們要串什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "CRUD stands for Create, Read, Update, Delete — the four things almost every app does with data. In this guide we build a tiny todo app where the browser talks to a Worker (a small program running on Cloudflare's edge), and the Worker reads and writes a D1 database (a serverless SQL database built on SQLite).",
+              "zh": "CRUD 是 Create、Read、Update、Delete（新增、讀取、更新、刪除）的縮寫，幾乎每個 App 對資料都在做這四件事。這篇我們要做一個小小的待辦事項 App：瀏覽器跟 Worker（跑在 Cloudflare 邊緣上的小程式）講話，Worker 再去讀寫 D1 資料庫（一個以 SQLite 為底的無伺服器 SQL 資料庫）。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Three layers, one data flow. The front-end never touches the database directly — it always goes through the Worker, which is the only thing holding the database binding. Here is the big picture:",
+              "zh": "三層、一條資料流。前端永遠不會直接碰資料庫——它一律透過 Worker，而唯一拿著資料庫綁定（binding）的也只有 Worker。先看一下全貌："
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Architecture: Browser → Worker → D1",
+              "zh": "架構：瀏覽器 → Worker → D1"
+            },
+            "code": {
+              "en": "flowchart LR\n  B[\"Browser (HTML / JS)\"] -->|\"fetch /api/todos\"| W[\"Worker API\"]\n  W -->|\"prepare().bind()\"| D[\"D1 (SQLite)\"]\n  D -->|\"rows\"| W\n  W -->|\"JSON\"| B",
+              "zh": "flowchart LR\n  B[\"瀏覽器（HTML / JS）\"] -->|\"fetch /api/todos\"| W[\"Worker API\"]\n  W -->|\"prepare().bind()\"| D[\"D1（SQLite）\"]\n  D -->|\"資料列\"| W\n  W -->|\"JSON 回應\"| B"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "restaurant",
+            "title": {
+              "en": "Think of it like a restaurant",
+              "zh": "把它想成一間餐廳"
+            },
+            "text": {
+              "en": "The browser is the customer placing an order, the Worker is the waiter who takes it to the kitchen and brings food back, and D1 is the kitchen pantry where all the ingredients (your data) are stored. The customer never walks into the pantry — they always ask the waiter.",
+              "zh": "瀏覽器是點餐的客人，Worker 是把點單送進廩房、再把菜端出來的服務生，而 D1 就是存放所有食材（你的資料）的廩房。客人不會自己走進廩房——一律跟服務生點。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "哪一層負責什麼？"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Front-end (Browser)",
+                  "zh": "前端（瀏覽器）"
+                },
+                "text": {
+                  "en": "Renders the UI and calls the API with fetch(). It only knows the URL and the JSON shape — nothing about SQL.",
+                  "zh": "負責畫面並用 fetch() 呼叫 API。它只知道網址和 JSON 長什麼樣——完全不碰 SQL。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "Worker (API)",
+                  "zh": "Worker（API）"
+                },
+                "text": {
+                  "en": "Receives HTTP requests, validates input, routes by method, runs SQL through the env.DB binding, and returns JSON.",
+                  "zh": "接收 HTTP 請求、驗證輸入、依方法分流，透過 env.DB 綁定跑 SQL，再回傳 JSON。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 (Database)",
+                  "zh": "D1（資料庫）"
+                },
+                "text": {
+                  "en": "Stores the todos table and runs the actual SELECT / INSERT / UPDATE / DELETE statements safely.",
+                  "zh": "存放 todos 資料表，安全地執行真正的 SELECT / INSERT / UPDATE / DELETE 語句。"
+                }
+              },
+              {
+                "icon": "vpn_key",
+                "title": {
+                  "en": "The binding",
+                  "zh": "綁定（binding）"
+                },
+                "text": {
+                  "en": "wrangler.toml connects the Worker to D1 under the name env.DB — no connection string or password needed.",
+                  "zh": "wrangler.toml 把 Worker 和 D1 以 env.DB 這個名字接起來——不用連線字串、也不用密碼。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "All four CRUD operations hit the same /api/todos path; the Worker decides what to do based on the HTTP method (GET, POST, PUT, DELETE). This is the routing logic in one picture:",
+              "zh": "四個 CRUD 動作都打到同一條 /api/todos 路徑；Worker 依 HTTP 方法（GET、POST、PUT、DELETE）決定要做什麼。一張圖看懂路由邏輯："
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Worker routing by HTTP method",
+              "zh": "Worker 依 HTTP 方法路由"
+            },
+            "code": {
+              "en": "flowchart TD\n  R[\"Request /api/todos\"] --> M{\"HTTP method?\"}\n  M -->|GET| S1[\"SELECT * FROM todos\"]\n  M -->|POST| S2[\"INSERT INTO todos\"]\n  M -->|PUT| S3[\"UPDATE todos SET ...\"]\n  M -->|DELETE| S4[\"DELETE FROM todos\"]\n  S1 --> J[\"Response.json(...)\"]\n  S2 --> J\n  S3 --> J\n  S4 --> J",
+              "zh": "flowchart TD\n  R[\"請求 /api/todos\"] --> M{\"HTTP 方法？\"}\n  M -->|GET| S1[\"SELECT * FROM todos\"]\n  M -->|POST| S2[\"INSERT INTO todos\"]\n  M -->|PUT| S3[\"UPDATE todos SET ...\"]\n  M -->|DELETE| S4[\"DELETE FROM todos\"]\n  S1 --> J[\"Response.json(...)\"]\n  S2 --> J\n  S3 --> J\n  S4 --> J"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model",
+          "zh": "資料模型"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Our app needs just one table: todos. Each row is one task. id is the primary key (PK — a unique number that identifies the row), title is the task text, done is 0 or 1 (SQLite has no real boolean, so we use an integer), and created_at is a timestamp filled in automatically.",
+              "zh": "我們的 App 只需要一張資料表：todos。每一列就是一件待辦事項。id 是主鍵（PK，用來唯一識別一列的號碼），title 是待辦內容，done 是 0 或 1（SQLite 沒有真正的布林型別，所以用整數代替），created_at 則是自動填上的時間戳記。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "todos table (ER diagram)",
+              "zh": "todos 資料表（ER 圖）"
+            },
+            "code": {
+              "en": "erDiagram\n  TODOS {\n    integer id PK \"auto increment\"\n    text title \"task text\"\n    integer done \"0 or 1\"\n    text created_at \"timestamp\"\n  }",
+              "zh": "erDiagram\n  TODOS {\n    integer id PK \"自動遞增\"\n    text title \"待辦內容\"\n    integer done \"0 或 1\"\n    text created_at \"建立時間\"\n  }"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Translated into SQL, that table looks like this. Save it as schema.sql — we apply it to D1 in the build steps below.",
+              "zh": "轉成 SQL，這張表長這樣。把它存成 schema.sql——下面的動手步驟會把它套用到 D1。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "CREATE TABLE IF NOT EXISTS todos (\n  id         INTEGER PRIMARY KEY AUTOINCREMENT,\n  title      TEXT    NOT NULL,\n  done       INTEGER NOT NULL DEFAULT 0,\n  created_at TEXT    NOT NULL DEFAULT (datetime('now'))\n);"
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "One full round trip",
+          "zh": "一次完整的往返"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Let's trace a Create from start to finish: the user types a task and submits the form. The browser sends POST /api/todos with a JSON body, the Worker validates it and runs an INSERT, D1 returns the freshly created row (thanks to RETURNING *), and the Worker hands that JSON back so the UI can show it instantly.",
+              "zh": "我們跟蹤一次 Create 從頭到尾：使用者打完待辦事項、送出表單。瀏覽器發出 POST /api/todos（帶著 JSON 資料），Worker 驗證後跑 INSERT，D1 透過 RETURNING * 回傳剛建好的那一列，Worker 再把那筆 JSON 送回來，畫面就能馬上顯示。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Create round trip (POST)",
+              "zh": "新增往返（POST）"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker\"\n  participant D as \"D1\"\n  U->>W: POST /api/todos (title)\n  W->>W: validate title\n  W->>D: INSERT INTO todos RETURNING *\n  D-->>W: new row\n  W-->>U: 201 Created + JSON\n  U->>U: render new todo",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant D as \"D1\"\n  U->>W: POST /api/todos（title）\n  W->>W: 驗證 title\n  W->>D: INSERT INTO todos RETURNING *\n  D-->>W: 新資料列\n  W-->>U: 201 Created + JSON\n  U->>U: 畫出新待辦事項"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "bolt",
+            "title": {
+              "en": "Why RETURNING *?",
+              "zh": "為什麼用 RETURNING *？"
+            },
+            "text": {
+              "en": "Without RETURNING you would have to run a second SELECT to learn the new id and created_at. RETURNING * gives you the whole inserted row in one query — fewer round trips, simpler code.",
+              "zh": "沒有 RETURNING 的話，你得再跑一次 SELECT 才能拿到新的 id 跟 created_at。RETURNING * 讓你一個查詢就拿到整列資料——往返更少、程式更簡單。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "一步一步串起來"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Follow these seven steps and you will have a deployed full-stack todo app. You need Node.js installed; everything else runs through npx wrangler (Cloudflare's command-line tool).",
+              "zh": "跟著這七個步驟走，你就會有一個部署上線的全端待辦事項 App。你只需要裝好 Node.js；其他全都透過 npx wrangler（Cloudflare 的命令列工具）來跑。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the D1 database",
+                  "zh": "建立 D1 資料庫"
+                },
+                "text": {
+                  "en": "Wrangler prints a database_id — copy it, you will paste it into wrangler.toml next.",
+                  "zh": "Wrangler 會印出一組 database_id——複製起來，下一步要貼進 wrangler.toml。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 create todo-db"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind D1 to the Worker",
+                  "zh": "把 D1 綁定到 Worker"
+                },
+                "text": {
+                  "en": "The [[d1_databases]] block exposes the database to your Worker as env.DB. Paste the id from step 1.",
+                  "zh": "[[d1_databases]] 這段讓資料庫以 env.DB 的名字出現在 Worker 裡。把步驟 1 的 id 貼進來。"
+                },
+                "code": {
+                  "lang": "toml",
+                  "body": "name = \"todo-api\"\nmain = \"src/index.js\"\ncompatibility_date = \"2024-09-23\"\n\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"todo-db\"\ndatabase_id = \"<paste-your-id-here>\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Apply the table schema",
+                  "zh": "套用資料表結構"
+                },
+                "text": {
+                  "en": "Run schema.sql against the real cloud database. Use --local instead of --remote to test on your machine first.",
+                  "zh": "把 schema.sql 跑在雲端真正的資料庫上。想先在本機測試的話，把 --remote 換成 --local。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 execute todo-db --remote --file=./schema.sql\n\n# quick check it worked\nnpx wrangler d1 execute todo-db --remote --command \"SELECT name FROM sqlite_master WHERE type='table';\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Worker (src/index.js)",
+                  "zh": "寫 Worker（src/index.js）"
+                },
+                "text": {
+                  "en": "One fetch handler routes all four CRUD verbs to D1 using prepare().bind() plus .all() / .first() / .run(). The CORS headers let a browser on another origin call this API.",
+                  "zh": "一個 fetch 處理函式用 prepare().bind() 加上 .all() / .first() / .run()，把四個 CRUD 動詞全都路由到 D1。CORS 標頭則讓另一個來源（origin）的瀏覽器能呼叫這個 API。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const id = url.pathname.match(/^\\/api\\/todos\\/(\\d+)$/);\n    const cors = {\n      \"Access-Control-Allow-Origin\": \"*\",\n      \"Access-Control-Allow-Methods\": \"GET,POST,PUT,DELETE,OPTIONS\",\n      \"Access-Control-Allow-Headers\": \"Content-Type\"\n    };\n\n    if (request.method === \"OPTIONS\") return new Response(null, { headers: cors });\n\n    try {\n      // READ: list every todo\n      if (url.pathname === \"/api/todos\" && request.method === \"GET\") {\n        const { results } = await env.DB\n          .prepare(\"SELECT * FROM todos ORDER BY created_at DESC\")\n          .all();\n        return json(results, 200, cors);\n      }\n\n      // CREATE: insert one todo\n      if (url.pathname === \"/api/todos\" && request.method === \"POST\") {\n        const { title } = await request.json();\n        if (!title) return json({ error: \"title required\" }, 400, cors);\n        const row = await env.DB\n          .prepare(\"INSERT INTO todos (title) VALUES (?) RETURNING *\")\n          .bind(title)\n          .first();\n        return json(row, 201, cors);\n      }\n\n      // UPDATE: toggle done or edit title\n      if (id && request.method === \"PUT\") {\n        const { title, done } = await request.json();\n        const row = await env.DB\n          .prepare(\"UPDATE todos SET title = COALESCE(?, title), done = COALESCE(?, done) WHERE id = ? RETURNING *\")\n          .bind(title ?? null, done ?? null, Number(id[1]))\n          .first();\n        return row ? json(row, 200, cors) : json({ error: \"not found\" }, 404, cors);\n      }\n\n      // DELETE: remove one todo\n      if (id && request.method === \"DELETE\") {\n        const info = await env.DB\n          .prepare(\"DELETE FROM todos WHERE id = ?\")\n          .bind(Number(id[1]))\n          .run();\n        return json({ deleted: info.meta.changes }, 200, cors);\n      }\n\n      return json({ error: \"not found\" }, 404, cors);\n    } catch (err) {\n      return json({ error: err.message }, 500, cors);\n    }\n  }\n};\n\nfunction json(data, status, cors) {\n  return new Response(JSON.stringify(data), {\n    status,\n    headers: { \"Content-Type\": \"application/json\", ...cors }\n  });\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Front-end: the four fetch calls",
+                  "zh": "前端：四個 fetch 呼叫"
+                },
+                "text": {
+                  "en": "These helpers map one-to-one to CRUD: GET reads, POST creates, PUT updates, DELETE removes. Point API at your deployed Worker URL.",
+                  "zh": "這幾個小函式跟 CRUD 一對一：GET 讀、POST 新增、PUT 更新、DELETE 刪除。把 API 指向你部署好的 Worker 網址。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "const API = \"https://todo-api.<your-subdomain>.workers.dev/api/todos\";\n\n// READ — GET all todos\nexport async function listTodos() {\n  const res = await fetch(API);\n  return res.json();\n}\n\n// CREATE — POST a new todo\nexport async function addTodo(title) {\n  const res = await fetch(API, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ title })\n  });\n  return res.json();\n}\n\n// UPDATE — PUT to toggle done (or edit title)\nexport async function toggleTodo(id, done) {\n  const res = await fetch(`${API}/${id}`, {\n    method: \"PUT\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ done })\n  });\n  return res.json();\n}\n\n// DELETE — remove a todo\nexport async function removeTodo(id) {\n  const res = await fetch(`${API}/${id}`, { method: \"DELETE\" });\n  return res.json();\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Wire it into a page (index.html)",
+                  "zh": "接進網頁（index.html）"
+                },
+                "text": {
+                  "en": "A complete, runnable page: a form that POSTs new todos, a list that GETs them, a checkbox that PUTs done, and a button that DELETEs. Open it with any static server.",
+                  "zh": "一個完整、能跑的頁面：表單負責 POST 新增、清單負責 GET 讀取、勾選框負責 PUT 切換完成、按鈕負責 DELETE。用任何靜態伺服器打開即可。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>Todo</title>\n</head>\n<body>\n  <h1>My Todos</h1>\n  <form id=\"new\">\n    <input id=\"title\" placeholder=\"What needs doing?\" required />\n    <button type=\"submit\">Add</button>\n  </form>\n  <ul id=\"list\"></ul>\n\n  <script type=\"module\">\n    const API = \"https://todo-api.<your-subdomain>.workers.dev/api/todos\";\n\n    async function load() {\n      const todos = await (await fetch(API)).json();\n      const ul = document.getElementById(\"list\");\n      ul.innerHTML = \"\";\n      for (const t of todos) {\n        const li = document.createElement(\"li\");\n        const box = document.createElement(\"input\");\n        box.type = \"checkbox\";\n        box.checked = !!t.done;\n        box.onchange = () => update(t.id, box.checked ? 1 : 0);\n        const span = document.createElement(\"span\");\n        span.textContent = \" \" + t.title + \" \";\n        const del = document.createElement(\"button\");\n        del.textContent = \"x\";\n        del.onclick = () => remove(t.id);\n        li.append(box, span, del);\n        ul.appendChild(li);\n      }\n    }\n\n    async function update(id, done) {\n      await fetch(`${API}/${id}`, {\n        method: \"PUT\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ done })\n      });\n      load();\n    }\n\n    async function remove(id) {\n      await fetch(`${API}/${id}`, { method: \"DELETE\" });\n      load();\n    }\n\n    document.getElementById(\"new\").addEventListener(\"submit\", async (e) => {\n      e.preventDefault();\n      const title = document.getElementById(\"title\").value.trim();\n      if (!title) return;\n      await fetch(API, {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ title })\n      });\n      e.target.reset();\n      load();\n    });\n\n    load();\n  </script>\n</body>\n</html>"
+                }
+              },
+              {
+                "title": {
+                  "en": "Run locally, then deploy",
+                  "zh": "本機跑跑看，再部署"
+                },
+                "text": {
+                  "en": "wrangler dev runs the Worker on your machine; wrangler deploy publishes it to the world and prints your live workers.dev URL.",
+                  "zh": "wrangler dev 在本機跑 Worker；wrangler deploy 把它發布到全世界，並印出你上線的 workers.dev 網址。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# develop with live reload\nnpx wrangler dev\n\n# ship it\nnpx wrangler deploy"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "shield",
+                "title": {
+                  "en": "Prepared statements",
+                  "zh": "預備語句"
+                },
+                "text": {
+                  "en": "prepare(\"... ?\").bind(value) keeps user input out of the SQL text, blocking SQL injection. Never build SQL with string concatenation.",
+                  "zh": "prepare(\"... ?\").bind(value) 把使用者輸入和 SQL 文字分開，擋掉 SQL 注入攻擊。千萬不要用字串拼接來組 SQL。"
+                }
+              },
+              {
+                "icon": "data_object",
+                "title": {
+                  "en": ".all() vs .first() vs .run()",
+                  "zh": ".all()、.first()、.run()"
+                },
+                "text": {
+                  "en": "all() returns many rows, first() returns one row (or null), run() is for writes where you only need the change count.",
+                  "zh": "all() 回傳多列，first() 回傳一列（或 null），run() 用在只需要知道改了幾列的寫入操作。"
+                }
+              },
+              {
+                "icon": "swap_horiz",
+                "title": {
+                  "en": "HTTP method = intent",
+                  "zh": "HTTP 方法就是意圖"
+                },
+                "text": {
+                  "en": "GET reads, POST creates, PUT/PATCH updates, DELETE removes. Same URL, different verb — that is REST in a nutshell.",
+                  "zh": "GET 讀、POST 新增、PUT/PATCH 更新、DELETE 刪除。同一網址、不同動詞——這就是 REST 的精髓。"
+                }
+              },
+              {
+                "icon": "public",
+                "title": {
+                  "en": "CORS",
+                  "zh": "CORS（跨來源存取）"
+                },
+                "text": {
+                  "en": "Browsers block cross-origin calls unless the server replies with Access-Control-* headers. That's why the Worker adds them to every response.",
+                  "zh": "除非伺服器回以 Access-Control-* 標頭，否則瀏覽器會擋掉跨來源呼叫。這就是為什麼 Worker 每個回應都要加上它們。"
+                }
+              },
+              {
+                "icon": "cloud_sync",
+                "title": {
+                  "en": "Local vs remote D1",
+                  "zh": "本機與遠端 D1"
+                },
+                "text": {
+                  "en": "--local hits a SQLite file on your disk for fast tests; --remote hits the real cloud database. They are separate — seed both.",
+                  "zh": "--local 打的是你磁碟上的 SQLite 檔、測試很快；--remote 打的是雲端真資料庫。兩邊是分開的，記得都要填資料。"
+                }
+              },
+              {
+                "icon": "playlist_add_check",
+                "title": {
+                  "en": "RETURNING *",
+                  "zh": "RETURNING *"
+                },
+                "text": {
+                  "en": "An SQLite feature that hands back the affected row from an INSERT/UPDATE in the same query — no second SELECT needed.",
+                  "zh": "SQLite 的功能，讓 INSERT/UPDATE 在同一查詢裡就把受影響的那列送回來——不用再 SELECT 一次。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & pricing",
+          "zh": "陷阱與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Don't expose D1 to the browser",
+              "zh": "不要把 D1 直接露給瀏覽器"
+            },
+            "text": {
+              "en": "The env.DB binding only exists inside the Worker. Never try to query D1 from front-end JavaScript — always go through the Worker so validation and auth stay server-side.",
+              "zh": "env.DB 綁定只存在於 Worker 內部。千萬不要想從前端 JavaScript 查 D1——一律走 Worker，讓驗證和權限判斷都留在伺服器端。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "payments",
+            "title": {
+              "en": "Billed by rows, not by time",
+              "zh": "依列數計費，不看時間"
+            },
+            "text": {
+              "en": "D1 counts rows read and rows written, plus storage. The free tier gives 5 million rows read and 100,000 rows written per day with 5 GB storage — plenty for a todo app.",
+              "zh": "D1 算的是讀取列數、寫入列數，再加上儲存量。免費額度每天給 500 萬列讀取、10 萬列寫入、加上 5 GB 儲存——做個待辦 App 綽綽有餘。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Validate input in the Worker (e.g. reject empty titles) before touching the database.",
+                "Add an index on columns you filter or sort by often to read fewer rows and save money.",
+                "Use status codes meaningfully: 201 for created, 404 for not found, 400 for bad input.",
+                "Remember --local and --remote D1 are separate databases; seed the one you are testing.",
+                "Serve the front-end from Cloudflare Pages so HTML and API share one domain (and you can drop CORS)."
+              ],
+              "zh": [
+                "在 Worker 裡先驗證輸入（例如拒絕空白的 title），再去碰資料庫。",
+                "在常用來篩選或排序的欄位上建索引（index），可以少讀很多列、同時省錢。",
+                "狀態碼要用得有意義：201 代表建立成功、404 找不到、400 輸入有誤。",
+                "記得 --local 與 --remote 的 D1 是兩個不同的資料庫；你在測哪個就要填哪個。",
+                "把前端放到 Cloudflare Pages，讓 HTML 和 API 共用同一個網域（連 CORS 都可以省）。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "rest-api-worker",
+        "label": {
+          "en": "REST API on a Worker",
+          "zh": "用 Worker 做 REST API"
+        }
+      },
+      {
+        "slug": "form-to-database",
+        "label": {
+          "en": "Form to database",
+          "zh": "表單存進資料庫"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/d1/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "rest-api-worker",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "api",
+    "title": {
+      "en": "Designing a REST API with Workers",
+      "zh": "用 Workers 設計 REST API"
+    },
+    "subtitle": {
+      "en": "Build a clean HTTP back-end on a single Worker: route by method and path, parse requests, return JSON with the right status codes, and open it up to a browser front-end with CORS.",
+      "zh": "在單一個 Worker 上打造乾淨的 HTTP 後端：用「方法 + 路徑」做路由、解析請求、回傳帶正確狀態碼的 JSON，並用 CORS 讓瀏覽器前端可以直接呼叫它。"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "This is the back-end half of front-end ↔ back-end: one Worker file that answers GET, POST, PUT, and DELETE like a proper REST API.",
+        "zh": "這是「前端 ↔ 後端」裡的後端那一半：用一個 Worker 檔案，像正規的 REST API 一樣回應 GET、POST、PUT、DELETE。"
+      }
+    },
+    "stats": [
+      {
+        "value": "4",
+        "label": {
+          "en": "CRUD verbs",
+          "zh": "CRUD 動詞"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "Worker file",
+          "zh": "個 Worker 檔"
+        }
+      },
+      {
+        "value": "0ms",
+        "label": {
+          "en": "Cold starts",
+          "zh": "冷啟動"
+        }
+      },
+      {
+        "value": "CORS",
+        "label": {
+          "en": "Browser-ready",
+          "zh": "瀏覽器可直連"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要做什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "We're building a REST API on a single Cloudflare Worker. A \"REST API\" (Representational State Transfer) is just an agreed-upon way for a front-end to ask a back-end for data over HTTP: you pick a URL path for a resource (like /api/users) and an HTTP method (GET, POST, PUT, DELETE) that says what you want to do to it.",
+              "zh": "我們要在單一個 Cloudflare Worker 上做一個 REST API。所謂「REST API」（Representational State Transfer，表現層狀態轉換）其實就是前端跟後端「用 HTTP 要資料」的一套共同約定：你用一段網址路徑代表一種資源（例如 /api/users），再用一個 HTTP 方法（GET、POST、PUT、DELETE）表示你想對它做什麼。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The whole back-end lives in one Worker. When a request arrives, the Worker reads two things — the method and the path — decides which handler should run, does the work, and sends back a JSON response with a status code. That's it. No framework required.",
+              "zh": "整個後端就放在一個 Worker 裡。當一個請求進來，Worker 會讀兩樣東西——方法（method）跟路徑（path）——決定該跑哪一段處理程式，做完事，再回傳一個帶狀態碼的 JSON 回應。就這樣，連框架都不用。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The big picture",
+              "zh": "整體架構"
+            },
+            "code": {
+              "en": "flowchart LR\n  B[\"Browser front-end (fetch)\"] -->|\"HTTP request\"| W[\"Worker REST API\"]\n  W --> R[\"Router (method + path)\"]\n  R --> H1[\"GET handler\"]\n  R --> H2[\"POST handler\"]\n  R --> H3[\"PUT handler\"]\n  R --> H4[\"DELETE handler\"]\n  H1 --> J[\"JSON + status code\"]\n  H2 --> J\n  H3 --> J\n  H4 --> J\n  J -->|\"with CORS headers\"| B",
+              "zh": "flowchart LR\n  B[\"瀏覽器前端 (fetch)\"] -->|\"HTTP 請求\"| W[\"Worker REST API\"]\n  W --> R[\"路由器 (方法 + 路徑)\"]\n  R --> H1[\"GET 處理函式\"]\n  R --> H2[\"POST 處理函式\"]\n  R --> H3[\"PUT 處理函式\"]\n  R --> H4[\"DELETE 處理函式\"]\n  H1 --> J[\"JSON + 狀態碼\"]\n  H2 --> J\n  H3 --> J\n  H4 --> J\n  J -->|\"附上 CORS 標頭\"| B"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "restaurant_menu",
+            "title": {
+              "en": "Think of it like a restaurant",
+              "zh": "把它想成一家餐廳"
+            },
+            "text": {
+              "en": "The URL path is the table number (which resource), and the HTTP method is what you say to the waiter: GET = \"show me the menu\", POST = \"I'd like to order this\", PUT = \"change my order\", DELETE = \"cancel it\". The status code is the waiter's reply: 200 \"here you go\", 201 \"order placed\", 404 \"we don't have that\".",
+              "zh": "網址路徑就像桌號（指哪一種資源），HTTP 方法就是你對服務生說的話：GET =「給我看菜單」、POST =「我要點這個」、PUT =「改一下我的餐點」、DELETE =「取消」。狀態碼則是服務生的回覆：200「好的給你」、201「已幫你下單」、404「我們沒有這個」。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "How the router decides",
+          "zh": "路由器怎麼做決定"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Inside the Worker, routing is just branching on two values you read from the incoming request: request.method and the pathname from new URL(request.url). Each method/path combination maps to one handler, and each handler returns a response with an appropriate status code.",
+              "zh": "在 Worker 內部，路由其實就是依據兩個從請求讀到的值來分流：request.method，以及 new URL(request.url) 取出的 pathname（路徑）。每一組「方法/路徑」對應到一個處理函式，每個處理函式都回傳一個帶有合適狀態碼的回應。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "front_hand",
+                "title": {
+                  "en": "OPTIONS — preflight",
+                  "zh": "OPTIONS — 預檢"
+                },
+                "text": {
+                  "en": "The browser's CORS safety check. Answer it first with 204 and the CORS headers, before any real work.",
+                  "zh": "瀏覽器的 CORS 安全檢查。最先處理它，回 204 加上 CORS 標頭，再談後面的事。"
+                }
+              },
+              {
+                "icon": "download",
+                "title": {
+                  "en": "GET — read",
+                  "zh": "GET — 讀取"
+                },
+                "text": {
+                  "en": "List a collection (/api/users) or fetch one item (/api/users/:id). Returns 200, or 404 if not found.",
+                  "zh": "列出整批（/api/users）或拿單一筆（/api/users/:id）。回 200，找不到就回 404。"
+                }
+              },
+              {
+                "icon": "add_circle",
+                "title": {
+                  "en": "POST — create",
+                  "zh": "POST — 新增"
+                },
+                "text": {
+                  "en": "Read the JSON body, validate it, create the resource. Returns 201 Created, or 400 if the body is invalid.",
+                  "zh": "讀取 JSON 內容、驗證、建立資源。回 201 Created，內容不合法就回 400。"
+                }
+              },
+              {
+                "icon": "edit",
+                "title": {
+                  "en": "PUT — update",
+                  "zh": "PUT — 更新"
+                },
+                "text": {
+                  "en": "Find the item by :id and replace its fields. Returns 200, 400 for bad input, or 404 if missing.",
+                  "zh": "用 :id 找到該筆並替換欄位。回 200、輸入不對回 400、找不到回 404。"
+                }
+              },
+              {
+                "icon": "delete",
+                "title": {
+                  "en": "DELETE — remove",
+                  "zh": "DELETE — 刪除"
+                },
+                "text": {
+                  "en": "Remove the item by :id. Returns 200 when it's gone, or 404 if there was nothing to delete.",
+                  "zh": "用 :id 刪掉該筆。刪掉了回 200，本來就沒有就回 404。"
+                }
+              },
+              {
+                "icon": "block",
+                "title": {
+                  "en": "Anything else",
+                  "zh": "其他情況"
+                },
+                "text": {
+                  "en": "An unknown path is 404; a path that exists but with the wrong method is 405 Method Not Allowed.",
+                  "zh": "不認識的路徑回 404；路徑存在但方法不對，回 405 Method Not Allowed（方法不允許）。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Request router",
+              "zh": "請求路由器"
+            },
+            "code": {
+              "en": "flowchart TD\n  REQ[\"Incoming request\"] --> M{\"method?\"}\n  M -->|OPTIONS| CORS[\"204 + CORS headers\"]\n  M -->|GET| P{\"path?\"}\n  M -->|POST| C[\"create → 201 / 400\"]\n  M -->|PUT| U[\"update → 200 / 400 / 404\"]\n  M -->|DELETE| D[\"remove → 200 / 404\"]\n  M -->|other| NA[\"405 not allowed\"]\n  P -->|\"/api/users\"| LIST[\"list → 200\"]\n  P -->|\"/api/users/:id\"| ONE[\"one → 200 / 404\"]",
+              "zh": "flowchart TD\n  REQ[\"收到請求\"] --> M{\"method?\"}\n  M -->|OPTIONS| CORS[\"204 + CORS 標頭\"]\n  M -->|GET| P{\"path?\"}\n  M -->|POST| C[\"新增 → 201 / 400\"]\n  M -->|PUT| U[\"更新 → 200 / 400 / 404\"]\n  M -->|DELETE| D[\"刪除 → 200 / 404\"]\n  M -->|other| NA[\"405 方法不允許\"]\n  P -->|\"/api/users\"| LIST[\"列出 → 200\"]\n  P -->|\"/api/users/:id\"| ONE[\"單筆 → 200 / 404\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "A browser call, step by step",
+          "zh": "瀏覽器呼叫的逐步流程"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "When a web page on one domain calls an API on another domain, the browser enforces CORS (Cross-Origin Resource Sharing) — a rule that protects users from sneaky cross-site requests. For some requests the browser first sends a \"preflight\": an OPTIONS request that asks the API \"are you OK with me calling you?\". Only if the API answers with the right Access-Control-* headers does the browser send the real request.",
+              "zh": "當某個網域上的網頁去呼叫另一個網域的 API 時，瀏覽器會執行 CORS（Cross-Origin Resource Sharing，跨來源資源共用）——這是一條保護使用者、避免被偷偷跨站請求的規則。對某些請求，瀏覽器會先送出一個「預檢（preflight）」：一個 OPTIONS 請求，問 API「你同意我呼叫你嗎？」。只有當 API 回應正確的 Access-Control-* 標頭，瀏覽器才會送出真正的請求。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Preflight then GET",
+              "zh": "先預檢再 GET"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant B as Browser\n  participant W as \"Worker API\"\n  Note over B,W: CORS preflight\n  B->>W: OPTIONS /api/users\n  W-->>B: 204 + Access-Control-Allow-*\n  Note over B,W: Real request\n  B->>W: GET /api/users\n  W->>W: route by method + path\n  W-->>B: 200 JSON + CORS headers",
+              "zh": "sequenceDiagram\n  participant B as 瀏覽器\n  participant W as \"Worker API\"\n  Note over B,W: CORS 預檢\n  B->>W: OPTIONS /api/users\n  W-->>B: 204 + Access-Control-Allow-*\n  Note over B,W: 真正的請求\n  B->>W: GET /api/users\n  W->>W: 依方法與路徑路由\n  W-->>B: 200 JSON + CORS 標頭"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "Not every request is preflighted",
+              "zh": "不是每個請求都會預檢"
+            },
+            "text": {
+              "en": "\"Simple\" requests (a plain GET, or a POST with a basic content type) skip the OPTIONS step. The moment you send Content-Type: application/json or a custom header, the browser preflights — which is why a JSON API must always handle OPTIONS.",
+              "zh": "「簡單請求」（單純的 GET，或用基本內容類型的 POST）會跳過 OPTIONS 那一步。但只要你送出 Content-Type: application/json 或自訂標頭，瀏覽器就會預檢——這就是為什麼 JSON API 一定要處理 OPTIONS。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Inside one handler",
+              "zh": "單一處理函式內部"
+            },
+            "code": {
+              "en": "flowchart TD\n  H[\"Handler runs\"] --> T{\"outcome?\"}\n  T -->|\"ok\"| OK[\"200 / 201 JSON\"]\n  T -->|\"bad input\"| BAD[\"400 error JSON\"]\n  T -->|\"not found\"| NF[\"404 error JSON\"]\n  T -->|\"threw error\"| ERR[\"500 error JSON\"]\n  OK --> ADD[\"attach CORS headers\"]\n  BAD --> ADD\n  NF --> ADD\n  ERR --> ADD\n  ADD --> SEND[\"send to browser\"]",
+              "zh": "flowchart TD\n  H[\"處理函式執行\"] --> T{\"結果?\"}\n  T -->|\"成功\"| OK[\"200 / 201 JSON\"]\n  T -->|\"輸入錯誤\"| BAD[\"400 錯誤 JSON\"]\n  T -->|\"找不到\"| NF[\"404 錯誤 JSON\"]\n  T -->|\"程式爆錯\"| ERR[\"500 錯誤 JSON\"]\n  OK --> ADD[\"附上 CORS 標頭\"]\n  BAD --> ADD\n  NF --> ADD\n  ERR --> ADD\n  ADD --> SEND[\"回傳給瀏覽器\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it",
+          "zh": "動手做"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the full back-end in one file, a matching front-end fetch example, and the wrangler config. The Worker uses a tiny in-memory array as a stand-in \"database\" so you can focus on routing — swap in D1 or KV for real, persistent data.",
+              "zh": "以下是完整後端（單一檔案）、對應的前端 fetch 範例，以及 wrangler 設定。Worker 用一個小小的記憶體陣列當作「假資料庫」，讓你專心看路由——要真正持久保存資料時，再換成 D1 或 KV。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create a Worker project",
+                  "zh": "建立 Worker 專案"
+                },
+                "text": {
+                  "en": "Scaffold a plain \"Hello World\" Worker in JavaScript, then open src/index.js.",
+                  "zh": "用 JavaScript 產生一個最單純的「Hello World」Worker，然後打開 src/index.js。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npm create cloudflare@latest -- my-api\ncd my-api"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the REST router",
+                  "zh": "寫 REST 路由器"
+                },
+                "text": {
+                  "en": "Replace src/index.js with the back-end code below. It reads the method and path, routes to a handler, and returns Response.json(...) with the right status and CORS headers.",
+                  "zh": "把 src/index.js 換成下面的後端程式碼。它會讀取方法與路徑、路由到對應的處理函式，並用 Response.json(...) 回傳正確狀態碼與 CORS 標頭。"
+                }
+              },
+              {
+                "title": {
+                  "en": "Run locally, then deploy",
+                  "zh": "先本機跑，再部署"
+                },
+                "text": {
+                  "en": "Test at http://localhost:8787/api/users, then publish to a public *.workers.dev URL.",
+                  "zh": "在 http://localhost:8787/api/users 測試，再發佈到公開的 *.workers.dev 網址。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler dev\nnpx wrangler deploy"
+                }
+              }
+            ]
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/index.js — the REST API",
+              "zh": "src/index.js — REST API"
+            },
+            "body": "// A single-file REST API on one Worker.\n\n// CORS = Cross-Origin Resource Sharing（跨來源資源共用）：\n// 這些標頭讓「別的網域」的瀏覽器前端可以呼叫我們。\nconst CORS = {\n  \"Access-Control-Allow-Origin\": \"*\", // 誰可以呼叫（* = 任何人；正式環境請鎖成你的網域）\n  \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n  \"Access-Control-Allow-Headers\": \"Content-Type\",\n};\n\n// 一個小小的記憶體資料（重啟會清空——正式請改用 D1 / KV）。\nlet users = [\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Linus\" },\n];\nlet nextId = 3;\n\n// 用一個 helper 統一產生每個 JSON 回應：資料 + 狀態碼 + CORS 標頭。\nfunction json(data, status = 200) {\n  return Response.json(data, { status, headers: CORS });\n}\n\nexport default {\n  async fetch(request) {\n    const { pathname } = new URL(request.url); // 例如 \"/api/users/2\"\n    const method = request.method;             // 例如 \"GET\"\n\n    // 1) CORS 預檢：瀏覽器在真正跨站請求前會先送 OPTIONS。\n    if (method === \"OPTIONS\") {\n      return new Response(null, { status: 204, headers: CORS });\n    }\n\n    // 2) 只服務我們的 API 路徑；其餘一律 404 Not Found（找不到）。\n    if (!pathname.startsWith(\"/api/users\")) {\n      return json({ error: \"Not found\" }, 404);\n    }\n\n    // 3) 從 /api/users/:id 取出可有可無的 id。\n    const parts = pathname.split(\"/\").filter(Boolean); // [\"api\",\"users\",\"2\"]\n    const id = parts[2] ? Number(parts[2]) : null;\n\n    try {\n      // GET /api/users → 列出全部（200 OK）\n      if (method === \"GET\" && id === null) {\n        return json(users, 200);\n      }\n\n      // GET /api/users/:id → 取單筆（200，找不到 404）\n      if (method === \"GET\" && id !== null) {\n        const user = users.find((u) => u.id === id);\n        return user ? json(user, 200) : json({ error: \"User not found\" }, 404);\n      }\n\n      // POST /api/users → 新增（201 Created，輸入不合法 400 Bad Request）\n      if (method === \"POST\" && id === null) {\n        const body = await request.json();\n        if (typeof body?.name !== \"string\") {\n          return json({ error: \"name is required\" }, 400);\n        }\n        const user = { id: nextId++, name: body.name };\n        users.push(user);\n        return json(user, 201);\n      }\n\n      // PUT /api/users/:id → 更新（200 / 400 / 404）\n      if (method === \"PUT\" && id !== null) {\n        const user = users.find((u) => u.id === id);\n        if (!user) return json({ error: \"User not found\" }, 404);\n        const body = await request.json();\n        if (typeof body?.name !== \"string\") {\n          return json({ error: \"name is required\" }, 400);\n        }\n        user.name = body.name;\n        return json(user, 200);\n      }\n\n      // DELETE /api/users/:id → 刪除（200，找不到 404）\n      if (method === \"DELETE\" && id !== null) {\n        const before = users.length;\n        users = users.filter((u) => u.id !== id);\n        return before === users.length\n          ? json({ error: \"User not found\" }, 404)\n          : json({ ok: true }, 200);\n      }\n\n      // 路徑存在，但方法不對 → 405 Method Not Allowed（方法不允許）。\n      return json({ error: \"Method not allowed\" }, 405);\n    } catch (err) {\n      // JSON 內容壞掉或其他意外 → 400 Bad Request。\n      return json({ error: \"Invalid request\" }, 400);\n    }\n  },\n};"
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "front-end — calling the API with fetch()",
+              "zh": "前端 — 用 fetch() 呼叫 API"
+            },
+            "body": "// 這段跑在瀏覽器裡。換成你部署後拿到的網址。\nconst API = \"https://my-api.<your-subdomain>.workers.dev/api/users\";\n\n// GET：列出全部使用者\nconst res = await fetch(API);\nconsole.log(res.status, await res.json()); // 200, [ {id:1,...}, ... ]\n\n// POST：新增一筆（把 JSON 放在 body，並標明 Content-Type）\nconst created = await fetch(API, {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ name: \"Grace\" }),\n});\nconsole.log(created.status, await created.json()); // 201, { id: 3, name: \"Grace\" }\n\n// PUT：更新 id = 3 那筆\nawait fetch(`${API}/3`, {\n  method: \"PUT\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ name: \"Grace H.\" }),\n});\n\n// DELETE：刪掉 id = 3 那筆\nawait fetch(`${API}/3`, { method: \"DELETE\" });"
+          },
+          {
+            "type": "code",
+            "lang": "toml",
+            "title": {
+              "en": "wrangler.toml",
+              "zh": "wrangler.toml"
+            },
+            "body": "name = \"my-api\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-01-01\""
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "database",
+            "title": {
+              "en": "In-memory data won't persist",
+              "zh": "記憶體資料不會留存"
+            },
+            "text": {
+              "en": "Each Worker isolate has its own copy of that users array, and it resets over time. It's perfect for learning routing, but for real data you need storage. See the D1 CRUD guide to wire this exact API to a SQL database.",
+              "zh": "每個 Worker isolate（隔離環境）都有自己一份 users 陣列，而且過一段時間就會重置。拿來學路由很完美，但要存真資料就需要儲存層。可參考 D1 CRUD 教學，把這個 API 接到 SQL 資料庫。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "http",
+                "title": {
+                  "en": "HTTP method",
+                  "zh": "HTTP 方法"
+                },
+                "text": {
+                  "en": "The verb of a request — GET reads, POST creates, PUT updates, DELETE removes. Read it from request.method.",
+                  "zh": "請求的「動詞」——GET 讀、POST 建立、PUT 更新、DELETE 刪除。用 request.method 讀到它。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "URL & path",
+                  "zh": "URL 與路徑"
+                },
+                "text": {
+                  "en": "new URL(request.url) parses the address. Its pathname (e.g. /api/users/2) tells you which resource is wanted.",
+                  "zh": "new URL(request.url) 會解析網址。它的 pathname（例如 /api/users/2）告訴你對方想要哪個資源。"
+                }
+              },
+              {
+                "icon": "data_object",
+                "title": {
+                  "en": "JSON body",
+                  "zh": "JSON 內容"
+                },
+                "text": {
+                  "en": "POST and PUT carry data in the request body. await request.json() turns it into a JavaScript object — always validate it.",
+                  "zh": "POST 與 PUT 會在請求內容（body）裡帶資料。await request.json() 把它轉成 JavaScript 物件——記得一定要驗證。"
+                }
+              },
+              {
+                "icon": "check_circle",
+                "title": {
+                  "en": "Status code",
+                  "zh": "狀態碼"
+                },
+                "text": {
+                  "en": "A 3-digit result: 2xx success, 4xx client mistake, 5xx server error. They let the front-end react without parsing text.",
+                  "zh": "三位數的結果：2xx 成功、4xx 用戶端出錯、5xx 伺服器出錯。它讓前端不必解析文字就能判斷狀況。"
+                }
+              },
+              {
+                "icon": "tune",
+                "title": {
+                  "en": "Response.json()",
+                  "zh": "Response.json()"
+                },
+                "text": {
+                  "en": "A Workers helper that serializes an object to JSON and sets Content-Type for you. Pass { status, headers } as the 2nd arg.",
+                  "zh": "Workers 的便利函式：把物件序列化成 JSON 並自動設好 Content-Type。第二個參數可放 { status, headers }。"
+                }
+              },
+              {
+                "icon": "public",
+                "title": {
+                  "en": "CORS",
+                  "zh": "CORS"
+                },
+                "text": {
+                  "en": "Headers that grant a browser on another domain permission to call you. Handle OPTIONS and add Access-Control-Allow-* to every response.",
+                  "zh": "授權「別的網域」瀏覽器呼叫你的標頭。要處理 OPTIONS，並在每個回應加上 Access-Control-Allow-*。"
+                }
+              },
+              {
+                "icon": "fork_right",
+                "title": {
+                  "en": "Routing",
+                  "zh": "路由"
+                },
+                "text": {
+                  "en": "Matching method + path to one handler. With a few routes, plain if checks beat any framework; for many, reach for itty-router or Hono.",
+                  "zh": "把「方法 + 路徑」對應到一個處理函式。路由不多時，幾個 if 判斷就贏過任何框架；路由很多時，可改用 itty-router 或 Hono。"
+                }
+              },
+              {
+                "icon": "rule",
+                "title": {
+                  "en": "Idempotency",
+                  "zh": "冪等性"
+                },
+                "text": {
+                  "en": "GET, PUT, DELETE should give the same result if repeated; POST usually creates something new each time. It guides which verb to pick.",
+                  "zh": "GET、PUT、DELETE 重複呼叫結果應一樣；POST 通常每次都會新建一筆。這會幫你決定該選哪個動詞。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Status codes you'll use most",
+              "zh": "最常用的狀態碼"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "200 OK — request succeeded (GET, PUT, DELETE)",
+                "201 Created — a new resource was created (POST)",
+                "204 No Content — success with no body (great for OPTIONS preflight)",
+                "400 Bad Request — the client sent invalid data",
+                "404 Not Found — no resource at that path / id",
+                "405 Method Not Allowed — path exists but the verb isn't supported",
+                "500 Internal Server Error — something blew up on your side"
+              ],
+              "zh": [
+                "200 OK — 請求成功（GET、PUT、DELETE）",
+                "201 Created — 成功建立了新資源（POST）",
+                "204 No Content — 成功但沒有內容（很適合 OPTIONS 預檢）",
+                "400 Bad Request — 用戶端送了不合法的資料",
+                "404 Not Found — 該路徑 / id 沒有對應的資源",
+                "405 Method Not Allowed — 路徑存在，但不支援這個動詞",
+                "500 Internal Server Error — 你這邊的程式爆掉了"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips & common pitfalls",
+          "zh": "小提示與常見陷阱"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "The #1 CORS mistake",
+              "zh": "最常見的 CORS 錯誤"
+            },
+            "text": {
+              "en": "If you forget to handle OPTIONS or leave CORS headers off your error responses, the browser blocks the call and the console shows a confusing \"CORS error\" — even though your Worker actually ran. Attach the CORS headers to every single response, success or failure.",
+              "zh": "如果你忘了處理 OPTIONS，或在錯誤回應上漏掉 CORS 標頭，瀏覽器就會擋下這次呼叫，主控台會出現讓人摸不著頭緒的「CORS error」——即使你的 Worker 其實有跑。請在「每一個」回應上都附上 CORS 標頭，不論成功或失敗。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "lock",
+            "title": {
+              "en": "Lock down the origin in production",
+              "zh": "正式環境請鎖定來源"
+            },
+            "text": {
+              "en": "Access-Control-Allow-Origin: * is fine while learning, but in production set it to your real front-end domain (e.g. https://app.example.com) so only your site can call the API from a browser.",
+              "zh": "學習階段用 Access-Control-Allow-Origin: * 沒問題，但正式環境請改成你真正的前端網域（例如 https://app.example.com），這樣才只有你的網站能從瀏覽器呼叫這個 API。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Habits that keep an API clean",
+              "zh": "讓 API 保持乾淨的好習慣"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Always wrap request.json() in try/catch — a malformed body should return 400, not crash the Worker",
+                "Validate every field before you trust it; never write unchecked input into storage",
+                "Return a consistent JSON shape for errors, e.g. { \"error\": \"message\" }, so the front-end can handle them uniformly",
+                "Pick the verb by intent: read = GET, create = POST, replace = PUT, remove = DELETE",
+                "Keep one json() helper so status codes and CORS headers are set in exactly one place",
+                "When routes multiply, move from if-chains to a router library like Hono to stay readable"
+              ],
+              "zh": [
+                "永遠把 request.json() 包在 try/catch 裡——內容壞掉時要回 400，而不是讓 Worker 當掉",
+                "信任任何欄位前都要先驗證；絕不要把未檢查的輸入寫進儲存層",
+                "錯誤一律用一致的 JSON 形狀，例如 { \"error\": \"訊息\" }，前端才能統一處理",
+                "依「意圖」選動詞：讀取 = GET、新增 = POST、整筆替換 = PUT、刪除 = DELETE",
+                "保留單一個 json() helper，讓狀態碼與 CORS 標頭只在一個地方設定",
+                "當路由變多時，從一堆 if 改用 Hono 之類的路由函式庫，維持可讀性"
+              ]
+            }
+          },
+          {
+            "type": "quote",
+            "text": {
+              "en": "A good REST API is boring on purpose: predictable paths, predictable verbs, predictable status codes.",
+              "zh": "好的 REST API 是「刻意無聊」的：路徑可預測、動詞可預測、狀態碼也可預測。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "frontend-worker-d1-crud",
+        "label": {
+          "en": "Front-end ↔ Worker ↔ D1 CRUD",
+          "zh": "前端 ↔ Worker ↔ D1 CRUD"
+        }
+      },
+      {
+        "slug": "auth-fullstack",
+        "label": {
+          "en": "Full-stack Auth",
+          "zh": "全端身分驗證"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/workers/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "form-to-database",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "dynamic_form",
+    "title": {
+      "en": "HTML form → Worker → database",
+      "zh": "HTML 表單 → Worker → 資料庫"
+    },
+    "subtitle": {
+      "en": "The classic flow: submit a form, save it, show it back — with real server-side validation",
+      "zh": "最經典的流程：送出表單、存起來、再顯示出來——搭配真正的伺服器端驗證"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "A contact or signup form that posts to a Worker, gets validated, and is saved to a D1 database.",
+        "zh": "一個聯絡或註冊表單：POST 到 Worker、通過驗證，再存進 D1 資料庫。"
+      }
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": {
+          "en": "Layers wired",
+          "zh": "層串接"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "Table to store rows",
+          "zh": "個資料表存資料"
+        }
+      },
+      {
+        "value": "201",
+        "label": {
+          "en": "Created on success",
+          "zh": "成功建立"
+        }
+      },
+      {
+        "value": "400",
+        "label": {
+          "en": "On invalid input",
+          "zh": "輸入不合法"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring up?",
+          "zh": "我們要串什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "This is the most common job in web development: a visitor fills in a form, you save what they typed, and you confirm it worked. We will wire three layers together — a front-end HTML form, a Cloudflare Worker (your server-side code that runs at the edge), and a D1 database (a serverless SQL database) where each submission becomes one row.",
+              "zh": "這是網頁開發最常見的任務：訪客填寫表單、你把他輸入的內容存起來、再回覆他成功了。我們要把三個層串在一起——前端 HTML 表單、一個 Cloudflare Worker（在邊緣執行的伺服器端程式碼）、以及一個 D1 資料庫（無伺服器的 SQL 資料庫），每一筆送出都會變成資料表裡的一列。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "local_post_office",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A reception desk. The visitor hands over a paper form (the HTML form). The receptionist checks it is filled in correctly (the Worker validating), then files it in a drawer (D1). If a field is blank, the receptionist hands it back and points at the problem — it never goes in the drawer.",
+              "zh": "一個服務櫃台。訪客遞交一張紙本表單（HTML 表單）。櫃台人員檢查是不是都填對了（Worker 驗證），再歸檔進抽屜（D1）。如果有欄位空白，櫃台會把表單退回來、指出問題——它永遠不會進抽屜。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Architecture at a glance",
+              "zh": "架構一眼看"
+            },
+            "code": {
+              "en": "flowchart TD\n  U[\"Visitor / Browser\"] -->|\"Fill in and submit\"| F[\"Front-end page (HTML + JS)\"]\n  F -->|\"fetch POST /api/submit\"| W[\"Worker (validate + logic)\"]\n  W -->|\"INSERT one row\"| D[\"D1 database\"]\n  D -->|\"success / failure\"| W\n  W -->|\"JSON response\"| F\n  F -->|\"Show success or error\"| U",
+              "zh": "flowchart TD\n  U[\"訪客 / 瀏覽器\"] -->|\"填寫並送出\"| F[\"前端網頁 (HTML + JS)\"]\n  F -->|\"fetch POST /api/submit\"| W[\"Worker (驗證 + 邏輯)\"]\n  W -->|\"INSERT 一筆資料\"| D[\"D1 資料庫\"]\n  D -->|\"成功 / 失敗\"| W\n  W -->|\"JSON 回應\"| F\n  F -->|\"顯示成功或錯誤\"| U"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what",
+          "zh": "每一層負責什麼"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Each layer has one clear job. Keeping them separate is what makes the app easy to reason about and secure.",
+              "zh": "每一層都只負責一件事。把它們分開，才能讓應用既好理解又安全。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Front-end (the form)",
+                  "zh": "前端（表單）"
+                },
+                "text": {
+                  "en": "HTML for the fields, plus JS that intercepts submit and sends the data with fetch. It also shows success or error messages.",
+                  "zh": "用 HTML 做出欄位，再用 JS 攔截送出動作、用 fetch 把資料傳出去，並負責顯示成功或錯誤訊息。"
+                }
+              },
+              {
+                "icon": "verified_user",
+                "title": {
+                  "en": "Worker (the gatekeeper)",
+                  "zh": "Worker（把關人）"
+                },
+                "text": {
+                  "en": "Receives the POST, validates every field, and only then writes to the database. This is the one place you can actually trust.",
+                  "zh": "接收 POST、驗證每一個欄位，確認無誤才寫進資料庫。這是唯一你真正能信任的地方。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 (the storage)",
+                  "zh": "D1（儲存）"
+                },
+                "text": {
+                  "en": "A SQL database that keeps every submission as a row. The Worker talks to it through the env.DB binding.",
+                  "zh": "一個 SQL 資料庫，把每筆送出存成一列。Worker 透過 env.DB binding（綁定）跟它溝通。"
+                }
+              },
+              {
+                "icon": "shield_lock",
+                "title": {
+                  "en": "Turnstile (optional)",
+                  "zh": "Turnstile（選配）"
+                },
+                "text": {
+                  "en": "A free, puzzle-free bot check. Add it to stop spam from flooding your table.",
+                  "zh": "免費、不用解拼圖的機器人檢查。加上它可以防止垃圾訊息灌爆你的資料表。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "dns",
+            "title": {
+              "en": "One origin, two paths",
+              "zh": "同一個網域、兩條路徑"
+            },
+            "text": {
+              "en": "With Workers static assets, the same Worker can serve your HTML page (e.g. /) and handle the API (/api/submit). Because they share an origin, the fetch needs no CORS setup.",
+              "zh": "透過 Workers 静態資源（static assets），同一個 Worker 可以同時伺服你的 HTML 頁面（例如 /）跟處理 API（/api/submit）。因為同源，fetch 就不需要設定 CORS。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model",
+          "zh": "資料模型"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "We only need one table: submissions. Each row is one filled-in form. The id auto-increments, and created_at is stamped automatically so you know when each message arrived.",
+              "zh": "我們只需要一個資料表：submissions。每一列就是一筆填好的表單。id 會自動遞增，created_at 會自動蓋上時間，讓你知道每筆訊息什麼時候進來的。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "submissions table",
+              "zh": "submissions 資料表"
+            },
+            "code": {
+              "en": "erDiagram\n  SUBMISSIONS {\n    integer id PK \"primary key\"\n    text name \"visitor name\"\n    text email \"contact email\"\n    text message \"message body\"\n    text created_at \"created time\"\n  }",
+              "zh": "erDiagram\n  SUBMISSIONS {\n    integer id PK \"主鍵\"\n    text name \"訪客姓名\"\n    text email \"聯絡信箱\"\n    text message \"訊息內容\"\n    text created_at \"建立時間\"\n  }"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "-- schema.sql\nCREATE TABLE IF NOT EXISTS submissions (\n  id         INTEGER PRIMARY KEY AUTOINCREMENT,\n  name       TEXT NOT NULL,\n  email      TEXT NOT NULL,\n  message    TEXT NOT NULL,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);"
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "schedule",
+            "title": {
+              "en": "Let the database stamp the time",
+              "zh": "讓資料庫蓋時間戳"
+            },
+            "text": {
+              "en": "Using DEFAULT (datetime('now')) means you never have to send created_at from the client — the server decides the time, so it cannot be faked.",
+              "zh": "用 DEFAULT (datetime('now')) 代表你永遠不用從前端傳 created_at——時間由伺服器決定，所以偽造不了。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "The request flow",
+          "zh": "請求流程"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Follow one submission from click to confirmation. Notice that validation happens on the Worker, and the database is only touched when every field is valid.",
+              "zh": "跟著一筆送出，從點擊一路看到回覆。注意驗證是在 Worker 上進行，而且只有當每個欄位都合法時，才會動到資料庫。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Submit → validate → save → confirm",
+              "zh": "送出 → 驗證 → 儲存 → 回覆"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Visitor\"\n  participant F as \"Front-end page\"\n  participant W as \"Worker\"\n  participant D as \"D1 database\"\n  U->>F: Fill in form and click submit\n  F->>W: POST /api/submit (JSON)\n  W->>W: Validate fields (name / email / message)\n  alt Fields valid\n    W->>D: INSERT INTO submissions\n    D-->>W: Write succeeded\n    W-->>F: 201 Created + JSON\n    F-->>U: Show success message\n  else Fields invalid\n    W-->>F: 400 + error list\n    F-->>U: Show field errors\n  end",
+              "zh": "sequenceDiagram\n  participant U as \"訪客\"\n  participant F as \"前端網頁\"\n  participant W as \"Worker\"\n  participant D as \"D1 資料庫\"\n  U->>F: 填寫表單並按下送出\n  F->>W: POST /api/submit (JSON)\n  W->>W: 驗證欄位 (姓名 / 信箱 / 訊息)\n  alt 欄位有效\n    W->>D: INSERT INTO submissions\n    D-->>W: 寫入成功\n    W-->>F: 201 Created + JSON\n    F-->>U: 顯示成功訊息\n  else 欄位無效\n    W-->>F: 400 + 錯誤清單\n    F-->>U: 顯示欄位錯誤\n  end"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "swap_horiz",
+            "title": {
+              "en": "Status codes are the contract",
+              "zh": "狀態碼就是約定"
+            },
+            "text": {
+              "en": "The Worker answers 201 (created) on success and 400 (bad request) on invalid input. The front-end reads res.ok to decide whether to clear the form or show errors.",
+              "zh": "Worker 成功時回 201（已建立）、輸入不合法時回 400（請求有誤）。前端看 res.ok 來決定要清空表單還是顯示錯誤。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "一步步動手串"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Here is the whole thing: the database and table, the wrangler config, the front-end form, and the Worker that ties it together. Copy each piece into the matching file.",
+              "zh": "下面是全部：資料庫與資料表、wrangler 設定、前端表單，以及把它們串起來的 Worker。把每一段貼進對應的檔案里。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the database and table",
+                  "zh": "建立資料庫與資料表"
+                },
+                "text": {
+                  "en": "Save the CREATE TABLE above as schema.sql, then run these. The --remote flag means 'apply to the real cloud database' (leave it off to test locally).",
+                  "zh": "把上面的 CREATE TABLE 存成 schema.sql，再跑這兩行。--remote 代表「套用到雲端上真正的資料庫」（不加就是在本機測試）。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# 1) Create the database (copy the printed database_id)\nnpx wrangler d1 create contact-db\n\n# 2) Apply the table from schema.sql to the real cloud database\nnpx wrangler d1 execute contact-db --remote --file=./schema.sql"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind D1 in wrangler.jsonc",
+                  "zh": "在 wrangler.jsonc 綁定 D1"
+                },
+                "text": {
+                  "en": "Paste the database_id from step 1. The binding name DB is how your Worker reaches the database as env.DB. The assets block lets the same Worker serve your HTML.",
+                  "zh": "貼上第 1 步拿到的 database_id。binding 名稱 DB 就是你的 Worker 用 env.DB 存取資料庫的方式。assets 那段讓同一個 Worker 能伺服你的 HTML。"
+                },
+                "code": {
+                  "lang": "json",
+                  "body": "{\n  \"name\": \"contact-form\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"assets\": { \"directory\": \"./public\" },\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"contact-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Build the front-end form",
+                  "zh": "做出前端表單"
+                },
+                "text": {
+                  "en": "Save this as public/index.html. It uses FormData to gather the fields, sends them as JSON with fetch, and updates the status line based on the response.",
+                  "zh": "把這個存成 public/index.html。它用 FormData 收集欄位、用 fetch 以 JSON 送出，再依回應更新狀態文字。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<!doctype html>\n<html lang=\"zh-Hant\">\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Contact us</title>\n</head>\n<body>\n  <form id=\"contact-form\">\n    <input name=\"name\" type=\"text\" placeholder=\"Your name\" required />\n    <input name=\"email\" type=\"email\" placeholder=\"you@example.com\" required />\n    <textarea name=\"message\" placeholder=\"Message\" required></textarea>\n    <button type=\"submit\">Send</button>\n    <p id=\"status\"></p>\n  </form>\n\n  <script>\n    const form = document.getElementById('contact-form');\n    const statusEl = document.getElementById('status');\n\n    form.addEventListener('submit', async (e) => {\n      e.preventDefault();                 // stop the normal full-page reload\n      statusEl.textContent = 'Sending...';\n\n      // FormData -> plain object -> JSON the Worker can read\n      const data = Object.fromEntries(new FormData(form));\n\n      const res = await fetch('/api/submit', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify(data),\n      });\n\n      const result = await res.json();\n      if (res.ok) {\n        statusEl.textContent = 'Thanks! We received your message.';\n        form.reset();\n      } else {\n        // result.errors looks like { email: 'Invalid email' }\n        statusEl.textContent = 'Please fix: ' + Object.values(result.errors).join(', ');\n      }\n    });\n  </script>\n</body>\n</html>"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Worker (validate + insert)",
+                  "zh": "寫 Worker（驗證 + 寫入）"
+                },
+                "text": {
+                  "en": "Save this as src/index.js. It checks the method and path, validates every field, and uses a prepared statement with bind() so user input can never become SQL.",
+                  "zh": "把這個存成 src/index.js。它檢查方法與路徑、驗證每個欄位，並用帶 bind() 的預備語句，讓使用者輸入永遠不會變成 SQL。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // Only the form endpoint is handled here\n    if (request.method !== 'POST' || url.pathname !== '/api/submit') {\n      return new Response('Not found', { status: 404 });\n    }\n\n    // 1. Read the body safely (bad JSON must not crash the Worker)\n    let body;\n    try {\n      body = await request.json();\n    } catch {\n      return Response.json({ errors: { form: 'Invalid JSON' } }, { status: 400 });\n    }\n\n    // 2. Validate EVERY field on the server. Never trust the client.\n    const errors = {};\n    const name = String(body.name || '').trim();\n    const email = String(body.email || '').trim();\n    const message = String(body.message || '').trim();\n\n    if (name.length < 2) errors.name = 'Name is too short';\n    if (!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(email)) errors.email = 'Invalid email';\n    if (message.length < 5) errors.message = 'Message is too short';\n    if (message.length > 2000) errors.message = 'Message is too long';\n\n    if (Object.keys(errors).length > 0) {\n      return Response.json({ errors }, { status: 400 });\n    }\n\n    // 3. Insert with a prepared statement. bind() fills the ? holes\n    //    so user input can never become SQL (blocks SQL injection).\n    await env.DB\n      .prepare('INSERT INTO submissions (name, email, message) VALUES (?, ?, ?)')\n      .bind(name, email, message)\n      .run();\n\n    // 4. Confirm success with 201 Created\n    return Response.json({ ok: true }, { status: 201 });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "(Optional) Stop bots with Turnstile",
+                  "zh": "（選配）用 Turnstile 擋機器人"
+                },
+                "text": {
+                  "en": "Add the Turnstile widget to the form, then verify the token at the very top of the Worker — before validation — so bots are rejected before they ever touch your validation or database.",
+                  "zh": "在表單加上 Turnstile widget，再在 Worker 最上方（驗證之前）驗證 token——讓機器人在碰到你的驗證或資料庫之前就被擋下。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// Optional: block bots BEFORE you validate or insert.\n// Add a Turnstile widget to the form (see the Turnstile guide),\n// it adds a \"cf-turnstile-response\" token to the submitted data.\n\nconst token = body['cf-turnstile-response'];\n\nconst verify = await fetch(\n  'https://challenges.cloudflare.com/turnstile/v0/siteverify',\n  {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n    body: new URLSearchParams({\n      secret: env.TURNSTILE_SECRET_KEY, // a Worker secret, never hardcoded\n      response: token || '',\n      remoteip: request.headers.get('CF-Connecting-IP') || '',\n    }),\n  }\n);\n\nconst outcome = await verify.json();\nif (!outcome.success) {\n  return Response.json({ errors: { form: 'Bot check failed' } }, { status: 403 });\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署上線"
+                },
+                "text": {
+                  "en": "Publish the Worker. Your form page and API go live on the same URL.",
+                  "zh": "發布這個 Worker。你的表單頁面跟 API 就在同一個網址上線了。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Server-side validation, branch by branch",
+              "zh": "伺服器端驗證，一條條分支"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "This is the decision the Worker makes for every request. There is exactly one happy path (save and return 201) and one rejection path (return 400 with a list of what is wrong).",
+              "zh": "這就是 Worker 對每個請求做的判斷。恰好只有一條順利路徑（儲存並回 201）和一條拒絕路徑（回 400 並附上哪裡有問題的清單）。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Validation branches",
+              "zh": "驗證分支"
+            },
+            "code": {
+              "en": "flowchart TD\n  A[\"Receive POST request\"] --> B[\"Parse JSON body\"]\n  B --> C{\"All fields valid?\"}\n  C -->|\"Yes\"| D[\"INSERT INTO submissions\"]\n  D --> E[\"Return 201 + success\"]\n  C -->|\"No\"| F[\"Collect error messages\"]\n  F --> G[\"Return 400 + error list\"]",
+              "zh": "flowchart TD\n  A[\"收到 POST 請求\"] --> B[\"解析 JSON 內容\"]\n  B --> C{\"欄位全部通過?\"}\n  C -->|\"是\"| D[\"INSERT INTO submissions\"]\n  D --> E[\"回傳 201 + 成功\"]\n  C -->|\"否\"| F[\"收集錯誤訊息\"]\n  F --> G[\"回傳 400 + 錯誤清單\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "gpp_bad",
+            "title": {
+              "en": "Never trust the client — why?",
+              "zh": "絕不要信任前端——為什麼？"
+            },
+            "text": {
+              "en": "HTML attributes like required or type=email are only hints for honest users. Anyone can open the dev tools, or send a raw request with curl, and skip the page entirely. The Worker is the real guard: it must re-check length, format, and required fields itself, because it is the only code an attacker cannot edit.",
+              "zh": "HTML 上的 required 或 type=email 只是給老實使用者的提示。任何人都可以打開開發者工具，或用 curl 直接送一個原始請求，完全跳過頁面。Worker 才是真正的守門員：它必須自己重新檢查長度、格式與必填欄位，因為它是攻擊者唯一改不了的程式碼。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "block",
+                "title": {
+                  "en": "preventDefault()",
+                  "zh": "preventDefault()"
+                },
+                "text": {
+                  "en": "Stops the browser's default form submit (a full-page reload) so your JS can send the data with fetch instead.",
+                  "zh": "阻止瀏覽器預設的表單送出（整頁重新載入），讓你的 JS 改用 fetch 把資料送出。"
+                }
+              },
+              {
+                "icon": "dataset",
+                "title": {
+                  "en": "FormData",
+                  "zh": "FormData"
+                },
+                "text": {
+                  "en": "A built-in object that grabs all named inputs from a form. Object.fromEntries turns it into a plain object ready for JSON.stringify.",
+                  "zh": "一個內建物件，能抓出表單裡所有有 name 的欄位。Object.fromEntries 再把它變成可以交給 JSON.stringify 的純物件。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Prepared statement",
+                  "zh": "預備語句"
+                },
+                "text": {
+                  "en": "prepare() + bind() keep user input out of the SQL text. The ? placeholders are filled as values, so input can never run as code — this blocks SQL injection.",
+                  "zh": "prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。? 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Binding (env.DB)",
+                  "zh": "Binding（env.DB）"
+                },
+                "text": {
+                  "en": "A binding is a named connection from your Worker to a resource. wrangler.jsonc maps the name DB to your database; in code it appears as env.DB.",
+                  "zh": "binding 是你 Worker 到某個資源的一條具名連線。wrangler.jsonc 把名稱 DB 對到你的資料庫；程式裡就是 env.DB。"
+                }
+              },
+              {
+                "icon": "tag",
+                "title": {
+                  "en": "HTTP status codes",
+                  "zh": "HTTP 狀態碼"
+                },
+                "text": {
+                  "en": "201 = created (success). 400 = bad request (your input is wrong). 403 = forbidden (e.g. bot check failed). The front-end branches on them.",
+                  "zh": "201 = 已建立（成功）。400 = 請求有誤（你的輸入不對）。403 = 禁止（例如機器人檢查未通過）。前端依這些狀態碼分支。"
+                }
+              },
+              {
+                "icon": "smart_toy",
+                "title": {
+                  "en": "Turnstile token",
+                  "zh": "Turnstile token"
+                },
+                "text": {
+                  "en": "A one-time pass the widget adds to the form. The Worker sends it to Cloudflare's Siteverify API to confirm a real human submitted it.",
+                  "zh": "widget 加進表單的一次性通行證。Worker 把它送到 Cloudflare 的 Siteverify API，確認是真人送出的。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & tips",
+          "zh": "陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "Validate, then store — in that order",
+              "zh": "先驗證、再儲存——順序別錯"
+            },
+            "text": {
+              "en": "A common bug is inserting first and validating later. Always reject bad input before the INSERT so your table never fills with junk or oversized rows.",
+              "zh": "一個常見的 bug 是先 INSERT 再驗證。請務必在 INSERT 之前就拒絕不合法的輸入，你的資料表才不會被垃圾或超大的資料塞滿。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Return a structured errors object (per field) so the front-end can point at each problem, not just say 'failed'.",
+                "Trim inputs and cap their length on the server; never rely on maxlength in HTML alone.",
+                "Wrap request.json() in try/catch — a malformed body should give a clean 400, not a crash.",
+                "Add an index on created_at if you list recent submissions often, to read fewer rows.",
+                "Store the Turnstile secret with 'wrangler secret put TURNSTILE_SECRET_KEY' — never hardcode it.",
+                "D1's free tier gives 5M rows read and 100K rows written per day — plenty for a contact form."
+              ],
+              "zh": [
+                "回傳一個結構化的 errors 物件（每個欄位一個），讓前端能指出每個問題，而不是只說「失敗」。",
+                "在伺服器端 trim 輸入並限制長度；千萬不要只靠 HTML 的 maxlength。",
+                "把 request.json() 包進 try/catch——格式不對的 body 應該回一個乾淨的 400，而不是讓程式崩潰。",
+                "如果你常列出最近的送出，在 created_at 建立索引（index）以減少讀取的列數。",
+                "用 'wrangler secret put TURNSTILE_SECRET_KEY' 存放 Turnstile 密鑰——絕不要寫死在程式裡。",
+                "D1 免費額度每天給 500 萬列讀取、10 萬列寫入——對一個聯絡表單絕對夠用。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "verified",
+            "title": {
+              "en": "Defense in depth",
+              "zh": "縱深防禦"
+            },
+            "text": {
+              "en": "Layer your defenses: HTML hints for UX, Worker validation for correctness, prepared statements against injection, and Turnstile against bots. No single layer is enough on its own.",
+              "zh": "把防禦分層疊起來：HTML 提示管體驗、Worker 驗證管正確性、預備語句擋注入、Turnstile 擋機器人。單靠任一層都不夠。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "turnstile",
+        "label": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "frontend-worker-d1-crud",
+        "label": {
+          "en": "Front-end ↔ Worker ↔ D1 CRUD",
+          "zh": "前端 ↔ Worker ↔ D1 CRUD"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/d1/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "auth-fullstack",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "lock_person",
+    "title": {
+      "en": "Authentication across front-end and back-end",
+      "zh": "前後端認證串接"
+    },
+    "subtitle": {
+      "en": "Two ways to wire login on Cloudflare: Zero Trust Access, or your own sessions in KV",
+      "zh": "在 Cloudflare 串接登入的兩種做法:零信任 Access,或自己用 KV 管 session"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "From a no-code login wall to a hand-built session cookie — see exactly how auth flows across the stack.",
+        "zh": "從免寫程式的登入牆,到手刻的 session cookie —— 看清認證如何在整個技術棧裡流動。"
+      }
+    },
+    "stats": [
+      {
+        "value": "2",
+        "label": {
+          "en": "Auth approaches",
+          "zh": "種認證做法"
+        }
+      },
+      {
+        "value": "50 users",
+        "label": {
+          "en": "Free Access seats",
+          "zh": "免費 Access 名額"
+        }
+      },
+      {
+        "value": "0 lines",
+        "label": {
+          "en": "Code for Access",
+          "zh": "Access 免寫程式"
+        }
+      },
+      {
+        "value": "HttpOnly",
+        "label": {
+          "en": "Cookie hardening",
+          "zh": "Cookie 強化"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring up?",
+          "zh": "我們要串接什麼?"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "\"Authentication\" just means proving who a user is before letting them in. On Cloudflare you have two clean ways to do it, and this guide walks through both so you can pick the right one.",
+              "zh": "「認證(Authentication)」其實就是:在放使用者進來之前,先確認他是誰。在 Cloudflare 上有兩種乾淨的做法,本篇會帶你走過兩種,讓你挑對適合自己的那一種。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Approach A is Cloudflare Access (Zero Trust): identity sits in front of your whole app and you write zero code. Approach B is app-level sessions: your own Worker checks the password, stores a session in Workers KV, and hands the browser a cookie.",
+              "zh": "做法 A 是 Cloudflare Access(零信任):身分驗證直接擋在整個應用程式前面,你完全不用寫程式。做法 B 是應用程式層級的 session:你自己的 Worker 檢查密碼、把 session 存進 Workers KV,再發一個 cookie 給瀏覽器。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The two paths at a glance",
+              "zh": "兩條路線一眼看懂"
+            },
+            "code": {
+              "en": "flowchart LR\n  U[\"Browser\"] --> Choice{\"Which auth?\"}\n  Choice -->|\"Zero Trust\"| CA[\"Cloudflare Access\"]\n  Choice -->|\"App login\"| W[\"Your Worker\"]\n  CA --> App[\"Protected app\"]\n  W --> KV[\"Workers KV sessions\"]\n  W --> App",
+              "zh": "flowchart LR\n  U[\"瀏覽器\"] --> Choice{\"用哪種認證?\"}\n  Choice -->|\"零信任\"| CA[\"Cloudflare Access\"]\n  Choice -->|\"應用程式登入\"| W[\"你的 Worker\"]\n  CA --> App[\"受保護的應用程式\"]\n  W --> KV[\"Workers KV session\"]\n  W --> App"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "verified_user",
+                "title": {
+                  "en": "A. Cloudflare Access",
+                  "zh": "A. Cloudflare Access"
+                },
+                "text": {
+                  "en": "Identity check in front of the app. No code, managed in the Zero Trust dashboard. Great for internal tools.",
+                  "zh": "在應用程式前面做身分檢查。免寫程式,在 Zero Trust 儀表板設定。很適合內部工具。"
+                }
+              },
+              {
+                "icon": "cookie",
+                "title": {
+                  "en": "B. Sessions in KV",
+                  "zh": "B. KV session"
+                },
+                "text": {
+                  "en": "Your Worker verifies the login, stores a session in KV, and sets a cookie. Full control, needs code. Great for public apps.",
+                  "zh": "你的 Worker 驗證登入、把 session 存進 KV、再設一個 cookie。完全掌控、但要寫程式。很適合公開的應用程式。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "meeting_room",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "Access is hiring a security guard for the whole building's front door. Building your own session is giving each visitor a numbered wristband at your own reception desk and checking that band at every room.",
+              "zh": "Access 就像幫整棟大樓的大門請一位保全。自建 session 則是你在自家櫃檯給每位訪客一條有編號的手環,之後每進一個房間都核對那條手環。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "approach-access",
+        "icon": "verified_user",
+        "heading": {
+          "en": "Approach A — Cloudflare Access (no code)",
+          "zh": "做法 A — Cloudflare Access(免寫程式)"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Cloudflare Access puts a login wall in front of your app at the edge. The user never reaches your app until Access has confirmed their identity with a provider you trust (Google, GitHub, Microsoft Entra ID, or a one-time email PIN).",
+              "zh": "Cloudflare Access 在邊緣(edge)幫你的應用程式擋一道登入牆。在 Access 用你信任的提供者(Google、GitHub、Microsoft Entra ID,或寄到 email 的一次性密碼)確認身分之前,使用者根本碰不到你的應用程式。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "This is Single Sign-On (SSO): the user logs in once with their existing account and Access issues a signed token (a JWT) as a cookie. Your app can stay completely unaware of passwords.",
+              "zh": "這就是單一登入(SSO,Single Sign-On):使用者用既有帳號登入一次,Access 就發一個已簽章的權杖(JWT)當作 cookie。你的應用程式可以完全不用碰密碼。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Cloudflare Access SSO flow",
+              "zh": "Cloudflare Access SSO 流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant CA as \"Cloudflare Access\"\n  participant IdP as \"Identity Provider\"\n  participant App as \"Your App\"\n  U->>CA: Open the app URL\n  CA-->>U: Redirect to login\n  U->>IdP: Sign in with Google\n  IdP-->>CA: Identity confirmed\n  CA->>CA: Check Access policy\n  CA-->>U: Set signed JWT cookie\n  U->>App: Request carries the JWT\n  App-->>U: Protected page",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant CA as \"Cloudflare Access\"\n  participant IdP as \"身分提供者\"\n  participant App as \"你的應用程式\"\n  U->>CA: 打開應用程式網址\n  CA-->>U: 轉址到登入頁\n  U->>IdP: 用 Google 登入\n  IdP-->>CA: 身分確認完成\n  CA->>CA: 檢查 Access 政策\n  CA-->>U: 設定已簽章的 JWT cookie\n  U->>App: 請求帶著 JWT\n  App-->>U: 受保護的頁面"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "code_off",
+                "title": {
+                  "en": "Zero code",
+                  "zh": "零程式碼"
+                },
+                "text": {
+                  "en": "Add the app and a policy in the dashboard. Nothing to write, build, or deploy.",
+                  "zh": "在儀表板新增應用程式和一條政策即可。不用寫、不用建置、也不用部署。"
+                }
+              },
+              {
+                "icon": "groups",
+                "title": {
+                  "en": "Reuse company logins",
+                  "zh": "沿用公司帳號"
+                },
+                "text": {
+                  "en": "Plug in Google Workspace, GitHub, or Entra ID so people use accounts they already have.",
+                  "zh": "接上 Google Workspace、GitHub 或 Entra ID,大家直接用既有帳號。"
+                }
+              },
+              {
+                "icon": "policy",
+                "title": {
+                  "en": "Identity-based policies",
+                  "zh": "以身分為基礎的政策"
+                },
+                "text": {
+                  "en": "Allow only @yourcompany.com emails, require MFA, or restrict by group.",
+                  "zh": "只允許 @yourcompany.com 的 email、要求多因素驗證,或依群組限制。"
+                }
+              },
+              {
+                "icon": "history",
+                "title": {
+                  "en": "Built-in audit log",
+                  "zh": "內建稽核紀錄"
+                },
+                "text": {
+                  "en": "Every login attempt is recorded — who, what, and when — with no extra work.",
+                  "zh": "每次登入嘗試都會被記錄(誰、做了什麼、何時),不用額外做任何事。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "verified",
+            "title": {
+              "en": "Your app can still trust the token",
+              "zh": "你的應用程式仍可信任這個權杖"
+            },
+            "text": {
+              "en": "Access forwards a signed Cf-Access-Jwt-Assertion header. If you want, your Worker can verify that JWT against Cloudflare's public keys to read the user's email — but you never have to handle the login itself.",
+              "zh": "Access 會轉發一個已簽章的 Cf-Access-Jwt-Assertion 標頭。需要的話,你的 Worker 可以拿 Cloudflare 的公鑰驗證這個 JWT 來讀出使用者 email —— 但你完全不必自己處理登入。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "approach-sessions",
+        "icon": "cookie",
+        "heading": {
+          "en": "Approach B — App-level sessions in KV",
+          "zh": "做法 B — 應用程式層級的 KV session"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "When you run your own sign-up and login (public app, custom UI, your own user table), you handle auth in code. The classic, robust pattern is the server-side session backed by a cookie.",
+              "zh": "當你要自己做註冊和登入(公開的應用程式、自訂介面、你自己的使用者資料表)時,認證就由程式碼處理。最經典、最穩健的模式就是「伺服器端 session + cookie」。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The Worker checks the password, creates a random session id, stores the real session data in Workers KV with an expiry, and sends the browser a cookie holding only that id. On later requests the browser auto-sends the cookie and the Worker looks the session up in KV.",
+              "zh": "Worker 檢查密碼、產生一個隨機的 session id、把真正的 session 資料連同到期時間存進 Workers KV,然後發給瀏覽器一個「只裝這個 id」的 cookie。之後每次請求,瀏覽器會自動帶上 cookie,Worker 再用它去 KV 查出 session。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "App-level login flow",
+              "zh": "應用程式登入流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: POST /login email and password\n  W->>W: Verify the password hash\n  W->>KV: put session id and user json\n  KV-->>W: stored with a TTL\n  W-->>U: Set-Cookie session id\n  U->>W: GET /me with the cookie\n  W->>KV: get session id\n  KV-->>W: user json\n  W-->>U: Profile JSON",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: POST /login 帶 email 與密碼\n  W->>W: 驗證密碼雜湊\n  W->>KV: put 寫入 session id 與使用者 json\n  KV-->>W: 已存入並設定 TTL\n  W-->>U: Set-Cookie 回傳 session id\n  U->>W: GET /me 帶著 cookie\n  W->>KV: get 查 session id\n  KV-->>W: 使用者 json\n  W-->>U: 個人資料 JSON"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Opaque session id",
+                  "zh": "不透明的 session id"
+                },
+                "text": {
+                  "en": "The cookie holds a random id only. User data lives server-side in KV, never in the browser.",
+                  "zh": "cookie 只裝一個隨機 id。使用者資料放在伺服器端的 KV,絕不放在瀏覽器裡。"
+                }
+              },
+              {
+                "icon": "schedule",
+                "title": {
+                  "en": "Auto-expiring",
+                  "zh": "自動過期"
+                },
+                "text": {
+                  "en": "expirationTtl makes KV delete the session automatically — logout-by-timeout for free.",
+                  "zh": "expirationTtl 會讓 KV 自動刪掉 session —— 等於免費的「逾時自動登出」。"
+                }
+              },
+              {
+                "icon": "logout",
+                "title": {
+                  "en": "Instant revoke",
+                  "zh": "即時撤銷"
+                },
+                "text": {
+                  "en": "Delete the KV key and that session is dead immediately, even before it expires.",
+                  "zh": "刪掉那個 KV key,該 session 立刻失效,就算還沒到期也一樣。"
+                }
+              },
+              {
+                "icon": "tune",
+                "title": {
+                  "en": "Full control",
+                  "zh": "完全掌控"
+                },
+                "text": {
+                  "en": "Your routes, your cookie flags, your rules. You can add roles, refresh, anything.",
+                  "zh": "你的路由、你的 cookie 旗標、你的規則。可以加角色、加更新機制,什麼都行。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "lan",
+            "title": {
+              "en": "Why KV fits sessions",
+              "zh": "為什麼 KV 適合存 session"
+            },
+            "text": {
+              "en": "Sessions are read on almost every request and KV is built for read-heavy, globally-replicated lookups with a built-in TTL. That makes it a natural home for session data on Workers.",
+              "zh": "幾乎每個請求都要讀 session,而 KV 正是為「讀多、全球同步、內建 TTL」的查詢而設計的,所以拿來放 Workers 上的 session 資料剛剛好。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "decide",
+        "icon": "call_split",
+        "heading": {
+          "en": "Which one should I use?",
+          "zh": "我該用哪一種?"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Pick by audience. If you are gating an internal tool or staff dashboard, Access wins — it's faster and safer than anything you'd hand-roll. If you are building a public product where strangers sign up, you need your own sessions.",
+              "zh": "依「對象」來選。如果你要把關的是內部工具或員工後台,Access 勝出 —— 它比你自己手刻的任何東西都更快也更安全。如果你在做一個對外、讓陌生人自行註冊的產品,那你就需要自己的 session。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Decision: Access vs build-your-own",
+              "zh": "決策:Access 還是自建 session"
+            },
+            "code": {
+              "en": "flowchart TD\n  Start[\"Need to protect something\"] --> Q1{\"Internal tool or staff app?\"}\n  Q1 -->|Yes| Access[\"Use Cloudflare Access\"]\n  Q1 -->|No| Q2{\"Public app with user accounts?\"}\n  Q2 -->|Yes| Build[\"Build sessions in KV\"]\n  Q2 -->|No| Q3{\"Just block bots on a form?\"}\n  Q3 -->|Yes| Turnstile[\"Add Turnstile\"]\n  Q3 -->|No| Access\n  Access --> Done[\"Login wall ready\"]\n  Build --> Done\n  Turnstile --> Done",
+              "zh": "flowchart TD\n  Start[\"需要保護某個東西\"] --> Q1{\"內部工具或員工系統?\"}\n  Q1 -->|是| Access[\"用 Cloudflare Access\"]\n  Q1 -->|否| Q2{\"公開且有使用者帳號?\"}\n  Q2 -->|是| Build[\"自建 KV session\"]\n  Q2 -->|否| Q3{\"只是想擋表單機器人?\"}\n  Q3 -->|是| Turnstile[\"加上 Turnstile\"]\n  Q3 -->|否| Access\n  Access --> Done[\"登入牆完成\"]\n  Build --> Done\n  Turnstile --> Done"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "badge",
+                "title": {
+                  "en": "Choose Access when…",
+                  "zh": "選 Access 的時機…"
+                },
+                "text": {
+                  "en": "Internal apps, admin panels, staging sites, SSH/RDP, or anything for a known set of people.",
+                  "zh": "內部應用程式、管理後台、測試站、SSH／遠端桌面,或任何給「已知一群人」用的東西。"
+                }
+              },
+              {
+                "icon": "public",
+                "title": {
+                  "en": "Build your own when…",
+                  "zh": "自建 session 的時機…"
+                },
+                "text": {
+                  "en": "Public sign-up, custom login UI, social accounts, per-user data, or a mobile/SPA backend.",
+                  "zh": "對外開放註冊、自訂登入介面、社群帳號、每位使用者各自的資料,或行動／SPA 後端。"
+                }
+              },
+              {
+                "icon": "shield",
+                "title": {
+                  "en": "Or just Turnstile…",
+                  "zh": "或只要 Turnstile…"
+                },
+                "text": {
+                  "en": "If you only need to stop bots on a contact or signup form, add Turnstile and skip auth entirely.",
+                  "zh": "如果你只是要擋住聯絡或註冊表單上的機器人,加個 Turnstile 就好,完全不用做認證。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "merge",
+            "title": {
+              "en": "You can combine them",
+              "zh": "兩者可以混用"
+            },
+            "text": {
+              "en": "It's common to use Access for the admin area and your own KV sessions for end-user accounts in the same project. They don't conflict.",
+              "zh": "同一個專案裡,用 Access 守後台、用自己的 KV session 處理一般使用者帳號,是很常見的組合。兩者並不衝突。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: a session Worker end to end",
+          "zh": "動手做:一個完整的 session Worker"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is approach B in full: create the KV namespaces, bind them, seed a demo user, then the Worker (login + middleware + logout) and a tiny front-end. Approach A needs no code — just the dashboard steps from the Access section.",
+              "zh": "以下是做法 B 的完整版:建立 KV 命名空間、綁定、塞一個示範使用者,接著是 Worker(登入 + 中介層 + 登出)和一個小小的前端。做法 A 不用寫程式,照前面 Access 那段的儀表板步驟做即可。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create two KV namespaces",
+                  "zh": "建立兩個 KV 命名空間"
+                },
+                "text": {
+                  "en": "One stores sessions, one stores the demo users. Wrangler prints an id for each.",
+                  "zh": "一個存 session,一個存示範使用者。Wrangler 會各印出一個 id。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Two namespaces: one for sessions, one for the demo user store\nnpx wrangler kv namespace create SESSIONS\nnpx wrangler kv namespace create USERS"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind them in wrangler.jsonc",
+                  "zh": "在 wrangler.jsonc 綁定"
+                },
+                "text": {
+                  "en": "Paste the ids so the Worker can reach them as env.SESSIONS and env.USERS.",
+                  "zh": "把 id 貼進來,Worker 就能用 env.SESSIONS 和 env.USERS 取用。"
+                },
+                "code": {
+                  "lang": "json",
+                  "body": "{\n  \"name\": \"auth-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"kv_namespaces\": [\n    { \"binding\": \"SESSIONS\", \"id\": \"<paste-sessions-id>\" },\n    { \"binding\": \"USERS\", \"id\": \"<paste-users-id>\" }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Seed a demo user",
+                  "zh": "塞一個示範使用者"
+                },
+                "text": {
+                  "en": "Store one user whose passwordHash is the SHA-256 of the password \"hunter2\".",
+                  "zh": "存一位使用者,他的 passwordHash 就是密碼「hunter2」的 SHA-256。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Seed one demo user. passwordHash below is SHA-256 of \"hunter2\".\nnpx wrangler kv key put --binding USERS \\\n  \"user:alice@example.com\" \\\n  '{\"email\":\"alice@example.com\",\"passwordHash\":\"f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7\"}' \\\n  --remote"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "The Worker: login, middleware, logout",
+              "zh": "Worker:登入、中介層、登出"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Note the password check uses SHA-256 only to keep the demo short. In production, hash passwords with a real KDF (key derivation function) such as Argon2id, scrypt, or bcrypt, or PBKDF2 via Web Crypto with a high iteration count and a per-user salt.",
+              "zh": "注意:這裡密碼檢查只用 SHA-256 是為了讓示範簡短。正式環境請改用真正的 KDF(金鑰衍生函式)來雜湊密碼,例如 Argon2id、scrypt、bcrypt,或用 Web Crypto 的 PBKDF2 搭配高迭代次數與每位使用者各自的鹽(salt)。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/index.js",
+              "zh": "src/index.js"
+            },
+            "body": "// src/index.js -- app-level sessions stored in Workers KV\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // Public: log in and receive a session cookie\n    if (url.pathname === \"/login\" && request.method === \"POST\") {\n      return handleLogin(request, env);\n    }\n    // Public: drop the session\n    if (url.pathname === \"/logout\" && request.method === \"POST\") {\n      return handleLogout(request, env);\n    }\n    // Protected: only reachable with a valid session cookie\n    if (url.pathname === \"/me\") {\n      return requireSession(request, env, (session) =>\n        Response.json({ email: session.email })\n      );\n    }\n    return new Response(\"Not found\", { status: 404 });\n  },\n};\n\n// --- Login: verify password, create a session in KV, set a cookie ---\nasync function handleLogin(request, env) {\n  const { email, password } = await request.json();\n\n  const record = await env.USERS.get(`user:${email}`);\n  if (!record) return new Response(\"Invalid login\", { status: 401 });\n  const user = JSON.parse(record);\n\n  // DEMO ONLY: comparing SHA-256 hashes.\n  // In production hash passwords with a real KDF (Argon2id / scrypt / bcrypt,\n  // or PBKDF2 via Web Crypto with many iterations and a per-user salt).\n  if ((await sha256(password)) !== user.passwordHash) {\n    return new Response(\"Invalid login\", { status: 401 });\n  }\n\n  // Opaque random id -- the cookie holds only this id, never user data.\n  const sessionId = crypto.randomUUID();\n  const session = { email: user.email, createdAt: Date.now() };\n  const ttl = 60 * 60 * 24 * 7; // 7 days, in seconds\n\n  await env.SESSIONS.put(`session:${sessionId}`, JSON.stringify(session), {\n    expirationTtl: ttl,\n  });\n\n  return new Response(JSON.stringify({ ok: true }), {\n    headers: {\n      \"Content-Type\": \"application/json\",\n      \"Set-Cookie\": cookie(\"session\", sessionId, ttl),\n    },\n  });\n}\n\n// --- Middleware: read the cookie, look the session up in KV ---\nasync function requireSession(request, env, handler) {\n  const id = getCookie(request, \"session\");\n  if (!id) return new Response(\"Unauthorized\", { status: 401 });\n\n  const record = await env.SESSIONS.get(`session:${id}`);\n  if (!record) return new Response(\"Unauthorized\", { status: 401 });\n\n  return handler(JSON.parse(record));\n}\n\n// --- Logout: delete the session and clear the cookie ---\nasync function handleLogout(request, env) {\n  const id = getCookie(request, \"session\");\n  if (id) await env.SESSIONS.delete(`session:${id}`);\n  return new Response(JSON.stringify({ ok: true }), {\n    headers: {\n      \"Content-Type\": \"application/json\",\n      \"Set-Cookie\": cookie(\"session\", \"\", 0),\n    },\n  });\n}\n\n// --- Helpers ---\nfunction cookie(name, value, maxAge) {\n  return [\n    `${name}=${value}`,\n    \"HttpOnly\",\n    \"Secure\",\n    \"SameSite=Lax\",\n    \"Path=/\",\n    `Max-Age=${maxAge}`,\n  ].join(\"; \");\n}\n\nfunction getCookie(request, name) {\n  const header = request.headers.get(\"Cookie\") || \"\";\n  for (const part of header.split(\";\")) {\n    const [key, ...rest] = part.trim().split(\"=\");\n    if (key === name) return rest.join(\"=\");\n  }\n  return null;\n}\n\nasync function sha256(text) {\n  const data = new TextEncoder().encode(text);\n  const digest = await crypto.subtle.digest(\"SHA-256\", data);\n  return [...new Uint8Array(digest)]\n    .map((b) => b.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n}"
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "The front-end: a login form",
+              "zh": "前端:登入表單"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "credentials: \"include\" is the key detail — it tells the browser to store the Set-Cookie response and resend the cookie on later requests, so /me just works.",
+              "zh": "credentials: \"include\" 是關鍵 —— 它叫瀏覽器存下回應的 Set-Cookie,並在之後的請求自動帶上 cookie,這樣 /me 才會直接通。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "html",
+            "title": {
+              "en": "login.html",
+              "zh": "login.html"
+            },
+            "body": "<!-- A plain login form posting JSON to the Worker -->\n<form id=\"login\">\n  <input name=\"email\" type=\"email\" placeholder=\"Email\" required />\n  <input name=\"password\" type=\"password\" placeholder=\"Password\" required />\n  <button>Log in</button>\n</form>\n\n<script>\n  const form = document.getElementById(\"login\");\n  form.addEventListener(\"submit\", async (e) => {\n    e.preventDefault();\n    const res = await fetch(\"/login\", {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      credentials: \"include\", // let the browser store & resend the cookie\n      body: JSON.stringify({\n        email: form.email.value,\n        password: form.password.value,\n      }),\n    });\n    if (res.ok) {\n      // The session cookie is set; protected fetches now work automatically.\n      const me = await fetch(\"/me\", { credentials: \"include\" }).then((r) => r.json());\n      alert(`Welcome, ${me.email}`);\n    } else {\n      alert(\"Login failed\");\n    }\n  });\n</script>"
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "gpp_maybe",
+            "title": {
+              "en": "Before going live",
+              "zh": "上線前必看"
+            },
+            "text": {
+              "en": "Always serve over HTTPS (the Secure flag needs it), keep cookies HttpOnly so JavaScript can't read them, use a real password KDF, and add rate limiting plus Turnstile on the login route to slow down credential-stuffing.",
+              "zh": "一定要走 HTTPS(Secure 旗標需要它)、cookie 保持 HttpOnly 讓 JavaScript 讀不到、使用真正的密碼 KDF,並在登入路由加上速率限制和 Turnstile,拖慢撞庫攻擊(credential stuffing)。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key terms, in plain words",
+          "zh": "重點術語,白話版"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "verified_user",
+                "title": {
+                  "en": "Zero Trust",
+                  "zh": "零信任"
+                },
+                "text": {
+                  "en": "Never trust by default; verify identity on every request, inside or outside the network. Access is built on this idea.",
+                  "zh": "預設誰都不信任;每個請求都驗證身分,不管在網路內外。Access 就建立在這個概念上。"
+                }
+              },
+              {
+                "icon": "badge",
+                "title": {
+                  "en": "Session",
+                  "zh": "Session(連線階段)"
+                },
+                "text": {
+                  "en": "Server-side proof that a user already logged in. Stored in KV here, identified by a random id.",
+                  "zh": "伺服器端「這位使用者已經登入過」的憑證。這裡存在 KV,用一個隨機 id 來辨識。"
+                }
+              },
+              {
+                "icon": "cookie",
+                "title": {
+                  "en": "Cookie",
+                  "zh": "Cookie"
+                },
+                "text": {
+                  "en": "A small value the browser stores and auto-resends to your domain. We put only the session id in it.",
+                  "zh": "瀏覽器儲存、並會自動回送到你網域的一小段值。我們只在裡面放 session id。"
+                }
+              },
+              {
+                "icon": "token",
+                "title": {
+                  "en": "JWT",
+                  "zh": "JWT"
+                },
+                "text": {
+                  "en": "A signed, self-contained token that carries claims (like the user's email). Access issues one after SSO.",
+                  "zh": "一個已簽章、自帶內容的權杖,裡面裝著聲明(claims,例如使用者 email)。Access 在 SSO 後會發一個。"
+                }
+              },
+              {
+                "icon": "shield_lock",
+                "title": {
+                  "en": "HttpOnly / Secure",
+                  "zh": "HttpOnly／Secure"
+                },
+                "text": {
+                  "en": "Cookie flags: HttpOnly hides it from JavaScript (anti-XSS); Secure sends it only over HTTPS.",
+                  "zh": "Cookie 旗標:HttpOnly 讓 JavaScript 讀不到它(防 XSS);Secure 只在 HTTPS 下傳送。"
+                }
+              },
+              {
+                "icon": "swap_horiz",
+                "title": {
+                  "en": "SameSite",
+                  "zh": "SameSite"
+                },
+                "text": {
+                  "en": "Controls whether the cookie rides along on cross-site requests. Lax is a sensible default against CSRF.",
+                  "zh": "控制 cookie 是否跟著跨站請求一起送出。Lax 是對抗 CSRF 的合理預設值。"
+                }
+              },
+              {
+                "icon": "password",
+                "title": {
+                  "en": "KDF / password hash",
+                  "zh": "KDF／密碼雜湊"
+                },
+                "text": {
+                  "en": "A slow, salted one-way function (Argon2/bcrypt/scrypt) for storing passwords safely. Not plain SHA-256.",
+                  "zh": "一種慢、加鹽的單向函式(Argon2／bcrypt／scrypt),用來安全地保存密碼。不是單純的 SHA-256。"
+                }
+              },
+              {
+                "icon": "login",
+                "title": {
+                  "en": "SSO",
+                  "zh": "單一登入(SSO)"
+                },
+                "text": {
+                  "en": "Log in once with one identity provider and gain access to multiple apps. That's the Access experience.",
+                  "zh": "用一個身分提供者登入一次,就能進入多個應用程式。這就是 Access 的體驗。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & billing",
+          "zh": "常見陷阱與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "Never store passwords or user data in the cookie",
+              "zh": "千萬別把密碼或使用者資料放進 cookie"
+            },
+            "text": {
+              "en": "The cookie should carry only an opaque session id. Anything you put in a plain cookie is visible and tamperable by the user; keep the real data in KV on the server.",
+              "zh": "cookie 只應該帶一個不透明的 session id。任何放進一般 cookie 的東西,使用者都看得到也能竄改;真正的資料要放在伺服器端的 KV。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "KV is eventually consistent: a brand-new session is readable almost immediately, but allow a moment for global propagation in edge cases.",
+                "Set expirationTtl on every session so stale sessions clean themselves up; mirror it in the cookie Max-Age.",
+                "Cloudflare Zero Trust (Access) is free for up to 50 users — perfect for internal tools.",
+                "KV pricing is per read/write/delete with a generous free tier; one session lookup per request is cheap.",
+                "Add Turnstile to the login form to blunt brute-force and credential-stuffing attacks.",
+                "On logout, delete the KV key AND send a Max-Age=0 cookie so both sides forget the session."
+              ],
+              "zh": [
+                "KV 是最終一致性(eventually consistent):剛建立的 session 幾乎能立刻讀到,但極端情況下要留一點全球同步的時間。",
+                "每個 session 都設 expirationTtl,讓過期的 session 自己清掉;cookie 的 Max-Age 也設成一樣。",
+                "Cloudflare Zero Trust(Access)最多 50 位使用者免費 —— 內部工具超適合。",
+                "KV 以讀／寫／刪次數計費,且有大方的免費額度;每個請求查一次 session 很便宜。",
+                "在登入表單加上 Turnstile,削弱暴力破解和撞庫攻擊。",
+                "登出時,要刪掉 KV key「並且」回送一個 Max-Age=0 的 cookie,讓兩邊都忘掉這個 session。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "auto_awesome",
+            "title": {
+              "en": "Rule of thumb",
+              "zh": "一句話原則"
+            },
+            "text": {
+              "en": "Internal? Reach for Access first. Public sign-up? Own your sessions in KV. Either way, let Cloudflare's edge do the heavy lifting.",
+              "zh": "內部用?先想到 Access。對外註冊?自己用 KV 掌管 session。不論哪種,都讓 Cloudflare 的邊緣幫你扛重活。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "access",
+        "label": {
+          "en": "Cloudflare Access",
+          "zh": "Cloudflare Access"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "turnstile",
+        "label": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/cloudflare-one/policies/access/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "file-upload-r2",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "upload_file",
+    "title": {
+      "en": "File uploads: front-end → Worker → R2",
+      "zh": "檔案上傳：前端 → Worker → R2"
+    },
+    "subtitle": {
+      "en": "Let users upload images and docs from a web page, store them in R2, serve them back, and keep the metadata in D1.",
+      "zh": "讓使用者從網頁上傳圖片與文件，存進 R2，再提供下載，並把中繼資料（檔案的描述資料）記在 D1。"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Three layers, one flow: the browser picks a file, the Worker stores it in R2, and D1 remembers the details.",
+        "zh": "三層、一條流程：瀏覽器選檔案、Worker 存進 R2、D1 記住所有細節。"
+      }
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": {
+          "en": "Layers wired",
+          "zh": "層串接"
+        }
+      },
+      {
+        "value": "$0",
+        "label": {
+          "en": "R2 egress fees",
+          "zh": "R2 流出費"
+        }
+      },
+      {
+        "value": "100 MB",
+        "label": {
+          "en": "Free-plan upload limit",
+          "zh": "免費方案上傳上限"
+        }
+      },
+      {
+        "value": "5 TiB",
+        "label": {
+          "en": "Max R2 object size",
+          "zh": "R2 單一物件上限"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring up?",
+          "zh": "我們要串什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "We will build a tiny page with a file input, send the chosen file to a Worker, store the raw bytes in R2 (object storage = a service for keeping whole files like images and PDFs), record its details in D1 (a SQL database), and then serve the file back by a public URL.",
+              "zh": "我們會做一個很小的網頁，上面有一個檔案輸入框（file input）。使用者選好檔案後送到 Worker，Worker 把原始檔案內容存進 R2（物件儲存，object storage，就是專門存放整份檔案如圖片、PDF 的服務），把檔案細節寫進 D1（一種 SQL 資料庫），之後再用一個公開網址把檔案提供回去。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "warehouse",
+            "title": {
+              "en": "Think of it like a coat check",
+              "zh": "把它想成寄物櫃"
+            },
+            "text": {
+              "en": "The Worker is the coat-check desk. You hand over your coat (the file); it stores the coat in the back room (R2) and writes a ticket number in its logbook (D1). Later you show the ticket (the key) and it fetches your coat.",
+              "zh": "Worker 就像寄物櫃的櫃台。你把外套（檔案）交給它，它把外套放進後方倉庫（R2），並在登記簿（D1）寫下一個號碼牌。之後你出示號碼牌（也就是 key），它就能把外套拿回給你。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Architecture at a glance",
+              "zh": "架構一眼看懂"
+            },
+            "code": {
+              "en": "flowchart LR\n  B[\"Browser (file input)\"] -->|\"POST multipart\"| W[\"Worker\"]\n  W -->|\"put object\"| R[\"R2 bucket\"]\n  W -->|\"save metadata\"| D[\"D1 database\"]\n  R -->|\"stream bytes\"| W\n  W -->|\"file URL\"| B",
+              "zh": "flowchart LR\n  B[\"瀏覽器（檔案輸入框）\"] -->|\"POST 上傳\"| W[\"Worker\"]\n  W -->|\"存入物件\"| R[\"R2 儲存桶\"]\n  W -->|\"寫入中繼資料\"| D[\"D1 資料庫\"]\n  R -->|\"串流位元組\"| W\n  W -->|\"檔案網址\"| B"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "各層的職責"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Each layer has one clear job. Keeping bytes (R2) separate from facts about the bytes (D1) is what makes the system easy to query, list, and clean up later.",
+              "zh": "每一層只負責一件事。把「檔案內容」（放 R2）和「關於檔案的資料」（放 D1）分開，之後要查詢、列出清單、清理檔案時都會輕鬆很多。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Front-end",
+                  "zh": "前端網頁"
+                },
+                "text": {
+                  "en": "Shows a file picker and POSTs the chosen file as multipart/form-data using fetch.",
+                  "zh": "顯示檔案選擇器，用 fetch 把選到的檔案以 multipart/form-data 格式 POST 出去。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "Worker",
+                  "zh": "Worker"
+                },
+                "text": {
+                  "en": "Receives the upload, writes bytes to R2, records a row in D1, and streams files back on request.",
+                  "zh": "接收上傳、把內容寫進 R2、在 D1 新增一筆資料，並在被請求時把檔案串流回去。"
+                }
+              },
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "R2 (bytes)",
+                  "zh": "R2（檔案內容）"
+                },
+                "text": {
+                  "en": "Object storage that holds the actual file bytes. Reading them back out costs $0 in egress.",
+                  "zh": "物件儲存，存放真正的檔案內容。把它讀出來給使用者完全不收流出（egress）費用。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 (facts)",
+                  "zh": "D1（檔案資料）"
+                },
+                "text": {
+                  "en": "A SQL database that stores who uploaded what, the filename, type, size, and time.",
+                  "zh": "一個 SQL 資料庫，記錄誰上傳了什麼、檔名、類型、大小與時間。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Upload path vs serve path",
+              "zh": "上傳路徑 vs 提供路徑"
+            },
+            "code": {
+              "en": "flowchart TD\n  subgraph CLIENT[\"Front-end\"]\n    F[\"File input + fetch\"]\n  end\n  subgraph EDGE[\"Cloudflare Worker\"]\n    UP[\"POST /upload handler\"]\n    DL[\"GET /files/:key handler\"]\n  end\n  F -->|\"upload\"| UP\n  UP -->|\"put\"| R2[\"R2 bucket\"]\n  UP -->|\"insert\"| D1[\"D1 metadata\"]\n  F -->|\"view\"| DL\n  DL -->|\"get\"| R2\n  D1 -.->|\"lookup\"| DL",
+              "zh": "flowchart TD\n  subgraph CLIENT[\"前端\"]\n    F[\"檔案輸入框＋fetch\"]\n  end\n  subgraph EDGE[\"Cloudflare Worker\"]\n    UP[\"POST /upload 處理器\"]\n    DL[\"GET /files/:key 處理器\"]\n  end\n  F -->|\"上傳\"| UP\n  UP -->|\"存物件\"| R2[\"R2 儲存桶\"]\n  UP -->|\"寫入\"| D1[\"D1 中繼資料\"]\n  F -->|\"檢視\"| DL\n  DL -->|\"讀取\"| R2\n  D1 -.->|\"查詢\"| DL"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The metadata table",
+          "zh": "中繼資料表"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "R2 only stores bytes under a key (key = the unique name/path of an object). To list a user's uploads or show a filename, we keep a small row of metadata in D1 for every object.",
+              "zh": "R2 只會把檔案內容存在一個 key（key＝物件的唯一名稱／路徑）底下。但要列出某位使用者的上傳清單、或顯示原始檔名，就得在 D1 裡為每個物件保留一小筆中繼資料。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Users and their files",
+              "zh": "使用者與檔案"
+            },
+            "code": {
+              "en": "erDiagram\n  USERS ||--o{ FILES : \"uploads\"\n  USERS {\n    int id PK\n    text email\n  }\n  FILES {\n    text key PK\n    int user_id FK\n    text filename\n    text content_type\n    int size_bytes\n    text uploaded_at\n  }",
+              "zh": "erDiagram\n  USERS ||--o{ FILES : \"上傳\"\n  USERS {\n    int id PK\n    text email\n  }\n  FILES {\n    text key PK\n    int user_id FK\n    text filename\n    text content_type\n    int size_bytes\n    text uploaded_at\n  }"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "CREATE TABLE IF NOT EXISTS files (\n  key          TEXT PRIMARY KEY,   -- R2 object key, e.g. uploads/172...-photo.jpg\n  filename     TEXT NOT NULL,      -- original name the user picked\n  content_type TEXT,               -- MIME type, e.g. image/png\n  size_bytes   INTEGER,            -- file size, for quotas and display\n  uploaded_at  TEXT NOT NULL       -- ISO timestamp\n);"
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "Why store the key as the primary key?",
+              "zh": "為什麼用 key 當主鍵？"
+            },
+            "text": {
+              "en": "The R2 key is already unique and is exactly what you need to fetch the object later, so it makes a clean primary key that ties the D1 row to the R2 object one-to-one.",
+              "zh": "R2 的 key 本來就是唯一的，而且正是日後取回物件所需的名稱，因此用它當主鍵（primary key）最乾淨，能把 D1 的資料列和 R2 的物件一對一綁在一起。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Request flows",
+          "zh": "請求流程"
+        },
+        "blocks": [
+          {
+            "type": "h3",
+            "text": {
+              "en": "1) Uploading a file",
+              "zh": "1）上傳檔案"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Upload flow",
+              "zh": "上傳流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant R as R2\n  participant D as D1\n  U->>U: pick a file\n  U->>W: POST /upload (multipart)\n  W->>R: env.BUCKET.put(key, body)\n  R-->>W: stored ok\n  W->>D: INSERT file metadata\n  D-->>W: row saved\n  W-->>U: 200 JSON url and key",
+              "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as Worker\n  participant R as R2\n  participant D as D1\n  U->>U: 選擇檔案\n  U->>W: POST /upload（multipart）\n  W->>R: env.BUCKET.put(key, body)\n  R-->>W: 已存好物件\n  W->>D: 寫入檔案中繼資料\n  D-->>W: 已新增資料列\n  W-->>U: 200 JSON 回傳網址與 key"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The browser bundles the file into a multipart body (multipart/form-data = the standard way browsers package one or more files plus form fields). The Worker reads it, writes the bytes to R2 with put(), saves a row to D1, and returns a URL the page can link to.",
+              "zh": "瀏覽器會把檔案打包成 multipart 內容（multipart/form-data＝瀏覽器把一個或多個檔案連同表單欄位一起打包的標準格式）。Worker 讀取後用 put() 把內容寫進 R2，再把一筆資料寫進 D1，最後回傳一個網頁可以連結的網址。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "2) Serving a file back",
+              "zh": "2）把檔案提供回去"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Download / serve flow",
+              "zh": "下載／提供流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant R as R2\n  U->>W: GET /files/:key\n  W->>R: env.BUCKET.get(key)\n  R-->>W: object body and headers\n  W-->>U: 200 stream file bytes",
+              "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as Worker\n  participant R as R2\n  U->>W: GET /files/:key\n  W->>R: env.BUCKET.get(key)\n  R-->>W: 物件內容與標頭\n  W-->>U: 200 串流檔案位元組"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "To view a file, the page just requests /files/<key>. The Worker calls get(), copies the stored Content-Type onto the response, and streams the bytes straight to the browser — no copy is loaded fully into memory.",
+              "zh": "要看檔案時，網頁只要請求 /files/<key>。Worker 呼叫 get()，把儲存時記下的 Content-Type 複製到回應的標頭上，然後把位元組直接串流給瀏覽器——過程中不會把整份檔案一次塞進記憶體。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "動手一步步串起來"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Wrangler is Cloudflare's command-line tool (CLI = a program you type commands into). Make sure you have run npm install -g wrangler and wrangler login first.",
+              "zh": "Wrangler 是 Cloudflare 的命令列工具（CLI＝你在終端機輸入指令操作的程式）。開始前請先執行過 npm install -g wrangler 與 wrangler login。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the R2 bucket and D1 database",
+                  "zh": "建立 R2 儲存桶與 D1 資料庫"
+                },
+                "text": {
+                  "en": "Run both creates. Copy the database_id that wrangler prints for the D1 database — you will paste it next.",
+                  "zh": "兩個都建立。把 wrangler 為 D1 資料庫印出的 database_id 複製下來，下一步要貼上。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Bucket that will hold the file bytes\nwrangler r2 bucket create user-uploads\n\n# Database that will hold the metadata (copy the printed database_id)\nwrangler d1 create uploads-meta"
+                }
+              },
+              {
+                "title": {
+                  "en": "Add both bindings in wrangler.toml",
+                  "zh": "在 wrangler.toml 加上兩個綁定"
+                },
+                "text": {
+                  "en": "A binding gives your code a variable to reach a resource. Here [[r2_buckets]] exposes env.BUCKET and [[d1_databases]] exposes env.DB.",
+                  "zh": "「綁定（binding）」會讓你的程式碼多一個變數來操作某個資源。這裡 [[r2_buckets]] 會給你 env.BUCKET，[[d1_databases]] 會給你 env.DB。"
+                },
+                "code": {
+                  "lang": "toml",
+                  "body": "name = \"file-uploader\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-09-23\"\n\n# R2 binding -> reachable as env.BUCKET in your Worker\n[[r2_buckets]]\nbinding = \"BUCKET\"\nbucket_name = \"user-uploads\"\n\n# D1 binding -> reachable as env.DB in your Worker\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"uploads-meta\"\ndatabase_id = \"paste-the-id-from-wrangler-d1-create\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the metadata table",
+                  "zh": "建立中繼資料表"
+                },
+                "text": {
+                  "en": "Run the CREATE TABLE against the real (remote) D1 database. You can also save it as schema.sql and use --file=./schema.sql instead.",
+                  "zh": "對真正（remote）的 D1 資料庫執行 CREATE TABLE。你也可以把它存成 schema.sql，改用 --file=./schema.sql 來執行。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "wrangler d1 execute uploads-meta --remote --command \"CREATE TABLE IF NOT EXISTS files (key TEXT PRIMARY KEY, filename TEXT NOT NULL, content_type TEXT, size_bytes INTEGER, uploaded_at TEXT NOT NULL);\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Front-end: file input + fetch",
+                  "zh": "前端：檔案輸入框 + fetch"
+                },
+                "text": {
+                  "en": "FormData tells the browser to build a multipart/form-data body for us, so we never assemble the upload by hand.",
+                  "zh": "FormData 會請瀏覽器幫我們組好 multipart/form-data 內容，所以我們完全不用自己手動拼裝上傳資料。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<!-- index.html (front-end) -->\n<input type=\"file\" id=\"file\" accept=\"image/*,.pdf\" />\n<button id=\"send\">Upload</button>\n<p id=\"status\"></p>\n\n<script>\n  const fileInput = document.getElementById(\"file\");\n  const statusEl = document.getElementById(\"status\");\n\n  document.getElementById(\"send\").addEventListener(\"click\", async () => {\n    const file = fileInput.files[0];\n    if (!file) {\n      statusEl.textContent = \"Pick a file first.\";\n      return;\n    }\n\n    // FormData makes the browser send a multipart/form-data body for us\n    const form = new FormData();\n    form.append(\"file\", file);\n\n    statusEl.textContent = \"Uploading...\";\n    const res = await fetch(\"/upload\", { method: \"POST\", body: form });\n    const data = await res.json();\n\n    statusEl.innerHTML = `Done! <a href=\"${data.url}\">${data.filename}</a>`;\n  });\n</script>"
+                }
+              },
+              {
+                "title": {
+                  "en": "Worker: store in R2 + record in D1 + serve",
+                  "zh": "Worker：存進 R2 + 記到 D1 + 提供下載"
+                },
+                "text": {
+                  "en": "One handler does both jobs: POST /upload writes to R2 and D1; GET /files/<key> reads from R2 and streams it back.",
+                  "zh": "同一個處理器負責兩件事：POST /upload 寫進 R2 和 D1；GET /files/<key> 從 R2 讀出來並串流回去。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // 1) UPLOAD: POST /upload  (multipart/form-data)\n    if (request.method === \"POST\" && url.pathname === \"/upload\") {\n      const form = await request.formData();\n      const file = form.get(\"file\");\n      if (!(file instanceof File)) {\n        return Response.json({ error: \"No file field\" }, { status: 400 });\n      }\n\n      // Build a unique key so two uploads never collide\n      const key = `uploads/${Date.now()}-${crypto.randomUUID()}-${file.name}`;\n\n      // Store the raw bytes in R2 (reading them back out is free)\n      await env.BUCKET.put(key, file.stream(), {\n        httpMetadata: { contentType: file.type },\n      });\n\n      // Remember the details in D1 (bound params = no SQL injection)\n      await env.DB.prepare(\n        \"INSERT INTO files (key, filename, content_type, size_bytes, uploaded_at) VALUES (?, ?, ?, ?, ?)\"\n      )\n        .bind(key, file.name, file.type, file.size, new Date().toISOString())\n        .run();\n\n      return Response.json({\n        key,\n        filename: file.name,\n        url: `${url.origin}/files/${encodeURIComponent(key)}`,\n      });\n    }\n\n    // 2) SERVE: GET /files/<key>\n    if (request.method === \"GET\" && url.pathname.startsWith(\"/files/\")) {\n      const key = decodeURIComponent(url.pathname.slice(\"/files/\".length));\n      const object = await env.BUCKET.get(key);\n      if (object === null) {\n        return new Response(\"Not found\", { status: 404 });\n      }\n\n      // Copy the stored content-type etc. onto the response, then stream it\n      const headers = new Headers();\n      object.writeHttpMetadata(headers);\n      headers.set(\"etag\", object.httpEtag);\n      return new Response(object.body, { headers });\n    }\n\n    return new Response(\"Not found\", { status: 404 });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署上線"
+                },
+                "text": {
+                  "en": "Publish the Worker to Cloudflare's global network. Your upload page and /files/ endpoint go live worldwide.",
+                  "zh": "把 Worker 發布到 Cloudflare 的全球網路。你的上傳頁面與 /files/ 端點會在全球同時上線。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "wrangler deploy"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "Object storage",
+                  "zh": "物件儲存 (Object storage)"
+                },
+                "text": {
+                  "en": "A service for keeping whole files (objects) instead of rows or blocks. Great for images, PDFs, and video.",
+                  "zh": "專門存放「整份檔案（物件）」的服務，而不是資料列或磁碟區塊。最適合圖片、PDF、影片。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Key",
+                  "zh": "鍵 (Key)"
+                },
+                "text": {
+                  "en": "The unique name/path of an object, like uploads/2026/photo.jpg. You read an object back by its key.",
+                  "zh": "物件的唯一名稱／路徑，例如 uploads/2026/photo.jpg。之後就是用這個 key 把物件讀回來。"
+                }
+              },
+              {
+                "icon": "folder",
+                "title": {
+                  "en": "Bucket",
+                  "zh": "儲存桶 (Bucket)"
+                },
+                "text": {
+                  "en": "A named container that holds many objects, like a top-level folder for your app's files.",
+                  "zh": "裝著很多物件、有名字的容器，可以想成你 App 檔案的最上層資料夾。"
+                }
+              },
+              {
+                "icon": "upload_file",
+                "title": {
+                  "en": "multipart/form-data",
+                  "zh": "multipart/form-data"
+                },
+                "text": {
+                  "en": "The standard request format browsers use to send files. FormData builds it for you automatically.",
+                  "zh": "瀏覽器傳送檔案時使用的標準請求格式。FormData 會自動幫你組好它。"
+                }
+              },
+              {
+                "icon": "description",
+                "title": {
+                  "en": "Content-Type (MIME)",
+                  "zh": "Content-Type（MIME 類型）"
+                },
+                "text": {
+                  "en": "A label like image/png that tells browsers how to display a file. Store it on upload and set it on serve.",
+                  "zh": "像 image/png 這樣的標籤，告訴瀏覽器該如何顯示檔案。上傳時記下、提供時設回去。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Presigned URL",
+                  "zh": "預簽網址 (Presigned URL)"
+                },
+                "text": {
+                  "en": "A temporary signed link that lets the browser upload or download directly from R2, bypassing the Worker for large files.",
+                  "zh": "一個有時效、帶簽章的連結，讓瀏覽器直接對 R2 上傳或下載，遇到大檔案時就能繞過 Worker。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips, pitfalls & pricing",
+          "zh": "小提示、陷阱與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Big files? Use presigned URLs",
+              "zh": "大檔案？改用預簽網址"
+            },
+            "text": {
+              "en": "Uploading through the Worker is simplest, but a single request body is capped (about 100 MB on the Free plan). For large files, have the Worker mint a presigned URL so the browser uploads multipart directly to R2, then save the metadata afterwards.",
+              "zh": "讓檔案經過 Worker 上傳最簡單，但單一請求內容有大小上限（免費方案約 100 MB）。遇到大檔案時，請改由 Worker 產生一個「預簽網址（presigned URL）」，讓瀏覽器以分段（multipart）方式直接傳給 R2，之後再回頭把中繼資料存起來。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "savings",
+            "title": {
+              "en": "Zero egress is the headline",
+              "zh": "零流出費是最大賣點"
+            },
+            "text": {
+              "en": "However many times users download a file from R2, serving it out to the internet costs $0 in egress — unlike most clouds, where a popular file can run up a surprise bill.",
+              "zh": "不論使用者從 R2 下載一個檔案幾次，把它傳給網路上的使用者一律 0 元流出費——不像多數雲端，一個熱門檔案就可能讓帳單暴增。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Always make keys unique (timestamp + random id) so a new upload never overwrites an old one.",
+                "Validate file size and type on the Worker before put() — never trust the browser alone.",
+                "Store and re-apply Content-Type, or browsers may download files instead of showing them.",
+                "Add CORS headers on /upload if your page is served from a different origin than the Worker.",
+                "Avoid putting the raw user filename directly in the key; encode it or strip unusual characters."
+              ],
+              "zh": [
+                "key 一定要唯一（時間戳 + 隨機 id），新的上傳才不會覆蓋舊檔。",
+                "在 Worker 端、put() 之前就驗證檔案大小與類型——絕不能只信任瀏覽器。",
+                "務必記下並重新套用 Content-Type，否則瀏覽器可能會下載檔案而不是直接顯示。",
+                "若網頁與 Worker 不在同一個來源（origin），記得在 /upload 加上 CORS 標頭。",
+                "別把使用者的原始檔名直接塞進 key，請先編碼或去掉特殊字元。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "images",
+        "label": {
+          "en": "Images",
+          "zh": "Images"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/r2/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "pages-functions-fullstack",
+    "category": "integrations",
+    "group": {
+      "en": "Full-stack Basics",
+      "zh": "全端串接基礎"
+    },
+    "icon": "web",
+    "title": {
+      "en": "Deploy a full-stack app with Pages + Functions",
+      "zh": "用 Pages + Functions 部署全端應用"
+    },
+    "subtitle": {
+      "en": "Host your front-end and run your back-end API in one Cloudflare Pages project",
+      "zh": "用同一個 Cloudflare Pages 專案，同時放前端網頁、跑後端 API"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "One git repo, one deploy: static pages and an /api/* backend ship together.",
+        "zh": "一個 git repo、一次部署：靜態網頁和 /api/* 後端一起上線。"
+      }
+    },
+    "stats": [
+      {
+        "value": "1",
+        "label": {
+          "en": "Repo, full-stack",
+          "zh": "個 repo 跑全端"
+        }
+      },
+      {
+        "value": "500",
+        "label": {
+          "en": "Free builds / month",
+          "zh": "每月免費建置"
+        }
+      },
+      {
+        "value": "100",
+        "label": {
+          "en": "Custom domains",
+          "zh": "自訂網域"
+        }
+      },
+      {
+        "value": "25 MiB",
+        "label": {
+          "en": "Max asset size",
+          "zh": "單檔上限"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring together?",
+          "zh": "我們要串什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Cloudflare Pages hosts your front-end (the HTML, CSS, and JavaScript a browser downloads). Pages Functions let that SAME project also run back-end code — your API. You drop files into a functions/ folder, each file becomes an API route, and you bind a D1 database (SQL) or KV store (key-value) so the back-end can read and write data.",
+              "zh": "Cloudflare Pages 負責放你的前端（瀏覽器會下載的 HTML、CSS、JavaScript）。而 Pages Functions（Pages 函式）讓「同一個專案」也能跑後端程式碼——也就是你的 API。你只要把檔案丟進 functions/ 資料夾，每個檔案就會自動變成一條 API 路由，再綁定 D1 資料庫（SQL）或 KV 儲存（鍵值對），後端就能讀寫資料了。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The magic is that the static site and the API live in one repository and deploy together. A request to / returns a static file; a request to /api/hello runs a Function. No separate server, no separate deploy pipeline.",
+              "zh": "重點在於：靜態網站和 API 住在同一個 repository（程式碼倉庫）裡、一起部署。打 / 會回傳靜態檔案；打 /api/hello 則會執行一個 Function。不用另外架伺服器，也不用維護第二條部署流程。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Project layout & request routing",
+              "zh": "專案結構與請求路由"
+            },
+            "code": {
+              "en": "flowchart TD\n  USER[\"Browser\"] --> EDGE[\"Cloudflare edge\"]\n  EDGE -->|\"static path\"| STATIC[\"Static assets (HTML/CSS/JS)\"]\n  EDGE -->|\"/api/*\"| FN[\"functions/api/[[route]].js\"]\n  STATIC -->|\"calls /api/hello\"| FN\n  FN --> DB[\"D1 database (env.DB)\"]\n  FN --> KV[\"KV namespace (env.CACHE)\"]",
+              "zh": "flowchart TD\n  USER[\"瀏覽器\"] --> EDGE[\"Cloudflare 邊緣節點\"]\n  EDGE -->|\"靜態路徑\"| STATIC[\"靜態檔案 (HTML/CSS/JS)\"]\n  EDGE -->|\"/api/*\"| FN[\"functions/api/[[route]].js\"]\n  STATIC -->|\"呼叫 /api/hello\"| FN\n  FN --> DB[\"D1 資料庫 (env.DB)\"]\n  FN --> KV[\"KV 命名空間 (env.CACHE)\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "home_work",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A shop with a storefront and a back office under one roof. The storefront (static pages) is what customers see; the back office (Functions) handles orders and talks to the filing cabinet (D1/KV). One building, one set of keys, one address.",
+              "zh": "一間「前面是店面、後面是辦公室」的店，全在同一個屋簷下。店面（靜態網頁）是客人看到的門面；後台辦公室（Functions）處理訂單、去翻檔案櫃（D1／KV）。一棟建築、一把鑰匙、一個地址。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "各層的職責"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the folder you actually create. Anything in your build output folder (here public/) is served as a static file. Anything in functions/ becomes server-side code mapped to a URL.",
+              "zh": "這是你實際會建立的資料夾。放在「建置輸出資料夾」（這裡是 public/）的東西，都會被當成靜態檔案直接送出；放在 functions/ 裡的，則會變成對應到某個網址的後端程式碼。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "text",
+            "title": {
+              "en": "Folder structure",
+              "zh": "資料夾結構"
+            },
+            "body": "my-fullstack-app/\n├── public/            # static front-end (served as-is)\n│   └── index.html\n├── functions/         # each file = one API route\n│   └── api/\n│       └── hello.js   # -> /api/hello\n├── schema.sql         # D1 table + seed data\n└── wrangler.toml      # bindings + build output dir"
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "html",
+                "title": {
+                  "en": "Static front-end",
+                  "zh": "靜態前端"
+                },
+                "text": {
+                  "en": "Files in public/ (HTML, CSS, JS, images) are cached and served from Cloudflare's edge worldwide.",
+                  "zh": "public/ 裡的檔案（HTML、CSS、JS、圖片）會被快取，並從 Cloudflare 全球邊緣節點直接送出。"
+                }
+              },
+              {
+                "icon": "function",
+                "title": {
+                  "en": "functions/ = your API",
+                  "zh": "functions/ 就是你的 API"
+                },
+                "text": {
+                  "en": "functions/api/hello.js automatically answers /api/hello. The file path becomes the URL path.",
+                  "zh": "functions/api/hello.js 會自動回應 /api/hello。檔案的路徑，就等於網址的路徑。"
+                }
+              },
+              {
+                "icon": "cable",
+                "title": {
+                  "en": "Bindings",
+                  "zh": "綁定（Bindings）"
+                },
+                "text": {
+                  "en": "A binding is a named handle (e.g. env.DB, env.CACHE) that connects a Function to D1 or KV — no connection strings.",
+                  "zh": "綁定就是一個有名字的把手（例如 env.DB、env.CACHE），把 Function 接到 D1 或 KV——不用連線字串、不用密碼。"
+                }
+              },
+              {
+                "icon": "merge",
+                "title": {
+                  "en": "One deploy",
+                  "zh": "一次部署"
+                },
+                "text": {
+                  "en": "Push to git (or run one command) and the static site + Functions go live together at the same domain.",
+                  "zh": "推上 git（或跑一行指令），靜態網站和 Functions 就會一起上線、掛在同一個網域下。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "From git push to a live request",
+          "zh": "從 git push 到請求上線"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "When you connect your repo, every push triggers a build. Pages compiles your front-end, bundles the functions/ folder, and deploys both. After that, the edge decides per-request: serve a static file, or run a Function.",
+              "zh": "當你把 repo 連上 Pages 後，每次 push 都會觸發一次建置（build）。Pages 會編譯前端、把 functions/ 資料夾打包起來，然後一起部署。之後邊緣節點會「逐一請求」判斷：要回傳靜態檔案，還是執行一個 Function。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Push, build, deploy, serve",
+              "zh": "推送、建置、部署、回應"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant Dev as Developer\n  participant Git as GitHub\n  participant Pages as \"Pages build\"\n  participant Edge as \"Cloudflare edge\"\n  participant User as Browser\n  Dev->>Git: git push\n  Git->>Pages: webhook triggers build\n  Pages->>Pages: run build command\n  Pages->>Edge: deploy assets + Functions\n  User->>Edge: GET /\n  Edge-->>User: index.html (static)\n  User->>Edge: GET /api/hello\n  Edge-->>User: JSON from Function",
+              "zh": "sequenceDiagram\n  participant Dev as \"開發者\"\n  participant Git as GitHub\n  participant Pages as \"Pages 建置\"\n  participant Edge as \"Cloudflare 邊緣\"\n  participant User as \"瀏覽器\"\n  Dev->>Git: git push\n  Git->>Pages: webhook 觸發建置\n  Pages->>Pages: 執行建置指令\n  Pages->>Edge: 部署靜態檔案 + Functions\n  User->>Edge: GET /\n  Edge-->>User: index.html (靜態)\n  User->>Edge: GET /api/hello\n  Edge-->>User: Function 回傳 JSON"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "一步步動手做"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "We'll create a tiny page that fetches /api/hello, a Function that reads a name from D1 and counts hits in KV, the bindings, and the deploy. Three layers — front-end, Function, data — all in one project.",
+              "zh": "我們會做一個小網頁去抓 /api/hello、一個從 D1 讀名字並用 KV 計數的 Function、把綁定設好、再部署。前端、Function、資料層三邊，全部塞進同一個專案。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Write the front-end",
+                  "zh": "寫前端"
+                },
+                "text": {
+                  "en": "Put this in public/index.html. The fetch('/api/hello') is same-origin — no CORS, no full URL — because the API lives in the same project.",
+                  "zh": "把這段放進 public/index.html。fetch('/api/hello') 是同源請求（same-origin）——不用處理 CORS、不用寫完整網址——因為 API 就住在同一個專案裡。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>Hello Pages</title>\n  </head>\n  <body>\n    <h1 id=\"msg\">Loading…</h1>\n    <script>\n      // Same origin: the Function is at /api/hello in the SAME project\n      fetch(\"/api/hello\")\n        .then((r) => r.json())\n        .then((data) => {\n          document.getElementById(\"msg\").textContent = data.message;\n        })\n        .catch((err) => {\n          document.getElementById(\"msg\").textContent = \"Error: \" + err;\n        });\n    </script>\n  </body>\n</html>"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Function",
+                  "zh": "寫 Function"
+                },
+                "text": {
+                  "en": "Create functions/api/hello.js. The export name onRequest handles every HTTP method; context.env holds your bindings. (Use onRequestGet / onRequestPost to handle a single method.)",
+                  "zh": "建立 functions/api/hello.js。匯出的 onRequest 會處理所有 HTTP 方法；context.env 就握著你的綁定。（想只處理單一方法，就用 onRequestGet／onRequestPost。）"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// functions/api/hello.js  ->  GET/POST /api/hello\nexport async function onRequest(context) {\n  // context.env carries your bindings (DB, CACHE) + vars + secrets\n  const { env } = context;\n\n  // Read one row from the D1 database bound as DB\n  const { results } = await env.DB\n    .prepare(\"SELECT name FROM greetings WHERE id = ?\")\n    .bind(1)\n    .all();\n  const name = results[0]?.name ?? \"world\";\n\n  // Count visits in the KV namespace bound as CACHE\n  const hits = Number(await env.CACHE.get(\"hits\")) + 1;\n  await env.CACHE.put(\"hits\", String(hits));\n\n  return Response.json({ message: `Hello from ${name}!`, hits });\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the data layer",
+                  "zh": "建立資料層"
+                },
+                "text": {
+                  "en": "Make a D1 database and a KV namespace, then seed the table. Save the SQL below as schema.sql first.",
+                  "zh": "建立一個 D1 資料庫和一個 KV 命名空間，然後把資料表灌進去。先把下面的 SQL 存成 schema.sql。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- schema.sql: create the table the Function reads, then seed one row\nCREATE TABLE IF NOT EXISTS greetings (\n  id   INTEGER PRIMARY KEY,\n  name TEXT NOT NULL\n);\n\nINSERT INTO greetings (id, name) VALUES (1, 'Taipei');"
+                }
+              },
+              {
+                "title": {
+                  "en": "Provision D1 + KV",
+                  "zh": "開好 D1 + KV"
+                },
+                "text": {
+                  "en": "Wrangler prints an id for each — copy them into wrangler.toml in the next step. --remote runs against the real cloud database.",
+                  "zh": "Wrangler 會各印出一組 id——把它們複製到下一步的 wrangler.toml。--remote 代表對雲端上真正的資料庫執行。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 create my-app-db\nnpx wrangler kv namespace create CACHE\n\n# seed the D1 table from your SQL file\nnpx wrangler d1 execute my-app-db --remote --file=./schema.sql"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind D1 + KV to the project",
+                  "zh": "把 D1 + KV 綁到專案"
+                },
+                "text": {
+                  "en": "wrangler.toml tells Pages which storage to expose as env.DB and env.CACHE, and which folder is the static output. pages_build_output_dir is what makes this a Pages config.",
+                  "zh": "wrangler.toml 告訴 Pages：要把哪些儲存以 env.DB、env.CACHE 的名字交給 Functions，以及哪個資料夾是靜態輸出。pages_build_output_dir 這一行，正是它被視為 Pages 設定的關鍵。"
+                },
+                "code": {
+                  "lang": "toml",
+                  "body": "name = \"my-fullstack-app\"\npages_build_output_dir = \"./public\"\ncompatibility_date = \"2025-01-01\"\n\n# D1 -> reachable in Functions as env.DB\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"my-app-db\"\ndatabase_id = \"<paste-your-d1-id>\"\n\n# KV -> reachable in Functions as env.CACHE\n[[kv_namespaces]]\nbinding = \"CACHE\"\nid = \"<paste-your-kv-id>\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Configure the build",
+                  "zh": "設定建置"
+                },
+                "text": {
+                  "en": "For plain HTML there's nothing to compile, so the build command is blank and the output is public/. For a framework (Vite/React) you'd set a build command and point the output at dist/. These live in the Pages dashboard under Settings > Builds, or in wrangler.toml.",
+                  "zh": "純 HTML 沒東西要編譯，所以建置指令留空、輸出設成 public/。如果是框架（Vite／React），就設好建置指令、把輸出指向 dist/。這些設定在 Pages 儀表板的 Settings > Builds，或寫在 wrangler.toml 裡。"
+                },
+                "code": {
+                  "lang": "text",
+                  "body": "# Pages build settings (dashboard, or wrangler.toml)\nBuild command:           (blank for plain static, or: npm run build)\nBuild output directory:  public      # plain HTML/CSS/JS\nRoot directory:          /\n\n# For a Vite / React app instead:\n#   Build command:          npm run build\n#   Build output directory: dist"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy two ways",
+                  "zh": "兩種部署方式"
+                },
+                "text": {
+                  "en": "Direct deploy uploads the folder right now. Git-connected is the real workflow: connect the repo once in the dashboard, set the build command + output dir, and every push to your production branch auto-builds and deploys.",
+                  "zh": "直接部署（direct deploy）會立刻把資料夾上傳。Git 連動才是正式做法：在儀表板把 repo 連一次、設好建置指令與輸出資料夾，之後每次 push 到正式分支，都會自動建置並部署。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Option A: direct deploy (great for a quick first try)\nnpx wrangler pages deploy ./public\n\n# Option B: git-connected (recommended)\n#   1. Push your repo to GitHub/GitLab\n#   2. Cloudflare dashboard > Workers & Pages > Create > Pages > Connect to Git\n#   3. Set build command + output dir, add D1/KV bindings\n#   4. Every push to main now builds & deploys automatically\ngit push origin main"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A common question: should I use Pages Functions or a standalone Worker? Quick rule below.",
+              "zh": "最常見的疑問：到底該用 Pages Functions，還是獨立的 Worker？下面這張圖給你一個快速判斷準則。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Pages Functions vs standalone Worker",
+              "zh": "Pages Functions 與獨立 Worker 怎麼選"
+            },
+            "code": {
+              "en": "flowchart TD\n  Q[\"Need to host a website too?\"] -->|\"Yes: front-end + API\"| PF[\"Use Pages + Functions\"]\n  Q -->|\"No: API only\"| WK[\"Use a standalone Worker\"]\n  PF --> ONE[\"One repo, one deploy\"]\n  WK --> API[\"Pure backend service\"]",
+              "zh": "flowchart TD\n  Q[\"也要同時架網站嗎？\"] -->|\"要：前端 + API\"| PF[\"用 Pages + Functions\"]\n  Q -->|\"不用：只要 API\"| WK[\"用獨立的 Worker\"]\n  PF --> ONE[\"一個 repo、一次部署\"]\n  WK --> API[\"純後端服務\"]"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "compare_arrows",
+                "title": {
+                  "en": "Pages vs Workers",
+                  "zh": "Pages 與 Workers 的差別"
+                },
+                "text": {
+                  "en": "Pages is front-end hosting with optional Functions bolted on; a Worker is pure code with no built-in static hosting. Pages Functions actually run ON Workers under the hood.",
+                  "zh": "Pages 本質是「前端網站托管」，再外掛 Functions 當後端；Worker 則是「純程式碼」、本身不附帶靜態托管。其實 Pages Functions 底層就是跑在 Workers 上的。"
+                }
+              },
+              {
+                "icon": "route",
+                "title": {
+                  "en": "File = route",
+                  "zh": "檔案即路由"
+                },
+                "text": {
+                  "en": "functions/api/hello.js answers /api/hello. [id].js matches one segment (e.g. /users/42); [[route]].js is a catch-all that matches any depth.",
+                  "zh": "functions/api/hello.js 對應 /api/hello。[id].js 只接一段路徑（例如 /users/42）；[[route]].js 是 catch-all，後面接幾層都吃得下。"
+                }
+              },
+              {
+                "icon": "api",
+                "title": {
+                  "en": "onRequest handlers",
+                  "zh": "onRequest 處理器"
+                },
+                "text": {
+                  "en": "Export onRequest for all methods, or onRequestGet / onRequestPost / onRequestPut / onRequestDelete to handle just one HTTP verb.",
+                  "zh": "匯出 onRequest 處理所有方法；或用 onRequestGet／onRequestPost／onRequestPut／onRequestDelete 各自對應一個 HTTP 動詞。"
+                }
+              },
+              {
+                "icon": "deployed_code",
+                "title": {
+                  "en": "The context object",
+                  "zh": "context 物件"
+                },
+                "text": {
+                  "en": "Each handler gets context with env (bindings), params (dynamic route values), request, next (middleware), and waitUntil (background work).",
+                  "zh": "每個處理器都會拿到 context，裡面有 env（綁定）、params（動態路由的值）、request、next（中介層 middleware）和 waitUntil（背景工作）。"
+                }
+              },
+              {
+                "icon": "vpn_key",
+                "title": {
+                  "en": "Bindings, not secrets",
+                  "zh": "用綁定，不用密碼"
+                },
+                "text": {
+                  "en": "Bindings give a Function direct, authenticated access to D1/KV/R2 via env.NAME. No connection strings or passwords in your code.",
+                  "zh": "綁定讓 Function 透過 env.NAME 直接、已驗證地存取 D1／KV／R2。程式碼裡不會出現連線字串或密碼。"
+                }
+              },
+              {
+                "icon": "layers",
+                "title": {
+                  "en": "Middleware with _middleware.js",
+                  "zh": "用 _middleware.js 做中介層"
+                },
+                "text": {
+                  "en": "A _middleware.js in a folder runs before its routes — perfect for auth or logging. Call context.next() to continue to the matched Function.",
+                  "zh": "資料夾裡的 _middleware.js 會在該層路由之前先跑——很適合做驗證或記錄。呼叫 context.next() 就會繼續往下交給命中的 Function。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips, gotchas & pricing",
+          "zh": "小提示、陷阱與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "The functions/ folder is special",
+              "zh": "functions/ 資料夾是特別的"
+            },
+            "text": {
+              "en": "Don't put functions/ inside your build output folder. Pages reads functions/ separately to build routes; if your front-end build wipes or relocates it, your /api/* routes silently vanish.",
+              "zh": "別把 functions/ 放進「建置輸出資料夾」裡。Pages 會「另外」讀 functions/ 來產生路由；如果你的前端建置流程清空或搬動了它，你的 /api/* 路由就會無聲無息地消失。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Bindings must be added for BOTH Production and Preview environments in the dashboard, or your preview deploys will throw 'undefined' on env.DB.",
+                "Run the whole thing locally with: npx wrangler pages dev ./public — it serves static files and Functions together with your bindings.",
+                "Function invocations count toward your Workers quota: the free plan includes 100,000 requests per day.",
+                "Free plan: 500 builds per month, up to 20,000 files per deploy, and 25 MiB per asset.",
+                "Use D1 for relational/SQL data, KV for fast key lookups and caching, and R2 for large files."
+              ],
+              "zh": [
+                "綁定要在儀表板裡幫「正式（Production）」和「預覽（Preview）」兩個環境都各加一次，否則預覽部署在 env.DB 會炸出 undefined。",
+                "用這行在本機整包跑起來：npx wrangler pages dev ./public——它會把靜態檔案、Functions 和你的綁定一起服務。",
+                "Function 的呼叫次數會算進你的 Workers 額度：免費方案每天含 100,000 次請求。",
+                "免費方案：每月 500 次建置、每次部署最多 20,000 個檔案、單一檔案上限 25 MiB。",
+                "關聯式／SQL 資料用 D1；快速鍵值查找與快取用 KV；大型檔案則交給 R2。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "bolt",
+            "title": {
+              "en": "Start static, grow into full-stack",
+              "zh": "先靜態，再長成全端"
+            },
+            "text": {
+              "en": "You can ship a pure static site today and add your first Function later just by creating functions/api/hello.js. Nothing else changes — same project, same deploy.",
+              "zh": "你今天可以先上一個純靜態網站，之後想加第一個後端，只要新增 functions/api/hello.js 就好。其他什麼都不用改——同一個專案、同一條部署。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "rest-api-worker",
+        "label": {
+          "en": "REST API on a Worker",
+          "zh": "用 Worker 做 REST API"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/pages/functions/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "choose-your-database",
+    "category": "integrations",
+    "group": {
+      "en": "Data & Storage",
+      "zh": "資料庫與儲存"
+    },
+    "icon": "alt_route",
+    "title": {
+      "en": "Which storage should I use? KV vs D1 vs R2 vs DO vs Hyperdrive",
+      "zh": "我該用哪種儲存？KV / D1 / R2 / Durable Objects / Hyperdrive 選型"
+    },
+    "subtitle": {
+      "en": "A decision guide that matches the shape of your data to the right Cloudflare storage",
+      "zh": "一份選型指南：把你資料的「形狀」對應到最適合的 Cloudflare 儲存"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Five storage products, one Worker. Ask a few questions and the right one falls out.",
+        "zh": "五種儲存、一個 Worker。問自己幾個問題，答案自然浮現。"
+      }
+    },
+    "stats": [
+      {
+        "value": "5",
+        "label": {
+          "en": "Storage options",
+          "zh": "種儲存選項"
+        }
+      },
+      {
+        "value": "$0",
+        "label": {
+          "en": "R2 egress fees",
+          "zh": "R2 流量費"
+        }
+      },
+      {
+        "value": "~60s",
+        "label": {
+          "en": "KV global sync",
+          "zh": "KV 全球同步"
+        }
+      },
+      {
+        "value": "SQL",
+        "label": {
+          "en": "D1 is relational",
+          "zh": "D1 是關聯式"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we choosing between?",
+          "zh": "我們在選什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Cloudflare gives you five very different ways to store data, and they all sit behind your Worker. Picking the wrong one makes everything harder; picking the right one makes your code short and fast. This guide turns the choice into a few yes/no questions.",
+              "zh": "Cloudflare 提供五種差很多的資料儲存方式，它們全都掛在你的 Worker 後面。選錯會讓一切變難；選對則讓程式碼又短又快。這份指南把「該用哪個」變成幾個是/否的問題。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the whole cast on one stage: the Worker is the brain, and each store plays one role. KV is the cache, D1 is the SQL table, R2 is the file shelf, Durable Objects is the single source of truth, and Hyperdrive is the fast lane to a database you already own.",
+              "zh": "先把所有角色擺上同一個舞台：Worker 是大腦，每種儲存各演一個角色。KV 是快取、D1 是 SQL 資料表、R2 是檔案櫃、Durable Objects 是「唯一真相來源」、Hyperdrive 是通往你既有資料庫的快速通道。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Five stores behind one Worker",
+              "zh": "一個 Worker 後面的五種儲存"
+            },
+            "code": {
+              "en": "flowchart LR\n  C[\"Browser\"] --> W[\"Worker\"]\n  W -->|\"cache\"| KV[\"Workers KV\"]\n  W -->|\"SQL\"| D1[\"D1\"]\n  W -->|\"files\"| R2[\"R2\"]\n  W -->|\"state\"| DO[\"Durable Objects\"]\n  W -->|\"accelerate\"| HD[\"Hyperdrive\"]\n  HD --> PG[\"Postgres / MySQL\"]",
+              "zh": "flowchart LR\n  C[\"瀏覽器\"] --> W[\"Worker\"]\n  W -->|\"快取\"| KV[\"Workers KV\"]\n  W -->|\"SQL\"| D1[\"D1\"]\n  W -->|\"檔案\"| R2[\"R2\"]\n  W -->|\"狀態\"| DO[\"Durable Objects\"]\n  W -->|\"加速\"| HD[\"Hyperdrive\"]\n  HD --> PG[\"Postgres / MySQL\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "kitchen",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A kitchen. KV is the spice rack (grab-and-go, refilled occasionally), D1 is the recipe binder (structured, searchable), R2 is the walk-in freezer (big, bulky items), Durable Objects is the head chef who keeps one authoritative order list, and Hyperdrive is a delivery shortcut to the supplier you already use.",
+              "zh": "一間廚房。KV 是調味料架（隨手拿、偶爾補貨）、D1 是食譜本（有結構、可查找）、R2 是大型冷凍庫（又大又笨重的東西）、Durable Objects 是主廚（手上握著唯一一份正式點單）、Hyperdrive 則是通往你「現有供應商」的送貨捷徑。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "decision",
+        "icon": "account_tree",
+        "heading": {
+          "en": "The decision tree",
+          "zh": "決策樹"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Start at the top and follow the answers. Each branch lands on exactly one product. You can always combine several later, but for any single piece of data this tree gives you a clear default.",
+              "zh": "從最上面開始，照著答案往下走，每條分支都會落在一個產品上。之後你當然可以混搭多種儲存，但對「單一一筆資料」來說，這棵樹會給你一個明確的預設答案。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Pick a store in four questions",
+              "zh": "四個問題選出儲存"
+            },
+            "code": {
+              "en": "flowchart TD\n  S[\"What are you storing?\"]\n  Q3{\"Large files / blobs?\"}\n  Q1{\"Relational SQL queries?\"}\n  Q2{\"Existing Postgres / MySQL?\"}\n  Q4{\"Strong consistency + coordination?\"}\n  KV[\"Workers KV\"]\n  D1[\"D1\"]\n  R2[\"R2\"]\n  DO[\"Durable Objects\"]\n  HD[\"Hyperdrive\"]\n  S --> Q3\n  Q3 -->|\"Yes\"| R2\n  Q3 -->|\"No\"| Q1\n  Q1 -->|\"Yes\"| Q2\n  Q2 -->|\"Yes\"| HD\n  Q2 -->|\"No\"| D1\n  Q1 -->|\"No\"| Q4\n  Q4 -->|\"Yes\"| DO\n  Q4 -->|\"No\"| KV",
+              "zh": "flowchart TD\n  S[\"你要存什麼資料？\"]\n  Q3{\"大型檔案 / 二進位物件？\"}\n  Q1{\"需要關聯式 SQL 查詢？\"}\n  Q2{\"已有 Postgres / MySQL？\"}\n  Q4{\"強一致性 + 協調？\"}\n  KV[\"Workers KV\"]\n  D1[\"D1\"]\n  R2[\"R2\"]\n  DO[\"Durable Objects\"]\n  HD[\"Hyperdrive\"]\n  S --> Q3\n  Q3 -->|\"是\"| R2\n  Q3 -->|\"否\"| Q1\n  Q1 -->|\"是\"| Q2\n  Q2 -->|\"是\"| HD\n  Q2 -->|\"否\"| D1\n  Q1 -->|\"否\"| Q4\n  Q4 -->|\"是\"| DO\n  Q4 -->|\"否\"| KV"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "Order matters",
+              "zh": "順序有意義"
+            },
+            "text": {
+              "en": "Ask about big files first (R2 is unmistakable), then relational needs (D1 vs Hyperdrive), then strong consistency (Durable Objects). If none of those fit, a small read-heavy value almost always means KV.",
+              "zh": "先問「是不是大檔案」（R2 最好認），再問「需不需要關聯式」（D1 或 Hyperdrive），接著問「要不要強一致性」（Durable Objects）。如果都不是，那通常就是一筆「讀多寫少」的小資料，答案幾乎都是 KV。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "options",
+        "icon": "target",
+        "heading": {
+          "en": "The five options at a glance",
+          "zh": "五個選項一次看懂"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "One card per store, with the one-line rule for when to reach for it.",
+              "zh": "每個儲存一張卡片，附上「什麼時候該用它」的一句話原則。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Workers KV — use when…",
+                  "zh": "Workers KV — 何時用…"
+                },
+                "text": {
+                  "en": "Tiny values read far more than written, and ~60s global sync is fine: caches, feature flags, config, sessions.",
+                  "zh": "小資料、讀遠多於寫，而且約 60 秒的全球同步可以接受：快取、功能開關、設定、登入工作階段。"
+                }
+              },
+              {
+                "icon": "table",
+                "title": {
+                  "en": "D1 — use when…",
+                  "zh": "D1 — 何時用…"
+                },
+                "text": {
+                  "en": "You need relational tables and SQL (JOIN, WHERE, ORDER BY) and want a Cloudflare-native database with no server to run.",
+                  "zh": "需要關聯式資料表與 SQL（JOIN、WHERE、ORDER BY），而且想要一個 Cloudflare 原生、不用自己養伺服器的資料庫。"
+                }
+              },
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "R2 — use when…",
+                  "zh": "R2 — 何時用…"
+                },
+                "text": {
+                  "en": "You store large files — images, video, PDFs, backups — and want zero egress (download) fees.",
+                  "zh": "要存大型檔案——圖片、影片、PDF、備份——而且想要零「egress（對外下載流量）」費用。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Durable Objects — use when…",
+                  "zh": "Durable Objects — 何時用…"
+                },
+                "text": {
+                  "en": "One piece of state must be strongly consistent and coordinated: counters, chat rooms, game state, locks, live collaboration.",
+                  "zh": "某一份狀態必須強一致且需要協調：計數器、聊天室、遊戲狀態、鎖、即時協作。"
+                }
+              },
+              {
+                "icon": "rocket_launch",
+                "title": {
+                  "en": "Hyperdrive — use when…",
+                  "zh": "Hyperdrive — 何時用…"
+                },
+                "text": {
+                  "en": "You already have a Postgres/MySQL database and just want it fast from Workers — no migration, no rewrite.",
+                  "zh": "你已經有 Postgres / MySQL 資料庫，只想讓它從 Workers 連起來變快——不用搬遷、不用改寫。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "How each binding looks in code",
+          "zh": "每個 binding 在程式碼裡長怎樣"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A binding is a name you declare in wrangler.jsonc that shows up as env.SOMETHING inside your Worker. Here is the smallest real snippet for each store — notice how different the access patterns are.",
+              "zh": "「binding（綁定）」是你在 wrangler.jsonc 宣告的一個名字，它會以 env.某某 的形式出現在 Worker 裡。下面是每種儲存最小的真實片段——注意它們的存取方式差很多。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "KV — get / put a value",
+                  "zh": "KV — 讀取 / 寫入一個值"
+                },
+                "text": {
+                  "en": "Look up by key; values are strings (or streams). Optional TTL auto-expires the key.",
+                  "zh": "用 key 查找；值是字串（或串流）。可選的 TTL 會讓 key 自動過期。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// wrangler.jsonc -> { \"kv_namespaces\": [{ \"binding\": \"KV\", \"id\": \"...\" }] }\nconst cached = await env.KV.get(\"user:42\");\nawait env.KV.put(\"user:42\", JSON.stringify(user), { expirationTtl: 3600 });"
+                }
+              },
+              {
+                "title": {
+                  "en": "D1 — prepared SQL query",
+                  "zh": "D1 — 預備式 SQL 查詢"
+                },
+                "text": {
+                  "en": "Write SQL with ? placeholders, bind() the values, then .all() for rows.",
+                  "zh": "用 ? 佔位符寫 SQL，用 bind() 填值，再用 .all() 取回資料列。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// wrangler.jsonc -> { \"d1_databases\": [{ \"binding\": \"DB\", \"database_name\": \"app\" }] }\nconst { results } = await env.DB\n  .prepare(\"SELECT * FROM orders WHERE city = ?\")\n  .bind(\"Taipei\")\n  .all();"
+                }
+              },
+              {
+                "title": {
+                  "en": "R2 — store / fetch an object",
+                  "zh": "R2 — 存入 / 取出一個物件"
+                },
+                "text": {
+                  "en": "put() a file by key, get() it back as an object whose .body is a stream.",
+                  "zh": "用 put() 以 key 存檔，再用 get() 取回一個物件，它的 .body 是串流。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// wrangler.jsonc -> { \"r2_buckets\": [{ \"binding\": \"BUCKET\", \"bucket_name\": \"files\" }] }\nawait env.BUCKET.put(\"invoice.pdf\", request.body);\nconst object = await env.BUCKET.get(\"invoice.pdf\");\nreturn new Response(object.body);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Durable Objects — call a stub",
+                  "zh": "Durable Objects — 呼叫 stub"
+                },
+                "text": {
+                  "en": "getByName() returns the ONE instance for that name; call its methods directly over RPC. Every caller hits the same object.",
+                  "zh": "getByName() 會回傳「那個名字唯一的一個實例」；直接用 RPC 呼叫它的方法。所有呼叫者都打到同一個物件。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// wrangler.jsonc -> durable_objects: { \"name\": \"ROOM\", \"class_name\": \"Room\" }\nconst stub = env.ROOM.getByName(\"room-42\");\nconst count = await stub.increment(); // strongly consistent"
+                }
+              },
+              {
+                "title": {
+                  "en": "Hyperdrive — connection string",
+                  "zh": "Hyperdrive — 連線字串"
+                },
+                "text": {
+                  "en": "Read env.HYPERDRIVE.connectionString and connect with a normal pg client; pooling and caching happen for you.",
+                  "zh": "讀取 env.HYPERDRIVE.connectionString，用一般的 pg 客戶端連線；連線池與快取都自動幫你處理。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// wrangler.jsonc -> { \"hyperdrive\": [{ \"binding\": \"HYPERDRIVE\", \"id\": \"...\" }] }\nimport { Client } from \"pg\";\n\nconst client = new Client({ connectionString: env.HYPERDRIVE.connectionString });\nawait client.connect();\nconst { rows } = await client.query(\"SELECT * FROM products LIMIT 10\");"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "The words behind the choice",
+          "zh": "選型背後的關鍵字"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Three ideas decide most of these picks: consistency, relational vs key-value, and object storage. Get these and the tree becomes obvious.",
+              "zh": "大多數的選擇其實是被三個概念決定的：一致性、關聯式 vs 鍵值、以及物件儲存。搞懂它們，那棵決策樹就一目了然。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "schedule",
+                "title": {
+                  "en": "Eventual consistency",
+                  "zh": "最終一致性"
+                },
+                "text": {
+                  "en": "After a write, other regions may take up to ~60s to show the new value — they catch up 'eventually'. KV works this way: great for caches, wrong for bank balances.",
+                  "zh": "寫入後，其他地區可能要約 60 秒才看得到新值——它們會「最終」追上。KV 就是這樣：拿來做快取很棒，拿來存銀行餘額就錯了。"
+                }
+              },
+              {
+                "icon": "verified",
+                "title": {
+                  "en": "Strong consistency",
+                  "zh": "強一致性"
+                },
+                "text": {
+                  "en": "Every reader always sees the latest write, immediately. A Durable Object gives this because exactly one instance owns the data and processes requests in order.",
+                  "zh": "每個讀取者永遠、立刻看到最新的寫入。Durable Object 能做到，因為「剛好只有一個實例」擁有這份資料、並依序處理請求。"
+                }
+              },
+              {
+                "icon": "table_rows",
+                "title": {
+                  "en": "Relational (SQL)",
+                  "zh": "關聯式 (SQL)"
+                },
+                "text": {
+                  "en": "Data lives in tables with columns and relationships, queried with SQL — JOIN links tables, WHERE filters, ORDER BY sorts. D1 (and your own DB via Hyperdrive) are relational.",
+                  "zh": "資料放在有欄位與關聯的「資料表」裡，用 SQL 查詢——JOIN 串接資料表、WHERE 過濾、ORDER BY 排序。D1（以及透過 Hyperdrive 連的自家資料庫）都是關聯式。"
+                }
+              },
+              {
+                "icon": "data_object",
+                "title": {
+                  "en": "Key-value",
+                  "zh": "鍵值"
+                },
+                "text": {
+                  "en": "No tables, no SQL — just a name (key) pointing to a value. Fast and simple, but you can only look things up by the exact key. KV is the pure key-value store.",
+                  "zh": "沒有資料表、沒有 SQL——只有一個名字（key）指向一個值。又快又簡單，但你只能用「精確的 key」查找。KV 就是純粹的鍵值儲存。"
+                }
+              },
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "Object storage",
+                  "zh": "物件儲存"
+                },
+                "text": {
+                  "en": "Built for large, opaque files ('objects') like images and video, addressed by a key. R2 is object storage with no egress fee for downloading those files.",
+                  "zh": "專為大型、內容不透明的檔案（「物件」）打造，例如圖片與影片，用一個 key 來定址。R2 就是物件儲存，而且下載這些檔案不收 egress 流量費。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Coordination",
+                  "zh": "協調"
+                },
+                "text": {
+                  "en": "When many users act on the same shared thing — same counter, same chat room — someone must serialize them so updates don't clash. That single owner is exactly what Durable Objects provides.",
+                  "zh": "當很多使用者同時動到「同一個共享的東西」——同一個計數器、同一個聊天室——必須有人把它們排隊，更新才不會打架。那個「唯一擁有者」正是 Durable Objects 提供的。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Consistency spectrum",
+              "zh": "一致性光譜"
+            },
+            "code": {
+              "en": "flowchart LR\n  W[\"Weaker consistency\"] --> KV[\"Workers KV\"]\n  KV --> D1[\"D1\"]\n  D1 --> DO[\"Durable Objects\"]\n  DO --> S[\"Stronger consistency\"]",
+              "zh": "flowchart LR\n  W[\"較弱一致性\"] --> KV[\"Workers KV\"]\n  KV --> D1[\"D1\"]\n  D1 --> DO[\"Durable Objects\"]\n  DO --> S[\"較強一致性\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Cheat-sheet, mixing & gotchas",
+          "zh": "速查表、混搭與陷阱"
+        },
+        "blocks": [
+          {
+            "type": "h3",
+            "text": {
+              "en": "Use X when…",
+              "zh": "什麼時候用哪個…"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Use KV when: tiny values are read far more than written and ~60s global sync is fine (cache, config, sessions).",
+                "Use D1 when: you need relational tables and SQL queries (JOIN/WHERE/ORDER BY) in a Cloudflare-native database.",
+                "Use R2 when: you store big files — images, video, PDFs, backups — and want zero egress fees.",
+                "Use Durable Objects when: one shared piece of state must be strongly consistent and coordinated (counters, rooms, locks).",
+                "Use Hyperdrive when: you already run Postgres/MySQL elsewhere and just want it fast from Workers — no migration."
+              ],
+              "zh": [
+                "用 KV：小資料讀遠多於寫，且約 60 秒的全球同步可接受（快取、設定、工作階段）。",
+                "用 D1：需要關聯式資料表與 SQL 查詢（JOIN／WHERE／ORDER BY），且想要 Cloudflare 原生資料庫。",
+                "用 R2：要存大型檔案——圖片、影片、PDF、備份——而且想要零 egress 流量費。",
+                "用 Durable Objects：某一份共享狀態必須強一致且需要協調（計數器、聊天室、鎖）。",
+                "用 Hyperdrive：你已在別處跑 Postgres／MySQL，只想讓它從 Workers 連起來變快——不用搬遷。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "extension",
+            "title": {
+              "en": "You can mix them",
+              "zh": "其實可以混搭"
+            },
+            "text": {
+              "en": "Real apps combine several: store the upload in R2, keep its metadata in D1, cache the hot lookups in KV, and let a Durable Object guard the one counter that must never double-count.",
+              "zh": "真實的應用通常會混用：把上傳的檔案放 R2、它的中繼資料放 D1、把熱門查找快取在 KV，再用一個 Durable Object 守住「絕對不能重複計數」的那個計數器。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Common mis-picks",
+              "zh": "常見選錯"
+            },
+            "text": {
+              "en": "Don't store large files in KV (25 MiB cap and it's not built for blobs) and don't use KV for must-be-fresh-everywhere data. Don't reach for Durable Objects just to hold static data a table would handle. Don't pick Hyperdrive if you have no existing database — start with D1.",
+              "zh": "別把大型檔案塞進 KV（單筆上限 25 MiB，本來就不是給二進位物件用的），也別用 KV 存「全球每處都得即時最新」的資料。別只為了放靜態資料就動用 Durable Objects——那種用一張資料表就好。如果你根本沒有既有資料庫，就別選 Hyperdrive，直接從 D1 開始。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "KV: read-heavy, eventually consistent, key-value only, up to 25 MiB per value.",
+                "D1: SQLite-based relational SQL, read replicas, great default for app data.",
+                "R2: S3-compatible object storage, no egress fees, ideal for media and backups.",
+                "Durable Objects: one instance per name, strongly consistent, has its own embedded SQLite.",
+                "Hyperdrive: pooling + caching in front of your existing Postgres/MySQL — not a new database."
+              ],
+              "zh": [
+                "KV：讀多寫少、最終一致、只有鍵值、單筆最多 25 MiB。",
+                "D1：以 SQLite 為基礎的關聯式 SQL、有讀取副本，是應用資料的好預設。",
+                "R2：相容 S3 的物件儲存、無 egress 流量費，最適合媒體與備份。",
+                "Durable Objects：一個名字對應一個實例、強一致、內建自己的 SQLite。",
+                "Hyperdrive：在你既有 Postgres／MySQL 前面加上連線池與快取——它不是一個新資料庫。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "durable-objects",
+        "label": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        }
+      },
+      {
+        "slug": "hyperdrive",
+        "label": {
+          "en": "Hyperdrive",
+          "zh": "Hyperdrive"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/workers/platform/storage-options/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "d1-schema-design",
+    "category": "integrations",
+    "group": {
+      "en": "Data & Storage",
+      "zh": "資料庫與儲存"
+    },
+    "icon": "schema",
+    "title": {
+      "en": "Designing a D1 schema (tables & migrations)",
+      "zh": "設計 D1 資料庫綱要（資料表與 migration）"
+    },
+    "subtitle": {
+      "en": "Model users and posts in SQLite, then evolve the schema safely with migrations",
+      "zh": "用 SQLite 設計 users 與 posts 資料表，再用 migration 安全地讓綱要隨時間演進"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "A good schema is the foundation of every app — design it once, change it safely forever.",
+        "zh": "好的資料庫綱要是每個應用的地基——設計一次，之後永遠都能安全地修改它。"
+      }
+    },
+    "stats": [
+      {
+        "value": "2",
+        "label": {
+          "en": "Tables modeled",
+          "zh": "示範資料表"
+        }
+      },
+      {
+        "value": "1:N",
+        "label": {
+          "en": "Relationship",
+          "zh": "關聯型態"
+        }
+      },
+      {
+        "value": "SQLite",
+        "label": {
+          "en": "SQL dialect",
+          "zh": "SQL 方言"
+        }
+      },
+      {
+        "value": "0001+",
+        "label": {
+          "en": "Versioned migrations",
+          "zh": "有版本的 migration"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we designing?",
+          "zh": "我們要設計什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "A schema is the blueprint of your database — the list of tables, the columns in each table, and the rules that keep the data clean. In this guide we model a tiny blog: users who write posts. You will learn primary keys, foreign keys, indexes, and the NOT NULL / UNIQUE rules, then manage every future change with migrations.",
+              "zh": "綱要（schema）就是你資料庫的設計藍圖——有哪些資料表、每張表有哪些欄位，以及讓資料保持乾淨的規則。這篇我們會設計一個迷你部落格：使用者（users）撰寫貼文（posts）。你會學到主鍵（primary key）、外鍵（foreign key）、索引（index），以及 NOT NULL／UNIQUE 規則，最後用 migration 管理之後的每一次變更。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "D1 runs on SQLite, so this is plain, standard SQL. The big idea: design the tables thoughtfully up front, then never hand-edit the live database — instead, write a small migration file for each change so your schema has a clear, versioned history.",
+              "zh": "D1 底層是 SQLite，所以這裡用的就是樸實的標準 SQL。核心觀念是：一開始把資料表設計好，之後絕不直接手動改線上資料庫——而是為每次變更寫一個小小的 migration 檔，讓你的綱要擁有清楚、有版本紀錄的歷史。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The schema design journey",
+              "zh": "綱要設計的旅程"
+            },
+            "code": {
+              "en": "flowchart LR\n  A[\"List your data\"] --> B[\"Design tables and columns\"]\n  B --> C[\"Add keys and indexes\"]\n  C --> D[\"Write a migration file\"]\n  D --> E[\"Apply with Wrangler\"]\n  E --> F[\"Versioned D1 schema\"]",
+              "zh": "flowchart LR\n  A[\"列出你的資料\"] --> B[\"設計資料表與欄位\"]\n  B --> C[\"加上鍵與索引\"]\n  C --> D[\"寫一個 migration 檔\"]\n  D --> E[\"用 Wrangler 套用\"]\n  E --> F[\"有版本紀錄的 D1 綱要\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model: users and posts",
+          "zh": "資料模型：users 與 posts"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "One user can write many posts, and every post belongs to exactly one user. That is a one-to-many relationship. We link them with a foreign key: posts.user_id points back to users.id.",
+              "zh": "一位使用者可以發表很多篇貼文，而每篇貼文剛好屬於一位使用者，這就是「一對多」（one-to-many）關聯。我們用外鍵把它們連起來：posts.user_id 指回 users.id。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "ER diagram: users ↔ posts",
+              "zh": "ER 圖：users ↔ posts"
+            },
+            "code": {
+              "en": "erDiagram\n  USERS ||--o{ POSTS : \"writes\"\n  USERS {\n    integer id PK \"auto id\"\n    text email UK \"unique login\"\n    text name \"display name\"\n    text created_at \"timestamp\"\n  }\n  POSTS {\n    integer id PK \"auto id\"\n    integer user_id FK \"owner\"\n    text title \"not null\"\n    text body \"content\"\n    text status \"draft or live\"\n    text created_at \"timestamp\"\n  }",
+              "zh": "erDiagram\n  USERS ||--o{ POSTS : \"發表\"\n  USERS {\n    integer id PK \"自動編號\"\n    text email UK \"唯一登入\"\n    text name \"顯示名稱\"\n    text created_at \"建立時間\"\n  }\n  POSTS {\n    integer id PK \"自動編號\"\n    integer user_id FK \"作者\"\n    text title \"不可空白\"\n    text body \"內文\"\n    text status \"草稿或上線\"\n    text created_at \"建立時間\"\n  }"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Primary key (PK)",
+                  "zh": "主鍵（PK）"
+                },
+                "text": {
+                  "en": "id uniquely identifies each row. INTEGER PRIMARY KEY in SQLite auto-fills a new number for every insert.",
+                  "zh": "id 用來唯一辨識每一列。在 SQLite 裡 INTEGER PRIMARY KEY 會在每次新增時自動填入一個新號碼。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Foreign key (FK)",
+                  "zh": "外鍵（FK）"
+                },
+                "text": {
+                  "en": "posts.user_id stores the id of the owning user, linking the two tables and keeping data consistent.",
+                  "zh": "posts.user_id 存放擁有者使用者的 id，把兩張表連起來，並讓資料保持一致。"
+                }
+              },
+              {
+                "icon": "manage_search",
+                "title": {
+                  "en": "Index",
+                  "zh": "索引（index）"
+                },
+                "text": {
+                  "en": "An index on user_id lets the database jump straight to a user's posts instead of scanning the whole table.",
+                  "zh": "在 user_id 上建索引，能讓資料庫直接跳到某位使用者的貼文，而不必把整張表掃過一遍。"
+                }
+              },
+              {
+                "icon": "block",
+                "title": {
+                  "en": "NOT NULL",
+                  "zh": "NOT NULL（不可空白）"
+                },
+                "text": {
+                  "en": "email and name are required — the database rejects any row that leaves them empty.",
+                  "zh": "email 與 name 是必填——只要這些欄位留空，資料庫就會拒絕那一列。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "UNIQUE",
+                  "zh": "UNIQUE（唯一）"
+                },
+                "text": {
+                  "en": "email is UNIQUE, so two users can never register with the same address.",
+                  "zh": "email 設為 UNIQUE，所以兩位使用者絕不可能用同一個信箱註冊。"
+                }
+              },
+              {
+                "icon": "account_tree",
+                "title": {
+                  "en": "One-to-many",
+                  "zh": "一對多"
+                },
+                "text": {
+                  "en": "The crow's-foot mark (o{) means one user relates to many posts — the most common app relationship.",
+                  "zh": "魚尾符號（o{）代表一位使用者對應很多貼文——這是應用程式裡最常見的關聯。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Schema vocabulary",
+          "zh": "綱要術語小辭典"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "These are the building blocks you will use in almost every table you ever design.",
+              "zh": "以下是你之後設計幾乎每一張資料表都會用到的基本元件。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "schema",
+                "title": {
+                  "en": "Schema",
+                  "zh": "綱要 schema"
+                },
+                "text": {
+                  "en": "The full definition of your tables, columns, types, and rules — your database's blueprint.",
+                  "zh": "你所有資料表、欄位、型別與規則的完整定義——也就是資料庫的藍圖。"
+                }
+              },
+              {
+                "icon": "data_object",
+                "title": {
+                  "en": "Data types",
+                  "zh": "資料型別"
+                },
+                "text": {
+                  "en": "SQLite uses TEXT, INTEGER, REAL, BLOB, and NULL. Store timestamps as TEXT (ISO strings) for simplicity.",
+                  "zh": "SQLite 用 TEXT、INTEGER、REAL、BLOB、NULL 五種。時間戳記建議用 TEXT（ISO 字串）儲存，最單純。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Primary key",
+                  "zh": "主鍵"
+                },
+                "text": {
+                  "en": "The column that uniquely names each row. INTEGER PRIMARY KEY also auto-increments for you.",
+                  "zh": "用來唯一命名每一列的欄位。INTEGER PRIMARY KEY 還會幫你自動遞增編號。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Foreign key",
+                  "zh": "外鍵"
+                },
+                "text": {
+                  "en": "A column pointing at another table's primary key, expressing relationships between rows.",
+                  "zh": "一個指向另一張表主鍵的欄位，用來表達列與列之間的關聯。"
+                }
+              },
+              {
+                "icon": "manage_search",
+                "title": {
+                  "en": "Index",
+                  "zh": "索引"
+                },
+                "text": {
+                  "en": "A lookup shortcut that speeds up filtering and joins on a column — at the cost of slightly slower writes.",
+                  "zh": "一種查找捷徑，能加速某欄位的篩選與 join——代價是寫入會稍微慢一點點。"
+                }
+              },
+              {
+                "icon": "rule",
+                "title": {
+                  "en": "Constraints",
+                  "zh": "約束條件"
+                },
+                "text": {
+                  "en": "Rules like NOT NULL, UNIQUE, and DEFAULT that the database enforces so bad data never gets in.",
+                  "zh": "像 NOT NULL、UNIQUE、DEFAULT 這類由資料庫強制執行的規則，讓壞資料根本進不來。"
+                }
+              },
+              {
+                "icon": "start",
+                "title": {
+                  "en": "DEFAULT",
+                  "zh": "DEFAULT 預設值"
+                },
+                "text": {
+                  "en": "A value auto-filled when you omit a column, e.g. status defaults to 'draft' and created_at to now.",
+                  "zh": "沒給欄位值時自動帶入的值，例如 status 預設為 'draft'、created_at 預設為現在時間。"
+                }
+              },
+              {
+                "icon": "update",
+                "title": {
+                  "en": "Migration",
+                  "zh": "Migration（綱要遷移）"
+                },
+                "text": {
+                  "en": "A numbered SQL file describing one schema change. Run in order, they give your database a version history.",
+                  "zh": "一個有編號的 SQL 檔，描述一次綱要變更。依序執行後，就替你的資料庫建立了版本歷史。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "migrations",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Changing the schema with migrations",
+          "zh": "用 migration 修改綱要"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Apps grow: you will need a new column, a new table, or a new index. A migration is a small, numbered SQL file (0001_..., 0002_...) that records exactly one change. Wrangler keeps track of which files have already run, so applying them is repeatable on every environment.",
+              "zh": "應用程式會長大：你總會需要新增欄位、新表，或新索引。Migration 就是一個小小、有編號的 SQL 檔（0001_...、0002_...），剛好記錄一次變更。Wrangler 會記住哪些檔案已經跑過，所以在每個環境套用都能重現一樣的結果。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The golden rule: once a migration has been applied to a shared or production database, never edit that file. To fix or change something, write a new migration. This keeps the history honest and lets teammates catch up by simply running 'migrations apply'.",
+              "zh": "黃金守則：一旦某個 migration 已經套用到共用或正式資料庫，就絕對不要再去改那個檔案。要修正或變更，就寫一個新的 migration。這能讓歷史保持誠實，隊友只要跑一次 migrations apply 就能跟上進度。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Migration workflow",
+              "zh": "Migration 工作流程"
+            },
+            "code": {
+              "en": "flowchart LR\n  A[\"Decide the change\"] --> B[\"wrangler d1 migrations create\"]\n  B --> C[\"Write CREATE/ALTER SQL\"]\n  C --> D[\"apply --local to test\"]\n  D --> E{\"Works?\"}\n  E -->|\"yes\"| F[\"apply --remote\"]\n  E -->|\"no\"| C\n  F --> G[\"Versioned schema in D1\"]",
+              "zh": "flowchart LR\n  A[\"決定要改什麼\"] --> B[\"wrangler d1 migrations create\"]\n  B --> C[\"寫 CREATE/ALTER SQL\"]\n  C --> D[\"apply --local 測試\"]\n  D --> E{\"成功？\"}\n  E -->|\"是\"| F[\"apply --remote\"]\n  E -->|\"否\"| C\n  F --> G[\"D1 內有版本的綱要\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "history",
+            "title": {
+              "en": "Why versioned files?",
+              "zh": "為什麼要用有版本的檔案？"
+            },
+            "text": {
+              "en": "Because the migrations folder lives in Git alongside your code. Anyone can clone the repo and rebuild the exact same schema by running the migrations in order — no manual SQL, no guesswork.",
+              "zh": "因為 migrations 資料夾會和你的程式碼一起放進 Git。任何人 clone 下來後，只要依序跑這些 migration，就能重建出一模一樣的綱要——不必手動敲 SQL，也不用猜。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "一步步動手做"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Now wire it all together: create the database, bind it to a Worker, define the schema in a migration, apply it, add a second migration to evolve the schema, and finally query across both tables with a JOIN.",
+              "zh": "現在把全部串起來：建立資料庫、綁定到 Worker、在 migration 裡定義綱要、套用它、再加第二個 migration 讓綱要演進，最後用 JOIN 跨兩張表查詢。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the database",
+                  "zh": "建立資料庫"
+                },
+                "text": {
+                  "en": "Wrangler prints a database_id — copy it for the next step.",
+                  "zh": "Wrangler 會印出一組 database_id——複製起來，下一步會用到。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 create blog-db"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind it to your Worker",
+                  "zh": "綁定到你的 Worker"
+                },
+                "text": {
+                  "en": "Add this to wrangler.jsonc so your Worker reaches the database as env.DB.",
+                  "zh": "把這段加進 wrangler.jsonc，讓 Worker 能用 env.DB 存取這個資料庫。"
+                },
+                "code": {
+                  "lang": "json",
+                  "body": "{\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"blog-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the first migration",
+                  "zh": "建立第一個 migration"
+                },
+                "text": {
+                  "en": "This makes a migrations/ folder and an empty 0001_create_users_and_posts.sql file.",
+                  "zh": "這會建立一個 migrations/ 資料夾，以及一個空的 0001_create_users_and_posts.sql 檔。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 migrations create blog-db create_users_and_posts"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the schema SQL",
+                  "zh": "寫下綱要 SQL"
+                },
+                "text": {
+                  "en": "Open the generated file and define both tables with their keys, constraints, and indexes.",
+                  "zh": "打開剛產生的檔案，把兩張表連同它們的鍵、約束與索引都定義好。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- migrations/0001_create_users_and_posts.sql\n-- Enforce foreign keys (SQLite leaves this off by default)\nPRAGMA foreign_keys = ON;\n\nCREATE TABLE users (\n  id         INTEGER PRIMARY KEY,\n  email      TEXT NOT NULL UNIQUE,\n  name       TEXT NOT NULL,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);\n\nCREATE TABLE posts (\n  id         INTEGER PRIMARY KEY,\n  user_id    INTEGER NOT NULL,\n  title      TEXT NOT NULL,\n  body       TEXT,\n  status     TEXT NOT NULL DEFAULT 'draft',\n  created_at TEXT NOT NULL DEFAULT (datetime('now')),\n  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n);\n\n-- Index the columns we filter and join on\nCREATE INDEX idx_posts_user_id ON posts (user_id);\nCREATE INDEX idx_posts_status  ON posts (status);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Apply locally, then remotely",
+                  "zh": "先套用到本機，再套用到遠端"
+                },
+                "text": {
+                  "en": "Test against the local copy first; once it works, apply to the real cloud database.",
+                  "zh": "先對本機副本測試；確認沒問題後，再套用到雲端上真正的資料庫。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Build the schema on the local test DB\nnpx wrangler d1 migrations apply blog-db --local\n\n# See what is still pending on production\nnpx wrangler d1 migrations list blog-db --remote\n\n# Apply to the real cloud database\nnpx wrangler d1 migrations apply blog-db --remote"
+                }
+              },
+              {
+                "title": {
+                  "en": "Evolve the schema later",
+                  "zh": "之後讓綱要演進"
+                },
+                "text": {
+                  "en": "Need a new column? Create a second migration instead of editing the first — then apply it the same way.",
+                  "zh": "需要新欄位？建立第二個 migration，而不是去改第一個——接著用同樣方式套用。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 migrations create blog-db add_published_at_to_posts\n\n# In migrations/0002_add_published_at_to_posts.sql:\n#   ALTER TABLE posts ADD COLUMN published_at TEXT;\n\nnpx wrangler d1 migrations apply blog-db --local\nnpx wrangler d1 migrations apply blog-db --remote"
+                }
+              },
+              {
+                "title": {
+                  "en": "Query across tables from a Worker",
+                  "zh": "從 Worker 跨表查詢"
+                },
+                "text": {
+                  "en": "prepare() builds a safe query, bind() fills the ? placeholder (blocking SQL injection), and the JOIN pulls each post together with its author.",
+                  "zh": "prepare() 建立安全查詢，bind() 填入 ? 佔位符（擋掉 SQL 注入），JOIN 則把每篇貼文和它的作者一起拉出來。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const userId = url.searchParams.get(\"user_id\") ?? \"1\";\n\n    // Join each post to its author, newest first.\n    const { results } = await env.DB\n      .prepare(\n        `SELECT posts.id, posts.title, posts.status, users.name AS author\n         FROM posts\n         JOIN users ON users.id = posts.user_id\n         WHERE posts.user_id = ?\n         ORDER BY posts.created_at DESC`\n      )\n      .bind(userId)\n      .all();\n\n    return Response.json(results);\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署上線"
+                },
+                "text": {
+                  "en": "Publish the Worker — your schema-backed API is now live.",
+                  "zh": "發布這個 Worker——你那個有綱要撐腰的 API 就上線了。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Seed some data to test",
+              "zh": "塞一點資料來測試"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "bash",
+            "title": {
+              "en": "Insert sample rows",
+              "zh": "插入範例資料"
+            },
+            "body": "npx wrangler d1 execute blog-db --remote --command \"INSERT INTO users (email, name) VALUES ('mei@example.com', 'Mei');\"\n\nnpx wrangler d1 execute blog-db --remote --command \"INSERT INTO posts (user_id, title, status) VALUES (1, 'Hello D1', 'live');\""
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & tips",
+          "zh": "常見陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Never edit an applied migration",
+              "zh": "絕不要改已套用的 migration"
+            },
+            "text": {
+              "en": "Once 0001 has run on a shared database, editing it will not re-run, and teammates' databases will drift out of sync. Always add a new numbered migration for the change.",
+              "zh": "一旦 0001 已經在共用資料庫跑過，再去改它也不會重跑，隊友的資料庫就會慢慢和你的不同步。要改變更，永遠加一個新的有編號 migration。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Turn on foreign keys with PRAGMA foreign_keys = ON; SQLite ignores FK rules otherwise.",
+                "Add an index on every foreign key and any column you frequently filter or sort by.",
+                "SQLite's ALTER TABLE can add columns and rename, but cannot drop a column easily — plan columns thoughtfully.",
+                "Prefer NOT NULL with a DEFAULT so existing rows stay valid when you add a column.",
+                "Test every migration with --local before --remote; the local copy is fast and disposable.",
+                "Keep the migrations/ folder in Git so the whole schema history travels with your code."
+              ],
+              "zh": [
+                "用 PRAGMA foreign_keys = ON; 開啟外鍵約束，否則 SQLite 會忽略 FK 規則。",
+                "為每個外鍵、以及任何常用來篩選或排序的欄位都建立索引。",
+                "SQLite 的 ALTER TABLE 能新增欄位、改名，但不容易刪欄位——欄位請事先想清楚再設計。",
+                "新增欄位時優先用 NOT NULL 搭配 DEFAULT，這樣既有的列才不會變不合法。",
+                "每個 migration 都先用 --local 測過再 --remote；本機副本又快又可隨時丟掉重建。",
+                "把 migrations/ 資料夾放進 Git，整段綱要歷史就會跟著你的程式碼一起走。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "savings",
+            "title": {
+              "en": "Indexes save rows read",
+              "zh": "索引能省下讀取列數"
+            },
+            "text": {
+              "en": "D1 bills by rows read and written. A good index lets a query touch only the rows it needs instead of scanning the whole table — faster responses and a smaller bill.",
+              "zh": "D1 是依讀取與寫入的列數計費。好的索引能讓查詢只碰到真正需要的列，而不是把整張表掃一遍——回應更快，帳單也更小。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "d1-relationships",
+        "label": {
+          "en": "D1 relationships",
+          "zh": "D1 關聯設計"
+        }
+      },
+      {
+        "slug": "frontend-worker-d1-crud",
+        "label": {
+          "en": "Front-end ↔ Worker ↔ D1 CRUD",
+          "zh": "前端 ↔ Worker ↔ D1 CRUD"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/d1/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "d1-relationships",
+    "category": "integrations",
+    "group": {
+      "en": "Data & Storage",
+      "zh": "資料庫與儲存"
+    },
+    "icon": "share",
+    "title": {
+      "en": "Relationships & JOINs in D1",
+      "zh": "D1 的關聯與 JOIN 查詢"
+    },
+    "subtitle": {
+      "en": "Model one-to-many and many-to-many data in D1, then query it with JOINs and batch transactions",
+      "zh": "在 D1 裡建立一對多與多對多資料模型，再用 JOIN 查詢與批次交易把它們串起來"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Model users, posts, and tags the relational way — then pull them back together with a single JOIN.",
+        "zh": "用關聯式的方式設計 使用者、貼文、標籤，再用一句 JOIN 把它們重新拼回來。"
+      }
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": {
+          "en": "Tables linked",
+          "zh": "關聯資料表"
+        }
+      },
+      {
+        "value": "1:N",
+        "label": {
+          "en": "One-to-many",
+          "zh": "一對多"
+        }
+      },
+      {
+        "value": "M:N",
+        "label": {
+          "en": "Many-to-many",
+          "zh": "多對多"
+        }
+      },
+      {
+        "value": "1 txn",
+        "label": {
+          "en": "Atomic batch",
+          "zh": "原子交易"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we modeling?",
+          "zh": "我們要建立什麼模型？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Real apps rarely store everything in one giant table. Instead we split data into focused tables and connect them with relationships (a relationship = a rule that says how rows in one table relate to rows in another). In this guide we build a tiny blog: users write posts, and posts are labeled with tags.",
+              "zh": "真實的應用程式很少把所有東西塞進一張大表。我們會把資料拆成各司其職的小表，再用「關聯」把它們連起來（關聯 = 一條規則，說明某張表的列和另一張表的列怎麼對應）。這篇我們會做一個迷你部落格：使用者（users）會發表貼文（posts），而貼文會被貼上標籤（tags）。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Two kinds of relationship cover almost everything: one-to-many (one user writes many posts) and many-to-many (a post has many tags, and a tag is on many posts). Once the data is split, we use a JOIN to glue it back together in one query.",
+              "zh": "兩種關聯幾乎就涵蓋了大部分情境：一對多（一位使用者寫很多篇貼文）以及多對多（一篇貼文有很多標籤，一個標籤也貼在很多貼文上）。資料拆開之後，我們再用 JOIN（合併查詢）在一次查詢裡把它們黏回來。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "family_history",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A family tree. Each person (a user) can have many children (posts) — that branch is one-to-many. But friendships go both ways: you have many friends and each friend has many friends — that web is many-to-many, and you need a separate list to record who is friends with whom.",
+              "zh": "一棵家族樹。每個人（使用者）可以有很多小孩（貼文）——這條分支就是一對多。但「朋友關係」是雙向的：你有很多朋友、每個朋友也有很多朋友——這張網就是多對多，而你需要一份額外的名單來記錄「誰和誰是朋友」。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The blog at a glance",
+              "zh": "部落格資料一覽"
+            },
+            "code": {
+              "en": "flowchart TD\n  U[\"Users\"] -->|\"1 user writes many posts\"| P[\"Posts\"]\n  P -->|\"each post has many tags\"| PT[\"post_tags\"]\n  T[\"Tags\"] -->|\"each tag on many posts\"| PT",
+              "zh": "flowchart TD\n  U[\"使用者\"] -->|\"一位使用者寫多篇貼文\"| P[\"貼文\"]\n  P -->|\"每篇貼文有多個標籤\"| PT[\"post_tags 中介表\"]\n  T[\"標籤\"] -->|\"每個標籤貼在多篇貼文上\"| PT"
+            }
+          }
+        ]
+      },
+      {
+        "id": "relationship-types",
+        "icon": "account_tree",
+        "heading": {
+          "en": "The two relationship shapes",
+          "zh": "兩種關聯的形狀"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Before any SQL, get a feel for the two patterns. The trick is always asking: 'for one row on this side, how many rows on the other side?'",
+              "zh": "在寫任何 SQL 之前，先抓住這兩種模式的感覺。訣竅永遠是問一句：「這一邊的一列，對應到另一邊的幾列？」"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "call_split",
+                "title": {
+                  "en": "One-to-many (1:N)",
+                  "zh": "一對多（1:N）"
+                },
+                "text": {
+                  "en": "One user writes many posts, but each post has exactly one author. The 'many' side (posts) stores a column pointing back to the 'one' side.",
+                  "zh": "一位使用者寫很多篇貼文，但每篇貼文剛好只有一位作者。由「多」的那一邊（貼文）存一個欄位，指回「一」的那一邊。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Many-to-many (M:N)",
+                  "zh": "多對多（M:N）"
+                },
+                "text": {
+                  "en": "A post has many tags, and a tag is on many posts — both sides are 'many'. Neither table can hold the link on its own.",
+                  "zh": "一篇貼文有很多標籤，一個標籤也貼在很多貼文上——兩邊都是「多」。任何一張表都無法靠自己記下這個連結。"
+                }
+              },
+              {
+                "icon": "grid_view",
+                "title": {
+                  "en": "Join table for M:N",
+                  "zh": "多對多要用中介表"
+                },
+                "text": {
+                  "en": "Many-to-many needs a third middle table (post_tags) with one row per link: post 10 ↔ tag 'sql'. This is the only honest way to record it.",
+                  "zh": "多對多需要第三張中介表（post_tags），每一個連結存成一列：貼文 10 ↔ 標籤 'sql'。這是唯一誠實記錄它的方式。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "Don't stuff lists into one column",
+              "zh": "別把清單塞進一個欄位"
+            },
+            "text": {
+              "en": "It is tempting to store tags as the text 'sql,cloudflare' in a single posts column. Don't. You can't index it, can't JOIN it, and can't ask 'which posts have the sql tag?' efficiently. Use a join table.",
+              "zh": "你可能會想把標籤存成一個 posts 欄位裡的文字 'sql,cloudflare'。別這樣。它無法建索引、無法 JOIN，也無法有效率地問「哪些貼文有 sql 標籤？」請改用中介表。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model (ER diagram)",
+          "zh": "資料模型（ER 圖）"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "An ER diagram (entity-relationship diagram) shows tables as boxes and relationships as connectors. The crow's-foot symbol (the little fork) marks the 'many' end. Here users connect to posts as one-to-many, and posts connect to tags as many-to-many — broken into two one-to-many links through post_tags.",
+              "zh": "ER 圖（實體關聯圖）把資料表畫成方塊、把關聯畫成連線。那個像鳥腳的分叉符號（crow's-foot）標示「多」的那一端。這裡 users 對 posts 是一對多，posts 對 tags 是多對多——並透過 post_tags 拆成兩段一對多。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "users · posts · tags",
+              "zh": "users · posts · tags"
+            },
+            "code": {
+              "en": "erDiagram\n  USERS ||--o{ POSTS : \"writes\"\n  POSTS ||--o{ POST_TAGS : \"has\"\n  TAGS ||--o{ POST_TAGS : \"labels\"\n  USERS {\n    int id PK\n    text email\n    text name\n  }\n  POSTS {\n    int id PK\n    int user_id FK\n    text title\n  }\n  TAGS {\n    int id PK\n    text name\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }",
+              "zh": "erDiagram\n  USERS ||--o{ POSTS : \"撰寫\"\n  POSTS ||--o{ POST_TAGS : \"擁有\"\n  TAGS ||--o{ POST_TAGS : \"標記\"\n  USERS {\n    int id PK\n    text email\n    text name\n  }\n  POSTS {\n    int id PK\n    int user_id FK\n    text title\n  }\n  TAGS {\n    int id PK\n    text name\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Primary key (PK)",
+                  "zh": "主鍵（PK）"
+                },
+                "text": {
+                  "en": "Each table's id uniquely names one row, like a national ID number. No two rows share it.",
+                  "zh": "每張表的 id 用來唯一指認某一列，像身分證字號。沒有兩列會重複。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Foreign key (FK)",
+                  "zh": "外鍵（FK）"
+                },
+                "text": {
+                  "en": "posts.user_id is a foreign key: it must equal some users.id. It's the pointer that creates the one-to-many link.",
+                  "zh": "posts.user_id 是外鍵：它的值必須等於某個 users.id。這個指標就是建立一對多連結的關鍵。"
+                }
+              },
+              {
+                "icon": "grid_view",
+                "title": {
+                  "en": "Composite PK",
+                  "zh": "複合主鍵"
+                },
+                "text": {
+                  "en": "post_tags uses (post_id, tag_id) together as its key, so the same post-tag pair can't be linked twice.",
+                  "zh": "post_tags 把 (post_id, tag_id) 兩欄合起來當主鍵，所以同一組貼文-標籤配對不會被連結兩次。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "joins",
+        "icon": "join_inner",
+        "heading": {
+          "en": "What a JOIN actually does",
+          "zh": "JOIN 到底在做什麼"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "A JOIN takes rows from two tables and stitches matching ones into a single wider row. You tell it how to match with an ON condition — usually 'foreign key equals primary key'. That's it: it's a lookup that happens inside the database instead of in your code.",
+              "zh": "JOIN 把兩張表的列拿出來，依照配對規則把相符的縫成一條更寬的列。你用 ON 條件告訴它怎麼配對——通常就是「外鍵等於主鍵」。就這樣：它是一個發生在資料庫內部、而不是在你程式碼裡的查表動作。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Two rows in, one row out",
+              "zh": "兩列進，一列出"
+            },
+            "code": {
+              "en": "flowchart LR\n  P[\"posts row (user_id = 1)\"] --> J{\"JOIN ON posts.user_id = users.id\"}\n  U[\"users row (id = 1)\"] --> J\n  J --> R[\"One combined row: title + author name\"]",
+              "zh": "flowchart LR\n  P[\"posts 列 (user_id = 1)\"] --> J{\"JOIN ON posts.user_id = users.id\"}\n  U[\"users 列 (id = 1)\"] --> J\n  J --> R[\"合併成一列：標題 + 作者姓名\"]"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "join_inner",
+                "title": {
+                  "en": "INNER JOIN",
+                  "zh": "INNER JOIN（內部合併）"
+                },
+                "text": {
+                  "en": "Keeps only rows that match on both sides. A post with no matching author simply disappears from the result.",
+                  "zh": "只保留兩邊都配對成功的列。找不到對應作者的貼文，就會直接從結果裡消失。"
+                }
+              },
+              {
+                "icon": "join_left",
+                "title": {
+                  "en": "LEFT JOIN",
+                  "zh": "LEFT JOIN（左側合併）"
+                },
+                "text": {
+                  "en": "Keeps every row from the left table even with no match — handy so posts with zero tags still show up (tags come back NULL).",
+                  "zh": "保留左表的每一列，就算沒配對到也留著——很適合讓「零標籤的貼文」依然出現（標籤欄會是 NULL）。"
+                }
+              },
+              {
+                "icon": "rule",
+                "title": {
+                  "en": "The ON condition",
+                  "zh": "ON 配對條件"
+                },
+                "text": {
+                  "en": "ON posts.user_id = users.id is the rule that pairs rows. Wrong ON = duplicated or missing rows, so double-check it.",
+                  "zh": "ON posts.user_id = users.id 就是配對列的規則。ON 寫錯就會多出重複列或漏列，所以務必再三確認。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it end to end",
+          "zh": "從頭到尾動手做"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Now wire the whole thing: create the tables (including the join table with foreign keys), seed data, run both kinds of JOIN, write atomically with a batch transaction, then read it from a Worker and a web page.",
+              "zh": "現在把整條線串起來：建立資料表（含帶外鍵的中介表）、塞入資料、跑兩種 JOIN、用批次交易做原子寫入，最後從 Worker 與網頁讀出來。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Bind the database",
+                  "zh": "綁定資料庫"
+                },
+                "text": {
+                  "en": "After 'wrangler d1 create blog-db', add the binding so your Worker can reach it as env.DB.",
+                  "zh": "跑完 'wrangler d1 create blog-db' 後，加上這個綁定，讓 Worker 能用 env.DB 存取它。"
+                },
+                "code": {
+                  "lang": "json",
+                  "body": "{\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"blog-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the schema (with FKs)",
+                  "zh": "建立資料表結構（含外鍵）"
+                },
+                "text": {
+                  "en": "post_tags is the join table. It has two foreign keys and a composite primary key. ON DELETE CASCADE means deleting a post auto-removes its link rows.",
+                  "zh": "post_tags 就是中介表。它有兩個外鍵和一個複合主鍵。ON DELETE CASCADE 代表刪掉一篇貼文時，會自動把它的連結列一併清掉。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- users: one row per author\nCREATE TABLE users (\n  id    INTEGER PRIMARY KEY,\n  email TEXT NOT NULL UNIQUE,\n  name  TEXT NOT NULL\n);\n\n-- posts: each post belongs to exactly ONE user  (one-to-many)\nCREATE TABLE posts (\n  id      INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  title   TEXT NOT NULL,\n  body    TEXT,\n  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n);\n\n-- tags: one row per reusable label\nCREATE TABLE tags (\n  id   INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE\n);\n\n-- post_tags: the JOIN TABLE linking posts and tags  (many-to-many)\nCREATE TABLE post_tags (\n  post_id INTEGER NOT NULL,\n  tag_id  INTEGER NOT NULL,\n  PRIMARY KEY (post_id, tag_id),\n  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,\n  FOREIGN KEY (tag_id)  REFERENCES tags(id)  ON DELETE CASCADE\n);\n\n-- index the foreign-key columns so JOINs stay fast\nCREATE INDEX idx_posts_user_id    ON posts(user_id);\nCREATE INDEX idx_post_tags_tag_id ON post_tags(tag_id);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Seed some rows",
+                  "zh": "塞入一些資料"
+                },
+                "text": {
+                  "en": "Two users, three posts, three tags, and the link rows that connect posts to tags.",
+                  "zh": "兩位使用者、三篇貼文、三個標籤，以及把貼文連到標籤的連結列。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "INSERT INTO users (id, email, name) VALUES\n  (1, 'mei@example.com',  'Mei'),\n  (2, 'alex@example.com', 'Alex');\n\nINSERT INTO posts (id, user_id, title) VALUES\n  (10, 1, 'Hello D1'),\n  (11, 1, 'JOINs explained'),\n  (12, 2, 'Edge databases');\n\nINSERT INTO tags (id, name) VALUES\n  (100, 'sql'),\n  (101, 'cloudflare'),\n  (102, 'beginner');\n\n-- the many-to-many link rows\nINSERT INTO post_tags (post_id, tag_id) VALUES\n  (10, 100), (10, 101),\n  (11, 100), (11, 102),\n  (12, 101);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Query one-to-many (post + author)",
+                  "zh": "查一對多（貼文 + 作者）"
+                },
+                "text": {
+                  "en": "JOIN posts to users on the foreign key. Each result row now carries the author's name pulled from the users table.",
+                  "zh": "用外鍵把 posts JOIN 到 users。現在每一列結果都帶著從 users 表取來的作者姓名。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- One-to-many: every post WITH its author's name.\nSELECT posts.id, posts.title, users.name AS author\nFROM posts\nJOIN users ON posts.user_id = users.id\nWHERE users.id = ?\nORDER BY posts.id DESC;"
+                }
+              },
+              {
+                "title": {
+                  "en": "Query many-to-many (post + tags)",
+                  "zh": "查多對多（貼文 + 標籤）"
+                },
+                "text": {
+                  "en": "Hop posts → post_tags → tags. Because a post can match many tags, use GROUP BY + GROUP_CONCAT to fold the tags back into one row per post.",
+                  "zh": "從 posts → post_tags → tags 一路跳過去。因為一篇貼文會配對到很多標籤，用 GROUP BY + GROUP_CONCAT 把標籤摺回成「每篇貼文一列」。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- Many-to-many: every post with a comma list of its tags.\nSELECT posts.id,\n       posts.title,\n       GROUP_CONCAT(tags.name) AS tags\nFROM posts\nLEFT JOIN post_tags ON post_tags.post_id = posts.id\nLEFT JOIN tags      ON tags.id = post_tags.tag_id\nGROUP BY posts.id\nORDER BY posts.id;\n\n-- The other direction: which posts carry the 'sql' tag?\nSELECT posts.title\nFROM posts\nJOIN post_tags ON post_tags.post_id = posts.id\nJOIN tags      ON tags.id = post_tags.tag_id\nWHERE tags.name = ?;"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write atomically with batch()",
+                  "zh": "用 batch() 做原子寫入"
+                },
+                "text": {
+                  "en": "Creating a post AND its tag links must be all-or-nothing. env.DB.batch() runs every statement in order inside one transaction; last_insert_rowid() returns the id of the post just inserted on the same connection.",
+                  "zh": "建立貼文「以及」它的標籤連結必須是「全有或全無」。env.DB.batch() 會把所有語句依序放進同一個交易執行；last_insert_rowid() 會回傳同一條連線上剛插入那篇貼文的 id。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// Create a post AND attach two tags as ONE atomic transaction.\n// If any statement fails, D1 rolls the whole batch back.\nconst results = await env.DB.batch([\n  env.DB\n    .prepare(\"INSERT INTO posts (user_id, title, body) VALUES (?, ?, ?)\")\n    .bind(userId, title, body),\n  env.DB\n    .prepare(\"INSERT INTO post_tags (post_id, tag_id) VALUES (last_insert_rowid(), ?)\")\n    .bind(sqlTagId),\n  env.DB\n    .prepare(\"INSERT INTO post_tags (post_id, tag_id) VALUES (last_insert_rowid(), ?)\")\n    .bind(cfTagId),\n]);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Serve joined data from a Worker",
+                  "zh": "從 Worker 回傳合併好的資料"
+                },
+                "text": {
+                  "en": "One endpoint, one query: combine author and tags server-side so the browser receives ready-to-render rows.",
+                  "zh": "一個端點、一次查詢：在伺服器端就把作者和標籤合好，讓瀏覽器收到可以直接渲染的列。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // GET /api/users/:id/posts -> each post joined with author + tags\n    if (request.method === \"GET\" && url.pathname.startsWith(\"/api/users/\")) {\n      const userId = url.pathname.split(\"/\")[3];\n\n      const { results } = await env.DB\n        .prepare(\n          `SELECT posts.id,\n                  posts.title,\n                  users.name              AS author,\n                  GROUP_CONCAT(tags.name) AS tags\n           FROM posts\n           JOIN users          ON posts.user_id    = users.id\n           LEFT JOIN post_tags ON post_tags.post_id = posts.id\n           LEFT JOIN tags      ON tags.id           = post_tags.tag_id\n           WHERE users.id = ?\n           GROUP BY posts.id\n           ORDER BY posts.id DESC`\n        )\n        .bind(userId)\n        .all();\n\n      return Response.json(results);\n    }\n\n    return new Response(\"Not found\", { status: 404 });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Render it in the browser",
+                  "zh": "在瀏覽器渲染"
+                },
+                "text": {
+                  "en": "The front-end just fetches JSON. Each row already has author and tags — no extra requests, no client-side joining.",
+                  "zh": "前端只要 fetch JSON。每一列都已經帶著作者和標籤——不用額外請求，也不用在前端自己合併。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// Browser: load one author's posts. Each row already carries the\n// author name and tag list, thanks to the JOINs on the server.\nconst res = await fetch(`/api/users/${userId}/posts`);\nconst posts = await res.json();\n\nposts.forEach((post) => {\n  // e.g. 'Hello D1 - by Mei - sql,cloudflare'\n  console.log(`${post.title} - by ${post.author} - ${post.tags}`);\n});"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Batch = one transaction",
+              "zh": "批次 = 一個交易"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant W as Worker\n  participant D as D1\n  W->>D: batch([insert post, link tag1, link tag2])\n  Note over D: All statements run in one transaction\n  alt every statement succeeds\n    D-->>W: commit and return results\n  else any statement fails\n    D-->>W: roll the whole batch back\n  end",
+              "zh": "sequenceDiagram\n  participant W as Worker\n  participant D as D1\n  W->>D: batch([插入貼文, 連結標籤1, 連結標籤2])\n  Note over D: 所有語句在同一個交易中執行\n  alt 每一句都成功\n    D-->>W: 提交並回傳 results\n  else 任一句失敗\n    D-->>W: 整批回滾\n  end"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "bolt",
+            "title": {
+              "en": "One query beats many",
+              "zh": "一次查詢勝過很多次"
+            },
+            "text": {
+              "en": "Without JOIN you'd fetch posts, then loop and fetch each author and each tag separately — the classic 'N+1' problem. A single JOIN lets the database do that matching once, close to the data.",
+              "zh": "沒有 JOIN 的話，你得先抓貼文，再用迴圈一筆筆去抓每個作者、每個標籤——這就是經典的「N+1」問題。一句 JOIN 讓資料庫在貼近資料的地方一次把配對做完。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key terms",
+          "zh": "重點術語"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "call_split",
+                "title": {
+                  "en": "One-to-many",
+                  "zh": "一對多"
+                },
+                "text": {
+                  "en": "One parent row owns many child rows; each child points back at one parent (posts → users).",
+                  "zh": "一筆父列擁有很多子列；每筆子列指回唯一的父列（posts → users）。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Many-to-many",
+                  "zh": "多對多"
+                },
+                "text": {
+                  "en": "Both sides have many of each other (posts ↔ tags); it can't be stored without a middle table.",
+                  "zh": "兩邊都互相對應到很多筆（posts ↔ tags）；沒有中介表就存不下來。"
+                }
+              },
+              {
+                "icon": "grid_view",
+                "title": {
+                  "en": "Join table",
+                  "zh": "中介表"
+                },
+                "text": {
+                  "en": "A small table (post_tags) whose only job is to hold one row per link between two other tables.",
+                  "zh": "一張小表（post_tags），唯一的工作就是為兩張表之間的每個連結存一列。"
+                }
+              },
+              {
+                "icon": "join_inner",
+                "title": {
+                  "en": "JOIN",
+                  "zh": "JOIN 合併查詢"
+                },
+                "text": {
+                  "en": "A SELECT that matches rows from two tables on an ON condition and merges them into wider rows.",
+                  "zh": "一種 SELECT，依 ON 條件配對兩張表的列，再把它們合併成更寬的列。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Foreign key (FK)",
+                  "zh": "外鍵（FK）"
+                },
+                "text": {
+                  "en": "A column that must match a primary key in another table — the database can enforce this for you.",
+                  "zh": "一個必須對應到另一張表主鍵的欄位——資料庫可以替你強制檢查這件事。"
+                }
+              },
+              {
+                "icon": "lock",
+                "title": {
+                  "en": "Transaction",
+                  "zh": "交易（transaction）"
+                },
+                "text": {
+                  "en": "A group of writes that all succeed or all fail together, leaving the data consistent. batch() gives you one.",
+                  "zh": "一組寫入，要嘛全部成功、要嘛全部失敗，讓資料保持一致。batch() 就給你一個交易。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & tips",
+          "zh": "陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "fact_check",
+            "title": {
+              "en": "D1 enforces foreign keys",
+              "zh": "D1 會強制檢查外鍵"
+            },
+            "text": {
+              "en": "Insert parents before children: a posts row needs its users row to exist first. For batches where statements depend on each other, you may add PRAGMA defer_foreign_keys = true; to delay the check until the transaction commits.",
+              "zh": "先插父、再插子：一筆 posts 列需要它對應的 users 列先存在。若批次裡的語句彼此相依，可以加上 PRAGMA defer_foreign_keys = true; 把檢查延到交易提交時再做。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Always index foreign-key columns (user_id, tag_id) so JOINs don't scan whole tables.",
+                "A JOIN can multiply rows (one post × many tags); use GROUP BY + GROUP_CONCAT to fold them back to one row per post.",
+                "Use LEFT JOIN when the left side should appear even with no match (a post with zero tags).",
+                "batch() is atomic and all-or-nothing — ideal for 'create post + its tag links' together.",
+                "D1 bills by rows read and written; a tight JOIN that reads fewer rows is also cheaper.",
+                "Keep your CREATE TABLE statements in schema.sql and apply with wrangler d1 execute --file=./schema.sql."
+              ],
+              "zh": [
+                "一定要在外鍵欄位（user_id、tag_id）上建索引，JOIN 才不會掃整張表。",
+                "JOIN 可能讓列數倍增（一篇貼文 × 多個標籤）；用 GROUP BY + GROUP_CONCAT 摺回成每篇貼文一列。",
+                "當左側就算沒配對到也要出現時（零標籤的貼文），請用 LEFT JOIN。",
+                "batch() 是原子且全有全無的——最適合把「建立貼文 + 它的標籤連結」綁在一起。",
+                "D1 依讀取與寫入列數計費；少讀幾列的精準 JOIN 也比較省錢。",
+                "把 CREATE TABLE 語句放進 schema.sql，再用 wrangler d1 execute --file=./schema.sql 套用。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "d1-schema-design",
+        "label": {
+          "en": "D1 Schema Design",
+          "zh": "D1 資料表設計"
+        }
+      },
+      {
+        "slug": "frontend-worker-d1-crud",
+        "label": {
+          "en": "Front-end ↔ Worker ↔ D1 CRUD",
+          "zh": "前端 ↔ Worker ↔ D1 CRUD"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/d1/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "kv-cache-layer",
+    "category": "integrations",
+    "group": {
+      "en": "Data & Storage",
+      "zh": "資料庫與儲存"
+    },
+    "icon": "bolt",
+    "title": {
+      "en": "Add a KV cache in front of your database",
+      "zh": "用 KV 在資料庫前面加一層快取"
+    },
+    "subtitle": {
+      "en": "Put a fast key-value cache before D1 to cut latency and cost on read-heavy data",
+      "zh": "在 D1 前面擺一層快速的鍵值快取，替「讀多寫少」的資料降低延遲與成本"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Check KV first; only touch the database on a miss, then cache the answer with a TTL.",
+        "zh": "先問 KV，沒有才查資料庫，查完順手把答案加上存活時間（TTL）快取起來。"
+      }
+    },
+    "stats": [
+      {
+        "value": "100K",
+        "label": {
+          "en": "Free KV reads / day",
+          "zh": "每日免費 KV 讀取"
+        }
+      },
+      {
+        "value": "~0ms",
+        "label": {
+          "en": "Cached edge read",
+          "zh": "邊緣快取讀取"
+        }
+      },
+      {
+        "value": "300s",
+        "label": {
+          "en": "Example TTL",
+          "zh": "範例 TTL"
+        }
+      },
+      {
+        "value": "2",
+        "label": {
+          "en": "Stores wired (KV + D1)",
+          "zh": "串接的儲存 (KV + D1)"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要做什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "We will put a cache in front of a database. The Worker checks a fast key-value store (Workers KV) first; only when the value is missing does it query the slower database (D1), and it saves that answer back into KV for next time. This pattern is called cache-aside.",
+              "zh": "我們要在資料庫前面加一層快取。Worker 會先去問一個很快的鍵值資料庫（Workers KV）；只有在找不到值的時候，才去查比較慢的資料庫（D1），並把查到的答案存回 KV 供下次使用。這個做法叫做「cache-aside（旁路快取）」。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "For read-heavy data - the same product page, the same config, the same profile fetched thousands of times - this is a huge win: most requests never reach the database, so they are faster and cheaper.",
+              "zh": "對於「讀多寫少」的資料——同一個商品頁、同一份設定、同一個個人檔案被讀取上千次——這個做法效益巨大：大多數請求根本不會打到資料庫，因此更快也更省錢。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "local_cafe",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A barista keeps a jug of brewed coffee on the counter (KV). If the jug has coffee, you get a cup instantly. Only when it runs dry do they brew a fresh pot from the machine (D1) - then refill the jug so the next ten customers are served instantly again.",
+              "zh": "咖啡師在櫃台上放了一壺已經煮好的咖啡（KV）。壺裡有咖啡，你馬上就有一杯。只有當壺空了，他們才去用機器重新煮一壺（D1）——然後把壺再裝滿，讓接下來十位客人又能立刻拿到。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Cache-aside read flow",
+              "zh": "Cache-aside 讀取流程"
+            },
+            "code": {
+              "en": "flowchart TD\n  U[\"User request\"] --> W[\"Worker\"]\n  W --> Q{\"Cache hit in KV?\"}\n  Q -->|\"Yes (hit)\"| R[\"Return value to user\"]\n  Q -->|\"No (miss)\"| D[\"Query D1 database\"]\n  D --> P[\"Put result in KV (TTL 300s)\"]\n  P --> R",
+              "zh": "flowchart TD\n  U[\"使用者請求\"] --> W[\"Worker\"]\n  W --> Q{\"KV 有快取嗎?\"}\n  Q -->|\"有 (命中)\"| R[\"把結果回傳給使用者\"]\n  Q -->|\"沒有 (未命中)\"| D[\"查詢 D1 資料庫\"]\n  D --> P[\"把結果寫入 KV (TTL 300 秒)\"]\n  P --> R"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "每一層各做什麼？"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Three pieces work together. The Worker is the brain that decides; KV is the fast cache; D1 is the source of truth that always holds the correct, latest data.",
+              "zh": "三個角色一起合作。Worker 是負責決策的大腦；KV 是快速的快取；D1 則是「真相來源（source of truth）」，永遠保存正確、最新的資料。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "psychology",
+                "title": {
+                  "en": "Worker - the orchestrator",
+                  "zh": "Worker - 指揮者"
+                },
+                "text": {
+                  "en": "Receives the request, checks KV, decides whether to hit D1, and writes the result back to the cache.",
+                  "zh": "接收請求、先查 KV、決定要不要去打 D1，並把結果寫回快取。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "KV - the fast cache",
+                  "zh": "KV - 快取層"
+                },
+                "text": {
+                  "en": "Holds a copy of recent answers near every user. Reads are near-instant; entries auto-expire by TTL.",
+                  "zh": "在每位使用者附近保存近期答案的副本。讀取幾乎瞬間完成；每筆資料會依 TTL 自動過期。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 - the source of truth",
+                  "zh": "D1 - 真相來源"
+                },
+                "text": {
+                  "en": "The authoritative SQL database. Slower and pricier per read, but always correct - only queried on a miss.",
+                  "zh": "權威的 SQL 資料庫。每次讀取較慢、較貴，但永遠正確——只有在快取未命中時才會被查詢。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "The cache key",
+                  "zh": "快取鍵 (key)"
+                },
+                "text": {
+                  "en": "A stable name like product:42 that maps one DB row to one KV entry. Same input, same key.",
+                  "zh": "像 product:42 這種穩定的名稱，把一筆資料列對應到一筆 KV 資料。相同輸入就對應到相同的 key。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Hit vs miss, side by side",
+          "zh": "命中與未命中，並排比較"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "The first request for a key is a MISS: the Worker has to walk all the way to D1 and back, then fill the cache. Every following request (until the TTL expires) is a HIT: it returns from KV without ever touching D1.",
+              "zh": "對某個 key 的第一次請求是「未命中（miss）」：Worker 必須一路走到 D1 再走回來，然後把快取填好。之後的每一次請求（在 TTL 過期前）都是「命中（hit）」：直接從 KV 回傳，完全不碰 D1。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Cache MISS vs cache HIT round trip",
+              "zh": "未命中 vs 命中的往返"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as User\n  participant W as Worker\n  participant K as \"KV cache\"\n  participant D as D1\n  Note over U,D: First request - cache MISS\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: empty, miss\n  W->>D: SELECT product 42\n  D-->>W: row\n  W->>K: put product:42 with TTL 300\n  W-->>U: JSON, slow path\n  Note over U,D: Next request - cache HIT\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: cached JSON\n  W-->>U: JSON, fast path",
+              "zh": "sequenceDiagram\n  participant U as 使用者\n  participant W as Worker\n  participant K as \"KV 快取\"\n  participant D as D1\n  Note over U,D: 第一次請求 - 未命中\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: 空的, 未命中\n  W->>D: 查詢 product 42\n  D-->>W: 資料列\n  W->>K: put product:42 設定 TTL 300\n  W-->>U: JSON, 慢路徑\n  Note over U,D: 下一次請求 - 命中\n  U->>W: GET /api/product/42\n  W->>K: get product:42\n  K-->>W: 快取的 JSON\n  W-->>U: JSON, 快路徑"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "trending_down",
+            "title": {
+              "en": "Why this saves so much",
+              "zh": "為什麼這樣能省這麼多"
+            },
+            "text": {
+              "en": "If 95% of requests are hits, you cut database reads by roughly 20x. Fewer D1 reads means lower bills and lower latency for almost everyone.",
+              "zh": "如果 95% 的請求都命中，你的資料庫讀取量大約只剩 1/20。D1 讀取變少，代表帳單更低、而且幾乎每個人的延遲都更短。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: KV + D1 + Worker",
+          "zh": "動手做：KV + D1 + Worker"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Create the two stores, bind them, seed a row, then write the cache-aside logic. The front end just calls your API - it never knows a cache exists.",
+              "zh": "建立兩個儲存、綁定它們、塞一筆資料，然後寫 cache-aside 邏輯。前端只負責呼叫你的 API——它完全不知道背後有快取。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the KV namespace and D1 database",
+                  "zh": "建立 KV 命名空間與 D1 資料庫"
+                },
+                "text": {
+                  "en": "Each command prints an id - paste them into wrangler.jsonc in the next step.",
+                  "zh": "每個指令都會印出一組 id——下一步把它們貼進 wrangler.jsonc。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler kv namespace create CACHE\nnpx wrangler d1 create shop"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind both to your Worker",
+                  "zh": "把兩者綁定到 Worker"
+                },
+                "text": {
+                  "en": "These bindings make the stores available as env.CACHE (KV) and env.DB (D1) inside your code.",
+                  "zh": "這些綁定讓兩個儲存在程式碼裡能用 env.CACHE（KV）和 env.DB（D1）取用。"
+                },
+                "code": {
+                  "lang": "json",
+                  "body": "{\n  \"name\": \"cache-aside-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"kv_namespaces\": [\n    { \"binding\": \"CACHE\", \"id\": \"<your-kv-namespace-id>\" }\n  ],\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"shop\",\n      \"database_id\": \"<your-d1-database-id>\"\n    }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the table and seed a row",
+                  "zh": "建立資料表並塞一筆資料"
+                },
+                "text": {
+                  "en": "D1 is the source of truth. Run this SQL once to give the cache something to load.",
+                  "zh": "D1 是真相來源。執行一次這段 SQL，讓快取有東西可以載入。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "CREATE TABLE IF NOT EXISTS products (\n  id    INTEGER PRIMARY KEY,\n  name  TEXT NOT NULL,\n  price REAL NOT NULL\n);\n\nINSERT INTO products (id, name, price) VALUES\n  (42, 'Mechanical Keyboard', 89.00);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the cache-aside read",
+                  "zh": "寫 cache-aside 讀取"
+                },
+                "text": {
+                  "en": "Ask KV first with get(key, \"json\"). On a hit, return immediately. On a miss, query D1, then put the result back into KV with a 300-second TTL.",
+                  "zh": "先用 get(key, \"json\") 問 KV。命中就立刻回傳；未命中就查 D1，再用 300 秒的 TTL 把結果 put 回 KV。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const id = url.pathname.split(\"/\").pop();\n    const key = `product:${id}`;\n\n    // 1) Cache-aside: ask KV first\n    let product = await env.CACHE.get(key, \"json\");\n    if (product) {\n      // HIT: return straight away, no database needed\n      return Response.json({ source: \"cache\", product });\n    }\n\n    // 2) MISS: fall back to D1 (the source of truth)\n    const { results } = await env.DB\n      .prepare(\"SELECT * FROM products WHERE id = ?\")\n      .bind(id)\n      .all();\n    product = results[0] ?? null;\n    if (!product) {\n      return new Response(\"Not found\", { status: 404 });\n    }\n\n    // 3) Re-fill the cache with a 5-minute TTL, then return\n    await env.CACHE.put(key, JSON.stringify(product), {\n      expirationTtl: 300,\n    });\n    return Response.json({ source: \"database\", product });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Invalidate on write",
+                  "zh": "寫入時讓快取失效"
+                },
+                "text": {
+                  "en": "When data changes, update D1, then delete(key). The cached copy is now gone, so the next read misses and repopulates with fresh data.",
+                  "zh": "當資料變動時，先更新 D1，再 delete(key)。快取副本就此消失，所以下一次讀取會未命中，並用最新資料重新填回快取。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// On any write, update D1 first, then invalidate the cached copy.\nasync function updateProduct(env, id, data) {\n  // 1) Write to the source of truth\n  await env.DB\n    .prepare(\"UPDATE products SET name = ?, price = ? WHERE id = ?\")\n    .bind(data.name, data.price, id)\n    .run();\n\n  // 2) Invalidate: delete the stale key so the next read repopulates it\n  await env.CACHE.delete(`product:${id}`);\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Call it from the front end",
+                  "zh": "在前端呼叫它"
+                },
+                "text": {
+                  "en": "The browser just fetches your API. Caching is entirely a server-side concern.",
+                  "zh": "瀏覽器只是 fetch 你的 API。快取完全是伺服器端的事。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// Plain browser fetch - it never talks to KV or D1 directly.\nasync function loadProduct(id) {\n  const res = await fetch(`/api/product/${id}`);\n  const data = await res.json();\n  // data.source tells you whether it came from \"cache\" or \"database\"\n  console.log(\"served from:\", data.source);\n  return data.product;\n}"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Write path: update then invalidate",
+              "zh": "寫入路徑：先更新、再失效"
+            },
+            "code": {
+              "en": "flowchart TD\n  C[\"Client write request\"] --> W[\"Worker\"]\n  W --> U[\"UPDATE row in D1\"]\n  U --> X[\"Delete the KV key\"]\n  X --> A[\"Reply OK to client\"]\n  A --> N[\"Next read misses and refetches fresh data\"]",
+              "zh": "flowchart TD\n  C[\"用戶端寫入請求\"] --> W[\"Worker\"]\n  W --> U[\"在 D1 更新資料\"]\n  U --> X[\"刪除對應的 KV key\"]\n  X --> A[\"回覆 OK 給用戶端\"]\n  A --> N[\"下次讀取會未命中並重新抓最新資料\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "layers",
+                "title": {
+                  "en": "Cache-aside (lazy loading)",
+                  "zh": "Cache-aside（旁路快取 / 延遲載入）"
+                },
+                "text": {
+                  "en": "The app code, not the cache, manages loading: read cache, on miss read the DB, then fill the cache. The cache stays out of the way until asked.",
+                  "zh": "由應用程式的程式碼（而不是快取自己）負責載入：先讀快取，未命中就讀資料庫，再把快取填好。快取在被需要之前都不插手。"
+                }
+              },
+              {
+                "icon": "timer",
+                "title": {
+                  "en": "TTL (time to live)",
+                  "zh": "TTL（存活時間）"
+                },
+                "text": {
+                  "en": "expirationTtl: 300 means the entry auto-deletes after 300 seconds. A short TTL keeps data fresher; a long TTL saves more DB reads. It is the dial you tune.",
+                  "zh": "expirationTtl: 300 代表這筆資料 300 秒後自動刪除。TTL 越短，資料越新鮮；TTL 越長，越省資料庫讀取。它就是你要調整的旋鈕。"
+                }
+              },
+              {
+                "icon": "compare_arrows",
+                "title": {
+                  "en": "Hit vs miss",
+                  "zh": "命中 vs 未命中"
+                },
+                "text": {
+                  "en": "A hit = the value was in KV (fast, no DB). A miss = it was not, so you pay the full DB round trip once and then cache it. Hit rate is the metric to watch.",
+                  "zh": "命中 = 值就在 KV 裡（快、不碰資料庫）。未命中 = 不在，所以要付一次完整的資料庫往返，然後把它快取起來。「命中率」是你要盯的指標。"
+                }
+              },
+              {
+                "icon": "schedule",
+                "title": {
+                  "en": "Eventual consistency",
+                  "zh": "最終一致性"
+                },
+                "text": {
+                  "en": "KV writes take up to ~60s to spread worldwide, and a cached value can be stale until its TTL expires. Readers see the new value eventually, not instantly.",
+                  "zh": "KV 的寫入最多要約 60 秒才會散布全球，而且快取的值在 TTL 過期前可能是舊的。讀取者最終會看到新值，但不是立刻。"
+                }
+              },
+              {
+                "icon": "delete_sweep",
+                "title": {
+                  "en": "Invalidation",
+                  "zh": "失效處理"
+                },
+                "text": {
+                  "en": "Deleting (or overwriting) the key on every write keeps the cache honest. The classic hard problem is remembering every place a piece of data is cached.",
+                  "zh": "每次寫入時刪除（或覆寫）對應的 key，能讓快取維持誠實。經典的難題是：要記得某筆資料被快取在哪些地方。"
+                }
+              },
+              {
+                "icon": "menu_book",
+                "title": {
+                  "en": "Source of truth",
+                  "zh": "真相來源"
+                },
+                "text": {
+                  "en": "D1 is authoritative; KV is a disposable copy. If KV and D1 disagree, D1 wins - so it is always safe to delete a KV entry and rebuild it.",
+                  "zh": "D1 是權威；KV 是可丟棄的副本。若 KV 與 D1 不一致，以 D1 為準——所以刪掉某筆 KV 再重建永遠是安全的。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & tips",
+          "zh": "陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Stale reads are the price of caching",
+              "zh": "讀到舊資料是快取的代價"
+            },
+            "text": {
+              "en": "Between a write and a cache delete (or before the TTL expires) some users may see old data. For anything that must be exactly correct everywhere - prices at checkout, stock counts, balances - use a short TTL, invalidate on write, or read D1 directly.",
+              "zh": "在「寫入」與「刪除快取」之間（或 TTL 還沒過期前），有些使用者可能看到舊資料。對於必須處處精準的東西——結帳價格、庫存數量、帳戶餘額——請用很短的 TTL、寫入時主動失效，或直接讀 D1。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Pick TTL by how stale you can tolerate: seconds for prices, minutes for product pages, hours for rarely-changing config.",
+                "Always invalidate on write (delete the key), or readers can stay stale for the full TTL.",
+                "Only cache what is actually read often - caching one-off lookups just wastes writes.",
+                "Never cache per-user secrets under a shared key; include the user id in the key, e.g. cart:{userId}.",
+                "Watch your hit rate. A low hit rate means the TTL is too short or the key is too specific to be reused.",
+                "A 'miss storm' (many misses at once on a cold key) can briefly hammer D1 - keep DB queries cheap and indexed."
+              ],
+              "zh": [
+                "依「能容忍多舊」來選 TTL：價格用秒、商品頁用分鐘、很少變的設定用小時。",
+                "寫入時務必失效（刪除 key），否則讀取者可能整段 TTL 都看到舊資料。",
+                "只快取真的常被讀取的東西——快取一次性的查詢只是白白浪費寫入次數。",
+                "絕不要把每位使用者的私密資料存在共用 key 下；把使用者 id 放進 key，例如 cart:{userId}。",
+                "盯著命中率看。命中率太低代表 TTL 太短，或 key 太細而無法被重複使用。",
+                "「未命中風暴」（冷門 key 同時湧入大量未命中）可能短暫衝擊 D1——讓資料庫查詢保持便宜並建好索引。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "KV is built for this",
+              "zh": "KV 天生就適合做這件事"
+            },
+            "text": {
+              "en": "Workers KV is read-optimized and globally replicated, which is exactly what a cache wants. Its weakness - slow-to-propagate writes - barely matters here, because a cache is allowed to be slightly behind.",
+              "zh": "Workers KV 是為讀取最佳化、且全球複寫的，這正是快取想要的特性。它的弱點——寫入要時間才會擴散——在這裡幾乎沒差，因為快取本來就允許稍微落後。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "cache-flow",
+        "label": {
+          "en": "Caching flow",
+          "zh": "快取流程"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/kv/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "durable-objects-state",
+    "category": "integrations",
+    "group": {
+      "en": "Data & Storage",
+      "zh": "資料庫與儲存"
+    },
+    "icon": "hub",
+    "title": {
+      "en": "Strongly-consistent state with Durable Objects",
+      "zh": "用 Durable Objects 管理強一致狀態"
+    },
+    "subtitle": {
+      "en": "Make one Durable Object the single source of truth for a counter, lock, or live room",
+      "zh": "讓單一 Durable Object 成為計數器、鎖、即時房間的唯一真相來源"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "When state MUST be correct, route every request to one instance that handles them one at a time — no locks, no race conditions, no lost updates.",
+        "zh": "當狀態「一定要正確」時，把每個請求都導向同一個實例、一次處理一個——不用鎖、沒有競爭條件、不會遺失更新。"
+      }
+    },
+    "stats": [
+      {
+        "value": "1",
+        "label": {
+          "en": "Instance per name",
+          "zh": "每個名稱一個實例"
+        }
+      },
+      {
+        "value": "Strong",
+        "label": {
+          "en": "Consistency",
+          "zh": "一致性"
+        }
+      },
+      {
+        "value": "0",
+        "label": {
+          "en": "Lost updates",
+          "zh": "遺失的更新"
+        }
+      },
+      {
+        "value": "~1k",
+        "label": {
+          "en": "Req/s per object",
+          "zh": "每物件請求數/秒"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring up?",
+          "zh": "我們要串什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Sometimes you need exactly one place in the whole world to hold a piece of state — a counter that must never miscount, a rate limiter, a game room, or a live document. A Durable Object (DO) gives you that: one instance, addressed by a name, that processes requests one at a time and carries its own storage.",
+              "zh": "有時候你需要全世界「剛好只有一個地方」來保管某份狀態——一個絕不能算錯的計數器、一個流量限制器、一個遊戲房間、或一份即時文件。Durable Object（DO，持久物件）正是為此而生：一個實例，用「名稱」定址，一次處理一個請求，而且自帶儲存。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "In this guide we wire a browser front-end to a Worker, and the Worker forwards every request to one shared Counter Durable Object. Because all traffic for a given name funnels into the same single instance, increments can never collide.",
+              "zh": "這篇教學會把瀏覽器前端串到一個 Worker，再讓 Worker 把每個請求都轉送給「同一個」共享的 Counter Durable Object。因為某個名稱的所有流量都匯流到同一個實例，計數的累加永遠不會互撞。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Many clients, one instance",
+              "zh": "多個用戶端，一個實例"
+            },
+            "code": {
+              "en": "flowchart TD\n  C1[\"Client A\"] --> W[\"Worker\"]\n  C2[\"Client B\"] --> W\n  C3[\"Client C\"] --> W\n  W -->|\"idFromName(global)\"| ID[\"DO ID\"]\n  ID --> DO[\"Counter (one instance)\"]\n  DO --> S[\"Storage (v)\"]",
+              "zh": "flowchart TD\n  C1[\"用戶端 A\"] --> W[\"Worker\"]\n  C2[\"用戶端 B\"] --> W\n  C3[\"用戶端 C\"] --> W\n  W -->|\"idFromName(global)\"| ID[\"DO 識別碼\"]\n  ID --> DO[\"Counter（唯一實例）\"]\n  DO --> S[\"儲存（v）\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "support_agent",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "One ticket counter for a popular event. No matter how many people show up, there is a single clerk handing out numbered tickets one at a time. Nobody gets the same number, and the count is always right — because there is exactly one clerk keeping the tally.",
+              "zh": "想成熱門活動的「單一售票口」。不管來多少人，都只有一位櫃檯人員、一次發一張號碼牌。沒有人會拿到重複的號碼，數量永遠正確——因為計數的就只有這一位櫃檯。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "The pieces & why DO beats KV here",
+          "zh": "各部件，以及為何此處 DO 勝過 KV"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "There are four moving parts. The Worker is the front door; the id is the address of your object; the stub is a remote-control handle; and the instance is the one real object with its own storage.",
+              "zh": "這裡有四個角色。Worker 是大門；id 是物件的「地址」；stub（代理把手）是一支遙控器；instance（實例）則是那個帶著自己儲存的「真正物件」。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "door_front",
+                "title": {
+                  "en": "Worker (front door)",
+                  "zh": "Worker（大門）"
+                },
+                "text": {
+                  "en": "A normal stateless Worker that receives the HTTP request and decides which object to forward it to.",
+                  "zh": "一個普通、無狀態的 Worker，負責接住 HTTP 請求，並決定要把它轉給哪個物件。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "id (the address)",
+                  "zh": "id（地址）"
+                },
+                "text": {
+                  "en": "idFromName(\"global\") turns a human name into a globally unique ID. Same name always maps to the same instance.",
+                  "zh": "idFromName(\"global\") 把一個好記的名稱轉成全球唯一的 ID。相同名稱永遠對應到相同的實例。"
+                }
+              },
+              {
+                "icon": "settings_remote",
+                "title": {
+                  "en": "stub (remote control)",
+                  "zh": "stub（遙控器）"
+                },
+                "text": {
+                  "en": "env.COUNTER.get(id) returns a stub. You call stub.fetch() locally; Cloudflare routes it to the real object.",
+                  "zh": "env.COUNTER.get(id) 回傳一個 stub。你在本地呼叫 stub.fetch()，Cloudflare 會把它轉送到真正的物件。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "instance (one object)",
+                  "zh": "instance（單一物件）"
+                },
+                "text": {
+                  "en": "The single live Counter, with its own private storage, that actually mutates and persists the value.",
+                  "zh": "那個唯一存活的 Counter，帶著自己專屬的儲存，實際負責修改並保存數值。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Why not just use Workers KV? KV is eventually consistent: a write spreads to edge copies over time, so two readers in different regions can briefly see different values. For a counter that is fatal — both could read 5, both write 6, and you lose a count. A Durable Object is strongly consistent: there is only one copy, and reads always see the latest write.",
+              "zh": "為什麼不直接用 Workers KV？KV 是「最終一致（eventual consistency）」：一次寫入會隨著時間擴散到各邊緣副本，所以不同地區的兩個讀取者可能短暫看到不同的值。對計數器來說這是致命的——兩邊都讀到 5、都寫回 6，你就少算了一次。Durable Object 則是「強一致（strong consistency）」：只有一份副本，讀取永遠看到最新的寫入。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "KV (eventual) vs Durable Object (strong)",
+              "zh": "KV（最終一致）vs Durable Object（強一致）"
+            },
+            "code": {
+              "en": "flowchart LR\n  WR[\"Write v=6\"] --> KV[\"KV (eventual)\"]\n  KV --> R1[\"Edge copy 1 (fresh)\"]\n  KV --> R2[\"Edge copy 2 (stale)\"]\n  WR2[\"Write v=6\"] --> DO[\"Durable Object (strong)\"]\n  DO --> ONE[\"One value, always fresh\"]",
+              "zh": "flowchart LR\n  WR[\"寫入 v=6\"] --> KV[\"KV（最終一致）\"]\n  KV --> R1[\"邊緣副本 1（最新）\"]\n  KV --> R2[\"邊緣副本 2（過時）\"]\n  WR2[\"寫入 v=6\"] --> DO[\"Durable Object（強一致）\"]\n  DO --> ONE[\"唯一數值，永遠最新\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "balance",
+            "title": {
+              "en": "Rule of thumb",
+              "zh": "判斷原則"
+            },
+            "text": {
+              "en": "Use KV when stale reads are fine (config, cached HTML). Use a Durable Object when many writers must agree on one correct, live value.",
+              "zh": "讀到稍舊的資料沒關係時（設定檔、快取 HTML）就用 KV。當很多寫入者必須對齊「同一個正確、即時的值」時，就用 Durable Object。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "consistency",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "One at a time: no lost updates",
+          "zh": "一次一個：不會遺失更新"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the key property: a Durable Object processes incoming requests serially — one fully finishes before the next begins. So even if Client A and Client B hit the counter at the very same millisecond, the object lines them up and runs read → increment → write twice in order. The final value is 2, never 1.",
+              "zh": "這就是關鍵特性：Durable Object 會「序列化（serialize）」處理進來的請求——一個完全做完，下一個才開始。所以就算用戶端 A 和 B 在同一毫秒打到計數器，物件也會把它們排好隊，依序執行「讀取 → 累加 → 寫入」兩次。最後的值是 2，絕不會只是 1。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Two concurrent increments, serialized",
+              "zh": "兩個並行的累加，被序列化處理"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant A as \"Client A\"\n  participant B as \"Client B\"\n  participant DO as \"Counter DO\"\n  participant S as \"Storage\"\n  A->>DO: POST /increment\n  B->>DO: POST /increment\n  Note over DO: serialized, one at a time\n  DO->>S: read v = 0\n  S-->>DO: 0\n  DO->>S: write v = 1\n  DO-->>A: 1\n  DO->>S: read v = 1\n  S-->>DO: 1\n  DO->>S: write v = 2\n  DO-->>B: 2",
+              "zh": "sequenceDiagram\n  participant A as \"用戶端 A\"\n  participant B as \"用戶端 B\"\n  participant DO as \"Counter DO\"\n  participant S as \"儲存\"\n  A->>DO: POST /increment\n  B->>DO: POST /increment\n  Note over DO: 序列化，一次處理一個\n  DO->>S: 讀取 v = 0\n  S-->>DO: 0\n  DO->>S: 寫入 v = 1\n  DO-->>A: 1\n  DO->>S: 讀取 v = 1\n  S-->>DO: 1\n  DO->>S: 寫入 v = 2\n  DO-->>B: 2"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "lock",
+            "title": {
+              "en": "You get a lock for free",
+              "zh": "你免費拿到一把鎖"
+            },
+            "text": {
+              "en": "With a normal database you would write a transaction or a lock to stop two requests from clobbering each other. A Durable Object's single-threaded, one-at-a-time execution gives you that mutual exclusion automatically — no locking code to get wrong.",
+              "zh": "用一般資料庫時，你得自己寫交易（transaction）或鎖（lock）來避免兩個請求互相覆蓋。Durable Object 的「單執行緒、一次一個」執行方式，自動就給了你這種互斥（mutual exclusion）——沒有會寫錯的鎖程式碼。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: front-end + Worker + object storage",
+          "zh": "動手做：前端 + Worker + 物件儲存"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Three layers, one file for the back-end. The Worker (front door) and the Counter class (instance + storage) live in src/index.js; wrangler.toml binds them together; and a tiny browser snippet calls the API. Note the data layer here IS the object's own storage — there is no separate database to set up.",
+              "zh": "三層，後端集中在一個檔案。Worker（大門）和 Counter 類別（實例＋儲存）都放在 src/index.js；wrangler.toml 把它們綁在一起；再用一小段瀏覽器程式碼呼叫 API。請注意：這裡的「資料層」就是物件自己的儲存——不用另外架一個資料庫。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create a Worker project",
+                  "zh": "建立 Worker 專案"
+                },
+                "text": {
+                  "en": "Scaffold a fresh project. We will replace the generated source with our Counter.",
+                  "zh": "先建立一個全新專案。等一下我們會用自己的 Counter 取代產生出來的程式碼。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npm create cloudflare@latest -- counter-app\ncd counter-app"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Worker + Durable Object",
+                  "zh": "寫 Worker ＋ Durable Object"
+                },
+                "text": {
+                  "en": "The Worker resolves the id by name and forwards the request; the Counter class reads, increments, and persists its value. See the full src/index.js below.",
+                  "zh": "Worker 用名稱解析出 id 並轉送請求；Counter 類別則讀取、累加、保存它的值。完整的 src/index.js 在下方。"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind & migrate in wrangler.toml",
+                  "zh": "在 wrangler.toml 綁定並設定 migration"
+                },
+                "text": {
+                  "en": "Add the binding (the name your Worker uses) and a migration (tells Cloudflare Counter is a new SQLite-backed class).",
+                  "zh": "加上 binding（Worker 用來呼叫它的名稱）和 migration（告訴 Cloudflare：Counter 是一個新的、用 SQLite 儲存的類別）。"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署"
+                },
+                "text": {
+                  "en": "Publish to Cloudflare's network. The instance for \"global\" is created automatically on first use.",
+                  "zh": "發佈到 Cloudflare 的網路。\"global\" 這個名稱的實例，會在第一次使用時自動建立。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              },
+              {
+                "title": {
+                  "en": "Test it",
+                  "zh": "測試看看"
+                },
+                "text": {
+                  "en": "Hit it a few times — the number goes up by exactly one each call, no matter who calls.",
+                  "zh": "連打幾次——不管誰來打，數字每次都剛好加一。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "curl -X POST https://counter-app.<your-subdomain>.workers.dev/\n# 1\ncurl -X POST https://counter-app.<your-subdomain>.workers.dev/\n# 2"
+                }
+              }
+            ]
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/index.js — Worker + Counter object",
+              "zh": "src/index.js — Worker ＋ Counter 物件"
+            },
+            "body": "// The Durable Object: one instance holds and mutates the count\nexport class Counter {\n  constructor(state, env) {\n    this.state = state; // gives access to this object's private storage\n    this.env = env;\n  }\n\n  async fetch(req) {\n    // Read the current value from THIS object's own storage (0 if unset)\n    let v = (await this.state.storage.get('v')) || 0;\n    v++;\n    // Persist before responding; the next request will read this value\n    await this.state.storage.put('v', v);\n    return new Response(v.toString(), {\n      headers: { 'content-type': 'text/plain' }\n    });\n  }\n}\n\n// The Worker (front door): forward every request to the ONE instance\nexport default {\n  async fetch(request, env) {\n    // Same name -> same single instance, anywhere on Earth\n    const id = env.COUNTER.idFromName('global');\n    const stub = env.COUNTER.get(id);\n    // Cloudflare routes this call to the real Counter object\n    return stub.fetch(request);\n  }\n};"
+          },
+          {
+            "type": "code",
+            "lang": "toml",
+            "title": {
+              "en": "wrangler.toml — binding + migration",
+              "zh": "wrangler.toml — 綁定 ＋ migration"
+            },
+            "body": "name = \"counter-app\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-06-01\"\n\n# Bind the COUNTER namespace in env to the Counter class\n[[durable_objects.bindings]]\nname = \"COUNTER\"\nclass_name = \"Counter\"\n\n# Register Counter as a new SQLite-backed Durable Object class\n[[migrations]]\ntag = \"v1\"\nnew_sqlite_classes = [\"Counter\"]"
+          },
+          {
+            "type": "code",
+            "lang": "html",
+            "title": {
+              "en": "Front-end — one shared counter for everyone",
+              "zh": "前端 — 大家共用的同一個計數器"
+            },
+            "body": "<button id=\"go\">+1</button>\n<span id=\"count\">0</span>\n\n<script>\n  document.querySelector('#go').addEventListener('click', async () => {\n    // Every click hits the ONE shared Counter behind the Worker\n    const res = await fetch('https://counter-app.example.workers.dev/', {\n      method: 'POST'\n    });\n    document.querySelector('#count').textContent = await res.text();\n  });\n</script>"
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Don't read state from the Worker",
+              "zh": "別在 Worker 裡讀狀態"
+            },
+            "text": {
+              "en": "The Worker is stateless and runs in many places at once. Keep all reads and writes inside the Durable Object's fetch — that is the only place where one-at-a-time ordering and strong consistency are guaranteed.",
+              "zh": "Worker 是無狀態的，而且會同時在很多地方執行。所有的讀寫都要放進 Durable Object 的 fetch 裡——那是唯一能保證「一次一個的順序」與「強一致」的地方。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts & when to reach for it",
+          "zh": "重點概念，以及何時該用它"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "badge",
+                "title": {
+                  "en": "Name",
+                  "zh": "名稱（Name）"
+                },
+                "text": {
+                  "en": "A human-friendly string like \"global\" or \"room-42\" you pass to idFromName. Picks which instance you reach.",
+                  "zh": "一個好記的字串，例如 \"global\" 或 \"room-42\"，傳給 idFromName。決定你連到哪個實例。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "id",
+                  "zh": "id（識別碼）"
+                },
+                "text": {
+                  "en": "The globally unique address derived from the name. Same name always yields the same id.",
+                  "zh": "由名稱推導出的全球唯一地址。相同名稱永遠得到相同 id。"
+                }
+              },
+              {
+                "icon": "settings_remote",
+                "title": {
+                  "en": "Stub",
+                  "zh": "Stub（代理）"
+                },
+                "text": {
+                  "en": "A local handle from .get(id). Calling stub.fetch() transparently reaches the real object.",
+                  "zh": "由 .get(id) 拿到的本地把手。呼叫 stub.fetch() 會透明地連到真正的物件。"
+                }
+              },
+              {
+                "icon": "looks_one",
+                "title": {
+                  "en": "Single instance",
+                  "zh": "單一實例"
+                },
+                "text": {
+                  "en": "Exactly one live object per name across the whole planet — the single source of truth.",
+                  "zh": "全世界每個名稱剛好只有一個存活的物件——唯一的真相來源。"
+                }
+              },
+              {
+                "icon": "format_list_numbered",
+                "title": {
+                  "en": "Serialized execution",
+                  "zh": "序列化執行"
+                },
+                "text": {
+                  "en": "Requests run one at a time inside the object, so no two can interleave and corrupt state.",
+                  "zh": "請求在物件內一次跑一個，所以不會有兩個交錯而把狀態弄亂。"
+                }
+              },
+              {
+                "icon": "verified",
+                "title": {
+                  "en": "Strong consistency",
+                  "zh": "強一致性"
+                },
+                "text": {
+                  "en": "One copy of the data; every read sees the most recent write. No stale values, ever.",
+                  "zh": "資料只有一份；每次讀取都看到最新的寫入。永遠不會讀到過時的值。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "Storage",
+                  "zh": "儲存（Storage）"
+                },
+                "text": {
+                  "en": "Each object has private, transactional storage via this.state.storage.get / put.",
+                  "zh": "每個物件都有專屬、具交易性的儲存，透過 this.state.storage.get / put 存取。"
+                }
+              },
+              {
+                "icon": "move_up",
+                "title": {
+                  "en": "Migration",
+                  "zh": "Migration（遷移）"
+                },
+                "text": {
+                  "en": "A wrangler.toml entry that registers, renames, or removes an object class.",
+                  "zh": "wrangler.toml 裡的一個項目，用來登記、改名或移除某個物件類別。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Not sure which storage to pick? Walk this quick decision tree.",
+              "zh": "不確定該選哪種儲存？跟著這棵小小的決策樹走一遍。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Which storage do I need?",
+              "zh": "我該用哪種儲存？"
+            },
+            "code": {
+              "en": "flowchart TD\n  Q[\"Need shared state?\"] -->|\"No, just cache\"| KV[\"Use KV\"]\n  Q -->|\"Yes, must be consistent\"| Q2[\"One hot key or coordination point?\"]\n  Q2 -->|\"Yes\"| DO[\"Use a Durable Object\"]\n  Q2 -->|\"No, lots of relational data\"| D1[\"Use D1\"]",
+              "zh": "flowchart TD\n  Q[\"需要共享狀態嗎？\"] -->|\"不用，只是快取\"| KV[\"用 KV\"]\n  Q -->|\"需要，而且要一致\"| Q2[\"是單一熱點或協調點嗎？\"]\n  Q2 -->|\"是\"| DO[\"用 Durable Object\"]\n  Q2 -->|\"不是，是大量關聯式資料\"| D1[\"用 D1\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls, limits & pricing",
+          "zh": "陷阱、限制與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "balance",
+            "title": {
+              "en": "One object = one bottleneck",
+              "zh": "一個物件 = 一個瓶頸"
+            },
+            "text": {
+              "en": "All traffic for a name funnels through a single instance (~1,000 req/s soft limit). A global counter is a teaching example; in production, shard hot state across many objects — one per room, user, or document.",
+              "zh": "某個名稱的所有流量都匯集到單一實例（約 1,000 req/s 的軟性上限）。全域計數器是教學範例；正式環境請把熱點狀態切分到很多物件——一個房間、一位使用者、或一份文件各一個。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Common mistakes",
+              "zh": "常見錯誤"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Caching the value in the Worker instead of reading it from the object — the Worker has no shared state.",
+                "Using KV for counters or locks — eventual consistency lets two writers lose an update.",
+                "Forgetting the [[migrations]] entry — the deploy fails until the class is registered.",
+                "Assuming different names share data — \"room-1\" and \"room-2\" are completely separate instances."
+              ],
+              "zh": [
+                "把值快取在 Worker 而不是從物件讀取——Worker 沒有共享狀態。",
+                "拿 KV 來做計數器或鎖——最終一致會讓兩個寫入者遺失一次更新。",
+                "忘了寫 [[migrations]] 項目——在類別登記之前部署都會失敗。",
+                "以為不同名稱會共用資料——\"room-1\" 和 \"room-2\" 是完全分開的兩個實例。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "savings",
+            "title": {
+              "en": "Free to start",
+              "zh": "免費就能開始"
+            },
+            "text": {
+              "en": "SQLite-backed Durable Objects run on the Workers Free plan with lower limits, so you can build and learn this model without paying. Billing is based on requests, compute duration, and stored data.",
+              "zh": "用 SQLite 儲存的 Durable Objects 在 Workers 免費方案就能跑（限制較低），所以你不用付費就能把這套模型做出來、學起來。計費依據是請求數、運算時間，以及儲存的資料量。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "durable-objects",
+        "label": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "blueprint-realtime-chat",
+        "label": {
+          "en": "Real-time chat blueprint",
+          "zh": "即時聊天藍圖"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/durable-objects/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "hyperdrive-postgres",
+    "category": "integrations",
+    "group": {
+      "en": "Data & Storage",
+      "zh": "資料庫與儲存"
+    },
+    "icon": "database",
+    "title": {
+      "en": "Connect a Worker to existing Postgres via Hyperdrive",
+      "zh": "用 Hyperdrive 讓 Worker 連既有的 Postgres"
+    },
+    "subtitle": {
+      "en": "Pool and cache queries to your regional Postgres so Workers stay fast",
+      "zh": "對你的區域 Postgres 做連線池與查詢快取，讓 Workers 維持飛快"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "You already have a Postgres. Hyperdrive makes it fast and safe to query from Workers — no migration needed.",
+        "zh": "你已經有一個 Postgres，Hyperdrive 讓 Workers 連它又快又穩——完全不用搬家。"
+      }
+    },
+    "stats": [
+      {
+        "value": "60s",
+        "label": {
+          "en": "Default cache TTL",
+          "zh": "預設快取時間"
+        }
+      },
+      {
+        "value": "0",
+        "label": {
+          "en": "DB migrations",
+          "zh": "資料庫搬遷"
+        }
+      },
+      {
+        "value": "Pooling",
+        "label": {
+          "en": "Connection reuse",
+          "zh": "連線重複利用"
+        }
+      },
+      {
+        "value": "Free",
+        "label": {
+          "en": "Works on Free plan",
+          "zh": "免費方案可用"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring?",
+          "zh": "我們要串什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "You have a regional Postgres already running — maybe on Neon, Supabase, AWS RDS, or your own server. It lives in one place. Your Workers, on the other hand, run in hundreds of cities. This guide wires a Worker to that database through Hyperdrive, so every request reuses warm connections and reads from cache instead of paying full latency each time.",
+              "zh": "你已經有一個區域型 Postgres 在跑——可能在 Neon、Supabase、AWS RDS，或你自己的伺服器上。它只住在一個地方。但你的 Workers 卻跑在數百個城市裡。這篇教學會用 Hyperdrive 把 Worker 接到那個資料庫，讓每個請求都能重複利用已經接通的連線、並從快取讀資料，而不是每次都付完整的延遲成本。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Hyperdrive sits in the middle as a connection pooler plus query cache. Your code still uses a normal Postgres driver — the only change is that it connects to env.HYPERDRIVE.connectionString instead of your database's real URL.",
+              "zh": "Hyperdrive 夾在中間，同時扮演「連線池（connection pooler，把連線存起來共用的中介）」和「查詢快取（query cache，把查詢結果記起來）」。你的程式碼照樣用一般的 Postgres 驅動程式——唯一的差別是它連到的是 env.HYPERDRIVE.connectionString，而不是資料庫真正的網址。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Many Worker calls share one pool",
+              "zh": "多個 Worker 呼叫共用一個連線池"
+            },
+            "code": {
+              "en": "flowchart LR\n  W1[\"Worker call 1\"] --> HD\n  W2[\"Worker call 2\"] --> HD\n  W3[\"Worker call 3\"] --> HD\n  HD[\"Hyperdrive\"] --> POOL[\"Connection pool: shared warm links\"]\n  HD --> CACHE[\"Query cache: remembers hot SELECTs\"]\n  POOL --> DB[(\"Your existing Postgres\")]\n  CACHE -->|\"Cache hit returns instantly\"| HD",
+              "zh": "flowchart LR\n  W1[\"Worker 呼叫 1\"] --> HD\n  W2[\"Worker 呼叫 2\"] --> HD\n  W3[\"Worker 呼叫 3\"] --> HD\n  HD[\"Hyperdrive\"] --> POOL[\"連線池：共用的熱連線\"]\n  HD --> CACHE[\"查詢快取：記住熱門 SELECT\"]\n  POOL --> DB[(\"你既有的 Postgres\")]\n  CACHE -->|\"快取命中直接回傳\"| HD"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "fast_forward",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A taxi rank outside your database. Instead of every Worker calling a brand-new cab and waiting for it to arrive (a fresh connection), Hyperdrive keeps a few engines running at the curb and remembers popular destinations — so most riders leave immediately.",
+              "zh": "資料庫門口的一排待客計程車。與其每個 Worker 都重新叫一台新車、再等它開過來（重開一條連線），Hyperdrive 直接在路邊備好幾台發動中的車，還記得熱門目的地——所以大多數乘客上車就走。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "各層負責什麼？"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "Your Worker",
+                  "zh": "你的 Worker"
+                },
+                "text": {
+                  "en": "Runs globally and stays stateless. It opens a client against env.HYPERDRIVE.connectionString and runs SQL.",
+                  "zh": "跑遍全球、保持無狀態。它對 env.HYPERDRIVE.connectionString 開一個客戶端，然後執行 SQL。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Hyperdrive",
+                  "zh": "Hyperdrive"
+                },
+                "text": {
+                  "en": "The pooling + caching layer in front of your DB. Reuses connections and serves cached reads.",
+                  "zh": "擋在資料庫前面的連線池＋快取層。重複利用連線、並回傳已快取的讀取結果。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "Your Postgres",
+                  "zh": "你的 Postgres"
+                },
+                "text": {
+                  "en": "Still the single source of truth. Schema, data, and provider all stay exactly as they are.",
+                  "zh": "依然是唯一的真實來源。資料表結構、資料、供應商通通維持原樣。"
+                }
+              },
+              {
+                "icon": "vpn_key",
+                "title": {
+                  "en": "Connection string",
+                  "zh": "連線字串"
+                },
+                "text": {
+                  "en": "Stored inside the Hyperdrive config, not in your Worker code — your DB password never ships in the bundle.",
+                  "zh": "存放在 Hyperdrive 設定裡，而不是 Worker 程式碼裡——資料庫密碼不會被打包進程式。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "How one query is served",
+              "zh": "一筆查詢怎麼被處理"
+            },
+            "code": {
+              "en": "flowchart TD\n  REQ[\"Worker receives request\"] --> Q{\"Is the query cacheable?\"}\n  Q -->|\"Yes and cached\"| HIT[\"Return straight from cache\"]\n  Q -->|\"No or not cached\"| POOL[\"Borrow a warm link from the pool\"]\n  POOL --> DB[(\"Postgres runs the query\")]\n  DB --> RET[\"Return rows and fill the cache\"]\n  HIT --> DONE[\"Respond to user\"]\n  RET --> DONE",
+              "zh": "flowchart TD\n  REQ[\"Worker 收到請求\"] --> Q{\"這筆查詢可以快取嗎？\"}\n  Q -->|\"可以且已快取\"| HIT[\"直接從快取回傳\"]\n  Q -->|\"不可或尚未快取\"| POOL[\"向連線池借一條熱連線\"]\n  POOL --> DB[(\"Postgres 執行查詢\")]\n  DB --> RET[\"回傳資料列並寫入快取\"]\n  HIT --> DONE[\"回應使用者\"]\n  RET --> DONE"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "help",
+            "title": {
+              "en": "Why not connect directly?",
+              "zh": "為什麼不直接連資料庫？"
+            },
+            "text": {
+              "en": "A direct connection from a far-away Worker pays a TCP + TLS + auth handshake every single time, and serverless invocations can quickly exhaust your database's connection limit. Pooling reuses warm links; caching skips the round-trip entirely for repeated reads.",
+              "zh": "從遠方的 Worker 直接連線，每一次都要付 TCP ＋ TLS ＋ 身分驗證的握手成本，而且無伺服器（serverless）的大量呼叫很快就會把資料庫的連線數上限用光。連線池讓你重複利用熱連線；快取則讓重複的讀取查詢完全省掉那趟來回。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Without vs with Hyperdrive",
+          "zh": "沒有 vs 有 Hyperdrive"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "The diagram below shows the same workload twice. The top half connects directly and rebuilds a connection on every request. The bottom half goes through Hyperdrive and reuses a warm, pooled link — often answering straight from cache.",
+              "zh": "下面這張圖把同一份工作畫了兩次。上半部直接連線、每次請求都重建一條連線；下半部走 Hyperdrive，重複利用已接通、進到連線池的連線——常常直接從快取回答。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Connection lifecycle comparison",
+              "zh": "連線生命週期比較"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"User\"\n  participant W as \"Worker\"\n  participant H as \"Hyperdrive\"\n  participant D as \"Postgres\"\n  Note over U,D: Without Hyperdrive - new connection every time (slow)\n  U->>W: Request A\n  W->>D: Open new connection + TLS handshake\n  D-->>W: Connection ready\n  W->>D: SELECT query\n  D-->>W: rows\n  W-->>U: Response (slower)\n  Note over U,D: With Hyperdrive - pooled + cached (fast)\n  U->>W: Request B\n  W->>H: Query via warm pooled link\n  H-->>W: Cache hit or shared connection\n  W-->>U: Response (faster)",
+              "zh": "sequenceDiagram\n  participant U as \"使用者\"\n  participant W as \"Worker\"\n  participant H as \"Hyperdrive\"\n  participant D as \"Postgres\"\n  Note over U,D: 沒有 Hyperdrive - 每次都重開連線（慢）\n  U->>W: 請求 A\n  W->>D: 建立新連線 + TLS 握手\n  D-->>W: 連線就緒\n  W->>D: SELECT 查詢\n  D-->>W: 資料列\n  W-->>U: 回應（較慢）\n  Note over U,D: 有 Hyperdrive - 連線池 + 快取（快）\n  U->>W: 請求 B\n  W->>H: 用熱連線池查詢\n  H-->>W: 快取命中或共用連線\n  W-->>U: 回應（較快）"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "speed",
+            "title": {
+              "en": "Where the time goes",
+              "zh": "時間都花在哪"
+            },
+            "text": {
+              "en": "On a cold direct connection, the handshake can cost several round-trips before a single byte of data moves. Hyperdrive pays that cost once and shares the result across many requests.",
+              "zh": "在一條全新的直接連線上，光是握手就可能花掉好幾趟來回，資料都還沒開始傳。Hyperdrive 把這個成本只付一次，再分攤給大量的請求共用。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Wire it up",
+          "zh": "動手串起來"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Five steps: create a Hyperdrive config pointing at your DB, add the binding to wrangler.toml, install a Postgres driver, query through env.HYPERDRIVE.connectionString, and deploy.",
+              "zh": "五個步驟：建立一個指向你資料庫的 Hyperdrive 設定、把綁定加進 wrangler.toml、安裝 Postgres 驅動程式、透過 env.HYPERDRIVE.connectionString 查詢，然後部署。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create a Hyperdrive config",
+                  "zh": "建立 Hyperdrive 設定"
+                },
+                "text": {
+                  "en": "Hand Hyperdrive your existing connection string. Wrangler prints an id — copy it for the next step.",
+                  "zh": "把你既有的連線字串交給 Hyperdrive。Wrangler 會印出一組 id——複製起來下一步要用。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler hyperdrive create my-postgres \\\n  --connection-string=\"postgres://user:password@db.example.com:5432/appdb\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Add the [[hyperdrive]] binding",
+                  "zh": "加入 [[hyperdrive]] 綁定"
+                },
+                "text": {
+                  "en": "Paste the id into wrangler.toml. The nodejs_compat flag is required, because Postgres drivers depend on Node APIs.",
+                  "zh": "把 id 貼進 wrangler.toml。一定要開 nodejs_compat 旗標，因為 Postgres 驅動程式會用到 Node 的 API。"
+                },
+                "code": {
+                  "lang": "toml",
+                  "body": "name = \"my-worker\"\nmain = \"src/index.js\"\ncompatibility_date = \"2024-09-23\"\ncompatibility_flags = [\"nodejs_compat\"]\n\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"<paste-the-id-from-step-1>\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Install a Postgres driver",
+                  "zh": "安裝 Postgres 驅動程式"
+                },
+                "text": {
+                  "en": "We use postgres.js here; the node-postgres pg package works too.",
+                  "zh": "這裡用 postgres.js；node-postgres 的 pg 套件也可以。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npm i postgres"
+                }
+              },
+              {
+                "title": {
+                  "en": "Query through Hyperdrive",
+                  "zh": "透過 Hyperdrive 查詢"
+                },
+                "text": {
+                  "en": "Connect to env.HYPERDRIVE.connectionString — never the real DB URL. Keep a small per-isolate pool and close it in the background.",
+                  "zh": "連到 env.HYPERDRIVE.connectionString——絕對不是資料庫真正的網址。每個 isolate 維持一個小連線池，並在背景關閉它。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "import postgres from \"postgres\";\n\nexport default {\n  async fetch(request, env, ctx) {\n    // Connect to Hyperdrive, not the database directly\n    const sql = postgres(env.HYPERDRIVE.connectionString, {\n      max: 5,            // small pool per Worker isolate\n      fetch_types: false // skip an extra round-trip\n    });\n\n    try {\n      const products = await sql`SELECT id, name, price FROM products LIMIT 10`;\n      // Close in the background so it does not delay the response\n      ctx.waitUntil(sql.end());\n      return Response.json(products);\n    } catch (err) {\n      console.error(err);\n      return Response.json({ error: String(err) }, { status: 500 });\n    }\n  }\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署上線"
+                },
+                "text": {
+                  "en": "Publish the Worker. Queries now flow through the pooled, cached fast lane.",
+                  "zh": "發布 Worker。查詢就會走上有連線池、有快取的快速通道了。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Reads and writes, safely",
+              "zh": "安全地讀取與寫入"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "queries.js",
+              "zh": "queries.js"
+            },
+            "body": "// Parameterized values are sent separately, never string-concatenated\nconst id = 42;\nconst rows = await sql`SELECT id, name FROM products WHERE id = ${id}`;\n\n// Writes (INSERT/UPDATE/DELETE) are never cached — they always hit Postgres\nawait sql`INSERT INTO views (product_id) VALUES (${id})`;"
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "key",
+            "title": {
+              "en": "Keep the real URL out of your code",
+              "zh": "別把真實網址寫進程式碼"
+            },
+            "text": {
+              "en": "The database password lives only inside the Hyperdrive config you created in step 1. Always connect via env.HYPERDRIVE.connectionString so the secret never ends up in your source or bundle.",
+              "zh": "資料庫密碼只存在你第一步建立的 Hyperdrive 設定裡。一律透過 env.HYPERDRIVE.connectionString 連線，這樣機密就不會跑進你的原始碼或打包檔裡。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Connection string",
+                  "zh": "連線字串"
+                },
+                "text": {
+                  "en": "The URL with host, port, user, password, and DB name. Hyperdrive hides yours behind env.HYPERDRIVE.connectionString.",
+                  "zh": "包含主機、連接埠、帳號、密碼與資料庫名稱的那串 URL。Hyperdrive 把你的藏在 env.HYPERDRIVE.connectionString 後面。"
+                }
+              },
+              {
+                "icon": "pool",
+                "title": {
+                  "en": "Connection pool",
+                  "zh": "連線池"
+                },
+                "text": {
+                  "en": "A set of warm, ready connections shared across requests so nobody pays the setup cost twice.",
+                  "zh": "一組已接通、隨時可用的連線，在請求之間共用，沒人需要重複付建立連線的成本。"
+                }
+              },
+              {
+                "icon": "cached",
+                "title": {
+                  "en": "Query cache",
+                  "zh": "查詢快取"
+                },
+                "text": {
+                  "en": "Cacheable SELECT results are remembered (default 60s) so identical repeats skip the database.",
+                  "zh": "可快取的 SELECT 結果會被記住（預設 60 秒），一模一樣的重複查詢就能跳過資料庫。"
+                }
+              },
+              {
+                "icon": "hourglass_empty",
+                "title": {
+                  "en": "Setup latency",
+                  "zh": "建立連線延遲"
+                },
+                "text": {
+                  "en": "The TCP + TLS + auth handshake a fresh connection must finish before any query runs. Pooling pays it once.",
+                  "zh": "一條全新連線在能跑查詢之前，必須先完成 TCP ＋ TLS ＋ 驗證的握手。連線池讓這個成本只付一次。"
+                }
+              },
+              {
+                "icon": "block",
+                "title": {
+                  "en": "Connection limits",
+                  "zh": "連線數上限"
+                },
+                "text": {
+                  "en": "Every Postgres has a max connection count. Bursty serverless traffic can exhaust it — pooling keeps usage flat.",
+                  "zh": "每個 Postgres 都有連線數上限。爆量的無伺服器流量很容易把它用光——連線池讓用量維持平穩。"
+                }
+              },
+              {
+                "icon": "verified",
+                "title": {
+                  "en": "DB stays the source",
+                  "zh": "資料庫仍是來源"
+                },
+                "text": {
+                  "en": "Hyperdrive only accelerates access. Your real rows always live in your own Postgres.",
+                  "zh": "Hyperdrive 只負責加速存取。你真正的資料永遠存放在你自己的 Postgres 裡。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips & gotchas",
+          "zh": "小提示與陷阱"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "tune",
+            "title": {
+              "en": "Tune caching for freshness",
+              "zh": "依新鮮度調整快取"
+            },
+            "text": {
+              "en": "Caching is on by default with a 60s max age (configurable up to 1 hour). For data that must always be live, disable it with: npx wrangler hyperdrive update <id> --caching-disabled true",
+              "zh": "快取預設開啟、最長保留 60 秒（可調到最多 1 小時）。如果某些資料一定要即時，可以用 npx wrangler hyperdrive update <id> --caching-disabled true 關掉它。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Without compatibility_flags = [\"nodejs_compat\"] and a recent compatibility_date, the Postgres driver fails to load.",
+                "Only read-only SELECTs are cached; INSERT/UPDATE/DELETE always reach Postgres.",
+                "Queries using NOW(), RANDOM(), or CURRENT_DATE are treated as uncacheable — even just naming one in a SQL comment disables caching for that query.",
+                "Always close with ctx.waitUntil(sql.end()) so cleanup never delays the response.",
+                "Keep the per-isolate pool small (e.g. max: 5); Hyperdrive multiplexes across them anyway.",
+                "Works with Postgres and Postgres-compatibles (Neon, Supabase, RDS, CockroachDB, Timescale) — and MySQL too.",
+                "Need a Cloudflare-native SQL database instead of bringing your own? See D1."
+              ],
+              "zh": [
+                "沒有 compatibility_flags = [\"nodejs_compat\"] 和夠新的 compatibility_date，Postgres 驅動程式會載入失敗。",
+                "只有唯讀的 SELECT 會被快取；INSERT／UPDATE／DELETE 一定會到 Postgres。",
+                "用到 NOW()、RANDOM()、CURRENT_DATE 的查詢會被視為不可快取——甚至只在 SQL 註解裡提到這些函式名稱，也會讓那筆查詢不快取。",
+                "一律用 ctx.waitUntil(sql.end()) 收尾，清理才不會拖慢回應。",
+                "每個 isolate 的連線池維持小一點（例如 max: 5）；Hyperdrive 反正會在背後多工共用。",
+                "支援 Postgres 與相容資料庫（Neon、Supabase、RDS、CockroachDB、Timescale）——也支援 MySQL。",
+                "想要 Cloudflare 原生的 SQL 資料庫、而不是自備？可以看看 D1。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "hyperdrive",
+        "label": {
+          "en": "Hyperdrive",
+          "zh": "Hyperdrive"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "choose-your-database",
+        "label": {
+          "en": "Choose your database",
+          "zh": "選擇你的資料庫"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/hyperdrive/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-blog-cms",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "rss_feed",
+    "title": {
+      "en": "Blueprint: a blog / CMS",
+      "zh": "架構藍圖：部落格 / CMS"
+    },
+    "subtitle": {
+      "en": "A reference architecture for a blog or CMS built entirely on Cloudflare",
+      "zh": "一套完全建在 Cloudflare 上的部落格／CMS 參考架構"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "See how Pages, Workers, D1, R2, KV and Images fit together to power a real content site.",
+        "zh": "看 Pages、Workers、D1、R2、KV 與 Images 如何拼成一個真正的內容網站。"
+      }
+    },
+    "stats": [
+      {
+        "value": "6",
+        "label": {
+          "en": "Cloudflare products",
+          "zh": "Cloudflare 產品"
+        }
+      },
+      {
+        "value": "4",
+        "label": {
+          "en": "Database tables",
+          "zh": "資料表"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "Worker API",
+          "zh": "Worker API"
+        }
+      },
+      {
+        "value": "~0ms",
+        "label": {
+          "en": "Cache reads at the edge",
+          "zh": "邊緣快取讀取"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要蓋什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "A blog or CMS (Content Management System = the software that stores and serves your articles) needs four jobs done: show pages to readers, run an API, store the text, and store the images. Instead of one big server doing everything, Cloudflare splits these jobs across small, focused services that all run at the edge (the edge = data centres close to your readers).",
+              "zh": "一個部落格或 CMS（內容管理系統，就是負責存放與供應文章的軟體）要做好四件事：把頁面顯示給讀者、跑一個 API、存放文字、存放圖片。Cloudflare 不是用一台大伺服器全包，而是把這些工作拆給數個小而專一的服務，全部都跑在邊緣（edge，指離讀者很近的資料中心）。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "This page is a 'see the whole system' map. The diagram below wires every piece together: the reader's browser talks to Pages (the front-end) and to a Worker (the API); the Worker reads articles from D1, images from R2, and a fast cache from KV; and the browser pulls optimised pictures through Images.",
+              "zh": "這一頁是「一眼看懂整個系統」的地圖。下面這張圖把每個零件串起來：讀者的瀏覽器同時跟 Pages（前端）和 Worker（API）對話；Worker 從 D1 讀文章、從 R2 讀圖片、從 KV 拿快取；而瀏覽器則透過 Images 抓最佳化過的圖片。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "System architecture",
+              "zh": "系統架構"
+            },
+            "code": {
+              "en": "flowchart TD\n  B[\"Browser\"] -->|\"page HTML\"| P[\"Pages front-end\"]\n  B -->|\"fetch /api\"| W[\"Worker API\"]\n  P -->|\"calls\"| W\n  W -->|\"SQL query\"| D[\"D1 posts and authors\"]\n  W -->|\"cache get/put\"| K[\"KV cache\"]\n  W -->|\"object key\"| R[\"R2 images\"]\n  B -->|\"img src\"| I[\"Images resize\"]\n  I -->|\"origin pull\"| R",
+              "zh": "flowchart TD\n  B[\"瀏覽器\"] -->|\"頁面 HTML\"| P[\"Pages 前端\"]\n  B -->|\"fetch /api\"| W[\"Worker API\"]\n  P -->|\"呼叫\"| W\n  W -->|\"SQL 查詢\"| D[\"D1 文章與作者\"]\n  W -->|\"快取讀寫\"| K[\"KV 快取\"]\n  W -->|\"物件鍵\"| R[\"R2 圖片\"]\n  B -->|\"img src\"| I[\"Images 縮圖\"]\n  I -->|\"回源讀取\"| R"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "restaurant",
+            "title": {
+              "en": "Think of it like a restaurant",
+              "zh": "把它想成一間餐廳"
+            },
+            "text": {
+              "en": "Pages is the dining room (what guests see), the Worker is the waiter (takes orders, brings food), D1 is the recipe book (structured text), R2 is the pantry (raw ingredients / files), KV is the dish kept warm on the pass (instant re-serve), and Images is the plating station (resizes each photo to order).",
+              "zh": "Pages 是用餐區（客人看到的），Worker 是服務生（接單、上菜），D1 是食譜本（結構化的文字），R2 是儲藏室（原始食材／檔案），KV 是出餐檯上保溫的菜（馬上再上一份），而 Images 是擺盤台（依需求把每張照片調整大小）。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "各零件的職責"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Each Cloudflare product has one clear role. Keeping them separate is what makes the system cheap, fast, and easy to reason about — you can change the cache without touching the database, or swap the front-end without rewriting the API.",
+              "zh": "每個 Cloudflare 產品都只扮演一個明確的角色。把它們分開，正是讓系統便宜、快、又好理解的關鍵——你可以只動快取而不碰資料庫，或換掉前端卻不用重寫 API。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Pages — front-end",
+                  "zh": "Pages — 前端"
+                },
+                "text": {
+                  "en": "Hosts your HTML, CSS and JavaScript and serves the blog UI globally. This is what readers actually open in the browser.",
+                  "zh": "託管你的 HTML、CSS 與 JavaScript，把部落格介面送到全球。這就是讀者實際在瀏覽器裡打開的東西。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "Workers — the API",
+                  "zh": "Workers — API"
+                },
+                "text": {
+                  "en": "The brain. It receives /api requests, decides what to read or write, talks to D1, R2 and KV, and returns JSON. All your business logic lives here.",
+                  "zh": "大腦。它接收 /api 請求，決定要讀或寫什麼，跟 D1、R2、KV 對話，最後回傳 JSON。你所有的商業邏輯都住在這裡。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 — structured data",
+                  "zh": "D1 — 結構化資料"
+                },
+                "text": {
+                  "en": "A SQL database holding posts, authors and tags — anything with relationships you query with SELECT/INSERT. The source of truth for text.",
+                  "zh": "一個 SQL 資料庫，存放文章、作者與標籤——凡是有關聯、要用 SELECT／INSERT 查詢的資料都放這。文字的真實來源。"
+                }
+              },
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "R2 — file storage",
+                  "zh": "R2 — 檔案儲存"
+                },
+                "text": {
+                  "en": "Object storage for big binary files: cover photos, uploads, attachments. The database only stores the object key; the bytes live here.",
+                  "zh": "存放大型二進位檔案的物件儲存：封面照、上傳檔、附件。資料庫只存物件鍵（key），真正的位元組住在這裡。"
+                }
+              },
+              {
+                "icon": "cached",
+                "title": {
+                  "en": "KV — read cache",
+                  "zh": "KV — 讀取快取"
+                },
+                "text": {
+                  "en": "A super-fast key→value store used to remember the JSON of popular posts, so repeat reads skip the database entirely. Cleared when a post changes.",
+                  "zh": "一個超快的鍵值（key→value）儲存，用來記住熱門文章的 JSON，讓重複讀取完全跳過資料庫。文章一變更就清掉。"
+                }
+              },
+              {
+                "icon": "auto_fix_high",
+                "title": {
+                  "en": "Images — optimisation",
+                  "zh": "Images — 圖片最佳化"
+                },
+                "text": {
+                  "en": "Resizes, crops and re-formats photos on the fly from a URL, so every device gets the right size without you storing many copies.",
+                  "zh": "直接從一個網址即時縮放、裁切、轉檔照片，讓每台裝置都拿到合適的尺寸，你不必自己存好幾份副本。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model",
+          "zh": "資料模型"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Four tables describe a blog. One author writes many posts. One post can carry many tags, and one tag can appear on many posts — that 'many-to-many' relationship needs a join table called post_tags. Notice posts only stores cover_key (a pointer into R2), not the image bytes themselves.",
+              "zh": "四張表就能描述一個部落格。一位作者寫多篇文章。一篇文章可以掛多個標籤，一個標籤也能出現在多篇文章上——這種「多對多」關係需要一張中介表，叫 post_tags。注意 posts 只存 cover_key（指向 R2 的指標），不存圖片本身的位元組。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Entity relationship diagram",
+              "zh": "實體關聯圖"
+            },
+            "code": {
+              "en": "erDiagram\n  AUTHORS ||--o{ POSTS : writes\n  POSTS ||--o{ POST_TAGS : has\n  TAGS ||--o{ POST_TAGS : labels\n  AUTHORS {\n    int id PK\n    text name\n    text email\n  }\n  POSTS {\n    int id PK\n    int author_id FK\n    text title\n    text slug\n    text cover_key\n    int published\n  }\n  TAGS {\n    int id PK\n    text name\n    text slug\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }",
+              "zh": "erDiagram\n  AUTHORS ||--o{ POSTS : \"撰寫\"\n  POSTS ||--o{ POST_TAGS : \"擁有\"\n  TAGS ||--o{ POST_TAGS : \"標記\"\n  AUTHORS {\n    int id PK\n    text name\n    text email\n  }\n  POSTS {\n    int id PK\n    int author_id FK\n    text title\n    text slug\n    text cover_key\n    int published\n  }\n  TAGS {\n    int id PK\n    text name\n    text slug\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "CREATE TABLE authors (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  email TEXT UNIQUE\n);\n\nCREATE TABLE posts (\n  id INTEGER PRIMARY KEY,\n  author_id INTEGER NOT NULL REFERENCES authors(id),\n  title TEXT NOT NULL,\n  slug TEXT UNIQUE NOT NULL,\n  body TEXT NOT NULL,\n  cover_key TEXT,\n  published INTEGER NOT NULL DEFAULT 0,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);\n\nCREATE TABLE tags (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  slug TEXT UNIQUE NOT NULL\n);\n\nCREATE TABLE post_tags (\n  post_id INTEGER NOT NULL REFERENCES posts(id),\n  tag_id INTEGER NOT NULL REFERENCES tags(id),\n  PRIMARY KEY (post_id, tag_id)\n);"
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Reading & publishing",
+          "zh": "讀取與發布流程"
+        },
+        "blocks": [
+          {
+            "type": "h3",
+            "text": {
+              "en": "Reading a post (with cache)",
+              "zh": "讀一篇文章（含快取）"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "When someone opens an article, the Worker checks KV first. If the JSON is already there (a cache hit), it returns instantly and never touches the database. If not (a cache miss), it queries D1, builds the response, and saves it to KV for next time. This is why a popular post stays fast and cheap.",
+              "zh": "有人打開一篇文章時，Worker 會先看 KV。如果 JSON 已經在那裡（命中快取），就立刻回傳、完全不碰資料庫。如果不在（未命中），就去查 D1、組好回應，再存進 KV 給下次用。這就是為什麼熱門文章能一直又快又便宜。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Read flow: KV cache hit vs miss",
+              "zh": "讀取流程：KV 命中 vs 未命中"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker API\"\n  participant K as \"KV cache\"\n  participant D as \"D1\"\n  U->>W: GET /api/posts/hello\n  W->>K: read cache key\n  alt cache hit\n    K-->>W: cached JSON\n    W-->>U: JSON x-cache=HIT\n  else cache miss\n    K-->>W: empty\n    W->>D: SELECT post + author\n    D-->>W: row\n    W->>K: write cache TTL=300s\n    W-->>U: JSON x-cache=MISS\n  end",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker API\"\n  participant K as \"KV 快取\"\n  participant D as \"D1\"\n  U->>W: GET /api/posts/hello\n  W->>K: 讀取快取鍵\n  alt 命中快取\n    K-->>W: 已快取 JSON\n    W-->>U: JSON x-cache=HIT\n  else 未命中\n    K-->>W: 空值\n    W->>D: 查詢文章與作者\n    D-->>W: 資料列\n    W->>K: 寫入快取 TTL=300s\n    W-->>U: JSON x-cache=MISS\n  end"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Publishing a post",
+              "zh": "發布一篇文章"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Writing goes the other way. The author submits text plus a cover image; the Worker stores the file in R2, saves the row (and its tags) in D1, then deletes the cached copy in KV so readers immediately see the new version.",
+              "zh": "寫入則是反方向。作者送出文字加上一張封面圖；Worker 把檔案存進 R2、把資料列（和它的標籤）寫進 D1，然後刪掉 KV 裡的快取副本，讓讀者馬上看到新版本。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Publish flow",
+              "zh": "發布流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant A as \"Author\"\n  participant W as \"Worker API\"\n  participant R as \"R2\"\n  participant D as \"D1\"\n  participant K as \"KV cache\"\n  A->>W: POST /api/posts + image\n  W->>R: store cover image\n  R-->>W: object key\n  W->>D: INSERT post and post_tags\n  D-->>W: new post id\n  W->>K: delete cached post\n  W-->>A: 201 Created",
+              "zh": "sequenceDiagram\n  participant A as \"作者\"\n  participant W as \"Worker API\"\n  participant R as \"R2\"\n  participant D as \"D1\"\n  participant K as \"KV 快取\"\n  A->>W: POST /api/posts + 圖片\n  W->>R: 儲存封面圖片\n  R-->>W: 物件鍵\n  W->>D: 寫入 post 與 post_tags\n  D-->>W: 新文章 id\n  W->>K: 刪除快取文章\n  W-->>A: 201 Created"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: bindings & code",
+          "zh": "動手做：綁定與程式碼"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A binding is a named connector (like DB or CACHE) that you declare in wrangler.jsonc so your Worker can reach a resource as env.<NAME> — no connection strings or secrets in code. Below: create the resources, declare the bindings, define the schema, then the Worker and the front-end.",
+              "zh": "綁定（binding）是一個有名字的連接器（例如 DB 或 CACHE），你在 wrangler.jsonc 裡宣告它，Worker 就能用 env.<名稱> 存取資源——程式碼裡不用放連線字串或密鑰。以下：建立資源、宣告綁定、定義結構，再寫 Worker 與前端。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the storage resources",
+                  "zh": "建立儲存資源"
+                },
+                "text": {
+                  "en": "One command each for the database, the cache namespace, and the image bucket. Copy the IDs Wrangler prints.",
+                  "zh": "資料庫、快取命名空間、圖片桶各一條指令。把 Wrangler 印出的 ID 複製起來。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 create blog\nnpx wrangler kv namespace create CACHE\nnpx wrangler r2 bucket create blog-images"
+                }
+              },
+              {
+                "title": {
+                  "en": "Declare the bindings",
+                  "zh": "宣告綁定"
+                },
+                "text": {
+                  "en": "Put all three bindings in wrangler.jsonc. Now env.DB, env.CACHE and env.BUCKET are available inside the Worker.",
+                  "zh": "把三個綁定都放進 wrangler.jsonc。這樣 Worker 裡就能用 env.DB、env.CACHE 與 env.BUCKET。"
+                },
+                "code": {
+                  "lang": "json",
+                  "body": "{\n  \"name\": \"blog-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"blog\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"kv_namespaces\": [\n    { \"binding\": \"CACHE\", \"id\": \"<your-kv-id>\" }\n  ],\n  \"r2_buckets\": [\n    { \"binding\": \"BUCKET\", \"bucket_name\": \"blog-images\" }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Apply the database schema",
+                  "zh": "套用資料庫結構"
+                },
+                "text": {
+                  "en": "Run the schema.sql from the data-model section against the real cloud database with --remote.",
+                  "zh": "用 --remote 把「資料模型」段落裡的 schema.sql 套到雲端上真正的資料庫。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 execute blog --remote --file=./schema.sql"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Worker API (read path)",
+                  "zh": "寫 Worker API（讀取路徑）"
+                },
+                "text": {
+                  "en": "This handler is the heart of the blueprint: KV first, then D1, then write back to KV. It also builds the Images URL from the R2 cover_key.",
+                  "zh": "這個 handler 是整張藍圖的核心：先 KV、再 D1、最後寫回 KV。它也用 R2 的 cover_key 組出 Images 網址。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const slug = url.pathname.split(\"/\").pop();\n    const cacheKey = `post:${slug}`;\n\n    // 1) Try the KV cache first\n    const cached = await env.CACHE.get(cacheKey);\n    if (cached) {\n      return new Response(cached, {\n        headers: { \"content-type\": \"application/json\", \"x-cache\": \"HIT\" },\n      });\n    }\n\n    // 2) Cache miss -> read post + author from D1\n    const post = await env.DB\n      .prepare(\n        \"SELECT p.id, p.title, p.body, p.cover_key, a.name AS author \" +\n        \"FROM posts p JOIN authors a ON a.id = p.author_id \" +\n        \"WHERE p.slug = ? AND p.published = 1\"\n      )\n      .bind(slug)\n      .first();\n\n    if (!post) return new Response(\"Not found\", { status: 404 });\n\n    // 3) Build an optimised image URL (R2 object served via Images)\n    post.cover_url =\n      `https://img.example.com/cdn-cgi/image/width=1200/${post.cover_key}`;\n\n    const json = JSON.stringify(post);\n\n    // 4) Save to KV for 5 minutes so the next read is instant\n    await env.CACHE.put(cacheKey, json, { expirationTtl: 300 });\n\n    return new Response(json, {\n      headers: { \"content-type\": \"application/json\", \"x-cache\": \"MISS\" },\n    });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Wire up the front-end",
+                  "zh": "串接前端"
+                },
+                "text": {
+                  "en": "On Pages, plain fetch() to the Worker API is all you need. The page renders the title, author and the optimised cover image.",
+                  "zh": "在 Pages 上，只要用原生 fetch() 打 Worker API 就夠了。頁面把標題、作者與最佳化過的封面圖渲染出來。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "async function loadPost(slug) {\n  const res = await fetch(`/api/posts/${slug}`);\n  if (!res.ok) throw new Error(\"Post not found\");\n  const post = await res.json();\n\n  document.querySelector(\"#title\").textContent = post.title;\n  document.querySelector(\"#author\").textContent = \"by \" + post.author;\n  document.querySelector(\"#cover\").src = post.cover_url;\n  document.querySelector(\"#body\").innerHTML = post.body;\n}\n\n// Read the slug from the URL, e.g. /blog/hello-world\nloadPost(location.pathname.split(\"/\").pop());"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署上線"
+                },
+                "text": {
+                  "en": "Publish the Worker; connect your repo to Pages for the front-end. The whole blog is now live on Cloudflare's edge.",
+                  "zh": "發布 Worker；把你的 repo 接上 Pages 做前端。整個部落格就上線在 Cloudflare 的邊緣了。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "cable",
+                "title": {
+                  "en": "Bindings, not connection strings",
+                  "zh": "用綁定，不用連線字串"
+                },
+                "text": {
+                  "en": "You reach D1, KV and R2 as env.DB / env.CACHE / env.BUCKET. There are no passwords in your code to leak.",
+                  "zh": "你用 env.DB／env.CACHE／env.BUCKET 存取 D1、KV、R2。程式碼裡沒有任何密碼會外洩。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "Cache key & TTL",
+                  "zh": "快取鍵與 TTL"
+                },
+                "text": {
+                  "en": "Each post is cached under post:<slug> with a TTL (time-to-live) — it auto-expires after 300 seconds even if nobody clears it.",
+                  "zh": "每篇文章以 post:<slug> 為鍵快取，並設定 TTL（存活時間）——就算沒人去清，300 秒後也會自動過期。"
+                }
+              },
+              {
+                "icon": "delete_sweep",
+                "title": {
+                  "en": "Invalidate on write",
+                  "zh": "寫入時失效"
+                },
+                "text": {
+                  "en": "When a post changes, delete its KV key. Otherwise readers keep seeing the stale cached version until the TTL runs out.",
+                  "zh": "文章一變更就刪掉它的 KV 鍵。否則在 TTL 到期前，讀者會一直看到過時的快取版本。"
+                }
+              },
+              {
+                "icon": "category",
+                "title": {
+                  "en": "Right tool per data type",
+                  "zh": "依資料型態選對工具"
+                },
+                "text": {
+                  "en": "Relational text → D1; large files → R2; hot read cache → KV. Mixing them up (e.g. images in D1) gets slow and pricey.",
+                  "zh": "關聯式文字 → D1；大型檔案 → R2；熱讀快取 → KV。混用（例如把圖片塞進 D1）會又慢又貴。"
+                }
+              },
+              {
+                "icon": "tune",
+                "title": {
+                  "en": "Images by URL",
+                  "zh": "用網址處理圖片"
+                },
+                "text": {
+                  "en": "Adding /cdn-cgi/image/width=1200/ to a URL resizes on the fly — store one original in R2, serve every size from it.",
+                  "zh": "在網址加上 /cdn-cgi/image/width=1200/ 就能即時縮放——R2 只存一份原圖，所有尺寸都由它供應。"
+                }
+              },
+              {
+                "icon": "dynamic_feed",
+                "title": {
+                  "en": "Pages + Worker split",
+                  "zh": "Pages 與 Worker 分工"
+                },
+                "text": {
+                  "en": "Pages serves static UI; the Worker serves /api. They deploy independently, so a UI tweak never risks your API.",
+                  "zh": "Pages 供應靜態介面；Worker 供應 /api。兩者各自部署，所以調整介面絕不會波及你的 API。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips & pitfalls",
+          "zh": "小提示與陷阱"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "payments",
+            "title": {
+              "en": "Generous free tiers stack up",
+              "zh": "免費額度疊起來很夠用"
+            },
+            "text": {
+              "en": "D1 (5M rows read/day), KV (100K reads/day), R2 (10GB + zero egress fees) and Pages (unlimited static requests) each have free tiers — a small blog can run at no cost. The cache means most reads never even hit D1's quota.",
+              "zh": "D1（每天 500 萬列讀取）、KV（每天 10 萬次讀取）、R2（10GB 且免下載流量費）與 Pages（無限靜態請求）各自都有免費額度——小型部落格幾乎零成本就能跑。有了快取，大多數讀取根本用不到 D1 的額度。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Always invalidate the KV key when you edit or unpublish a post, or readers see stale content.",
+                "Store only the cover_key in D1 (a short string); keep the actual image bytes in R2.",
+                "Add an index on posts(slug) — it is your main lookup column and keeps reads cheap.",
+                "R2 has no egress fees, so serving images is far cheaper than typical cloud storage.",
+                "Keep secrets (e.g. an admin token) in wrangler secrets, never in wrangler.jsonc."
+              ],
+              "zh": [
+                "編輯或下架文章時一定要讓 KV 鍵失效，否則讀者會看到過時內容。",
+                "D1 裡只存 cover_key（一個短字串）；真正的圖片位元組放在 R2。",
+                "在 posts(slug) 上建索引——它是你主要的查找欄位，能讓讀取一直很便宜。",
+                "R2 沒有下載流量費，所以供應圖片比一般雲端儲存便宜很多。",
+                "密鑰（例如管理者 token）放在 wrangler secrets，千萬別寫進 wrangler.jsonc。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "pages-functions-fullstack",
+        "label": {
+          "en": "Pages Functions full-stack",
+          "zh": "Pages Functions 全端"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "images",
+        "label": {
+          "en": "Images",
+          "zh": "Images"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-ecommerce",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "shopping_cart",
+    "title": {
+      "en": "Blueprint: an online store",
+      "zh": "架構藍圖：線上商店"
+    },
+    "subtitle": {
+      "en": "A reference architecture for e-commerce on Cloudflare: storefront, API, database, cart, images and a payment provider.",
+      "zh": "在 Cloudflare 上打造電商的參考架構：商店前台、API、資料庫、購物車、圖片，再接上金流。"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Wire Pages, Workers, D1, Durable Objects, R2, KV and Turnstile into one checkout that actually holds up.",
+        "zh": "把 Pages、Workers、D1、Durable Objects、R2、KV、Turnstile 串成一條真正撐得住的結帳流程。"
+      }
+    },
+    "stats": [
+      {
+        "value": "7",
+        "label": {
+          "en": "Cloudflare products",
+          "zh": "Cloudflare 產品"
+        }
+      },
+      {
+        "value": "4",
+        "label": {
+          "en": "Core tables",
+          "zh": "核心資料表"
+        }
+      },
+      {
+        "value": "3",
+        "label": {
+          "en": "Checkout steps",
+          "zh": "結帳步驟"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "Platform",
+          "zh": "單一平台"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要蓋什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "We will build a small online store entirely on Cloudflare. Customers browse products, drop items into a cart, and check out with a card — and every moving part runs on Cloudflare's edge, with one external service: the payment provider.",
+              "zh": "我們要完全用 Cloudflare 蓋一間小型線上商店。客人逛商品、把東西丟進購物車、用信用卡結帳——而所有環節都跑在 Cloudflare 的邊緣網路上，只有一個外部服務：金流商。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Think of this page as a wiring diagram. Each Cloudflare product does one job: Pages serves the storefront, a Worker is the API brain, D1 is the SQL database, Durable Objects keep each cart and the stock count consistent, R2 holds product images, KV caches the catalog, and Turnstile plus the WAF guard the checkout.",
+              "zh": "把這頁當成一張接線圖。每個 Cloudflare 產品各司其職：Pages 負責前台、Worker 是 API 大腦、D1 是 SQL 資料庫、Durable Objects 讓每台購物車和庫存數字維持一致、R2 放商品圖片、KV 快取商品目錄，而 Turnstile 加上 WAF 守住結帳關卡。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "storefront",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A physical shop: Pages is the shop window, the Worker is the cashier, D1 is the ledger in the back office, the Durable Object is the single basket in your hands (no one else can touch it), R2 is the stockroom of photos, and the payment provider is the bank's card terminal.",
+              "zh": "一間實體店面：Pages 是櫥窗、Worker 是收銀員、D1 是後台帳本、Durable Object 是你手上那只獨一無二的提籃（別人碰不到）、R2 是放照片的倉庫，而金流商就是銀行的刷卡機。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "System architecture",
+              "zh": "系統架構"
+            },
+            "code": {
+              "en": "flowchart TD\n  U[\"Shopper browser\"] --> WAF[\"WAF and DDoS shield\"]\n  WAF --> P[\"Pages storefront\"]\n  WAF --> W[\"Worker API\"]\n  P -->|\"product images\"| R2[\"R2 image bucket\"]\n  P -->|\"checkout challenge\"| TS[\"Turnstile\"]\n  W -->|\"catalog cache\"| KV[\"Workers KV\"]\n  W -->|\"products and orders\"| D1[\"D1 database\"]\n  W -->|\"cart and inventory\"| DO[\"Cart Durable Objects\"]\n  W -->|\"charge card\"| PAY[\"External payment\"]",
+              "zh": "flowchart TD\n  U[\"購物者瀏覽器\"] --> WAF[\"WAF 與 DDoS 防護\"]\n  WAF --> P[\"Pages 商店前台\"]\n  WAF --> W[\"Worker API\"]\n  P -->|\"商品圖片\"| R2[\"R2 圖片儲存桶\"]\n  P -->|\"結帳驗證\"| TS[\"Turnstile\"]\n  W -->|\"目錄快取\"| KV[\"Workers KV\"]\n  W -->|\"商品與訂單\"| D1[\"D1 資料庫\"]\n  W -->|\"購物車與庫存\"| DO[\"購物車 Durable Objects\"]\n  W -->|\"刷卡扣款\"| PAY[\"外部金流\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Each product's role",
+          "zh": "每個產品的角色"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Seven Cloudflare products plus one external payment service make up the whole store. Here is exactly what each one is responsible for.",
+              "zh": "整間商店由七個 Cloudflare 產品，加上一個外部金流服務組成。以下是每一個各自負責什麼。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Pages — storefront",
+                  "zh": "Pages — 前台"
+                },
+                "text": {
+                  "en": "Hosts the static/React shop UI on the global CDN. The browser talks to it first.",
+                  "zh": "把靜態或 React 商店介面放在全球 CDN 上。瀏覽器最先接觸的就是它。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "Workers — API",
+                  "zh": "Workers — API"
+                },
+                "text": {
+                  "en": "The brain: routes /api requests, runs business logic, and talks to every storage layer.",
+                  "zh": "大腦：負責路由 /api 請求、跑商業邏輯，並與每個儲存層溝通。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 — SQL database",
+                  "zh": "D1 — SQL 資料庫"
+                },
+                "text": {
+                  "en": "Stores products, customers, orders and order_items as relational tables.",
+                  "zh": "用關聯式資料表存放商品、客戶、訂單與訂單明細。"
+                }
+              },
+              {
+                "icon": "lock_clock",
+                "title": {
+                  "en": "Durable Objects — cart & stock",
+                  "zh": "Durable Objects — 購物車與庫存"
+                },
+                "text": {
+                  "en": "One instance per cart; serialises stock changes so two buyers can't oversell the last item.",
+                  "zh": "每台購物車一個實例；把庫存變動排成一列，避免兩個買家把最後一件商品同時賣掉。"
+                }
+              },
+              {
+                "icon": "image",
+                "title": {
+                  "en": "R2 — product images",
+                  "zh": "R2 — 商品圖片"
+                },
+                "text": {
+                  "en": "Object storage for photos, served with zero egress fees. The image_key column points here.",
+                  "zh": "存照片的物件儲存，下載免流量費。資料表的 image_key 欄位就指向這裡。"
+                }
+              },
+              {
+                "icon": "bolt_outline",
+                "title": {
+                  "en": "KV — catalog cache",
+                  "zh": "KV — 目錄快取"
+                },
+                "text": {
+                  "en": "Caches the product list at the edge so browsing doesn't hit D1 on every page view.",
+                  "zh": "在邊緣快取商品清單，讓每次瀏覽不必都打到 D1。"
+                }
+              },
+              {
+                "icon": "verified_user",
+                "title": {
+                  "en": "Turnstile — human check",
+                  "zh": "Turnstile — 真人驗證"
+                },
+                "text": {
+                  "en": "A friendly CAPTCHA on the checkout form; the Worker verifies the token before charging.",
+                  "zh": "結帳表單上的友善驗證碼；Worker 會在扣款前驗證它的 token。"
+                }
+              },
+              {
+                "icon": "shield",
+                "title": {
+                  "en": "WAF — firewall",
+                  "zh": "WAF — 防火牆"
+                },
+                "text": {
+                  "en": "Blocks malicious traffic and bots before they ever reach Pages or the Worker.",
+                  "zh": "在惡意流量與機器人觸及 Pages 或 Worker 之前就先擋下。"
+                }
+              },
+              {
+                "icon": "credit_card",
+                "title": {
+                  "en": "Payment provider — external",
+                  "zh": "金流商 — 外部"
+                },
+                "text": {
+                  "en": "The only off-Cloudflare service. The Worker calls its API server-to-server to charge the card.",
+                  "zh": "唯一不在 Cloudflare 上的服務。Worker 以伺服器對伺服器方式呼叫它的 API 來刷卡。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "hub",
+            "title": {
+              "en": "One platform, many bindings",
+              "zh": "同一平台，多個綁定"
+            },
+            "text": {
+              "en": "Because every product lives on Cloudflare, the Worker reaches them through bindings (env.DB, env.CART, env.IMAGES, env.CATALOG) instead of network calls with URLs and credentials. Less config, fewer secrets, lower latency.",
+              "zh": "因為每個產品都住在 Cloudflare 上，Worker 透過綁定（env.DB、env.CART、env.IMAGES、env.CATALOG）就能存取它們，不必用網址加金鑰去打網路請求。設定更少、密鑰更少、延遲更低。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model",
+          "zh": "資料模型"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Four tables cover a basic store. A customer places many orders; each order contains many order_items; each order_item points at one product. The order_items table is the join that records how many of each product were bought, at what price.",
+              "zh": "四張資料表就能撐起一間基本商店。一位客戶可以下很多筆訂單；每筆訂單包含許多訂單明細（order_items）；每筆明細指向一個商品。order_items 這張中介表記錄了每樣商品買了幾個、單價多少。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Entity relationships",
+              "zh": "實體關聯圖"
+            },
+            "code": {
+              "en": "erDiagram\n  CUSTOMERS ||--o{ ORDERS : places\n  ORDERS ||--o{ ORDER_ITEMS : contains\n  PRODUCTS ||--o{ ORDER_ITEMS : \"listed in\"\n  CUSTOMERS {\n    int id PK\n    text email\n    text name\n  }\n  PRODUCTS {\n    int id PK\n    text title\n    int price_cents\n    int stock\n  }\n  ORDERS {\n    int id PK\n    int customer_id FK\n    text status\n    int total_cents\n  }\n  ORDER_ITEMS {\n    int id PK\n    int order_id FK\n    int product_id FK\n    int qty\n  }",
+              "zh": "erDiagram\n  CUSTOMERS ||--o{ ORDERS : \"下單\"\n  ORDERS ||--o{ ORDER_ITEMS : \"包含\"\n  PRODUCTS ||--o{ ORDER_ITEMS : \"列於\"\n  CUSTOMERS {\n    int id PK\n    text email\n    text name\n  }\n  PRODUCTS {\n    int id PK\n    text title\n    int price_cents\n    int stock\n  }\n  ORDERS {\n    int id PK\n    int customer_id FK\n    text status\n    int total_cents\n  }\n  ORDER_ITEMS {\n    int id PK\n    int order_id FK\n    int product_id FK\n    int qty\n  }"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Create the tables",
+              "zh": "建立資料表"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "-- schema.sql : the four core tables of the store\nCREATE TABLE customers (\n  id    INTEGER PRIMARY KEY,\n  email TEXT UNIQUE NOT NULL,\n  name  TEXT\n);\n\nCREATE TABLE products (\n  id          INTEGER PRIMARY KEY,\n  title       TEXT NOT NULL,\n  price_cents INTEGER NOT NULL,\n  stock       INTEGER NOT NULL DEFAULT 0,\n  image_key   TEXT                      -- object key inside the R2 bucket\n);\n\nCREATE TABLE orders (\n  id          INTEGER PRIMARY KEY,\n  customer_id INTEGER REFERENCES customers(id),\n  email       TEXT,\n  status      TEXT NOT NULL DEFAULT 'pending',  -- pending | paid | failed\n  total_cents INTEGER NOT NULL,\n  created_at  TEXT DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE order_items (\n  id               INTEGER PRIMARY KEY,\n  order_id         INTEGER NOT NULL REFERENCES orders(id),\n  product_id       INTEGER NOT NULL REFERENCES products(id),\n  qty              INTEGER NOT NULL,\n  unit_price_cents INTEGER NOT NULL\n);\n\nCREATE INDEX idx_items_order ON order_items(order_id);"
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "payments",
+            "title": {
+              "en": "Store money as integers",
+              "zh": "金額用整數存"
+            },
+            "text": {
+              "en": "Notice price_cents and total_cents — we store money as whole cents (an integer), never as a floating-point dollar amount. Floats round badly and lose pennies; integers never do.",
+              "zh": "注意 price_cents 與 total_cents——金額一律用「整數分」存，絕不要用浮點數的「元」。浮點數會亂進位、掉零頭；整數不會。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "The checkout flow",
+          "zh": "結帳流程"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Browsing is easy (read from KV/D1, show images from R2). The interesting part is checkout, where five things must happen in the right order — and roll back cleanly if the card is declined.",
+              "zh": "瀏覽很簡單（從 KV／D1 讀取、用 R2 顯示圖片）。真正有趣的是結帳：五件事必須照正確順序發生——而且一旦刷卡失敗，要能乾淨地回滾。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Checkout sequence",
+              "zh": "結帳時序"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as Browser\n  participant W as \"Worker API\"\n  participant TS as Turnstile\n  participant DO as \"Cart DO\"\n  participant D as D1\n  participant PAY as Payment\n  U->>W: POST checkout with token\n  W->>TS: verify token\n  TS-->>W: human ok\n  W->>DO: reserve stock\n  DO->>D: decrement stock\n  D-->>DO: rows updated\n  DO-->>W: reserved and total\n  W->>D: INSERT order pending\n  D-->>W: order id\n  W->>PAY: create charge\n  PAY-->>W: paid\n  W->>D: UPDATE order paid\n  W-->>U: order confirmed",
+              "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as \"Worker API\"\n  participant TS as Turnstile\n  participant DO as \"購物車 DO\"\n  participant D as D1\n  participant PAY as 金流\n  U->>W: POST 結帳並附 token\n  W->>TS: 驗證 token\n  TS-->>W: 確認是真人\n  W->>DO: 預扣庫存\n  DO->>D: 扣減庫存\n  D-->>DO: 更新成功\n  DO-->>W: 已預扣與總金額\n  W->>D: 寫入待付款訂單\n  D-->>W: 訂單編號\n  W->>PAY: 建立扣款\n  PAY-->>W: 已付款\n  W->>D: 更新訂單為已付款\n  W-->>U: 訂單完成"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Verify the Turnstile token so bots can't hammer checkout.",
+                "Reserve stock inside the Cart Durable Object (atomic, no overselling).",
+                "Write a 'pending' order to D1 and get its id.",
+                "Call the external payment provider to charge the card.",
+                "On success mark the order 'paid'; on failure mark it 'failed' and release the stock."
+              ],
+              "zh": [
+                "先驗證 Turnstile token，讓機器人無法猛攻結帳。",
+                "在購物車 Durable Object 內預扣庫存（原子操作、不超賣）。",
+                "把一筆「待付款」訂單寫進 D1，取得訂單編號。",
+                "呼叫外部金流商來刷卡扣款。",
+                "成功就把訂單標為「已付款」；失敗就標為「失敗」並把庫存還回去。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Reserve before you charge",
+              "zh": "先預扣，再扣款"
+            },
+            "text": {
+              "en": "Always reserve stock before calling the payment provider. If you charge first and then discover the item is sold out, you have taken money for goods you can't ship — and now owe a refund.",
+              "zh": "務必在呼叫金流之前先預扣庫存。如果先扣款才發現商品賣完了，你就收了一筆無法出貨的錢——還得辦退款。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: bindings & code",
+          "zh": "動手做：綁定與程式碼"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the real wiring: the wrangler bindings that connect the Worker to every product, the secrets, the storefront front-end, the checkout Worker, and the Cart Durable Object.",
+              "zh": "以下是真正的接線：把 Worker 連到每個產品的 wrangler 綁定、密鑰、前台前端、結帳 Worker，以及購物車 Durable Object。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Declare all bindings",
+                  "zh": "宣告所有綁定"
+                },
+                "text": {
+                  "en": "In wrangler.jsonc, bind D1, KV, R2 and the Cart Durable Object so the Worker reaches them as env.DB, env.CATALOG, env.IMAGES and env.CART.",
+                  "zh": "在 wrangler.jsonc 裡綁定 D1、KV、R2 和購物車 Durable Object，讓 Worker 能用 env.DB、env.CATALOG、env.IMAGES、env.CART 存取它們。"
+                },
+                "code": {
+                  "lang": "jsonc",
+                  "body": "{\n  \"name\": \"store-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"store-db\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"kv_namespaces\": [\n    { \"binding\": \"CATALOG\", \"id\": \"<your-kv-id>\" }\n  ],\n  \"r2_buckets\": [\n    { \"binding\": \"IMAGES\", \"bucket_name\": \"store-images\" }\n  ],\n  \"durable_objects\": {\n    \"bindings\": [\n      { \"name\": \"CART\", \"class_name\": \"Cart\" }\n    ]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"Cart\"] }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Store the secrets",
+                  "zh": "設定密鑰"
+                },
+                "text": {
+                  "en": "Turnstile and the payment key never go in code — push them as encrypted secrets.",
+                  "zh": "Turnstile 與金流金鑰絕不寫進程式碼——用加密密鑰推上去。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Turnstile secret key (verifies the checkout challenge)\nnpx wrangler secret put TURNSTILE_SECRET\n\n# Your payment provider API key (Stripe, etc.)\nnpx wrangler secret put PAYMENT_KEY"
+                }
+              },
+              {
+                "title": {
+                  "en": "Apply the schema",
+                  "zh": "套用資料表結構"
+                },
+                "text": {
+                  "en": "Create the four tables in the remote D1 database from schema.sql.",
+                  "zh": "用 schema.sql 在遠端 D1 資料庫建立那四張資料表。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 execute store-db --remote --file=./schema.sql"
+                }
+              },
+              {
+                "title": {
+                  "en": "Upload images to R2",
+                  "zh": "上傳圖片到 R2"
+                },
+                "text": {
+                  "en": "Put each photo in the bucket, then save its key in the product row.",
+                  "zh": "把每張照片放進儲存桶，再把它的 key 存到商品那一列。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Upload a product image to the R2 bucket, then store its key in D1\nnpx wrangler r2 object put store-images/tshirt-blue.jpg --file ./tshirt-blue.jpg\n\nnpx wrangler d1 execute store-db --remote \\\n  --command \"UPDATE products SET image_key = 'tshirt-blue.jpg' WHERE id = 1;\""
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署"
+                },
+                "text": {
+                  "en": "Ship the Worker; the storefront on Pages deploys from its own git push.",
+                  "zh": "發布 Worker；Pages 上的前台則由它自己的 git push 來部署。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Front-end (Pages storefront)",
+              "zh": "前端（Pages 前台）"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "public/store.js",
+              "zh": "public/store.js"
+            },
+            "body": "// public/store.js -- runs in the browser on the Pages storefront\nconst API = \"https://store-api.example.workers.dev\";\n\n// A stable id for this browser's cart (used to find its Durable Object)\nconst cartId = localStorage.getItem(\"cartId\") || crypto.randomUUID();\nlocalStorage.setItem(\"cartId\", cartId);\n\n// 1) Browse products (images load straight from R2)\nasync function loadProducts() {\n  const res = await fetch(`${API}/api/products`);\n  const products = await res.json();\n  for (const p of products) {\n    // <img src=\"https://images.example.com/<image_key>\"> served by R2\n    renderCard(p);\n  }\n}\n\n// 2) Add to cart\nasync function addToCart(productId) {\n  await fetch(`${API}/api/cart/add`, {\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ cartId, productId, qty: 1 }),\n  });\n}\n\n// 3) Checkout -- token comes from the Turnstile widget on the page\nasync function checkout(email) {\n  const token = window.turnstile.getResponse();   // proves you are human\n  const res = await fetch(`${API}/api/checkout`, {\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ cartId, token, email }),\n  });\n  const { orderId, status } = await res.json();\n  alert(`Order ${orderId}: ${status}`);\n}"
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Checkout Worker (the API)",
+              "zh": "結帳 Worker（API）"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/index.js",
+              "zh": "src/index.js"
+            },
+            "body": "// src/index.js -- the store Worker API (router)\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // Browse catalog: serve from the KV cache, fall back to D1\n    if (url.pathname === \"/api/products\") {\n      let catalog = await env.CATALOG.get(\"catalog\", \"json\");\n      if (!catalog) {\n        const { results } = await env.DB\n          .prepare(\"SELECT id, title, price_cents, stock, image_key FROM products\")\n          .all();\n        catalog = results;\n        await env.CATALOG.put(\"catalog\", JSON.stringify(results), { expirationTtl: 60 });\n      }\n      return Response.json(catalog);\n    }\n\n    // Add to cart: route to THIS shopper's Cart Durable Object\n    if (url.pathname === \"/api/cart/add\" && request.method === \"POST\") {\n      const { cartId, productId, qty } = await request.json();\n      const stub = env.CART.get(env.CART.idFromName(cartId));\n      return stub.fetch(\"https://do/add\", {\n        method: \"POST\",\n        body: JSON.stringify({ productId, qty }),\n      });\n    }\n\n    // Checkout\n    if (url.pathname === \"/api/checkout\" && request.method === \"POST\") {\n      const { cartId, token, email } = await request.json();\n\n      // 1) Turnstile: prove the buyer is a human, not a bot\n      if (!(await verifyTurnstile(token, env.TURNSTILE_SECRET)))\n        return new Response(\"Failed challenge\", { status: 403 });\n\n      // 2) Reserve stock atomically inside the Cart Durable Object\n      const cart = env.CART.get(env.CART.idFromName(cartId));\n      const reserved = await (await cart.fetch(\"https://do/reserve\", { method: \"POST\" })).json();\n      if (!reserved.ok) return new Response(\"Out of stock\", { status: 409 });\n\n      // 3) Create a pending order in D1\n      const order = await env.DB\n        .prepare(\"INSERT INTO orders (email, status, total_cents) VALUES (?, 'pending', ?) RETURNING id\")\n        .bind(email, reserved.total_cents)\n        .first();\n\n      // 4) Charge the external payment provider\n      const charge = await chargePayment(env.PAYMENT_KEY, order.id, reserved.total_cents);\n\n      // 5) Confirm, or roll the stock back on failure\n      const status = charge.paid ? \"paid\" : \"failed\";\n      await env.DB.prepare(\"UPDATE orders SET status = ? WHERE id = ?\")\n        .bind(status, order.id).run();\n      if (!charge.paid) await cart.fetch(\"https://do/release\", { method: \"POST\" });\n\n      return Response.json({ orderId: order.id, status });\n    }\n\n    return new Response(\"Not found\", { status: 404 });\n  },\n};\n\nasync function verifyTurnstile(token, secret) {\n  const r = await fetch(\"https://challenges.cloudflare.com/turnstile/v0/siteverify\", {\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ secret, response: token }),\n  });\n  return (await r.json()).success === true;\n}\n\nasync function chargePayment(apiKey, orderId, amountCents) {\n  // Swap this for your provider's SDK / REST call\n  const r = await fetch(\"https://api.payments.example/v1/charges\", {\n    method: \"POST\",\n    headers: { authorization: \"Bearer \" + apiKey, \"content-type\": \"application/json\" },\n    body: JSON.stringify({ amount: amountCents, currency: \"twd\", reference: orderId }),\n  });\n  return r.json();\n}"
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Cart / inventory Durable Object",
+              "zh": "購物車／庫存 Durable Object"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/cart.js",
+              "zh": "src/cart.js"
+            },
+            "body": "// src/cart.js -- one Durable Object instance per shopper cart.\n// A single DO is single-threaded, so stock checks never race each other.\nexport class Cart {\n  constructor(state, env) {\n    this.state = state;   // durable, consistent storage for THIS cart\n    this.env = env;\n  }\n\n  async fetch(request) {\n    const url = new URL(request.url);\n    let items = (await this.state.storage.get(\"items\")) || [];\n\n    if (url.pathname === \"/add\") {\n      const { productId, qty } = await request.json();\n      items = [...items, { productId, qty }];           // immutable update\n      await this.state.storage.put(\"items\", items);\n      return Response.json({ items });\n    }\n\n    if (url.pathname === \"/reserve\") {\n      // Decrement stock for every line, all-or-nothing.\n      // 'WHERE stock >= ?' makes each decrement safe under load.\n      let total = 0;\n      for (const it of items) {\n        const row = await this.env.DB\n          .prepare(\"UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ? RETURNING price_cents\")\n          .bind(it.qty, it.productId, it.qty)\n          .first();\n        if (!row) return Response.json({ ok: false });  // sold out -> abort\n        total += row.price_cents * it.qty;\n      }\n      return Response.json({ ok: true, total_cents: total });\n    }\n\n    if (url.pathname === \"/release\") {\n      // Payment failed: give the reserved stock back.\n      for (const it of items) {\n        await this.env.DB\n          .prepare(\"UPDATE products SET stock = stock + ? WHERE id = ?\")\n          .bind(it.qty, it.productId).run();\n      }\n      await this.state.storage.delete(\"items\");\n      return Response.json({ ok: true });\n    }\n\n    return new Response(\"DO route not found\", { status: 404 });\n  }\n}"
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Why it works: the hard parts",
+          "zh": "為什麼能成立：那些難的部分"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "shopping_basket",
+                "title": {
+                  "en": "Cart consistency",
+                  "zh": "購物車一致性"
+                },
+                "text": {
+                  "en": "Each cart maps to exactly one Durable Object via idFromName(cartId). All adds/reserves for that cart run on one instance, in order, so reads and writes never interleave or lose updates.",
+                  "zh": "每台購物車透過 idFromName(cartId) 對應到剛好一個 Durable Object。該購物車的所有加入／預扣都在同一個實例上、依序執行，所以讀寫不會交錯，也不會掉更新。"
+                }
+              },
+              {
+                "icon": "lock",
+                "title": {
+                  "en": "DO for inventory",
+                  "zh": "用 DO 管庫存"
+                },
+                "text": {
+                  "en": "A Durable Object is single-threaded. Funnelling stock decrements through it means two shoppers grabbing the last item are handled one after another — no race, no overselling.",
+                  "zh": "Durable Object 是單執行緒。把庫存扣減都導進它，兩個搶最後一件的客人就會一前一後被處理——沒有競態、不會超賣。"
+                }
+              },
+              {
+                "icon": "shield_lock",
+                "title": {
+                  "en": "Protecting checkout",
+                  "zh": "保護結帳"
+                },
+                "text": {
+                  "en": "WAF blocks bad traffic at the edge; Turnstile proves a human is checking out; the Worker verifies the token server-side before it ever calls the payment provider.",
+                  "zh": "WAF 在邊緣擋掉惡意流量；Turnstile 證明是真人在結帳；Worker 在呼叫金流之前，會在伺服器端先驗證那個 token。"
+                }
+              },
+              {
+                "icon": "cached",
+                "title": {
+                  "en": "Cache then fall back",
+                  "zh": "先快取，再回源"
+                },
+                "text": {
+                  "en": "Browsing reads the catalog from KV first and only queries D1 on a cache miss, then refills KV. Fast pages, far fewer D1 reads.",
+                  "zh": "瀏覽時先從 KV 讀目錄，只有快取沒命中才查 D1，查完再回填 KV。頁面更快，D1 讀取也少很多。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "Bindings, not URLs",
+                  "zh": "用綁定，不用網址"
+                },
+                "text": {
+                  "en": "env.DB / env.CART / env.IMAGES are bindings injected at deploy time. No connection strings, no API keys between your own services.",
+                  "zh": "env.DB／env.CART／env.IMAGES 是部署時注入的綁定。自家服務之間不需要連線字串、也不需要 API 金鑰。"
+                }
+              },
+              {
+                "icon": "undo",
+                "title": {
+                  "en": "Roll back on failure",
+                  "zh": "失敗就回滾"
+                },
+                "text": {
+                  "en": "If the card is declined, the order is marked 'failed' and the DO releases the reserved stock, so the shelf count stays honest.",
+                  "zh": "如果刷卡被拒，訂單標為「失敗」，DO 會把預扣的庫存還回去，讓架上數量始終誠實。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & tips",
+          "zh": "陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "verified",
+            "title": {
+              "en": "Always verify payment server-side",
+              "zh": "金流一律在伺服器端驗證"
+            },
+            "text": {
+              "en": "Never trust the browser to tell you an order was paid. Confirm payment by calling the provider's API (or a signed webhook) from the Worker, then update the order status from that result.",
+              "zh": "永遠不要相信瀏覽器說「這筆已付款」。要從 Worker 呼叫金流商的 API（或用有簽章的 webhook）來確認付款，再依結果更新訂單狀態。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Keep the KV catalog TTL short (e.g. 60s) or purge the key whenever a product changes, so prices never go stale.",
+                "Make the payment call idempotent — pass the order id as the reference so a retried request never double-charges.",
+                "Store only image keys in D1; build the public R2 URL in the front-end. This keeps rows small and URLs swappable.",
+                "Use a webhook from the payment provider as a backstop in case the shopper closes the tab before the Worker sees 'paid'.",
+                "Add a periodic job (Cron Trigger) to release stock from carts that started checkout but never completed."
+              ],
+              "zh": [
+                "把 KV 目錄的 TTL 設短（例如 60 秒），或在商品變動時就清掉那個 key，價格才不會過期。",
+                "讓金流呼叫具備冪等性——把訂單編號當作 reference 傳過去，重送的請求就不會重複扣款。",
+                "D1 只存圖片 key；公開的 R2 網址在前端組出來。這讓資料列小、網址也好替換。",
+                "用金流商的 webhook 當後援，以防客人在 Worker 看到「已付款」之前就關掉分頁。",
+                "加一個定時工作（Cron Trigger），把那些開始結帳卻沒完成的購物車所預扣的庫存釋放掉。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "rocket_launch",
+            "title": {
+              "en": "Start small, grow into it",
+              "zh": "先小做，再長大"
+            },
+            "text": {
+              "en": "You don't need all seven products on day one. Begin with Pages + Worker + D1, add R2 when you have images, KV when browsing gets heavy, Durable Objects when stock races appear, and Turnstile/WAF before you take real money.",
+              "zh": "第一天不必七個產品全上。先從 Pages＋Worker＋D1 開始，有圖片再加 R2、瀏覽量變大再加 KV、出現庫存競態再加 Durable Objects，而在真正收錢之前先把 Turnstile／WAF 補上。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "durable-objects",
+        "label": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        }
+      },
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "turnstile",
+        "label": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        }
+      },
+      {
+        "slug": "waf",
+        "label": {
+          "en": "WAF",
+          "zh": "WAF"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-saas",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "apartment",
+    "title": {
+      "en": "Blueprint: a multi-tenant SaaS",
+      "zh": "架構藍圖：多租戶 SaaS"
+    },
+    "subtitle": {
+      "en": "A reference architecture for serving many customers from one app, with each customer's data safely isolated",
+      "zh": "一套參考架構：用同一個應用程式服務很多客戶，而且每個客戶的資料都安全地彼此隔離"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Pages + Worker API + Access JWT + D1 (tenant_id on every row) + KV + Durable Objects + Web Analytics — wired into one secure multi-tenant blueprint.",
+        "zh": "Pages + Worker API + Access JWT + D1（每一列都帶 tenant_id）+ KV + Durable Objects + Web Analytics —— 串成一套安全的多租戶藍圖。"
+      }
+    },
+    "stats": [
+      {
+        "value": "1 DB",
+        "label": {
+          "en": "Shared database, many tenants",
+          "zh": "一個資料庫、多個租戶"
+        }
+      },
+      {
+        "value": "tenant_id",
+        "label": {
+          "en": "On every row",
+          "zh": "每一列都有"
+        }
+      },
+      {
+        "value": "7",
+        "label": {
+          "en": "Cloudflare services wired",
+          "zh": "串接的 Cloudflare 服務"
+        }
+      },
+      {
+        "value": "100/min",
+        "label": {
+          "en": "Per-tenant rate limit",
+          "zh": "每租戶限流"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要蓋什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "A multi-tenant SaaS is one application that serves many separate customers (called tenants) from the same codebase and the same database. Think of an office building: one building, one front desk, but each company gets its own locked floor. Our job is to make sure Tenant A can never see Tenant B's data.",
+              "zh": "多租戶 SaaS（multi-tenant SaaS）是「一套應用程式同時服務很多獨立客戶」的架構，這些客戶稱為「租戶（tenant）」，大家共用同一份程式碼、同一個資料庫。可以想成一棟辦公大樓：一棟樓、一個櫃台，但每間公司都有自己上鎖的樓層。我們的任務，就是確保「租戶 A」永遠看不到「租戶 B」的資料。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "apartment",
+            "title": {
+              "en": "Think of it like an apartment building",
+              "zh": "把它想成一棟公寓大樓"
+            },
+            "text": {
+              "en": "Everyone shares the lobby, the elevators and the plumbing (shared infrastructure), but each tenant has a key that only opens their own apartment (tenant_id). The doorman (Access) checks ID at the entrance; the key (tenant_id) decides which door opens inside.",
+              "zh": "大家共用大廳、電梯和水管（共用的基礎設施），但每位住戶手上的鑰匙只能打開自己那一戶（tenant_id）。門口的管理員（Access）在大門口查證件；進到裡面後，鑰匙（tenant_id）決定哪一扇門能打開。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the whole system on one page. A user opens the front-end (hosted on Pages), Cloudflare Access verifies who they are and hands the Worker a signed token (JWT). The Worker reads the tenant_id out of that token, checks a per-tenant rate limit, loads per-tenant config, and finally runs a database query that is scoped to that one tenant.",
+              "zh": "下面這張圖把整個系統濃縮在一頁。使用者打開前端（放在 Pages 上），Cloudflare Access 先確認他是誰，並交給 Worker 一個簽章過的權杖（JWT）。Worker 從權杖裡讀出 tenant_id，檢查該租戶的限流額度、載入該租戶的設定，最後執行一個「只查這一個租戶」的資料庫查詢。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "System architecture",
+              "zh": "系統架構"
+            },
+            "code": {
+              "en": "flowchart TD\n  U[\"Browser (Pages)\"] --> ACC[\"Access: verify JWT\"]\n  ACC --> W[\"Worker API\"]\n  W --> MW[\"Middleware: resolve tenant_id\"]\n  MW --> RL[\"Durable Object: per-tenant rate limit\"]\n  RL --> CFG[\"KV: per-tenant config\"]\n  CFG --> Q[\"D1 query: WHERE tenant_id = ?\"]\n  Q --> RES[\"Tenant-scoped data\"]\n  W --> WA[\"Web Analytics\"]",
+              "zh": "flowchart TD\n  U[\"瀏覽器 (Pages)\"] --> ACC[\"Access：驗證 JWT\"]\n  ACC --> W[\"Worker API\"]\n  W --> MW[\"中介層：解析 tenant_id\"]\n  MW --> RL[\"Durable Object：每租戶限流\"]\n  RL --> CFG[\"KV：每租戶設定\"]\n  CFG --> Q[\"D1 查詢：WHERE tenant_id = ?\"]\n  Q --> RES[\"租戶隔離的資料\"]\n  W --> WA[\"Web Analytics\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "每個角色負責什麼？"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Each Cloudflare service in the blueprint has one clear job. Keeping responsibilities separate is what makes the system easy to reason about and secure.",
+              "zh": "藍圖裡每個 Cloudflare 服務都只負責一件清楚的事。把職責切乾淨，系統才好理解、也才安全。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Pages — front-end",
+                  "zh": "Pages —— 前端"
+                },
+                "text": {
+                  "en": "Hosts the static web app (HTML/JS/CSS) on Cloudflare's global edge. It calls the Worker API with fetch and shows the results.",
+                  "zh": "把靜態網頁應用程式（HTML/JS/CSS）放在 Cloudflare 全球邊緣節點上。它用 fetch 呼叫 Worker API，再把結果顯示出來。"
+                }
+              },
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "Worker — API",
+                  "zh": "Worker —— API"
+                },
+                "text": {
+                  "en": "The brain. It runs the auth/tenant middleware, enforces limits, and is the only thing that talks to the database. The front-end never touches D1 directly.",
+                  "zh": "系統的大腦。它執行身分／租戶中介層、強制限流，而且是唯一會跟資料庫對話的角色。前端絕不直接碰 D1。"
+                }
+              },
+              {
+                "icon": "badge",
+                "title": {
+                  "en": "Access — identity",
+                  "zh": "Access —— 身分驗證"
+                },
+                "text": {
+                  "en": "The doorman. It logs the user in (Google, GitHub, email PIN) and hands the Worker a signed JWT carrying claims like email and tenant_id.",
+                  "zh": "門口管理員。它讓使用者登入（Google、GitHub、email PIN），並交給 Worker 一個簽章過的 JWT，裡面帶著 email、tenant_id 等聲明（claims）。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 — SQL database",
+                  "zh": "D1 —— SQL 資料庫"
+                },
+                "text": {
+                  "en": "One shared SQLite database for everyone. Every tenant-owned table carries a tenant_id column, and every query filters by it.",
+                  "zh": "一個大家共用的 SQLite 資料庫。每個屬於租戶的資料表都帶一個 tenant_id 欄位，而且每次查詢都用它來過濾。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "KV — per-tenant config",
+                  "zh": "KV —— 每租戶設定"
+                },
+                "text": {
+                  "en": "A fast key-value store for small, read-heavy data: each tenant's feature flags, plan limits and cached settings, keyed by tenant_id.",
+                  "zh": "一個快速的鍵值（key-value）儲存，放小而常讀的資料：每個租戶的功能旗標、方案上限、快取設定，用 tenant_id 當鍵。"
+                }
+              },
+              {
+                "icon": "speed",
+                "title": {
+                  "en": "Durable Objects — rate limit",
+                  "zh": "Durable Objects —— 限流"
+                },
+                "text": {
+                  "en": "One tiny stateful instance per tenant, named by tenant_id. It counts requests so one noisy tenant can't slow down everyone else.",
+                  "zh": "每個租戶配一個有狀態的小實例，用 tenant_id 命名。它負責計算請求數，讓某個流量爆量的租戶不會拖慢其他人。"
+                }
+              },
+              {
+                "icon": "monitoring",
+                "title": {
+                  "en": "Web Analytics — insight",
+                  "zh": "Web Analytics —— 觀測"
+                },
+                "text": {
+                  "en": "Privacy-first, cookie-free traffic stats for the front-end, so you can watch usage and performance without slowing the page down.",
+                  "zh": "為前端提供「隱私優先、不用 cookie」的流量統計，讓你觀察使用情況與效能，又不拖慢頁面。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "How data isolation actually works",
+              "zh": "資料隔離實際上怎麼運作"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "We use the simplest, most common pattern: a shared database where every row is tagged with its tenant_id. There are no separate databases per customer. Isolation comes from one iron rule — every single query adds WHERE tenant_id = ?, and the Worker fills that value in from the verified JWT, never from anything the user typed.",
+              "zh": "我們用最簡單、也最常見的做法：共用一個資料庫，每一列都標上自己的 tenant_id。不需要為每個客戶開一個獨立資料庫。隔離來自一條鐵律 —— 每一個查詢都加上 WHERE tenant_id = ?，而且這個值是 Worker 從「已驗證的 JWT」填進去的，絕不採用使用者自己輸入的任何內容。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Shared table, isolated rows",
+              "zh": "共用資料表、隔離資料列"
+            },
+            "code": {
+              "en": "flowchart LR\n  TA[\"Tenant A\"] -->|\"tenant_id = A\"| DB[\"Shared D1 table\"]\n  TB[\"Tenant B\"] -->|\"tenant_id = B\"| DB\n  DB -->|\"filtered\"| OA[\"A sees only A rows\"]\n  DB -->|\"filtered\"| OB[\"B sees only B rows\"]",
+              "zh": "flowchart LR\n  TA[\"租戶 A\"] -->|\"tenant_id = A\"| DB[\"共用的 D1 資料表\"]\n  TB[\"租戶 B\"] -->|\"tenant_id = B\"| DB\n  DB -->|\"已過濾\"| OA[\"A 只看到 A 的資料列\"]\n  DB -->|\"已過濾\"| OB[\"B 只看到 B 的資料列\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model",
+          "zh": "資料模型"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Three tables show the pattern: tenants (the customers), users (people who belong to a tenant), and projects (an example resource). Notice that every table except tenants carries a tenant_id foreign key — that column is what makes isolation possible.",
+              "zh": "三張表就能說明這個模式：tenants（客戶本身）、users（屬於某個租戶的人）、projects（一個範例資源）。注意：除了 tenants 以外，每張表都帶一個 tenant_id 外鍵（foreign key）—— 正是這個欄位讓隔離成為可能。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Entity relationships",
+              "zh": "實體關聯圖"
+            },
+            "code": {
+              "en": "erDiagram\n  TENANTS ||--o{ USERS : \"has\"\n  TENANTS ||--o{ PROJECTS : \"owns\"\n  USERS ||--o{ PROJECTS : \"creates\"\n  TENANTS {\n    text id PK\n    text name\n    text plan\n  }\n  USERS {\n    text id PK\n    text tenant_id FK\n    text email\n    text role\n  }\n  PROJECTS {\n    text id PK\n    text tenant_id FK\n    text owner_id FK\n    text name\n  }",
+              "zh": "erDiagram\n  TENANTS ||--o{ USERS : \"擁有\"\n  TENANTS ||--o{ PROJECTS : \"擁有\"\n  USERS ||--o{ PROJECTS : \"建立\"\n  TENANTS {\n    text id PK\n    text name\n    text plan\n  }\n  USERS {\n    text id PK\n    text tenant_id FK\n    text email\n    text role\n  }\n  PROJECTS {\n    text id PK\n    text tenant_id FK\n    text owner_id FK\n    text name\n  }"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "key",
+            "title": {
+              "en": "Why tenant_id is a foreign key",
+              "zh": "為什麼 tenant_id 要當外鍵"
+            },
+            "text": {
+              "en": "Making tenant_id a foreign key to tenants(id) means the database itself refuses to create a row pointing at a tenant that doesn't exist. It is a cheap, built-in safety net on top of your application logic.",
+              "zh": "把 tenant_id 設成指向 tenants(id) 的外鍵，等於讓資料庫本身拒絕建立「指向不存在租戶」的資料列。這是在應用程式邏輯之上、免費又內建的一層安全網。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "One authenticated request, step by step",
+          "zh": "一次帶身分的請求，逐步拆解"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Follow a single API call from the browser all the way to the database and back. The key moment is in the middle: the Worker resolves tenant_id from the JWT and then scopes the SQL query to that tenant.",
+              "zh": "跟著一次 API 呼叫，從瀏覽器一路走到資料庫再回來。關鍵時刻在中間：Worker 從 JWT 解析出 tenant_id，然後把 SQL 查詢限縮到該租戶。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Authenticated request flow",
+              "zh": "帶身分的請求流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant B as \"Browser\"\n  participant AC as \"Access\"\n  participant W as \"Worker API\"\n  participant DO as \"Durable Object\"\n  participant KV as \"KV\"\n  participant D1 as \"D1\"\n  B->>AC: Request + JWT\n  AC->>W: Verified JWT\n  W->>W: Resolve tenant_id\n  W->>DO: Check tenant rate limit\n  DO-->>W: Allowed\n  W->>KV: Load tenant config\n  KV-->>W: Config\n  W->>D1: SELECT WHERE tenant_id = ?\n  D1-->>W: Tenant rows only\n  W-->>B: JSON",
+              "zh": "sequenceDiagram\n  participant B as \"瀏覽器\"\n  participant AC as \"Access\"\n  participant W as \"Worker API\"\n  participant DO as \"Durable Object\"\n  participant KV as \"KV\"\n  participant D1 as \"D1\"\n  B->>AC: 請求 + JWT\n  AC->>W: 已驗證的 JWT\n  W->>W: 解析 tenant_id\n  W->>DO: 檢查租戶限流\n  DO-->>W: 放行\n  W->>KV: 載入租戶設定\n  KV-->>W: 設定\n  W->>D1: SELECT WHERE tenant_id = ?\n  D1-->>W: 只回該租戶的資料列\n  W-->>B: JSON"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "gpp_maybe",
+            "title": {
+              "en": "Never trust the client for tenant_id",
+              "zh": "tenant_id 絕不能信任前端"
+            },
+            "text": {
+              "en": "The tenant_id must come from the signed JWT that Access verified — not from a URL parameter, request body, or header the user controls. If you let the client pick the tenant_id, anyone could just ask for another tenant's data.",
+              "zh": "tenant_id 一定要來自 Access 驗證過的簽章 JWT —— 不能來自網址參數、請求內容、或使用者能控制的標頭。如果讓前端自己挑 tenant_id，任何人都能直接索取別的租戶的資料。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: middleware + tenant-scoped queries",
+          "zh": "動手做：中介層 + 租戶範圍查詢"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Here is the whole thing in real, runnable code: the SQL schema, the front-end, the auth/tenant middleware, the per-tenant rate limiter, the tenant-scoped query, and the wrangler config that binds it all together.",
+              "zh": "下面是整套東西的真實、可執行程式碼：SQL 結構、前端、身分／租戶中介層、每租戶限流器、租戶範圍查詢，以及把全部綁在一起的 wrangler 設定。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "1. Create the D1 schema (tenant_id everywhere)",
+                  "zh": "1. 建立 D1 結構（到處都有 tenant_id）"
+                },
+                "text": {
+                  "en": "Every tenant-owned table gets a tenant_id column with a foreign key, plus an index so scoped queries stay fast as data grows.",
+                  "zh": "每張屬於租戶的表都加上一個帶外鍵的 tenant_id 欄位，再建索引，讓資料變多後範圍查詢依然很快。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- Every tenant-owned table carries tenant_id. Index it for fast, scoped queries.\nCREATE TABLE tenants (\n  id    TEXT PRIMARY KEY,\n  name  TEXT NOT NULL,\n  plan  TEXT NOT NULL DEFAULT 'free'\n);\n\nCREATE TABLE users (\n  id         TEXT PRIMARY KEY,\n  tenant_id  TEXT NOT NULL REFERENCES tenants(id),\n  email      TEXT NOT NULL,\n  role       TEXT NOT NULL DEFAULT 'member'\n);\n\nCREATE TABLE projects (\n  id         TEXT PRIMARY KEY,\n  tenant_id  TEXT NOT NULL REFERENCES tenants(id),\n  owner_id   TEXT NOT NULL REFERENCES users(id),\n  name       TEXT NOT NULL\n);\n\n-- Index tenant_id so WHERE tenant_id = ? stays fast as rows grow.\nCREATE INDEX idx_projects_tenant ON projects(tenant_id);\nCREATE INDEX idx_users_tenant    ON users(tenant_id);"
+                }
+              },
+              {
+                "title": {
+                  "en": "2. Front-end (Pages) calls the API",
+                  "zh": "2. 前端（Pages）呼叫 API"
+                },
+                "text": {
+                  "en": "The page just calls /api/projects with fetch. Access has already verified the user, so the auth cookie rides along automatically — the front-end never sees or sends the tenant_id.",
+                  "zh": "頁面只要用 fetch 呼叫 /api/projects。Access 早已驗證過使用者，所以驗證用的 cookie 會自動帶上 —— 前端根本不會看到、也不會送出 tenant_id。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// public/app.js - served by Cloudflare Pages\n// Access already verified the user; the auth cookie rides along automatically.\nasync function loadProjects() {\n  const res = await fetch('/api/projects', {\n    headers: { 'Accept': 'application/json' },\n    credentials: 'include'\n  });\n  if (!res.ok) {\n    document.getElementById('status').textContent = 'Error ' + res.status;\n    return;\n  }\n  const data = await res.json();\n  document.getElementById('list').innerHTML =\n    data.projects.map(p => `<li>${p.name}</li>`).join('');\n}\nloadProjects();"
+                }
+              },
+              {
+                "title": {
+                  "en": "3. Auth + tenant middleware",
+                  "zh": "3. 身分 + 租戶中介層"
+                },
+                "text": {
+                  "en": "Read the JWT that Access already verified and pull the tenant_id claim out of it. This is the one place a tenant is decided — from the token, never from user input.",
+                  "zh": "讀取 Access 已經驗證過的 JWT，從中取出 tenant_id 聲明。租戶只在這一個地方被決定 —— 來自權杖，絕不來自使用者輸入。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/index.js - Worker API entry\nexport { RateLimiter } from './rate-limiter.js';\n\n// Auth + tenant middleware: read the JWT Access already verified,\n// then pull the tenant_id claim out of it.\nfunction resolveTenant(request) {\n  const jwt = request.headers.get('Cf-Access-Jwt-Assertion');\n  if (!jwt) return null;\n  const parts = jwt.split('.');\n  if (parts.length !== 3) return null;\n  const json = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));\n  const claims = JSON.parse(json);\n  if (!claims.tenant_id) return null;\n  return { tenantId: claims.tenant_id, email: claims.email };\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "4. Per-tenant rate limiter (Durable Object)",
+                  "zh": "4. 每租戶限流器（Durable Object）"
+                },
+                "text": {
+                  "en": "One Durable Object instance per tenant (named by tenant_id) keeps an isolated counter. A 100-request-per-minute window means one busy tenant can never use up another tenant's budget.",
+                  "zh": "每個租戶一個 Durable Object 實例（用 tenant_id 命名），各自維護一個獨立計數器。「每分鐘 100 次」的視窗，代表某個忙碌的租戶永遠用不掉別的租戶的額度。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/rate-limiter.js - one Durable Object instance per tenant.\nexport class RateLimiter {\n  constructor(state) {\n    this.state = state;\n  }\n  async fetch() {\n    const now = Date.now();\n    const windowMs = 60000;   // 1-minute window\n    const limit = 100;        // 100 requests / minute / tenant\n    let w = (await this.state.storage.get('w')) || { start: now, count: 0 };\n    if (now - w.start > windowMs) w = { start: now, count: 0 };\n    w.count += 1;\n    await this.state.storage.put('w', w);\n    const ok = w.count <= limit;\n    return new Response(ok ? 'ok' : 'limited', { status: ok ? 200 : 429 });\n  }\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "5. The request pipeline + tenant-scoped query",
+                  "zh": "5. 請求流水線 + 租戶範圍查詢"
+                },
+                "text": {
+                  "en": "Tie it together: resolve the tenant, check its rate limit, read its KV config, then run the D1 query with WHERE tenant_id = ?, binding the value from the JWT. That bind is what guarantees isolation.",
+                  "zh": "把全部串起來：解析租戶、檢查限流、讀取它的 KV 設定，然後執行帶 WHERE tenant_id = ? 的 D1 查詢，並把 JWT 來的值綁定（bind）進去。這個綁定就是隔離的保證。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/index.js (continued) - the request pipeline\nexport default {\n  async fetch(request, env) {\n    // 1) Who is this, and which tenant do they belong to?\n    const tenant = resolveTenant(request);\n    if (!tenant) return new Response('Unauthorized', { status: 401 });\n\n    // 2) Per-tenant rate limit: one Durable Object named after the tenant.\n    const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(tenant.tenantId));\n    const rl = await stub.fetch('https://do/check');\n    if (rl.status === 429) return new Response('Too Many Requests', { status: 429 });\n\n    // 3) Per-tenant config from KV (cheap, cached at the edge).\n    const raw = await env.TENANT_KV.get('cfg:' + tenant.tenantId);\n    const cfg = raw ? JSON.parse(raw) : { maxProjects: 100 };\n\n    // 4) Tenant-scoped query: EVERY statement filters WHERE tenant_id = ?\n    const { results } = await env.DB\n      .prepare('SELECT id, name FROM projects WHERE tenant_id = ? ORDER BY name')\n      .bind(tenant.tenantId)\n      .all();\n\n    return Response.json({ tenant: tenant.tenantId, config: cfg, projects: results });\n  }\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "6. Wire the bindings in wrangler",
+                  "zh": "6. 在 wrangler 設定綁定"
+                },
+                "text": {
+                  "en": "Declare the D1, KV and Durable Object bindings so the Worker can reach them as env.DB, env.TENANT_KV and env.RATE_LIMITER. The migration registers the Durable Object class.",
+                  "zh": "宣告 D1、KV 和 Durable Object 的綁定，Worker 才能用 env.DB、env.TENANT_KV、env.RATE_LIMITER 存取它們。migration 則用來註冊 Durable Object 類別。"
+                },
+                "code": {
+                  "lang": "jsonc",
+                  "body": "// wrangler.jsonc\n{\n  \"name\": \"saas-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"saas\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"kv_namespaces\": [\n    { \"binding\": \"TENANT_KV\", \"id\": \"<your-kv-id>\" }\n  ],\n  \"durable_objects\": {\n    \"bindings\": [{ \"name\": \"RATE_LIMITER\", \"class_name\": \"RateLimiter\" }]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"RateLimiter\"] }\n  ]\n}"
+                }
+              }
+            ]
+          },
+          {
+            "type": "code",
+            "lang": "bash",
+            "title": {
+              "en": "Create resources and deploy",
+              "zh": "建立資源並部署"
+            },
+            "body": "# create the database, the KV namespace, load the schema, then deploy\nnpx wrangler d1 create saas\nnpx wrangler kv namespace create TENANT_KV\nnpx wrangler d1 execute saas --remote --file=./schema.sql\nnpx wrangler deploy"
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "groups",
+                "title": {
+                  "en": "Multi-tenancy",
+                  "zh": "多租戶"
+                },
+                "text": {
+                  "en": "One running app and one database serving many customers (tenants). Cheaper and simpler to operate than spinning up a separate copy per customer.",
+                  "zh": "一個運作中的應用程式、一個資料庫，服務很多客戶（租戶）。比起為每個客戶開一份獨立副本，營運更便宜、更單純。"
+                }
+              },
+              {
+                "icon": "shield_lock",
+                "title": {
+                  "en": "Data isolation",
+                  "zh": "資料隔離"
+                },
+                "text": {
+                  "en": "The guarantee that one tenant can never read or write another tenant's data. Here it is enforced by always filtering on tenant_id.",
+                  "zh": "保證某個租戶永遠無法讀取或寫入另一個租戶的資料。這裡是靠「永遠用 tenant_id 過濾」來達成。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "tenant_id",
+                  "zh": "tenant_id"
+                },
+                "text": {
+                  "en": "A column on every tenant-owned row that says which tenant it belongs to. The Worker sets it from the JWT — never from client input.",
+                  "zh": "每一列租戶資料上的欄位，標明它屬於哪個租戶。Worker 從 JWT 設定它 —— 絕不取自前端輸入。"
+                }
+              },
+              {
+                "icon": "verified_user",
+                "title": {
+                  "en": "JWT claims",
+                  "zh": "JWT 聲明"
+                },
+                "text": {
+                  "en": "A JWT is a signed token; the data inside (email, tenant_id) are its claims. Because Access signs it, the Worker can trust those values.",
+                  "zh": "JWT 是一個簽章過的權杖；裡面的資料（email、tenant_id）就是它的聲明（claims）。因為由 Access 簽章，Worker 才能信任這些值。"
+                }
+              },
+              {
+                "icon": "speed",
+                "title": {
+                  "en": "Per-tenant rate limiting",
+                  "zh": "每租戶限流"
+                },
+                "text": {
+                  "en": "Each tenant gets its own request budget via a dedicated Durable Object, so a single heavy tenant cannot degrade service for the others.",
+                  "zh": "每個租戶透過專屬的 Durable Object 擁有自己的請求額度，所以單一重度租戶不會拖垮其他人的服務品質。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "Per-tenant config in KV",
+                  "zh": "KV 裡的每租戶設定"
+                },
+                "text": {
+                  "en": "Small per-tenant settings (plan, feature flags) live in KV keyed by tenant_id — read in microseconds at the edge, no database round-trip.",
+                  "zh": "每個租戶的小型設定（方案、功能旗標）放在 KV，用 tenant_id 當鍵 —— 在邊緣以微秒讀取，不必往返資料庫。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & billing",
+          "zh": "陷阱與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "checklist",
+            "title": {
+              "en": "Make the safe path the only path",
+              "zh": "讓安全的路成為唯一的路"
+            },
+            "text": {
+              "en": "Wrap D1 access in a tiny helper that always takes a tenantId argument and always injects WHERE tenant_id = ?. If no query can run without a tenant, you can't forget the filter by accident.",
+              "zh": "把存取 D1 的程式碼包成一個小工具函式，強制每次都要傳入 tenantId，並且自動加上 WHERE tenant_id = ?。只要沒有 tenant 就無法查詢，你就不可能不小心漏掉過濾條件。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Forgetting WHERE tenant_id = ? on even one query leaks data across tenants — review every SQL statement for it.",
+                "Always .bind() the tenant_id as a parameter; never string-concatenate it into SQL (that invites SQL injection).",
+                "Index tenant_id on every tenant table, or scoped queries get slow as tenants accumulate rows.",
+                "Trust tenant_id only from the verified JWT, not from URLs, bodies or headers the client controls.",
+                "Name each rate-limit Durable Object by tenant_id so counters never bleed between tenants.",
+                "D1, KV, Durable Objects and Workers all have generous free tiers; you pay per request/read/write as you scale — check current pricing in the docs."
+              ],
+              "zh": [
+                "只要有一個查詢漏掉 WHERE tenant_id = ?，就會跨租戶外洩資料 —— 每一條 SQL 都要檢查。",
+                "一律用 .bind() 把 tenant_id 當參數綁定；絕不要用字串拼接塞進 SQL（那會招來 SQL 注入）。",
+                "每張租戶表都要替 tenant_id 建索引，否則租戶累積資料後，範圍查詢會變慢。",
+                "tenant_id 只信任來自驗證過的 JWT，不要採用網址、請求內容或前端可控的標頭。",
+                "每個限流 Durable Object 都用 tenant_id 命名，計數器才不會在租戶之間互相污染。",
+                "D1、KV、Durable Objects、Workers 都有大方的免費額度；規模變大後依請求／讀／寫計費 —— 最新價格請查官方文件。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "access",
+        "label": {
+          "en": "Access",
+          "zh": "Access"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "durable-objects",
+        "label": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        }
+      },
+      {
+        "slug": "auth-fullstack",
+        "label": {
+          "en": "Auth (full-stack)",
+          "zh": "全端身分驗證"
+        }
+      },
+      {
+        "slug": "web-analytics",
+        "label": {
+          "en": "Web Analytics",
+          "zh": "Web Analytics"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-ai-rag",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "neurology",
+    "title": {
+      "en": "Blueprint: an AI Q&A app (RAG)",
+      "zh": "架構藍圖：AI 問答應用（RAG）"
+    },
+    "subtitle": {
+      "en": "A reference architecture for Retrieval-Augmented Generation (RAG) on Cloudflare",
+      "zh": "Cloudflare 上檢索增強生成（RAG）的參考架構"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Combine Workers AI, Vectorize and D1 into an app that reads your own documents and answers questions with sources — the canonical RAG architecture on Cloudflare.",
+        "zh": "把 Workers AI、Vectorize 和 D1 組成一個會讀你自己文件、並且有所本回答問題的應用——這就是 Cloudflare 上最經典的 RAG 架構。"
+      }
+    },
+    "stats": [
+      {
+        "value": "768",
+        "label": {
+          "en": "Embedding dimensions",
+          "zh": "向量維度"
+        }
+      },
+      {
+        "value": "top-5",
+        "label": {
+          "en": "Chunks per question",
+          "zh": "每題取片段"
+        }
+      },
+      {
+        "value": "5",
+        "label": {
+          "en": "Services wired",
+          "zh": "串接服務"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要打造什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "We are building a Q&A app that answers questions from your own documents. A plain large language model (LLM) only knows what it saw during training, so it cannot answer about your private handbook — and it may confidently make things up. RAG (Retrieval-Augmented Generation) fixes this: first retrieve the most relevant pieces of your documents, then let the LLM generate an answer using only those pieces.",
+              "zh": "我們要做一個會根據你自己文件回答問題的問答應用。單純的大型語言模型（LLM）只懂得它訓練時看過的東西，所以無法回答你私有手冊裡的內容——而且還可能很有自信地亂編。RAG（Retrieval-Augmented Generation，檢索增強生成）就是來解決這個問題：先「檢索」出文件中最相關的片段，再讓 LLM 只根據這些片段「生成」答案。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "RAG has two phases. An offline ingest phase reads your documents, turns them into vectors (lists of numbers that capture meaning) and stores them. An online query phase takes a user question, finds the closest stored chunks, and feeds them to the LLM as context. Here is the whole picture:",
+              "zh": "RAG 有兩個階段。離線的「匯入」階段會讀進你的文件，把它們變成向量（一串能代表語意的數字）並存起來。線上的「查詢」階段則接收使用者的問題，找出最相近的片段，再把它們當成上下文（context）餵給 LLM。整體長這樣："
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "RAG on Cloudflare — the big picture",
+              "zh": "Cloudflare 上的 RAG —— 全貌"
+            },
+            "code": {
+              "en": "flowchart TD\n  DOC[\"Your documents\"] --> ING[\"Ingest: chunk + embed\"]\n  ING --> VEC[\"Vectorize + D1 (knowledge store)\"]\n  USR[\"User question\"] --> RET[\"Retrieve: search Vectorize\"]\n  VEC --> RET\n  RET --> GEN[\"Generate: Workers AI LLM\"]\n  GEN --> ANS[\"Grounded answer\"]",
+              "zh": "flowchart TD\n  DOC[\"你的文件\"] --> ING[\"匯入：切段 + 向量化\"]\n  ING --> VEC[\"Vectorize + D1（知識儲存層）\"]\n  USR[\"使用者問題\"] --> RET[\"檢索：搜尋 Vectorize\"]\n  VEC --> RET\n  RET --> GEN[\"生成：Workers AI 大型語言模型\"]\n  GEN --> ANS[\"有依據的答案\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "menu_book",
+            "title": {
+              "en": "Think of it like an open-book exam",
+              "zh": "把它想成一場開書考試"
+            },
+            "text": {
+              "en": "A closed-book exam forces you to answer from memory — and you might misremember. RAG turns it into an open-book exam: before answering, you flip to the most relevant pages (retrieval) and write your answer based on what they actually say (generation). The LLM is the student; Vectorize is the index at the back of the book.",
+              "zh": "閉書考試逼你憑記憶作答——可能記錯。RAG 把它變成開書考試：回答前先翻到最相關的那幾頁（檢索），再根據頁面上真正寫的內容作答（生成）。LLM 就是考生，Vectorize 就是書末的索引。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "各元件的職責"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Five Cloudflare pieces work together. The Worker is the conductor; Workers AI provides the brains (both embeddings and the LLM); Vectorize is the searchable memory; D1 keeps the original readable text; R2 holds the raw source files.",
+              "zh": "五個 Cloudflare 元件分工合作。Worker 是指揮；Workers AI 提供大腦（負責向量化與 LLM）；Vectorize 是可搜尋的記憶；D1 保存原始可讀的文字；R2 則存放原始檔案。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Workers — orchestrator",
+                  "zh": "Workers —— 指揮"
+                },
+                "text": {
+                  "en": "The serverless code that ties everything together: it exposes /ingest and /ask, calls each service in order, and returns JSON.",
+                  "zh": "把一切串起來的無伺服器程式碼：對外提供 /ingest 與 /ask，依序呼叫各服務，最後回傳 JSON。"
+                }
+              },
+              {
+                "icon": "neurology",
+                "title": {
+                  "en": "Workers AI — brains",
+                  "zh": "Workers AI —— 大腦"
+                },
+                "text": {
+                  "en": "Runs two models: an embedding model that turns text into vectors, and an LLM (Llama) that writes the final answer from the context.",
+                  "zh": "跑兩個模型：一個 embedding 模型把文字變成向量，一個 LLM（Llama）根據上下文寫出最終答案。"
+                }
+              },
+              {
+                "icon": "scatter_plot",
+                "title": {
+                  "en": "Vectorize — retrieval",
+                  "zh": "Vectorize —— 檢索"
+                },
+                "text": {
+                  "en": "The vector database. Stores every chunk's vector and, given the question's vector, returns the top-k most similar chunks in milliseconds.",
+                  "zh": "向量資料庫。存放每個片段的向量，給它問題的向量，就能在幾毫秒內回傳最相近的前 k 個片段。"
+                }
+              },
+              {
+                "icon": "table",
+                "title": {
+                  "en": "D1 — original text",
+                  "zh": "D1 —— 原始文字"
+                },
+                "text": {
+                  "en": "Vectorize stores numbers, not words. D1 (a SQL database) keeps each chunk's readable text, looked up by id after the search.",
+                  "zh": "Vectorize 存的是數字、不是文字。D1（SQL 資料庫）保存每個片段的可讀文字，搜尋後再用 id 撈回來。"
+                }
+              },
+              {
+                "icon": "folder",
+                "title": {
+                  "en": "R2 — raw files",
+                  "zh": "R2 —— 原始檔案"
+                },
+                "text": {
+                  "en": "Object storage for the source PDFs, Markdown or images you ingest, so you can re-chunk or re-embed later without re-uploading.",
+                  "zh": "物件儲存，放你匯入的原始 PDF、Markdown 或圖片，日後要重新切段或重新向量化時不必再上傳一次。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ingest",
+        "icon": "cloud_upload",
+        "heading": {
+          "en": "Phase 1 — Ingest (build the index)",
+          "zh": "階段一 —— 匯入（建立索引）"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Ingest runs once per document (or whenever it changes). We split the document into small chunks, embed each chunk with Workers AI, then store the vectors in Vectorize and the original text in D1. The id links the two: the same id lives in both stores.",
+              "zh": "匯入對每份文件只需跑一次（或在它更新時跑）。我們把文件切成小片段（chunk），用 Workers AI 把每段向量化，再把向量存進 Vectorize、把原始文字存進 D1。靠 id 把兩邊綁在一起：同一個 id 同時存在於兩個儲存層。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Ingest pipeline",
+              "zh": "匯入流程"
+            },
+            "code": {
+              "en": "flowchart TD\n  A[\"Source docs (PDF, MD)\"] --> B[\"Split into chunks\"]\n  B --> C[\"Workers AI: embed each chunk\"]\n  C --> D[\"Vectorize: store vectors\"]\n  B --> E[\"D1: store original text\"]\n  D --> F[\"Searchable knowledge index\"]\n  E --> F",
+              "zh": "flowchart TD\n  A[\"來源文件 (PDF、MD)\"] --> B[\"切成小段落 chunk\"]\n  B --> C[\"Workers AI：把每段做成向量\"]\n  C --> D[\"Vectorize：儲存向量\"]\n  B --> E[\"D1：儲存原始文字\"]\n  D --> F[\"可搜尋的知識索引\"]\n  E --> F"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "content_cut",
+            "title": {
+              "en": "Why chunk at all?",
+              "zh": "為什麼要切段？"
+            },
+            "text": {
+              "en": "Embedding a whole 50-page manual into one vector blurs its meaning, and you could never quote a precise passage. Splitting into ~200-word chunks (with a little overlap so sentences are not cut mid-thought) gives sharp, quotable pieces to retrieve.",
+              "zh": "把整本 50 頁手冊壓成一個向量會讓語意模糊，也無法精準引用某一段。切成約 200 字的片段（並讓相鄰片段稍微重疊，句子才不會被攔腰切斷），就能取得精準、可引用的片段。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "query",
+        "icon": "search",
+        "heading": {
+          "en": "Phase 2 — Query (answer a question)",
+          "zh": "階段二 —— 查詢（回答問題）"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "At query time we embed the question with the SAME model used at ingest, search Vectorize for the top-k closest chunks, pull their original text from D1, and stitch them into a prompt. The LLM reads that context plus the question and writes a grounded answer.",
+              "zh": "查詢時，我們用「和匯入時相同」的模型把問題向量化，到 Vectorize 搜尋最接近的前 k 個片段，從 D1 撈回它們的原始文字，再拼成一段 prompt。LLM 讀完這段上下文加上問題後，寫出有依據的答案。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Query pipeline",
+              "zh": "查詢流程"
+            },
+            "code": {
+              "en": "flowchart LR\n  Q[\"User question\"] --> E[\"Workers AI: embed question\"]\n  E --> V[\"Vectorize: search top-k\"]\n  V --> C[\"Top-k context chunks\"]\n  C --> P[\"Build prompt: context + question\"]\n  P --> L[\"Workers AI LLM: generate\"]\n  L --> A[\"Grounded answer\"]",
+              "zh": "flowchart LR\n  Q[\"使用者問題\"] --> E[\"Workers AI：把問題做成向量\"]\n  E --> V[\"Vectorize：搜尋 top-k\"]\n  V --> C[\"最相關的前 k 段內容\"]\n  C --> P[\"組 prompt：context + 問題\"]\n  P --> L[\"Workers AI 大型語言模型：生成\"]\n  L --> A[\"有依據的答案\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Same model, both sides",
+              "zh": "兩邊要用同一個模型"
+            },
+            "text": {
+              "en": "Documents and questions must be embedded by the exact same model, into the same number of dimensions. Mixing models (or index sizes) puts the vectors in different coordinate systems, so 'nearest' becomes meaningless and search returns garbage.",
+              "zh": "文件和問題必須用「完全相同」的模型、做成「相同維度」的向量。混用不同模型（或不同索引維度）會讓向量落在不同的座標系，「最近」就失去意義，搜尋結果會變垃圾。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "One question, end to end",
+          "zh": "一個問題的完整往返"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is exactly what happens inside the Worker when a user asks one question — every hop between Workers AI, Vectorize and D1:",
+              "zh": "當使用者問一個問題時，Worker 內部到底發生什麼事——Workers AI、Vectorize 和 D1 之間的每一次往返都在這裡："
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Request sequence",
+              "zh": "請求時序"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as User\n  participant W as Worker\n  participant AI as \"Workers AI\"\n  participant V as Vectorize\n  participant D as D1\n  U->>W: POST /ask (question)\n  W->>AI: embed the question\n  AI-->>W: question vector\n  W->>V: query(vector, topK=5)\n  V-->>W: top-5 matches (id, score)\n  W->>D: fetch original text by id\n  D-->>W: chunk texts\n  W->>AI: chat (context + question)\n  AI-->>W: answer\n  W-->>U: JSON (answer)",
+              "zh": "sequenceDiagram\n  participant U as 使用者\n  participant W as Worker\n  participant AI as \"Workers AI\"\n  participant V as Vectorize\n  participant D as D1\n  U->>W: POST /ask（問題）\n  W->>AI: 把問題做成向量\n  AI-->>W: 問題向量\n  W->>V: query(向量, topK=5)\n  V-->>W: 前 5 筆相符（id、分數）\n  W->>D: 依 id 取回原文\n  D-->>W: 各片段文字\n  W->>AI: chat（context + 問題）\n  AI-->>W: 答案\n  W-->>U: JSON（答案）"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it",
+          "zh": "動手實作"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Below is a complete, runnable Worker with two routes: POST /ingest to index a document, and POST /ask to answer a question. Create the resources, define the table, wire the bindings, then add the code.",
+              "zh": "以下是一個完整、可執行的 Worker，包含兩條路由：POST /ingest 用來把文件建索引，POST /ask 用來回答問題。先建立資源、定義資料表、接好繫結（binding），再加上程式碼。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the index & database",
+                  "zh": "建立索引與資料庫"
+                },
+                "text": {
+                  "en": "The index dimensions (768) must match the embedding model below. cosine is the recommended distance metric for bge models.",
+                  "zh": "索引維度（768）必須對應下面的 embedding 模型。bge 系列模型建議用 cosine（餘弦）距離。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Index sized for the bge-base embedding model (768 dims)\nwrangler vectorize create rag-index --dimensions=768 --metric=cosine\n\n# A D1 database to keep each chunk's original text\nwrangler d1 create rag-db"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the chunks table",
+                  "zh": "建立 chunks 資料表"
+                },
+                "text": {
+                  "en": "Save this as schema.sql, then run: wrangler d1 execute rag-db --remote --file=./schema.sql",
+                  "zh": "存成 schema.sql，再執行：wrangler d1 execute rag-db --remote --file=./schema.sql"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "CREATE TABLE IF NOT EXISTS chunks (\n  id      TEXT PRIMARY KEY,\n  doc_id  TEXT,\n  text    TEXT NOT NULL\n);"
+                }
+              },
+              {
+                "title": {
+                  "en": "Wire the bindings",
+                  "zh": "接好繫結"
+                },
+                "text": {
+                  "en": "Bindings expose AI, Vectorize and D1 to your code as env.AI, env.VECTORIZE and env.DB — no API keys in your source. Replace database_id with the id printed by 'wrangler d1 create'.",
+                  "zh": "繫結讓程式能用 env.AI、env.VECTORIZE、env.DB 來存取 AI、Vectorize 與 D1——原始碼裡不必放金鑰。把 database_id 換成『wrangler d1 create』印出來的那組 id。"
+                },
+                "code": {
+                  "lang": "jsonc",
+                  "body": "{\n  \"name\": \"rag-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  \"ai\": { \"binding\": \"AI\" },\n  \"vectorize\": [\n    { \"binding\": \"VECTORIZE\", \"index_name\": \"rag-index\" }\n  ],\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"rag-db\", \"database_id\": \"<your-d1-id>\" }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Ingest: chunk, embed, store",
+                  "zh": "匯入：切段、向量化、儲存"
+                },
+                "text": {
+                  "en": "One env.AI.run() call embeds every chunk at once. We upsert vectors into Vectorize (idempotent, so re-ingesting a doc is safe) and INSERT OR REPLACE the text into D1 under the same id.",
+                  "zh": "一次 env.AI.run() 就把所有片段一起向量化。我們用 upsert 把向量寫進 Vectorize（具冪等性，重新匯入同一份文件也安全），並用 INSERT OR REPLACE 以相同 id 把文字寫進 D1。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// POST /ingest  { docId, text }\nasync function ingest(env, docId, fullText) {\n  // 1) Split the document into small overlapping chunks\n  const chunks = chunkText(fullText, 200, 40);\n\n  // 2) Embed every chunk in one Workers AI call\n  const { data } = await env.AI.run(\"@cf/baai/bge-base-en-v1.5\", {\n    text: chunks,\n  });\n\n  // 3) Save original text in D1, vectors in Vectorize\n  const vectors = [];\n  for (let i = 0; i < chunks.length; i++) {\n    const id = docId + \":\" + i;\n    await env.DB.prepare(\n      \"INSERT OR REPLACE INTO chunks (id, doc_id, text) VALUES (?, ?, ?)\"\n    ).bind(id, docId, chunks[i]).run();\n    vectors.push({ id, values: data[i], metadata: { docId } });\n  }\n  await env.VECTORIZE.upsert(vectors);\n  return chunks.length;\n}\n\n// Split text into word chunks with a little overlap for context\nfunction chunkText(text, size, overlap) {\n  const words = text.split(/\\s+/);\n  const out = [];\n  for (let i = 0; i < words.length; i += size - overlap) {\n    out.push(words.slice(i, i + size).join(\" \"));\n  }\n  return out;\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Ask: embed, retrieve, generate",
+                  "zh": "提問：向量化、檢索、生成"
+                },
+                "text": {
+                  "en": "This is the heart of RAG. Embed the question, query() Vectorize for the top-5, load those chunks' text from D1, and pass them to the LLM as context. The system prompt forces the model to answer only from that context.",
+                  "zh": "這是 RAG 的核心。把問題向量化，用 query() 向 Vectorize 取前 5 名，從 D1 撈回這些片段的文字，當成上下文交給 LLM。系統提示（system prompt）強制模型只能根據這段上下文作答。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// POST /ask  { question }\nasync function ask(env, question) {\n  // 1) Embed the question with the SAME model used at ingest\n  const { data } = await env.AI.run(\"@cf/baai/bge-base-en-v1.5\", {\n    text: [question],\n  });\n  const queryVector = data[0];\n\n  // 2) Retrieve the top-k most similar chunks from Vectorize\n  const { matches } = await env.VECTORIZE.query(queryVector, {\n    topK: 5,\n    returnMetadata: true,\n  });\n\n  // 3) Load the original text of those chunks from D1\n  const ids = matches.map((m) => m.id);\n  const slots = ids.map(() => \"?\").join(\", \");\n  const { results } = await env.DB.prepare(\n    \"SELECT text FROM chunks WHERE id IN (\" + slots + \")\"\n  ).bind(...ids).all();\n  const context = results.map((r) => r.text).join(\"\\n---\\n\");\n\n  // 4) Generate an answer grounded ONLY in that context\n  const out = await env.AI.run(\"@cf/meta/llama-3.1-8b-instruct\", {\n    messages: [\n      {\n        role: \"system\",\n        content:\n          \"Answer using ONLY the context below. If it is not there, say you do not know.\",\n      },\n      {\n        role: \"user\",\n        content: \"Context:\\n\" + context + \"\\n\\nQuestion: \" + question,\n      },\n    ],\n  });\n  return out.response;\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Route the requests",
+                  "zh": "把請求接到路由"
+                },
+                "text": {
+                  "en": "The default export dispatches POST /ingest and POST /ask to the two functions above and returns JSON.",
+                  "zh": "default export 把 POST /ingest 與 POST /ask 派發給上面兩個函式，並回傳 JSON。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    if (request.method === \"POST\" && url.pathname === \"/ingest\") {\n      const { docId, text } = await request.json();\n      const count = await ingest(env, docId, text);\n      return Response.json({ ingested: count });\n    }\n\n    if (request.method === \"POST\" && url.pathname === \"/ask\") {\n      const { question } = await request.json();\n      const answer = await ask(env, question);\n      return Response.json({ answer });\n    }\n\n    return new Response(\"POST JSON to /ingest or /ask\", { status: 404 });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy & try it",
+                  "zh": "部署並試用"
+                },
+                "text": {
+                  "en": "Deploy, ingest a document, then ask about it. The answer should quote your document, not the model's training data.",
+                  "zh": "部署、匯入一份文件，再針對它提問。答案應該引用你的文件，而不是模型的訓練資料。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "wrangler deploy\n\n# Index a document\ncurl -X POST https://rag-worker.example.workers.dev/ingest \\\n  -d '{ \"docId\": \"handbook\", \"text\": \"Refunds are accepted within 30 days...\" }'\n\n# Ask a question about it\ncurl -X POST https://rag-worker.example.workers.dev/ask \\\n  -d '{ \"question\": \"How long do I have to get a refund?\" }'"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "scatter_plot",
+                "title": {
+                  "en": "Embedding 嵌入",
+                  "zh": "嵌入（Embedding）"
+                },
+                "text": {
+                  "en": "The act of turning text into a vector with an AI model. Pieces with similar meaning get similar vectors. Same model, same dimensions, on both documents and questions.",
+                  "zh": "用 AI 模型把文字變成向量的動作。語意相近的內容會得到相近的向量。文件和問題都要用同一個模型、同樣的維度。"
+                }
+              },
+              {
+                "icon": "social_distance",
+                "title": {
+                  "en": "Vector & similarity 向量與相似度",
+                  "zh": "向量與相似度"
+                },
+                "text": {
+                  "en": "A vector is a list of numbers (a point in space). 'Similarity' is how close two points are — cosine distance here. Closest points mean closest meaning, which is how retrieval works.",
+                  "zh": "向量就是一串數字（空間中的一個點）。「相似度」是兩個點有多接近——這裡用 cosine（餘弦）距離。點越近，語意越近，檢索就是靠這個。"
+                }
+              },
+              {
+                "icon": "auto_stories",
+                "title": {
+                  "en": "RAG 檢索增強生成",
+                  "zh": "RAG（檢索增強生成）"
+                },
+                "text": {
+                  "en": "Retrieve relevant chunks first, then let the LLM generate from them. It gives the model fresh, private knowledge and cuts down on made-up answers (hallucination).",
+                  "zh": "先檢索出相關片段，再讓 LLM 根據它們生成。這讓模型擁有最新、私有的知識，也大幅減少亂編答案（幻覺）。"
+                }
+              },
+              {
+                "icon": "filter_list",
+                "title": {
+                  "en": "Top-k 前 k 名",
+                  "zh": "Top-k（前 k 名）"
+                },
+                "text": {
+                  "en": "How many of the closest chunks you retrieve (here k=5). Too few may miss the answer; too many add noise and cost. Start at 3-8 and tune.",
+                  "zh": "你要取回幾個最接近的片段（這裡 k=5）。太少可能漏掉答案；太多會增加雜訊與成本。先從 3 到 8 之間試起再微調。"
+                }
+              },
+              {
+                "icon": "crop",
+                "title": {
+                  "en": "Context window 上下文視窗",
+                  "zh": "上下文視窗（Context window）"
+                },
+                "text": {
+                  "en": "The maximum amount of text an LLM can read at once. Your retrieved chunks plus the question must fit inside it — another reason to retrieve only the top-k, not everything.",
+                  "zh": "LLM 一次最多能讀進的文字量。你檢索到的片段加上問題必須塞得進去——這也是為什麼只取 top-k、而不是全部塞進去的原因。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips & pitfalls",
+          "zh": "小提示與陷阱"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "format_quote",
+            "title": {
+              "en": "Return sources to build trust",
+              "zh": "回傳出處，建立信任"
+            },
+            "text": {
+              "en": "Store a title or URL in each vector's metadata, and return the matched chunks' sources alongside the answer. Users can verify, and you can debug bad answers by seeing exactly what was retrieved.",
+              "zh": "在每個向量的 metadata（中介資料）裡存標題或網址，回答時連同相符片段的出處一起回傳。使用者能查證，你也能藉由看到「實際檢索到什麼」來除錯爛答案。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Dimensions must match: the index size, the embedding model, and the vectors you upsert all have to agree (768 here).",
+                "Always embed questions with the same model used for documents — mismatches silently return irrelevant results.",
+                "Vectorize stores numbers, not text. Keep the readable text in D1 (small chunks) or R2 (whole files) and join by id.",
+                "Tune chunk size and top-k: smaller chunks are more precise, a higher top-k is more thorough but costs more and risks overflowing the context window.",
+                "Put AI Gateway in front of Workers AI to cache, rate-limit and observe both the embedding and LLM calls.",
+                "Re-ingest when documents change; upsert by a stable id so old vectors are replaced, not duplicated."
+              ],
+              "zh": [
+                "維度必須一致：索引維度、embedding 模型、你 upsert 的向量三者都要對得上（這裡是 768）。",
+                "問題一定要用「和文件相同」的模型來向量化——不一致會悄悄回傳不相關的結果。",
+                "Vectorize 存的是數字、不是文字。可讀文字放 D1（小片段）或 R2（整份檔案），再用 id 對接。",
+                "調整片段大小與 top-k：片段越小越精準，top-k 越大越完整但更花錢、也可能撐爆上下文視窗。",
+                "在 Workers AI 前面加上 AI Gateway，可對 embedding 與 LLM 兩種呼叫做快取、限流與觀測。",
+                "文件更新時要重新匯入；用固定的 id 做 upsert，舊向量會被取代而不是重複堆積。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "workers-ai",
+        "label": {
+          "en": "Workers AI",
+          "zh": "Workers AI"
+        }
+      },
+      {
+        "slug": "vectorize",
+        "label": {
+          "en": "Vectorize",
+          "zh": "Vectorize"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "agents",
+        "label": {
+          "en": "Agents",
+          "zh": "Agents"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/vectorize/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-realtime-chat",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "forum",
+    "title": {
+      "en": "Blueprint: a real-time chat room",
+      "zh": "架構藍圖：即時聊天室"
+    },
+    "subtitle": {
+      "en": "A reference architecture for live chat: WebSockets + Durable Objects + D1",
+      "zh": "即時聊天的參考架構：WebSocket + Durable Objects + D1"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "One Durable Object per room holds every open WebSocket and broadcasts messages to everyone; D1 keeps the history.",
+        "zh": "每個房間用一個 Durable Object 握住所有開啟的 WebSocket 連線，把訊息廣播給所有人；D1 負責保存歷史紀錄。"
+      }
+    },
+    "stats": [
+      {
+        "value": "1",
+        "label": {
+          "en": "Durable Object per room",
+          "zh": "每房一個 Durable Object"
+        }
+      },
+      {
+        "value": "∞",
+        "label": {
+          "en": "Concurrent rooms",
+          "zh": "同時房間數"
+        }
+      },
+      {
+        "value": "3",
+        "label": {
+          "en": "Layers wired",
+          "zh": "串接層數"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要做什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "A real-time chat room where many people in the same room see each other's messages instantly. We use a WebSocket (a connection that stays open both ways) so the server can push new messages down without the browser asking again and again.",
+              "zh": "一個即時聊天室：同一個房間裡的很多人，能「立刻」看到彼此的訊息。我們用 WebSocket（一條持續開啟、雙向的連線），讓伺服器可以主動把新訊息推下來，瀏覽器不必一直重複詢問。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The trick is: who holds all those open connections and makes sure everyone in a room gets every message? The answer is a Durable Object (DO) — a single, always-there mini-server. We give every room its own Durable Object. A small Worker in front just routes each browser to the right room, and D1 (Cloudflare's SQL database) stores the message history.",
+              "zh": "關鍵在於：誰來握住這些開著的連線，並確保房間裡每個人都收到每則訊息？答案是 Durable Object（DO，可譯為「持久物件」）——一個單一、永遠都在的迷你伺服器。我們讓「每個房間」各擁有一個 Durable Object。前面放一個小小的 Worker 負責把每個瀏覽器路由到正確的房間，而 D1（Cloudflare 的 SQL 資料庫）負責保存訊息歷史。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "meeting_room",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "Each chat room is a real meeting room with one dedicated host standing at the door. The host (the Durable Object) keeps a list of everyone inside; when someone speaks, the host repeats it to the whole room and writes it in the room's logbook (D1). Different room name = a different host. There is never any confusion about who is in which room.",
+              "zh": "每個聊天室就像一間真實的會議室，門口站著一位專屬主持人。主持人（也就是 Durable Object）手上有「室內所有人」的名單；有人發言時，主持人就把那句話複誦給整個房間聽，並記在房間的紀錄簿（D1）裡。不同的房間名稱 = 不同的主持人。誰在哪個房間，永遠不會搞混。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "High-level architecture",
+              "zh": "整體架構圖"
+            },
+            "code": {
+              "en": "flowchart TD\n  B1[\"Browser A\"] -->|WebSocket| W[\"Worker (router)\"]\n  B2[\"Browser B\"] -->|WebSocket| W\n  B3[\"Browser C\"] -->|WebSocket| W\n  W -->|\"idFromName(room)\"| DO[\"Room Durable Object (per room)\"]\n  DO -->|\"broadcast\"| B1\n  DO -->|\"broadcast\"| B2\n  DO -->|\"broadcast\"| B3\n  DO -->|\"save history\"| D1[\"D1 (message history)\"]",
+              "zh": "flowchart TD\n  B1[\"瀏覽器 A\"] -->|WebSocket| W[\"Worker（路由）\"]\n  B2[\"瀏覽器 B\"] -->|WebSocket| W\n  B3[\"瀏覽器 C\"] -->|WebSocket| W\n  W -->|\"idFromName(room)\"| DO[\"房間 Durable Object（每房一個）\"]\n  DO -->|\"廣播\"| B1\n  DO -->|\"廣播\"| B2\n  DO -->|\"廣播\"| B3\n  DO -->|\"儲存歷史\"| D1[\"D1（訊息歷史）\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "每個角色負責什麼？"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "There are four roles. Each has one clear job — keeping responsibilities separate is what makes the system easy to reason about.",
+              "zh": "總共有四個角色，每個角色只做一件清楚的事——把職責切乾淨，整個系統才好懂、好維護。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "devices",
+                "title": {
+                  "en": "Browser (client)",
+                  "zh": "瀏覽器（用戶端）"
+                },
+                "text": {
+                  "en": "Opens a WebSocket to the server, shows incoming messages, and sends what the user types. It never talks to other browsers directly.",
+                  "zh": "對伺服器開一條 WebSocket，顯示收到的訊息，並把使用者輸入的內容送出去。它從不直接和其他瀏覽器溝通。"
+                }
+              },
+              {
+                "icon": "alt_route",
+                "title": {
+                  "en": "Worker (router)",
+                  "zh": "Worker（路由器）"
+                },
+                "text": {
+                  "en": "A stateless front door. It reads the room name from the URL, finds that room's Durable Object by name, and forwards the connection. No chat logic lives here.",
+                  "zh": "一道無狀態的前門。它從網址讀出房間名稱，依名稱找到那間房的 Durable Object，再把連線轉送過去。這裡不放任何聊天邏輯。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Room Durable Object",
+                  "zh": "房間 Durable Object"
+                },
+                "text": {
+                  "en": "The heart of the system. One per room. It holds every open WebSocket for that room, broadcasts each message to all of them, and is the single coordination point.",
+                  "zh": "整個系統的核心。每個房間一個。它握住那間房所有開啟的 WebSocket，把每則訊息廣播給全部連線，是唯一的協調點（single coordination point）。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "D1 (history)",
+                  "zh": "D1（歷史）"
+                },
+                "text": {
+                  "en": "A SQL database that stores every message so the conversation survives reloads and the room object restarting. The DO writes one row per message.",
+                  "zh": "一個 SQL 資料庫，把每則訊息存起來，讓對話在重新整理、甚至房間物件重啟後依然存在。DO 每則訊息寫入一列（row）。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Why is a Durable Object the natural \"room\"? Because the same room name always resolves to the exact same single instance, everywhere on Earth. That single instance becomes the one place where all the room's connections and state live — no locks, no message broker, no race conditions.",
+              "zh": "為什麼 Durable Object 天生就是「房間」？因為「相同的房間名稱」永遠會對應到「同一個」單一實例（instance），不管在地球哪個角落都一樣。這個單一實例就成了房間所有連線與狀態唯一的所在——不需要鎖（lock）、不需要訊息中介、也沒有競爭條件（race condition）。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "One name → one room object",
+              "zh": "一個名稱 → 一個房間物件"
+            },
+            "code": {
+              "en": "flowchart LR\n  U1[\"User 1\"] --> R[\"room = general\"]\n  U2[\"User 2\"] --> R\n  U3[\"User 3\"] --> R\n  R -->|\"idFromName(general)\"| DO[\"One Room DO (general)\"]\n  DO --> T[\"single source of truth\"]",
+              "zh": "flowchart LR\n  U1[\"使用者 1\"] --> R[\"房間 = general\"]\n  U2[\"使用者 2\"] --> R\n  U3[\"使用者 3\"] --> R\n  R -->|\"idFromName(general)\"| DO[\"唯一的房間 DO（general）\"]\n  DO --> T[\"單一真相來源\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The message history table",
+          "zh": "訊息歷史資料表"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Live messages flow through the Durable Object in memory; the permanent copy lives in D1. We need just one table, messages, with a row per chat message. room_id ties each message back to the room it belongs to.",
+              "zh": "即時訊息是在 Durable Object 的記憶體裡流動；永久的那一份則存在 D1。我們只需要一張資料表 messages，每則聊天訊息一列。room_id 把每則訊息綁回它所屬的房間。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "messages entity",
+              "zh": "messages 實體關係"
+            },
+            "code": {
+              "en": "erDiagram\n  ROOMS ||--o{ MESSAGES : contains\n  ROOMS {\n    text id PK\n    text name\n  }\n  MESSAGES {\n    int id PK\n    text room_id FK\n    text user\n    text body\n    int created_at\n  }",
+              "zh": "erDiagram\n  ROOMS ||--o{ MESSAGES : 包含\n  ROOMS {\n    text id PK\n    text name\n  }\n  MESSAGES {\n    int id PK\n    text room_id FK\n    text user\n    text body\n    int created_at\n  }"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql — create the history table",
+              "zh": "schema.sql — 建立歷史資料表"
+            },
+            "body": "CREATE TABLE IF NOT EXISTS messages (\n  id         INTEGER PRIMARY KEY AUTOINCREMENT,\n  room_id    TEXT    NOT NULL,\n  user       TEXT    NOT NULL,\n  body       TEXT    NOT NULL,\n  created_at INTEGER NOT NULL\n);\n\nCREATE INDEX IF NOT EXISTS idx_messages_room\n  ON messages (room_id, created_at);"
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "Why created_at is a number",
+              "zh": "為什麼 created_at 是數字"
+            },
+            "text": {
+              "en": "We store created_at as an integer — milliseconds from Date.now(). Numbers sort cleanly and are easy to turn into any timezone in the browser. The index on (room_id, created_at) makes \"load the last 50 messages for this room\" fast.",
+              "zh": "我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。(room_id, created_at) 這個索引讓「載入這個房間最近 50 則訊息」變得很快。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "The message round-trip",
+          "zh": "訊息往返流程"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the full life of one message — from a browser connecting, to the Durable Object broadcasting it to everyone and saving it to D1.",
+              "zh": "下面是「一則訊息的一生」——從瀏覽器連上線，到 Durable Object 把它廣播給所有人、並存進 D1。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Connect, send, broadcast, persist",
+              "zh": "連線、送出、廣播、保存"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant A as \"Client A\"\n  participant B as \"Client B\"\n  participant W as \"Worker\"\n  participant R as \"Room DO\"\n  participant D as \"D1\"\n  A->>W: WebSocket upgrade, room=lobby\n  W->>R: idFromName lobby, forward request\n  R-->>A: 101 accept, connection open\n  Note over B,R: Client B is already connected\n  A->>R: send a chat message\n  R->>D: INSERT INTO messages\n  R-->>A: broadcast to all\n  R-->>B: broadcast to all",
+              "zh": "sequenceDiagram\n  participant A as \"用戶端 A\"\n  participant B as \"用戶端 B\"\n  participant W as \"Worker\"\n  participant R as \"房間 DO\"\n  participant D as \"D1\"\n  A->>W: WebSocket 升級, room=lobby\n  W->>R: idFromName lobby, 轉送請求\n  R-->>A: 101 接受, 連線開啟\n  Note over B,R: 用戶端 B 已經連線\n  A->>R: 送出一則訊息\n  R->>D: INSERT INTO messages\n  R-->>A: 廣播給所有人\n  R-->>B: 廣播給所有人"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "campaign",
+            "title": {
+              "en": "\"Broadcast\" = one in, many out",
+              "zh": "「廣播」= 一進，多出"
+            },
+            "text": {
+              "en": "One client sends a single message in; the Durable Object loops over every open socket and sends it back out to all of them — including the original sender, so their own message appears the same way everyone else sees it.",
+              "zh": "一個用戶端送進「一則」訊息；Durable Object 就走訪每一條開著的連線，把它再送回給「所有人」——包含原本的發送者，這樣他自己的訊息也會用和別人一樣的方式顯示出來。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "一步步動手做"
+        },
+        "blocks": [
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the project and a D1 database",
+                  "zh": "建立專案與一個 D1 資料庫"
+                },
+                "text": {
+                  "en": "Scaffold a Worker, then create the D1 database that will hold the history. Note the database_id it prints — you paste it into config next.",
+                  "zh": "先建立一個 Worker，再建立用來存歷史的 D1 資料庫。記下它印出的 database_id——下一步要貼進設定檔。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npm create cloudflare@latest -- chat-room\ncd chat-room\nnpx wrangler d1 create chat-history"
+                }
+              },
+              {
+                "title": {
+                  "en": "Configure wrangler.jsonc",
+                  "zh": "設定 wrangler.jsonc"
+                },
+                "text": {
+                  "en": "Bind the Durable Object class (ROOMS), register a SQLite migration for it, and bind the D1 database (DB). The migration tells Cloudflare ChatRoom is a new SQLite-backed class.",
+                  "zh": "綁定 Durable Object 類別（ROOMS）、為它登記一個 SQLite migration（遷移），再綁定 D1 資料庫（DB）。migration 是在告訴 Cloudflare：ChatRoom 是一個新的、以 SQLite 儲存的類別。"
+                },
+                "code": {
+                  "lang": "jsonc",
+                  "body": "{\n  \"name\": \"chat-room\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"durable_objects\": {\n    \"bindings\": [\n      { \"name\": \"ROOMS\", \"class_name\": \"ChatRoom\" }\n    ]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"ChatRoom\"] }\n  ],\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"chat-history\", \"database_id\": \"<your-d1-database-id>\" }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the messages table",
+                  "zh": "建立 messages 資料表"
+                },
+                "text": {
+                  "en": "Run the schema.sql from the data-model section against your D1 database so the messages table exists before you write to it.",
+                  "zh": "把前面「資料模型」那段的 schema.sql 套用到你的 D1 資料庫，讓 messages 資料表先存在，之後才寫得進去。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 execute chat-history --remote --file=./schema.sql"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Worker (the router)",
+                  "zh": "寫 Worker（路由器）"
+                },
+                "text": {
+                  "en": "The Worker only checks for a WebSocket upgrade, resolves the room's Durable Object by name with env.ROOMS.idFromName(room), and forwards the request. It re-exports ChatRoom so the runtime can find the class.",
+                  "zh": "Worker 只做三件事：確認這是 WebSocket 升級請求、用 env.ROOMS.idFromName(room) 依名稱找到房間的 Durable Object、把請求轉送過去。它也把 ChatRoom 重新匯出（re-export），好讓執行環境找得到這個類別。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "import { ChatRoom } from \"./chat-room.js\";\nexport { ChatRoom };\n\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const room = url.searchParams.get(\"room\") || \"lobby\";\n\n    // Only accept WebSocket upgrade requests\n    if (request.headers.get(\"Upgrade\") !== \"websocket\") {\n      return new Response(\"Expected a WebSocket upgrade\", { status: 426 });\n    }\n\n    // Resolve the ONE Durable Object for this room name\n    const id = env.ROOMS.idFromName(room);\n    const stub = env.ROOMS.get(id);\n\n    // Forward the upgrade request to that room object\n    return stub.fetch(request);\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Room Durable Object",
+                  "zh": "寫房間 Durable Object"
+                },
+                "text": {
+                  "en": "The DO completes the WebSocket handshake with acceptWebSocket (hibernation mode). The webSocketMessage handler runs on every incoming message: it saves one row to D1, then broadcasts to every socket returned by getWebSockets().",
+                  "zh": "DO 用 acceptWebSocket 完成 WebSocket 握手（採休眠模式）。每當有訊息進來，webSocketMessage 處理器就會執行：先寫一列到 D1，再把訊息廣播給 getWebSockets() 回傳的每一條連線。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "import { DurableObject } from \"cloudflare:workers\";\n\nexport class ChatRoom extends DurableObject {\n  constructor(ctx, env) {\n    super(ctx, env);\n    this.ctx = ctx;\n    this.env = env;\n  }\n\n  // Completes the WebSocket handshake and registers the socket\n  async fetch(request) {\n    const url = new URL(request.url);\n    const room = url.searchParams.get(\"room\") || \"lobby\";\n\n    const pair = new WebSocketPair();\n    const client = pair[0];\n    const server = pair[1];\n\n    // Hibernation: let the runtime hold the socket so the DO can sleep\n    this.ctx.acceptWebSocket(server);\n    server.serializeAttachment({ room });\n\n    return new Response(null, { status: 101, webSocket: client });\n  }\n\n  // Runs whenever ANY connected client sends a message\n  async webSocketMessage(ws, raw) {\n    const { user, body } = JSON.parse(raw);\n    const { room } = ws.deserializeAttachment();\n    const created_at = Date.now();\n\n    // 1) Persist to D1 history\n    await this.env.DB\n      .prepare(\"INSERT INTO messages (room_id, user, body, created_at) VALUES (?, ?, ?, ?)\")\n      .bind(room, user, body, created_at)\n      .run();\n\n    // 2) Broadcast to everyone connected to THIS room\n    const payload = JSON.stringify({ user, body, created_at });\n    for (const socket of this.ctx.getWebSockets()) {\n      socket.send(payload);\n    }\n  }\n\n  async webSocketClose(ws, code, reason, wasClean) {\n    ws.close(code, \"room closing socket\");\n  }\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Connect from the browser",
+                  "zh": "從瀏覽器連線"
+                },
+                "text": {
+                  "en": "On the front end, open a WebSocket to the Worker with ?room=lobby, render each incoming message, and send the user's text as JSON. Use wss:// (the secure form) in production.",
+                  "zh": "在前端，用 ?room=lobby 對 Worker 開一條 WebSocket，把每則進來的訊息畫到畫面上，並把使用者輸入的文字以 JSON 送出。正式環境請用 wss://（加密版）。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<script>\n  const room = \"lobby\";\n  const ws = new WebSocket(`wss://chat-room.example.workers.dev/?room=${room}`);\n\n  ws.addEventListener(\"open\", () => console.log(\"connected to\", room));\n\n  ws.addEventListener(\"message\", (event) => {\n    const msg = JSON.parse(event.data);\n    addLine(`${msg.user}: ${msg.body}`); // render into your chat list\n  });\n\n  // Call this when the user submits the chat box\n  function send(user, text) {\n    ws.send(JSON.stringify({ user, body: text }));\n  }\n</script>"
+                }
+              },
+              {
+                "title": {
+                  "en": "Deploy",
+                  "zh": "部署"
+                },
+                "text": {
+                  "en": "Publish to Cloudflare's network. Every distinct ?room= value you connect with automatically gets its own Durable Object.",
+                  "zh": "發佈到 Cloudflare 的網路。你用每一個不同的 ?room= 值連線，都會自動拿到屬於它自己的 Durable Object。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler deploy"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "cable",
+                "title": {
+                  "en": "WebSocket",
+                  "zh": "WebSocket"
+                },
+                "text": {
+                  "en": "A connection that stays open in both directions. Unlike a normal request-then-response, the server can push data down any time — perfect for chat.",
+                  "zh": "一條會持續開啟、且「雙向」的連線。和一般「先請求、再回應」不同，伺服器可以隨時主動把資料推下來——非常適合聊天。"
+                }
+              },
+              {
+                "icon": "swap_horiz",
+                "title": {
+                  "en": "WebSocketPair",
+                  "zh": "WebSocketPair"
+                },
+                "text": {
+                  "en": "On the server you create a pair of linked sockets: you keep one (server) and hand the other (client) back to the browser inside a 101 response.",
+                  "zh": "在伺服器端你會建立「一對」互相連動的連線：自己留著一端（server），把另一端（client）放進 101 回應交還給瀏覽器。"
+                }
+              },
+              {
+                "icon": "bedtime",
+                "title": {
+                  "en": "Hibernation",
+                  "zh": "休眠（Hibernation）"
+                },
+                "text": {
+                  "en": "With acceptWebSocket(), the runtime holds the connections for you. An idle room object can be evicted from memory yet keep its sockets alive — so thousands of idle connections cost almost nothing.",
+                  "zh": "用 acceptWebSocket() 後，由執行環境替你保管連線。一個閒置的房間物件可以從記憶體被回收，但連線依然活著——所以成千上萬條閒置連線幾乎不花錢。"
+                }
+              },
+              {
+                "icon": "campaign",
+                "title": {
+                  "en": "Broadcast",
+                  "zh": "廣播（Broadcast）"
+                },
+                "text": {
+                  "en": "Loop over ctx.getWebSockets() and send() to each one. That single list of sockets is exactly why one object per room is so convenient — everyone you need is right there.",
+                  "zh": "走訪 ctx.getWebSockets()，對每一條 send()。「房間裡所有連線」這份名單就在手上——這正是「一個房間一個物件」如此方便的原因：你要找的人全都在這裡。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "idFromName()",
+                  "zh": "idFromName()"
+                },
+                "text": {
+                  "en": "Turns a room name into a stable object ID. The same name always maps to the same single instance, anywhere — this is how routing to \"the\" room works.",
+                  "zh": "把房間名稱轉成一個穩定的物件 ID。相同名稱永遠對應到同一個單一實例，哪裡都一樣——「路由到那間房」就是靠這個。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Why a DO is the room",
+                  "zh": "為什麼用 DO 當房間"
+                },
+                "text": {
+                  "en": "A room needs one place that holds all members and agrees on message order. A Durable Object is exactly that: a single coordination point with no locks or extra message broker needed.",
+                  "zh": "一個房間需要「一個」地方來握住所有成員、並對訊息順序達成一致。Durable Object 正好就是這個：一個單一協調點，不需要鎖，也不需要額外的訊息中介。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls & tips",
+          "zh": "陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "balance",
+            "title": {
+              "en": "One room = one bottleneck",
+              "zh": "一個房間 = 一個瓶頸"
+            },
+            "text": {
+              "en": "All traffic for a room funnels through its single object (a soft limit of about 1,000 requests/second). That's fine for a chat room, but don't try to push the whole site through one DO — split work by room, document, or user.",
+              "zh": "一個房間的所有流量都匯集到它「單一」的物件（軟性上限約每秒 1,000 個請求）。對一個聊天室來說綽綽有餘，但別想把整個網站塞進同一個 DO——請依房間、文件或使用者把工作拆開。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Easy mistakes to avoid",
+              "zh": "容易踩的坑"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Forgetting to re-export the ChatRoom class from your Worker entry file — the runtime won't find it.",
+                "Using ws:// instead of wss:// in production; browsers block insecure WebSockets on HTTPS pages.",
+                "Doing heavy work inside webSocketMessage and blocking the broadcast — keep it: persist, then broadcast.",
+                "Trusting the message body blindly — validate user and body before writing to D1.",
+                "Expecting the DO's memory to last forever — it can hibernate, so treat D1 as the durable history."
+              ],
+              "zh": [
+                "忘了在 Worker 入口檔把 ChatRoom 類別重新匯出（re-export）——執行環境會找不到它。",
+                "正式環境用 ws:// 而非 wss://；在 HTTPS 頁面上瀏覽器會擋掉不安全的 WebSocket。",
+                "在 webSocketMessage 裡做太重的工作，卡住廣播——順序維持簡單：先存檔，再廣播。",
+                "盲目相信訊息內容——寫進 D1 前先驗證 user 與 body。",
+                "以為 DO 的記憶體會永遠存在——它會休眠，所以請把 D1 當成持久的歷史來源。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "history",
+            "title": {
+              "en": "Show history on join",
+              "zh": "加入房間時顯示歷史"
+            },
+            "text": {
+              "en": "When a client connects, run SELECT * FROM messages WHERE room_id = ? ORDER BY created_at DESC LIMIT 50 against D1 and send those rows first — so newcomers instantly see recent chat instead of an empty room.",
+              "zh": "用戶端連上線時，先對 D1 跑 SELECT * FROM messages WHERE room_id = ? ORDER BY created_at DESC LIMIT 50，把這些歷史先送過去——新加入的人就能立刻看到最近的對話，而不是一個空房間。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "durable-objects",
+        "label": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        }
+      },
+      {
+        "slug": "realtime",
+        "label": {
+          "en": "Realtime",
+          "zh": "Realtime"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "durable-objects-state",
+        "label": {
+          "en": "Durable Objects: state",
+          "zh": "Durable Objects：狀態"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/durable-objects/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-image-pipeline",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "image",
+    "title": {
+      "en": "Blueprint: an image upload & processing pipeline",
+      "zh": "架構藍圖：圖片上傳與處理流水線"
+    },
+    "subtitle": {
+      "en": "Accept uploads instantly, then optimize images in the background with R2, Queues, Images and D1",
+      "zh": "先即時收下上傳，再用 R2、Queues、Images 與 D1 在背景把圖片最佳化"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "A reference architecture for user images: upload to R2, enqueue a job, let a consumer Worker resize and convert with Images, write variants back to R2, record metadata in D1 — and serve fast, optimized images.",
+        "zh": "處理使用者圖片的參考架構：上傳到 R2、把工作丟進佇列，讓消費者 Worker 用 Images 縮放轉檔、把變體寫回 R2、在 D1 記錄中繼資料，最後送出又快又最佳化的圖片。"
+      }
+    },
+    "stats": [
+      {
+        "value": "202",
+        "label": {
+          "en": "Instant accept",
+          "zh": "即時收下"
+        }
+      },
+      {
+        "value": "async",
+        "label": {
+          "en": "Decoupled work",
+          "zh": "非同步處理"
+        }
+      },
+      {
+        "value": "5",
+        "label": {
+          "en": "Products wired",
+          "zh": "串接產品"
+        }
+      },
+      {
+        "value": "$0",
+        "label": {
+          "en": "R2 / Queues egress",
+          "zh": "R2 / Queues 流出費"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要蓋什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Image processing is slow — resizing and converting a big photo can take seconds. If you do it while the user waits, uploads feel sluggish and a single failure loses the whole job. This blueprint splits the work into two halves: the front of the pipeline accepts the file and replies instantly, while the back of the pipeline does the heavy lifting in the background.",
+              "zh": "圖片處理很慢——把一張大照片縮放、轉檔可能要好幾秒。如果你讓使用者乾等著做完，上傳就會卡卡的，而且一出錯整個工作就沒了。這份藍圖把工作切成兩半：流水線的前半段收下檔案、立刻回應，後半段則在背景默默做粗重的事。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The glue between the two halves is a queue. The Upload Worker stores the original in R2 (object storage) and drops a tiny job message into Cloudflare Queues. A separate Consumer Worker picks that job up later, optimizes the image with Cloudflare Images, writes the variants back to R2, and records the result in D1 (a SQL database). This is the classic producer–consumer pattern.",
+              "zh": "把兩半黏起來的關鍵是「佇列（queue）」。上傳 Worker 把原圖存進 R2（物件儲存），然後把一則很小的工作訊息丟進 Cloudflare Queues。另一個獨立的消費者 Worker 之後再把那則工作取出來，用 Cloudflare Images 把圖片最佳化、把變體寫回 R2，並把結果記在 D1（一個 SQL 資料庫）裡。這就是經典的「生產者—消費者（producer–consumer）」模式。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "dry_cleaning",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A dry cleaner. You hand over your shirt and immediately get a numbered ticket (HTTP 202 + 'pending') — you don't stand there while it's cleaned. The shirts pile up on a rail (the queue); staff process them in batches in the back; and when yours is done, your ticket flips to 'ready' so you can collect the finished item.",
+              "zh": "乾洗店。你把襯衫交出去，馬上拿到一張號碼牌（HTTP 202 +『pending 處理中』）——你不會站在那裡等它洗好。襯衫們掛在吊桿上排隊（佇列），店員在後場成批處理；等你的洗好，號碼牌就翻成『ready 完成』，你就能來取件。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The full pipeline",
+              "zh": "完整流水線"
+            },
+            "code": {
+              "en": "flowchart LR\n  B[\"Browser\"] -->|\"upload\"| W[\"Upload Worker\"]\n  W -->|\"put original\"| RO[(\"R2 original\")]\n  W -->|\"send job\"| Q[\"Queues\"]\n  Q -->|\"deliver batch\"| CW[\"Consumer Worker\"]\n  CW -->|\"transform\"| IMG[\"Images\"]\n  IMG -->|\"variants\"| RV[(\"R2 variants\")]\n  CW -->|\"insert row\"| D1[(\"D1 metadata\")]\n  RV -->|\"serve\"| CDN[\"CDN edge\"]\n  CDN -->|\"optimized\"| B",
+              "zh": "flowchart LR\n  B[\"瀏覽器\"] -->|\"上傳\"| W[\"上傳 Worker\"]\n  W -->|\"存原圖\"| RO[(\"R2 原圖\")]\n  W -->|\"送工作\"| Q[\"Queues 佇列\"]\n  Q -->|\"投遞批次\"| CW[\"消費者 Worker\"]\n  CW -->|\"轉檔\"| IMG[\"Images 影像處理\"]\n  IMG -->|\"變體\"| RV[(\"R2 變體圖\")]\n  CW -->|\"寫入一列\"| D1[(\"D1 中繼資料\")]\n  RV -->|\"送出\"| CDN[\"CDN 邊緣\"]\n  CDN -->|\"最佳化圖片\"| B"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Who does what?",
+          "zh": "每個角色負責什麼？"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Each product in the pipeline has one clear job. Keeping responsibilities separate is what makes the system reliable: any one part can be slow or briefly fail without breaking the others.",
+              "zh": "流水線裡每個產品都只負責一件清楚的事。把職責切開正是系統可靠的關鍵：任何一塊變慢、或短暫出錯，都不會把其他部分一起拖垮。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "devices",
+                "title": {
+                  "en": "Browser (client)",
+                  "zh": "瀏覽器（用戶端）"
+                },
+                "text": {
+                  "en": "Sends the raw file to the Upload Worker and later requests the optimized image at the size it needs.",
+                  "zh": "把原始檔案送給上傳 Worker，之後再依需要的尺寸請求最佳化後的圖片。"
+                }
+              },
+              {
+                "icon": "cloud_upload",
+                "title": {
+                  "en": "Upload Worker (producer)",
+                  "zh": "上傳 Worker（生產者）"
+                },
+                "text": {
+                  "en": "Stores the original in R2, inserts a pending row in D1, enqueues a job, and replies 202 instantly.",
+                  "zh": "把原圖存進 R2、在 D1 新增一筆 pending 紀錄、把工作排進佇列，然後立刻回應 202。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "R2 (object storage)",
+                  "zh": "R2（物件儲存）"
+                },
+                "text": {
+                  "en": "Holds the original bytes and every generated variant. No egress fees when the CDN reads from it.",
+                  "zh": "存放原始位元組與每一個產生的變體。CDN 讀取時不收流出（egress）費用。"
+                }
+              },
+              {
+                "icon": "queue",
+                "title": {
+                  "en": "Queues (the buffer)",
+                  "zh": "Queues（緩衝佇列）"
+                },
+                "text": {
+                  "en": "Decouples accepting work from doing it. Buffers jobs, delivers them in batches, and retries failures.",
+                  "zh": "把『接下工作』和『執行工作』拆開。緩衝工作、成批投遞，並在失敗時自動重試。"
+                }
+              },
+              {
+                "icon": "settings_suggest",
+                "title": {
+                  "en": "Consumer Worker",
+                  "zh": "消費者 Worker"
+                },
+                "text": {
+                  "en": "Wakes up on each batch, reads the original from R2, drives Images, writes variants, updates D1.",
+                  "zh": "每來一批就被喚醒，從 R2 讀原圖、操作 Images、寫入變體、更新 D1。"
+                }
+              },
+              {
+                "icon": "auto_fix_high",
+                "title": {
+                  "en": "Images (transform)",
+                  "zh": "Images（影像處理）"
+                },
+                "text": {
+                  "en": "Resizes, crops and converts to modern formats like WebP/AVIF — the actual optimization step.",
+                  "zh": "縮放、裁切並轉成 WebP/AVIF 等現代格式——真正做最佳化的那一步。"
+                }
+              },
+              {
+                "icon": "schema",
+                "title": {
+                  "en": "D1 (metadata)",
+                  "zh": "D1（中繼資料）"
+                },
+                "text": {
+                  "en": "The source of truth for status: which images exist, whether they're ready, and how many variants.",
+                  "zh": "狀態的真實來源：有哪些圖、是否已完成、各有幾個變體。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "The decoupling boundary",
+              "zh": "解耦的那條界線"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "The queue is a one-way valve between the producer and the consumer. The producer never waits for the consumer; if the consumer is busy or fails, jobs simply wait and retry. Neither side needs to know the other is healthy.",
+              "zh": "佇列是生產者與消費者之間的單向閥。生產者永遠不等消費者；消費者忙碌或失敗時，工作就乖乖排隊、稍後重試。兩邊都不需要知道對方是否健在。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Producer–consumer decoupling",
+              "zh": "生產者—消費者解耦"
+            },
+            "code": {
+              "en": "flowchart TD\n  P[\"Upload Worker\"] -->|\"send job\"| Q[\"Queues buffer\"]\n  Q -->|\"deliver batch\"| C[\"Consumer Worker\"]\n  C -->|\"ack success\"| Q\n  C -->|\"retry on fail\"| Q",
+              "zh": "flowchart TD\n  P[\"上傳 Worker\"] -->|\"送工作\"| Q[\"Queues 緩衝\"]\n  Q -->|\"投遞批次\"| C[\"消費者 Worker\"]\n  C -->|\"成功確認\"| Q\n  C -->|\"失敗重試\"| Q"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-model",
+        "icon": "schema",
+        "heading": {
+          "en": "The data model",
+          "zh": "資料模型"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "D1 tracks every image and its variants. The images table is the headline record (id, R2 key, status, dimensions, variant count). A variants table holds one row per generated size, linked back by image_id.",
+              "zh": "D1 追蹤每一張圖與它的變體。images 表是主要紀錄（id、R2 key、status、尺寸、變體數）；variants 表則每個產生的尺寸放一列，用 image_id 連回去。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "images & variants tables",
+              "zh": "images 與 variants 表"
+            },
+            "code": {
+              "en": "erDiagram\n  IMAGES ||--o{ VARIANTS : \"produces\"\n  IMAGES {\n    text id PK\n    text key\n    text status\n    int width\n    int height\n    int variants\n  }\n  VARIANTS {\n    text id PK\n    text image_id FK\n    text label\n    text key\n    int width\n  }",
+              "zh": "erDiagram\n  IMAGES ||--o{ VARIANTS : \"產生\"\n  IMAGES {\n    text id PK\n    text key\n    text status\n    int width\n    int height\n    int variants\n  }\n  VARIANTS {\n    text id PK\n    text image_id FK\n    text label\n    text key\n    int width\n  }"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "status is the heartbeat",
+              "zh": "status 是心跳"
+            },
+            "text": {
+              "en": "Because work happens later, the front-end can't assume an image is ready the moment it uploads. The status column (pending → ready → failed) lets the UI poll or show a spinner until variants exist. This is what 'eventual consistency' looks like in practice.",
+              "zh": "因為工作是稍後才做的，前端不能假設一上傳圖片就好了。status 欄位（pending → ready → failed）讓 UI 可以輪詢、或先顯示轉圈圈，直到變體真的生出來。這就是『最終一致性（eventual consistency）』在實務上的樣子。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "CREATE TABLE images (\n  id        TEXT PRIMARY KEY,\n  key       TEXT NOT NULL,\n  status    TEXT NOT NULL DEFAULT 'pending',\n  width     INTEGER,\n  height    INTEGER,\n  variants  INTEGER NOT NULL DEFAULT 0,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);\n\nCREATE TABLE variants (\n  id        TEXT PRIMARY KEY,\n  image_id  TEXT NOT NULL REFERENCES images(id),\n  label     TEXT NOT NULL,\n  key       TEXT NOT NULL,\n  width     INTEGER NOT NULL\n);\n\n-- Fast lookups of jobs still waiting to be processed\nCREATE INDEX idx_images_status ON images (status);"
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Request flow over time",
+          "zh": "隨時間推進的流程"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Read this top to bottom. The crucial moment is the 202 reply: the upload returns before any processing happens. Everything below the dashed boundary runs asynchronously in the background.",
+              "zh": "由上往下看。關鍵時刻是那個 202 回應：上傳在任何處理發生之前就先返回了。界線以下的所有步驟，都是在背景非同步進行的。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Upload → enqueue → process → ready",
+              "zh": "上傳 → 排隊 → 處理 → 完成"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant B as \"Browser\"\n  participant W as \"Upload Worker\"\n  participant R as \"R2\"\n  participant Q as \"Queues\"\n  participant C as \"Consumer Worker\"\n  participant I as \"Images\"\n  participant D as \"D1\"\n  B->>W: POST upload with file\n  W->>R: put original object\n  W->>D: insert row status pending\n  W->>Q: send job message\n  W-->>B: 202 job queued\n  Note over Q,C: background async\n  Q->>C: deliver batch\n  C->>R: get original\n  C->>I: resize and convert\n  C->>R: put variants\n  C->>D: update status ready\n  Note over B: later\n  B->>W: GET image by id\n  W->>D: read status and variants\n  W-->>B: optimized image",
+              "zh": "sequenceDiagram\n  participant B as \"瀏覽器\"\n  participant W as \"上傳 Worker\"\n  participant R as \"R2\"\n  participant Q as \"Queues\"\n  participant C as \"消費者 Worker\"\n  participant I as \"Images\"\n  participant D as \"D1\"\n  B->>W: 上傳檔案\n  W->>R: 存入原始物件\n  W->>D: 新增一列 狀態 pending\n  W->>Q: 送出工作訊息\n  W-->>B: 202 已排入佇列\n  Note over Q,C: 背景非同步\n  Q->>C: 投遞批次\n  C->>R: 取出原圖\n  C->>I: 縮放並轉檔\n  C->>R: 寫入變體\n  C->>D: 更新狀態 ready\n  Note over B: 稍後\n  B->>W: 用 id 取圖\n  W->>D: 讀取狀態與變體\n  W-->>B: 最佳化圖片"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it",
+          "zh": "動手蓋出來"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "You'll create three resources (an R2 bucket, a queue, a D1 database), wire them as bindings, then write a producer, a consumer, and a tiny front-end. The Images binding needs no resource — it's a runtime capability.",
+              "zh": "你會建立三個資源（一個 R2 bucket、一個佇列、一個 D1 資料庫），把它們設成 binding（綁定），再寫一個生產者、一個消費者和一個小前端。Images binding 不需要建立資源——它是執行期就有的能力。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create the resources",
+                  "zh": "建立資源"
+                },
+                "text": {
+                  "en": "One R2 bucket holds both originals and variants; one queue carries the jobs; one D1 database stores metadata.",
+                  "zh": "一個 R2 bucket 同時放原圖與變體；一個佇列載送工作；一個 D1 資料庫存中繼資料。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler r2 bucket create user-images\nnpx wrangler queues create image-jobs\nnpx wrangler queues create image-jobs-dlq\nnpx wrangler d1 create image-meta"
+                }
+              },
+              {
+                "title": {
+                  "en": "Wire the bindings",
+                  "zh": "設定綁定"
+                },
+                "text": {
+                  "en": "Declare R2, the queue (as both producer and consumer), D1, and the Images binding in wrangler.jsonc. A dead letter queue catches jobs that keep failing.",
+                  "zh": "在 wrangler.jsonc 裡宣告 R2、佇列（同時當生產者與消費者）、D1 與 Images binding。死信佇列會接住一直失敗的工作。"
+                },
+                "code": {
+                  "lang": "jsonc",
+                  "body": "{\n  \"name\": \"image-pipeline\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n\n  \"r2_buckets\": [\n    { \"binding\": \"IMAGES_BUCKET\", \"bucket_name\": \"user-images\" }\n  ],\n  \"queues\": {\n    \"producers\": [\n      { \"queue\": \"image-jobs\", \"binding\": \"IMAGE_QUEUE\" }\n    ],\n    \"consumers\": [\n      {\n        \"queue\": \"image-jobs\",\n        \"max_batch_size\": 10,\n        \"max_batch_timeout\": 5,\n        \"dead_letter_queue\": \"image-jobs-dlq\"\n      }\n    ]\n  },\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"image-meta\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"images\": { \"binding\": \"IMAGES\" }\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Create the tables",
+                  "zh": "建立資料表"
+                },
+                "text": {
+                  "en": "Apply the schema to your D1 database.",
+                  "zh": "把 schema 套用到你的 D1 資料庫。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler d1 execute image-meta --remote --file=./schema.sql"
+                }
+              }
+            ]
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Front-end — upload the file",
+              "zh": "前端 — 上傳檔案"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "html",
+            "title": {
+              "en": "upload.html",
+              "zh": "upload.html"
+            },
+            "body": "<input type=\"file\" id=\"file\" accept=\"image/*\" />\n<button id=\"send\">Upload</button>\n\n<script>\n  document.getElementById(\"send\").onclick = async () => {\n    const file = document.getElementById(\"file\").files[0];\n\n    // Stream the raw bytes straight to the Upload Worker\n    const res = await fetch(\"/upload\", {\n      method: \"POST\",\n      headers: { \"content-type\": file.type },\n      body: file,\n    });\n\n    const job = await res.json(); // { id, status: \"pending\" }\n    console.log(\"Queued job\", job.id, \"->\", job.status);\n  };\n</script>"
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Producer — accept & enqueue",
+              "zh": "生產者 — 收下並排隊"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/producer.js",
+              "zh": "src/producer.js"
+            },
+            "body": "export default {\n  // PRODUCER: store the upload, then enqueue a background job\n  async fetch(request, env, ctx) {\n    if (request.method !== \"POST\") {\n      return new Response(\"Use POST to upload\", { status: 405 });\n    }\n\n    const id = crypto.randomUUID();\n    const key = `originals/${id}`;\n    const bytes = await request.arrayBuffer();\n    const contentType = request.headers.get(\"content-type\") || \"image/jpeg\";\n\n    // 1) Save the ORIGINAL image to R2\n    await env.IMAGES_BUCKET.put(key, bytes, {\n      httpMetadata: { contentType },\n    });\n\n    // 2) Record metadata in D1 with status = pending\n    await env.DB.prepare(\n      \"INSERT INTO images (id, key, status) VALUES (?, ?, 'pending')\"\n    ).bind(id, key).run();\n\n    // 3) Enqueue a job and reply instantly (do NOT wait for processing)\n    await env.IMAGE_QUEUE.send({ id, key });\n\n    return Response.json({ id, status: \"pending\" }, { status: 202 });\n  },\n};"
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "fast_forward",
+            "title": {
+              "en": "Keep messages tiny",
+              "zh": "訊息要小"
+            },
+            "text": {
+              "en": "Notice the message is just { id, key } — never the image bytes. Queue messages are capped at 128 KB, and the bytes already live in R2. The job only needs to say which object to process.",
+              "zh": "注意訊息只有 { id, key }——絕不放圖片位元組。佇列訊息上限是 128 KB，而位元組已經在 R2 裡了。工作只需要說明『要處理哪個物件』就好。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Consumer — process the batch",
+              "zh": "消費者 — 處理整批"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "src/consumer.js",
+              "zh": "src/consumer.js"
+            },
+            "body": "export default {\n  // CONSUMER: Cloudflare invokes this with a batch of queued jobs\n  async queue(batch, env, ctx) {\n    for (const message of batch.messages) {\n      try {\n        const { id, key } = message.body;\n\n        // 1) Read the original back from R2\n        const original = await env.IMAGES_BUCKET.get(key);\n        if (!original) {\n          message.ack(); // nothing to do\n          continue;\n        }\n\n        // 2) Build optimized variants with the Images binding\n        const sizes = [256, 1024];\n        const variantKeys = [];\n        for (const width of sizes) {\n          const result = await env.IMAGES\n            .input(original.body)\n            .transform({ width })\n            .output({ format: \"image/webp\" });\n\n          const variantKey = `variants/${id}/w${width}.webp`;\n          await env.IMAGES_BUCKET.put(variantKey, result.image());\n          variantKeys.push(variantKey);\n        }\n\n        // 3) Mark the row ready and record how many variants exist\n        await env.DB.prepare(\n          \"UPDATE images SET status = 'ready', variants = ? WHERE id = ?\"\n        ).bind(variantKeys.length, id).run();\n\n        message.ack(); // success — never deliver again\n      } catch (err) {\n        message.retry(); // failure — Queues will redeliver later\n      }\n    }\n  },\n};"
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Serve — an Images transform URL",
+              "zh": "送出 — Images 轉換網址"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "You can also resize on the fly straight from a URL with Cloudflare Images' transformation path. The browser asks only for the size it needs, and the CDN caches the result at the edge.",
+              "zh": "你也可以用 Cloudflare Images 的轉換路徑，直接從網址即時縮放。瀏覽器只請求它需要的尺寸，CDN 再把結果快取在邊緣。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "html",
+            "title": {
+              "en": "serve.html",
+              "zh": "serve.html"
+            },
+            "body": "<!-- Resize + convert on the fly with a transformation URL -->\n<!-- /cdn-cgi/image/<options>/<source-path> -->\n\n<img\n  src=\"https://media.example.com/cdn-cgi/image/width=512,quality=80,format=auto/variants/abc123/w1024.webp\"\n  width=\"512\"\n  alt=\"optimized photo\"\n/>"
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "call_split",
+                "title": {
+                  "en": "Async decoupling",
+                  "zh": "非同步解耦"
+                },
+                "text": {
+                  "en": "Accepting work and doing work are separated by the queue, so a slow back end never slows the upload.",
+                  "zh": "『接下工作』與『執行工作』被佇列隔開，所以後端再慢也不會拖慢上傳。"
+                }
+              },
+              {
+                "icon": "sync_alt",
+                "title": {
+                  "en": "Producer & consumer",
+                  "zh": "生產者與消費者"
+                },
+                "text": {
+                  "en": "The producer sends jobs with env.IMAGE_QUEUE.send(); the consumer's queue() handler processes batches.",
+                  "zh": "生產者用 env.IMAGE_QUEUE.send() 送工作；消費者的 queue() 處理函式成批處理。"
+                }
+              },
+              {
+                "icon": "restart_alt",
+                "title": {
+                  "en": "Idempotency",
+                  "zh": "冪等性"
+                },
+                "text": {
+                  "en": "A job may be delivered more than once, so re-running it must be safe — overwrite the same variant keys.",
+                  "zh": "一則工作可能被送來不只一次，所以重跑必須安全——覆寫同樣的變體 key 即可。"
+                }
+              },
+              {
+                "icon": "photo_library",
+                "title": {
+                  "en": "Variants",
+                  "zh": "變體（variants）"
+                },
+                "text": {
+                  "en": "Pre-generated sizes/formats of one image (e.g. 256px WebP, 1024px WebP) stored alongside the original.",
+                  "zh": "同一張圖預先產生的多種尺寸/格式（例如 256px WebP、1024px WebP），與原圖放在一起。"
+                }
+              },
+              {
+                "icon": "report",
+                "title": {
+                  "en": "Dead letter queue",
+                  "zh": "死信佇列（DLQ）"
+                },
+                "text": {
+                  "en": "Where a job lands after exhausting retries, so failures are inspectable instead of silently lost.",
+                  "zh": "工作用完重試後落腳的另一個佇列，讓失敗可被檢查，而不是無聲消失。"
+                }
+              },
+              {
+                "icon": "hourglass_top",
+                "title": {
+                  "en": "Eventual consistency",
+                  "zh": "最終一致性"
+                },
+                "text": {
+                  "en": "Right after upload an image isn't ready yet; the status column tells clients when variants exist.",
+                  "zh": "剛上傳時圖還沒好；status 欄位會告訴用戶端變體何時生出來。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips, pitfalls & pricing",
+          "zh": "小提示、陷阱與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Make the consumer idempotent",
+              "zh": "讓消費者保持冪等"
+            },
+            "text": {
+              "en": "Queues guarantees at-least-once delivery, which means the same job can arrive twice (e.g. after a retry). Always write to deterministic keys like variants/<id>/w256.webp so re-processing simply overwrites — never appends duplicates.",
+              "zh": "Queues 保證『至少一次（at-least-once）』投遞，也就是同一則工作可能來兩次（例如重試之後）。請永遠寫入像 variants/<id>/w256.webp 這種固定的 key，這樣重跑只會覆寫——不會重複堆疊。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Things to remember",
+              "zh": "值得記住的事"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Always configure a Dead Letter Queue so jobs that keep failing land somewhere you can inspect instead of vanishing.",
+                "Store status (pending / ready / failed) so the front-end can poll or show a spinner until variants exist.",
+                "Keep queue messages small — send only the id and R2 key, never the image bytes (128 KB message limit).",
+                "R2 and Queues charge no egress fees; store the variants you generate instead of transforming on every request.",
+                "Tune max_batch_size and max_batch_timeout to trade latency for throughput when traffic spikes."
+              ],
+              "zh": [
+                "一定要設死信佇列（DLQ），讓一直失敗的工作落到你能檢查的地方，而不是憑空消失。",
+                "存好 status（pending / ready / failed），讓前端可以輪詢、或先顯示轉圈圈，直到變體生出來。",
+                "佇列訊息要小——只送 id 與 R2 key，絕不送圖片位元組（128 KB 訊息上限）。",
+                "R2 與 Queues 都不收流出（egress）費用；把產生的變體存起來，而不是每次請求都重新轉檔。",
+                "流量尖峰時，調整 max_batch_size 與 max_batch_timeout，在延遲與吞吐量之間取捨。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "savings",
+            "title": {
+              "en": "Where the costs are",
+              "zh": "成本花在哪"
+            },
+            "text": {
+              "en": "R2 bills storage plus operations (no egress). Queues bills per million operations. Images bills per transformation or per image stored. The big win of this design is caching variants: you pay to transform once, then serve the stored result for free from R2 via the CDN.",
+              "zh": "R2 收儲存空間加上操作次數（不收流出費）。Queues 以每百萬次操作計費。Images 以每次轉換或每張儲存圖片計費。這個設計最大的好處就是『快取變體』：你只付一次轉換的錢，之後就從 R2 經由 CDN 免費送出已存好的結果。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "images",
+        "label": {
+          "en": "Images",
+          "zh": "Images"
+        }
+      },
+      {
+        "slug": "queues",
+        "label": {
+          "en": "Queues",
+          "zh": "Queues"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "file-upload-r2",
+        "label": {
+          "en": "Direct uploads to R2",
+          "zh": "直接上傳到 R2"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/queues/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "blueprint-url-shortener",
+    "category": "integrations",
+    "group": {
+      "en": "Architecture Blueprints",
+      "zh": "架構藍圖"
+    },
+    "icon": "link",
+    "title": {
+      "en": "Blueprint: a URL shortener (your first full-stack app)",
+      "zh": "架構藍圖：短網址服務（你的第一個全端應用）"
+    },
+    "subtitle": {
+      "en": "A form, a Worker, and KV — build a tiny link shortener end to end",
+      "zh": "一個表單、一個 Worker、加上 KV——從頭到尾做出迷你短網址服務"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Paste a long link, get a short one back, and click it to jump — the perfect first project.",
+        "zh": "貼上一條長網址，換回一條短的，點下去就跳轉——最適合的第一個專案。"
+      }
+    },
+    "stats": [
+      {
+        "value": "3",
+        "label": {
+          "en": "Layers wired",
+          "zh": "層串接"
+        }
+      },
+      {
+        "value": "6",
+        "label": {
+          "en": "Short code length",
+          "zh": "短碼長度"
+        }
+      },
+      {
+        "value": "302",
+        "label": {
+          "en": "Redirect status",
+          "zh": "轉址狀態碼"
+        }
+      },
+      {
+        "value": "1",
+        "label": {
+          "en": "KV namespace",
+          "zh": "KV 命名空間"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we building?",
+          "zh": "我們要做什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "A URL shortener is the classic 'hello world' of full-stack apps. You paste a long, ugly link, the app stores it under a short random code, and visiting that code redirects you to the original link. With Cloudflare you can build the whole thing with one HTML page, one Worker, and one KV namespace — no server to manage.",
+              "zh": "短網址服務是全端應用的經典「Hello World」。你貼上一條又長又醜的連結，應用程式把它存在一個隨機短代碼底下，之後拜訪那個代碼就會把你轉址回原本的連結。用 Cloudflare，你只要一個 HTML 頁面、一個 Worker、一個 KV 命名空間就能做出整套——完全不用管伺服器。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "There are exactly two things the app does: (1) create — turn a long URL into a short code and save it; (2) resolve — take a short code and send the browser to the long URL. Let's see both as a picture.",
+              "zh": "這個應用程式就只做兩件事：(1) 建立——把長網址變成短代碼並存起來；(2) 還原——拿短代碼把瀏覽器送去長網址。我們先用一張圖看懂這兩件事。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "sticky_note_2",
+            "title": {
+              "en": "Think of it like…",
+              "zh": "把它想成…"
+            },
+            "text": {
+              "en": "A coat-check ticket. You hand over a bulky coat (the long URL) and get a tiny numbered ticket (the short code). Later you show the ticket and the attendant brings back exactly your coat. KV is the rack of coats; the code is your ticket number.",
+              "zh": "一張寄物號碼牌。你交出一件笨重的大衣（長網址），換得一張小小的號碼牌（短代碼）。之後你出示號碼牌，服務員就把你那件大衣拿回來。KV 就是那排衣架；代碼就是你的號碼牌號碼。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The two flows at a glance",
+              "zh": "兩條流程一眼看懂"
+            },
+            "code": {
+              "en": "flowchart LR\n  KV[(\"KV store\")]\n  subgraph s1[\"Create a short link\"]\n    F[\"Browser form\"] -->|\"POST long URL\"| W1[\"Worker create\"]\n    W1 -->|\"return short URL\"| F\n  end\n  subgraph s2[\"Open a short link\"]\n    B[\"Browser /code\"] --> W2[\"Worker lookup\"]\n    W2 -->|\"302 redirect\"| B\n  end\n  W1 -->|\"put(code, url)\"| KV\n  W2 -->|\"get(code)\"| KV",
+              "zh": "flowchart LR\n  KV[(\"KV 儲存\")]\n  subgraph s1[\"建立短網址\"]\n    F[\"瀏覽器表單\"] -->|\"POST 長網址\"| W1[\"Worker 建立\"]\n    W1 -->|\"回傳短網址\"| F\n  end\n  subgraph s2[\"開啟短網址\"]\n    B[\"瀏覽器 /code\"] --> W2[\"Worker 查詢\"]\n    W2 -->|\"302 轉址\"| B\n  end\n  W1 -->|\"put(code, url)\"| KV\n  W2 -->|\"get(code)\"| KV"
+            }
+          }
+        ]
+      },
+      {
+        "id": "architecture",
+        "icon": "account_tree",
+        "heading": {
+          "en": "How the pieces fit",
+          "zh": "各個元件怎麼搭"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Three small layers, each with one job. Requests flow front-end → Worker → KV and back. Because the Worker also serves the static form, your whole app lives at a single URL.",
+              "zh": "三個小小的層，各司其職。請求的流向是 前端 → Worker → KV，再原路回來。因為 Worker 同時也提供那個靜態表單，你的整個應用就活在同一個網址底下。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "web",
+                "title": {
+                  "en": "1. Front-end form",
+                  "zh": "1. 前端表單"
+                },
+                "text": {
+                  "en": "A plain HTML page with one input and a fetch() call. No framework needed.",
+                  "zh": "一個單純的 HTML 頁面，一個輸入框加一個 fetch() 呼叫。不需要任何框架。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "2. Worker (the brain)",
+                  "zh": "2. Worker（大腦）"
+                },
+                "text": {
+                  "en": "One function that reads the request, decides create vs resolve, and talks to KV.",
+                  "zh": "一個函式，讀取請求、判斷是要建立還是要查詢，然後跟 KV 溝通。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "3. KV (the memory)",
+                  "zh": "3. KV（記憶體）"
+                },
+                "text": {
+                  "en": "A global key-value store holding every code → URL pair, read back in milliseconds.",
+                  "zh": "一個全球鍵值資料庫，保存每一組 代碼 → 網址 的配對，毫秒內就能讀回。"
+                }
+              },
+              {
+                "icon": "tag",
+                "title": {
+                  "en": "The short code",
+                  "zh": "短代碼"
+                },
+                "text": {
+                  "en": "A tiny random string like abc123 that becomes the key and the last part of the short URL.",
+                  "zh": "一段像 abc123 的迷你隨機字串，它同時是 key，也是短網址的結尾。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Inside the Worker: one router, two jobs",
+              "zh": "Worker 內部：一個路由、兩件工作"
+            },
+            "code": {
+              "en": "flowchart TD\n  R[\"Incoming request\"] --> Q{\"Match route\"}\n  Q -->|\"POST /api/shorten\"| C[\"Create handler\"]\n  Q -->|\"GET /code\"| L[\"Lookup handler\"]\n  C -->|\"put(code, url)\"| KV[(\"KV: LINKS\")]\n  C --> J[\"Return JSON short URL\"]\n  L -->|\"get(code)\"| KV\n  L --> RD[\"Return 302 redirect\"]",
+              "zh": "flowchart TD\n  R[\"進來的請求\"] --> Q{\"比對路由\"}\n  Q -->|\"POST /api/shorten\"| C[\"建立處理器\"]\n  Q -->|\"GET /code\"| L[\"查詢處理器\"]\n  C -->|\"put(code, url)\"| KV[(\"KV：LINKS\")]\n  C --> J[\"回傳 JSON 短網址\"]\n  L -->|\"get(code)\"| KV\n  L --> RD[\"回傳 302 轉址\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "What happens on each click",
+          "zh": "每次點擊背後發生什麼"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Both flows talk to the same three players: your Browser, the Worker, and KV. Here is the exact back-and-forth for creating a link and then opening it.",
+              "zh": "兩條流程都跟同樣三位角色互動：你的瀏覽器、Worker、以及 KV。以下是「建立連結」再「開啟連結」時，一來一回的確切順序。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Create, then resolve",
+              "zh": "先建立、再還原"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant K as KV\n  Note over U,K: Create a short link\n  U->>W: POST /api/shorten with long URL\n  W->>W: generate random code\n  W->>K: put(code, longUrl)\n  K-->>W: stored\n  W-->>U: short URL /abc123\n  Note over U,K: Open the short link\n  U->>W: GET /abc123\n  W->>K: get(abc123)\n  K-->>W: long URL\n  W-->>U: 302 redirect to long URL",
+              "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as Worker\n  participant K as KV\n  Note over U,K: 建立短網址\n  U->>W: POST /api/shorten 帶長網址\n  W->>W: 產生隨機代碼\n  W->>K: put(code, longUrl)\n  K-->>W: 已儲存\n  W-->>U: 短網址 /abc123\n  Note over U,K: 開啟短網址\n  U->>W: GET /abc123\n  W->>K: get(abc123)\n  K-->>W: 長網址\n  W-->>U: 302 轉址到長網址"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it step by step",
+          "zh": "一步步動手做"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Five steps from empty folder to a live link shortener. Create a project with npm create cloudflare@latest, then follow along — every file you need is below.",
+              "zh": "五個步驟，從空資料夾到上線的短網址服務。先用 npm create cloudflare@latest 建立專案，然後跟著做——你需要的每個檔案都在下面。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Create a KV namespace",
+                  "zh": "建立 KV 命名空間"
+                },
+                "text": {
+                  "en": "A namespace is one isolated bucket of key-value pairs. Wrangler prints an id — copy it for the next step.",
+                  "zh": "命名空間就是一桶獨立的鍵值配對。Wrangler 會印出一組 id——複製起來給下一步用。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler kv namespace create LINKS"
+                }
+              },
+              {
+                "title": {
+                  "en": "Bind KV in wrangler.jsonc",
+                  "zh": "在 wrangler.jsonc 綁定 KV"
+                },
+                "text": {
+                  "en": "This config file names your entry Worker, points at the static files, and makes the namespace available in code as env.LINKS.",
+                  "zh": "這個設定檔指定你的進入點 Worker、指向靜態檔，並讓那個命名空間能在程式碼中用 env.LINKS 取用。"
+                },
+                "code": {
+                  "lang": "jsonc",
+                  "body": "{\n  \"name\": \"url-shortener\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  // Serve everything in ./public as static files (the HTML form lives here)\n  \"assets\": { \"directory\": \"./public\" },\n  // Make the KV namespace available in code as env.LINKS\n  \"kv_namespaces\": [\n    { \"binding\": \"LINKS\", \"id\": \"<paste-your-id-here>\" }\n  ]\n}"
+                }
+              },
+              {
+                "title": {
+                  "en": "Build the front-end form",
+                  "zh": "做出前端表單"
+                },
+                "text": {
+                  "en": "Save this as public/index.html. It is served automatically at / and posts the URL to your Worker with fetch().",
+                  "zh": "把這個存成 public/index.html。它會自動在 / 被提供，並用 fetch() 把網址 POST 給你的 Worker。"
+                },
+                "code": {
+                  "lang": "html",
+                  "body": "<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>URL Shortener 短網址</title>\n  </head>\n  <body>\n    <h1>Shorten a URL 縮短網址</h1>\n\n    <form id=\"shorten-form\">\n      <input\n        id=\"long-url\"\n        type=\"url\"\n        placeholder=\"https://example.com/a/very/long/path\"\n        required\n      />\n      <button type=\"submit\">Shorten</button>\n    </form>\n\n    <p id=\"result\"></p>\n\n    <script>\n      const form = document.getElementById(\"shorten-form\");\n\n      form.addEventListener(\"submit\", async (event) => {\n        event.preventDefault();\n        const longUrl = document.getElementById(\"long-url\").value;\n\n        // POST the long URL to our Worker as JSON\n        const response = await fetch(\"/api/shorten\", {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({ url: longUrl }),\n        });\n\n        const data = await response.json();\n        const result = document.getElementById(\"result\");\n\n        if (data.short) {\n          const shortUrl = location.origin + data.short;\n          result.innerHTML =\n            'Short link: <a href=\"' + shortUrl + '\">' + shortUrl + \"</a>\";\n        } else {\n          result.textContent = data.error || \"Something went wrong\";\n        }\n      });\n    </script>\n  </body>\n</html>"
+                }
+              },
+              {
+                "title": {
+                  "en": "Write the Worker",
+                  "zh": "寫 Worker"
+                },
+                "text": {
+                  "en": "Save this as src/index.js. On POST it generates a code and saves it; on GET it looks the code up and redirects. This is the entire back-end.",
+                  "zh": "把這個存成 src/index.js。在 POST 時它產生代碼並儲存；在 GET 時查出代碼並轉址。這就是整個後端。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/index.js — the entire back-end of the URL shortener\n\n// Build a random short code, e.g. \"a8Kp2Z\", from safe characters.\nfunction makeCode(length = 6) {\n  const chars =\n    \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\n  const bytes = crypto.getRandomValues(new Uint8Array(length));\n  let code = \"\";\n  for (const byte of bytes) {\n    code += chars[byte % chars.length];\n  }\n  return code;\n}\n\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // 1) CREATE a short link:  POST /api/shorten  with { \"url\": \"https://...\" }\n    if (request.method === \"POST\" && url.pathname === \"/api/shorten\") {\n      const body = await request.json();\n      const longUrl = body.url;\n\n      // Validate the input before trusting it.\n      const ok =\n        longUrl &&\n        (longUrl.startsWith(\"http://\") || longUrl.startsWith(\"https://\"));\n      if (!ok) {\n        return Response.json(\n          { error: \"Please send a valid http(s) URL\" },\n          { status: 400 }\n        );\n      }\n\n      const code = makeCode(6);\n      await env.LINKS.put(code, longUrl); // save the pair: code -> long URL\n      return Response.json({ short: \"/\" + code });\n    }\n\n    // 2) RESOLVE a short link:  GET /<code>  ->  302 redirect to the long URL\n    if (request.method === \"GET\") {\n      const code = url.pathname.slice(1); // drop the leading \"/\"\n      const longUrl = await env.LINKS.get(code); // look the code up in KV\n      if (longUrl) {\n        return Response.redirect(longUrl, 302);\n      }\n      return new Response(\"Short link not found\", { status: 404 });\n    }\n\n    return new Response(\"Method not allowed\", { status: 405 });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "Run locally, then deploy",
+                  "zh": "先在本機跑，再部署"
+                },
+                "text": {
+                  "en": "wrangler dev runs it on your machine; wrangler deploy puts it on Cloudflare's global network with a public URL.",
+                  "zh": "wrangler dev 在你電腦上跑；wrangler deploy 把它放上 Cloudflare 全球網路，給你一個公開網址。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Run it on your own machine first\nnpx wrangler dev\n# open http://localhost:8787 , paste a URL, then click the short link\n\n# Happy with it? Ship it worldwide:\nnpx wrangler deploy"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key concepts",
+          "zh": "重點概念"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "key",
+                "title": {
+                  "en": "KV stores code → URL",
+                  "zh": "KV 存的是 代碼 → 網址"
+                },
+                "text": {
+                  "en": "Each short code is a key; the long URL is its value. put(code, url) saves the pair, get(code) reads it back. No tables, no SQL.",
+                  "zh": "每個短代碼就是一個 key，長網址是它的 value。put(code, url) 存下這組配對，get(code) 再把它讀回來。沒有資料表，也沒有 SQL。"
+                }
+              },
+              {
+                "icon": "subdirectory_arrow_right",
+                "title": {
+                  "en": "302 redirect",
+                  "zh": "302 轉址"
+                },
+                "text": {
+                  "en": "Response.redirect(url, 302) tells the browser 'this link lives somewhere else, go there now'. 302 = a temporary redirect, so you can change the target later.",
+                  "zh": "Response.redirect(url, 302) 等於告訴瀏覽器「這個連結其實在別處，現在去那裡吧」。302 代表「暫時轉址」，所以你之後還能改目標網址。"
+                }
+              },
+              {
+                "icon": "casino",
+                "title": {
+                  "en": "Random short code",
+                  "zh": "隨機短代碼"
+                },
+                "text": {
+                  "en": "We pick 6 characters at random from a-z, A-Z, 0-9 — over 56 billion combinations, so collisions are extremely unlikely for a small app.",
+                  "zh": "我們從 a-z、A-Z、0-9 裡隨機挑 6 個字元——超過 560 億種組合，所以小型應用幾乎不可能撞碼。"
+                }
+              },
+              {
+                "icon": "schedule",
+                "title": {
+                  "en": "Eventual consistency is fine here",
+                  "zh": "最終一致性在這裡剛剛好"
+                },
+                "text": {
+                  "en": "A freshly created code can take up to ~60s to appear in every region. For sharing links that is perfectly acceptable.",
+                  "zh": "剛建立的代碼可能要約 60 秒才會在每個地區都生效。對「分享連結」這種需求完全沒問題。"
+                }
+              },
+              {
+                "icon": "web",
+                "title": {
+                  "en": "Static assets + Worker",
+                  "zh": "靜態資源 + Worker"
+                },
+                "text": {
+                  "en": "The HTML form is a static file served automatically; any path that is not a file (like /abc123) falls through to your Worker.",
+                  "zh": "HTML 表單是一個會被自動提供的靜態檔；任何不是檔案的路徑（像 /abc123）就會落到你的 Worker 處理。"
+                }
+              },
+              {
+                "icon": "shield",
+                "title": {
+                  "en": "Validate the input",
+                  "zh": "驗證輸入"
+                },
+                "text": {
+                  "en": "Always check the submitted URL really starts with http:// or https:// before saving it — never trust raw form data.",
+                  "zh": "存檔前一定要檢查送來的網址真的以 http:// 或 https:// 開頭——別輕信原始表單資料。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "301 vs 302",
+              "zh": "301 與 302 的差別"
+            },
+            "text": {
+              "en": "301 = permanent (browsers and search engines cache it hard); 302 = temporary. Start with 302 while learning so you can freely change where a code points.",
+              "zh": "301 = 永久轉址（瀏覽器和搜尋引擎會用力快取）；302 = 暫時轉址。學習階段先用 302，這樣你隨時能改某個代碼指向哪裡。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "upgrade",
+        "icon": "trending_up",
+        "heading": {
+          "en": "Level it up: count the clicks",
+          "zh": "再升級：統計點擊次數"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Once the basics work, a fun next step is counting how many times each short link is opened. The quick way: keep a counter in KV. The robust way: log each click into a D1 (SQL) table so you can run analytics.",
+              "zh": "基本功能跑起來後，一個好玩的下一步是統計每條短連結被開過幾次。快速做法：在 KV 裡放一個計數器。穩健做法：把每次點擊記進 D1（SQL）資料表，這樣就能做分析。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Quick way — a KV counter",
+              "zh": "快速做法——KV 計數器"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "add inside the GET branch",
+              "zh": "加在 GET 分支裡"
+            },
+            "body": "// Inside the GET branch, right after you read longUrl:\nconst key = \"clicks:\" + code;\nconst hits = parseInt((await env.LINKS.get(key)) || \"0\", 10);\nawait env.LINKS.put(key, String(hits + 1)); // best-effort click count"
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Robust way — a D1 table",
+              "zh": "穩健做法——D1 資料表"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "With D1 you keep one row per link and one row per click. The shape looks like this:",
+              "zh": "用 D1，你為每條連結留一列、每次點擊留一列。資料長相如下："
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Click-tracking schema (D1 upgrade)",
+              "zh": "點擊統計資料結構（D1 升級版）"
+            },
+            "code": {
+              "en": "erDiagram\n  LINKS ||--o{ CLICKS : records\n  LINKS {\n    text code PK\n    text long_url\n    int created_at\n  }\n  CLICKS {\n    int id PK\n    text code FK\n    int clicked_at\n  }",
+              "zh": "erDiagram\n  LINKS ||--o{ CLICKS : 記錄\n  LINKS {\n    text code PK\n    text long_url\n    int created_at\n  }\n  CLICKS {\n    int id PK\n    text code FK\n    int clicked_at\n  }"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "sql",
+            "title": {
+              "en": "schema.sql",
+              "zh": "schema.sql"
+            },
+            "body": "-- schema.sql  (run with: npx wrangler d1 execute mydb --file schema.sql)\nCREATE TABLE links (\n  code       TEXT PRIMARY KEY,\n  long_url   TEXT NOT NULL,\n  created_at INTEGER NOT NULL\n);\n\nCREATE TABLE clicks (\n  id         INTEGER PRIMARY KEY,\n  code       TEXT NOT NULL,\n  clicked_at INTEGER NOT NULL\n);"
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "lightbulb",
+            "title": {
+              "en": "KV or D1?",
+              "zh": "KV 還是 D1？"
+            },
+            "text": {
+              "en": "KV is perfect for the code → URL lookup (tons of fast reads). D1 is better for click logs you want to query and aggregate. Many real apps use both together.",
+              "zh": "KV 很適合 代碼 → 網址 的查找（超大量的快速讀取）。D1 比較適合你想查詢、彙總的點擊紀錄。很多真實應用會兩個一起用。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips, traps & limits",
+          "zh": "小提示、陷阱與限制"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "warning",
+            "title": {
+              "en": "Open redirects can be abused",
+              "zh": "開放轉址可能被濫用"
+            },
+            "text": {
+              "en": "Because anyone can shorten any URL, bad actors could hide phishing links behind your domain. For a learning project it's fine; for production, consider a blocklist or only allowing your own URLs.",
+              "zh": "因為任何人都能縮短任何網址，壞人可能把釣魚連結藏在你的網域後面。學習專案沒關係；但要上正式環境，請考慮加黑名單，或只允許縮短你自己的網址。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "KV free tier: 100,000 reads/day and 1,000 writes/day — plenty for a personal shortener.",
+                "Reads are fast and cheap; writes are limited to ~1 per second per key, which is fine since each code is written once.",
+                "Check for an existing code before saving if you want to be extra safe against the tiny collision chance.",
+                "A new code may take up to ~60 seconds to be readable in every region (eventual consistency)."
+              ],
+              "zh": [
+                "KV 免費額度：每天 10 萬次讀取、1,000 次寫入——對個人短網址服務綽綽有餘。",
+                "讀取又快又便宜；同一個 key 寫入限約每秒 1 次，但每個代碼只寫一次，所以沒問題。",
+                "想對極小的撞碼機率再保險一點，可以在儲存前先檢查代碼是否已存在。",
+                "新代碼可能要約 60 秒才會在每個地區都讀得到（最終一致性）。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "kv-cache-layer",
+        "label": {
+          "en": "KV as a cache layer",
+          "zh": "用 KV 當快取層"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/kv/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "request-lifecycle",
+    "category": "integrations",
+    "group": {
+      "en": "Flows & Lifecycles",
+      "zh": "流程圖解"
+    },
+    "icon": "timeline",
+    "title": {
+      "en": "The life of a request on Cloudflare",
+      "zh": "一個請求在 Cloudflare 上的完整生命週期"
+    },
+    "subtitle": {
+      "en": "Follow one HTTP request from the browser through DNS, the edge, WAF, cache, a Worker, storage, and all the way back",
+      "zh": "跟著一個 HTTP 請求，從瀏覽器出發，走過 DNS、邊緣、WAF、快取、Worker、儲存，再一路回到使用者眼前"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "This is the mental model that ties the whole platform together — once you can draw it, everything else clicks.",
+        "zh": "這就是把整個平台串起來的心智模型——只要你畫得出這張圖，其他產品就全部說得通了。"
+      }
+    },
+    "stats": [
+      {
+        "value": "1",
+        "label": {
+          "en": "Request traced end-to-end",
+          "zh": "完整追蹤一個請求"
+        }
+      },
+      {
+        "value": "330+",
+        "label": {
+          "en": "Edge cities it could land in",
+          "zh": "可能落地的邊緣城市"
+        }
+      },
+      {
+        "value": "6",
+        "label": {
+          "en": "Hops on the journey",
+          "zh": "旅程上的站點"
+        }
+      },
+      {
+        "value": "1 IP",
+        "label": {
+          "en": "Anycast address, many locations",
+          "zh": "一個 Anycast 位址、多個據點"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What journey are we tracing?",
+          "zh": "我們要追蹤的是哪一段旅程？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Every time you open a web page, a single HTTP request leaves your browser and travels through a chain of stops before an answer comes back. On Cloudflare that chain is: DNS finds the address, Anycast routes you to the nearest edge data center, the WAF checks the request is safe, the cache tries to answer instantly, and only if needed does a Worker run your back-end code and read storage. Then the response retraces its steps home.",
+              "zh": "每次你打開一個網頁，瀏覽器都會送出一個 HTTP 請求，這個請求要經過一連串的站點，答案才會回來。在 Cloudflare 上這條路徑是：DNS（網域名稱系統）先找到位址，Anycast 把你導向最近的邊緣資料中心，WAF（網站應用防火牆）檢查請求是否安全，快取（cache）試著立刻回答，只有在需要時，Worker 才會執行你的後端程式並讀取儲存。接著回應會沿著原路一路回家。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is the whole path on one diagram. Read it left to right: the browser starts the trip, the edge PoP does the heavy lifting (WAF then cache then Worker), storage sits at the far end, and the response flows back.",
+              "zh": "下面這張圖把整條路徑畫在一起。由左讀到右：瀏覽器開啟旅程，邊緣 PoP（接入點）負責主要工作（先 WAF、再快取、再 Worker），儲存在最末端，回應再流回來。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The full path, left to right",
+              "zh": "完整路徑（由左到右）"
+            },
+            "code": {
+              "en": "flowchart LR\n  B[\"Browser\"]\n  DNS[\"DNS lookup\"]\n  subgraph EDGE[\"Nearest edge PoP\"]\n    WAF[\"WAF security\"]\n    CACHE[\"Cache\"]\n    W[\"Worker backend\"]\n  end\n  STORE[\"Storage D1 / KV / R2\"]\n  B -->|\"1 DNS query\"| DNS\n  DNS -->|\"2 Anycast to nearest PoP\"| WAF\n  WAF -->|\"3 passes checks\"| CACHE\n  CACHE -->|\"4 MISS goes deeper\"| W\n  W -->|\"5 read or write\"| STORE\n  STORE -->|\"6 data back\"| W\n  W -->|\"7 build response\"| CACHE\n  CACHE -->|\"8 response\"| B",
+              "zh": "flowchart LR\n  B[\"瀏覽器\"]\n  DNS[\"DNS 查詢\"]\n  subgraph EDGE[\"最近的邊緣 PoP\"]\n    WAF[\"WAF 安全檢查\"]\n    CACHE[\"快取 Cache\"]\n    W[\"Worker 後端\"]\n  end\n  STORE[\"儲存 D1 / KV / R2\"]\n  B -->|\"1 DNS 查詢\"| DNS\n  DNS -->|\"2 Anycast 導向最近 PoP\"| WAF\n  WAF -->|\"3 通過檢查\"| CACHE\n  CACHE -->|\"4 MISS 才往後\"| W\n  W -->|\"5 讀寫資料\"| STORE\n  STORE -->|\"6 回傳資料\"| W\n  W -->|\"7 產生回應\"| CACHE\n  CACHE -->|\"8 回應\"| B"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "local_shipping",
+            "title": {
+              "en": "Think of it like a parcel delivery",
+              "zh": "把它想成一趟包裹配送"
+            },
+            "text": {
+              "en": "DNS is looking up the address. Anycast is the courier choosing the nearest depot. The WAF is security at the gate. The cache is a shelf of ready-to-ship parcels. The Worker is the worker who assembles a custom order, and storage is the warehouse out back. Most of the time you never reach the warehouse — the shelf already had your parcel.",
+              "zh": "DNS 是在查地址。Anycast 是宅配選了離你最近的轉運站。WAF 是門口的保全。快取是一整排「現貨、可立即出貨」的包裹。Worker 是那位幫你客製組裝訂單的員工，儲存則是後方的大倉庫。大多數時候你根本走不到倉庫——貨架上早就有你的包裹了。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "hops",
+        "icon": "account_tree",
+        "heading": {
+          "en": "Each hop, one at a time",
+          "zh": "逐站拆解：每一個站點在做什麼"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Six stops make up the journey. Each one has a single job, and each one can short-circuit the trip — for example, the cache can answer before the request ever reaches your code.",
+              "zh": "整趟旅程由六個站點組成。每個站點只負責一件事，而且每一站都可能讓旅程「提前結束」——例如快取可以在請求碰到你的程式碼之前就先回答。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "1. DNS",
+                  "zh": "1. DNS（網域名稱系統）"
+                },
+                "text": {
+                  "en": "Turns a name like shop.com into an IP address. On Cloudflare that IP is an Anycast address shared by every edge data center.",
+                  "zh": "把像 shop.com 這樣的名字換成一個 IP 位址。在 Cloudflare 上，這個 IP 是所有邊緣資料中心共用的 Anycast 位址。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "2. Edge PoP",
+                  "zh": "2. 邊緣 PoP（接入點）"
+                },
+                "text": {
+                  "en": "The nearest Cloudflare data center (Point of Presence). Anycast steers your request here so the round trip stays short.",
+                  "zh": "離你最近的 Cloudflare 資料中心（Point of Presence，接入點）。Anycast 把請求導向這裡，讓來回距離保持最短。"
+                }
+              },
+              {
+                "icon": "shield",
+                "title": {
+                  "en": "3. WAF",
+                  "zh": "3. WAF（網站應用防火牆）"
+                },
+                "text": {
+                  "en": "Inspects the request first. Bad traffic (SQL injection, bots, abuse) is blocked or challenged before it can touch anything else.",
+                  "zh": "最先檢查請求。惡意流量（SQL 注入、機器人、濫用）會在碰到後面任何東西之前先被封鎖或要求驗證。"
+                }
+              },
+              {
+                "icon": "bolt",
+                "title": {
+                  "en": "4. Cache",
+                  "zh": "4. 快取（Cache）"
+                },
+                "text": {
+                  "en": "If a fresh copy of the response is already stored at this PoP, it is sent back instantly — a cache HIT. No Worker, no origin.",
+                  "zh": "如果這個 PoP 已經存有一份還新鮮的回應複本，就立刻送回去——這就是快取命中（HIT）。不需要動用 Worker，也不必回源。"
+                }
+              },
+              {
+                "icon": "code",
+                "title": {
+                  "en": "5. Worker (back-end)",
+                  "zh": "5. Worker（後端）"
+                },
+                "text": {
+                  "en": "On a cache MISS, your serverless code runs right here at the edge. It decides what to do: read data, call an API, render HTML.",
+                  "zh": "快取未命中（MISS）時，你的無伺服器程式碼就在這個邊緣節點執行。它決定接下來要做什麼：讀資料、呼叫 API、產生 HTML。"
+                }
+              },
+              {
+                "icon": "database",
+                "title": {
+                  "en": "6. Storage",
+                  "zh": "6. 儲存（Storage）"
+                },
+                "text": {
+                  "en": "The Worker reads or writes data: D1 (SQL), KV (key-value), or R2 (files). This is the far end of the trip before the answer turns around.",
+                  "zh": "Worker 在這裡讀寫資料：D1（SQL 資料庫）、KV（鍵值儲存）或 R2（檔案儲存）。這是答案掉頭回家之前、旅程的最遠端。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Step by step, with cache HIT vs MISS",
+          "zh": "一步一步走，含快取 HIT 與 MISS 分支"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Now the same trip as a time-ordered sequence. Notice the branch: a cache HIT answers in one short hop, while a cache MISS has to wake the Worker and reach storage before it can reply — and then it saves the result so the next visitor gets a HIT.",
+              "zh": "現在把同一趟旅程畫成依時間排序的流程。注意那個分支：快取命中（HIT）只要一個短短的往返就能回答；而快取未命中（MISS）必須叫醒 Worker、走到儲存才能回應——而且回應後會把結果存起來，讓下一位訪客拿到 HIT。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Request sequence (HIT vs MISS)",
+              "zh": "請求時序（HIT 與 MISS）"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant E as \"Edge PoP\"\n  participant W as \"Worker\"\n  participant S as \"Storage\"\n  U->>E: GET /page after DNS and Anycast\n  Note over E: WAF checks the request\n  alt Cache HIT\n    E-->>U: Cached response is fast\n  else Cache MISS\n    E->>W: Forward the request\n    W->>S: Read or write data\n    S-->>W: Result\n    W-->>E: Fresh response\n    Note over E: Store in cache for next time\n    E-->>U: Response\n  end",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant E as \"邊緣 PoP\"\n  participant W as \"Worker\"\n  participant S as \"儲存\"\n  U->>E: GET /page 經 DNS 與 Anycast\n  Note over E: WAF 檢查這個請求\n  alt 快取命中 HIT\n    E-->>U: 直接回快取很快\n  else 快取未命中 MISS\n    E->>W: 轉發請求\n    W->>S: 讀取或寫入資料\n    S-->>W: 結果\n    W-->>E: 全新回應\n    Note over E: 存進快取給下次用\n    E-->>U: 回應\n  end"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "info",
+            "title": {
+              "en": "How to tell HIT from MISS",
+              "zh": "怎麼分辨 HIT 還是 MISS"
+            },
+            "text": {
+              "en": "Cloudflare reports the outcome in the cf-cache-status response header. The first request to a page is often a MISS; load it again and you usually get a HIT served straight from the edge.",
+              "zh": "Cloudflare 會用 cf-cache-status 這個回應標頭告訴你結果。第一次請求某個頁面常常是 MISS；再載入一次，通常就會拿到直接從邊緣送出的 HIT。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "decisions",
+        "icon": "alt_route",
+        "heading": {
+          "en": "The decisions made at the edge",
+          "zh": "邊緣節點當下做的那些決定"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Inside that one edge PoP, a few yes/no questions decide the rest of the request's fate: is it malicious, is it already cached, and does a route send it to a Worker? Following the arrows shows every possible path the request can take.",
+              "zh": "在那一個邊緣 PoP 裡，幾個是／否的問題就決定了這個請求接下來的命運：它是惡意的嗎？它已經被快取了嗎？有沒有路由把它送去某個 Worker？順著箭頭走，就能看到請求所有可能走的路。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Decision points at the edge",
+              "zh": "邊緣節點的決策點"
+            },
+            "code": {
+              "en": "flowchart TD\n  IN[\"Request arrives at edge PoP\"]\n  WAF{\"WAF: malicious or bot?\"}\n  BLOCK[\"Block or challenge\"]\n  CACHEQ{\"Fresh copy in cache?\"}\n  SERVE[\"Serve cached HIT\"]\n  ROUTEQ{\"Route matches a Worker?\"}\n  WORKER[\"Run Worker code\"]\n  ORIGIN[\"Fetch from origin\"]\n  RESP[\"Build response and maybe cache\"]\n  OUT[\"Return to browser\"]\n  IN --> WAF\n  WAF -->|\"yes\"| BLOCK\n  WAF -->|\"no\"| CACHEQ\n  CACHEQ -->|\"yes\"| SERVE\n  CACHEQ -->|\"no\"| ROUTEQ\n  ROUTEQ -->|\"yes\"| WORKER\n  ROUTEQ -->|\"no\"| ORIGIN\n  WORKER --> RESP\n  ORIGIN --> RESP\n  RESP --> OUT\n  SERVE --> OUT",
+              "zh": "flowchart TD\n  IN[\"請求抵達邊緣 PoP\"]\n  WAF{\"WAF：惡意或機器人?\"}\n  BLOCK[\"封鎖或出 Challenge\"]\n  CACHEQ{\"快取裡有新鮮複本?\"}\n  SERVE[\"直接回快取 HIT\"]\n  ROUTEQ{\"路由命中 Worker?\"}\n  WORKER[\"執行 Worker 程式\"]\n  ORIGIN[\"回源伺服器抓取\"]\n  RESP[\"組裝回應並視情況寫入快取\"]\n  OUT[\"回傳給瀏覽器\"]\n  IN --> WAF\n  WAF -->|\"是\"| BLOCK\n  WAF -->|\"否\"| CACHEQ\n  CACHEQ -->|\"是\"| SERVE\n  CACHEQ -->|\"否\"| ROUTEQ\n  ROUTEQ -->|\"是\"| WORKER\n  ROUTEQ -->|\"否\"| ORIGIN\n  WORKER --> RESP\n  ORIGIN --> RESP\n  RESP --> OUT\n  SERVE --> OUT"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "rocket_launch",
+            "title": {
+              "en": "Cheapest path wins",
+              "zh": "越早結束、越省"
+            },
+            "text": {
+              "en": "The earlier the request exits this chart, the faster and cheaper it is. A cache HIT skips the Worker, the origin, and storage entirely — which is why caching is the single biggest performance lever you have.",
+              "zh": "請求越早離開這張圖，就越快也越省。一次快取命中會完全跳過 Worker、來源伺服器與儲存——這就是為什麼「快取」是你手上最有力的效能槓桿。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Where the Worker sits in the path",
+          "zh": "Worker 在這條路徑上的位置"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A Worker is just a fetch handler that Cloudflare runs at the edge PoP — after the WAF, and only when the cache could not answer. Here is a sketch that mirrors the diagrams above: try the cache first, run back-end logic and read storage on a MISS, then save the response for next time.",
+              "zh": "Worker 其實就是一個 fetch 處理函式，由 Cloudflare 在邊緣 PoP 執行——在 WAF 之後、而且只有在快取無法回答時才會跑。下面這段範例剛好對應上面的圖：先試快取，MISS 時才執行後端邏輯並讀取儲存，最後把回應存起來給下次用。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "place",
+            "title": {
+              "en": "This code runs at step 5",
+              "zh": "這段程式碼跑在「第 5 站」"
+            },
+            "text": {
+              "en": "env.DB is a D1 (SQL) binding and env.ASSETS is a KV binding — both are the 'storage' hop. caches.default is the edge cache from the diagrams. ctx.waitUntil lets the response leave while the cache write finishes in the background.",
+              "zh": "env.DB 是 D1（SQL）的 binding（繫結），env.ASSETS 是 KV 的 binding，兩者都是圖中「儲存」這一站。caches.default 就是圖裡的邊緣快取。ctx.waitUntil 讓回應先送出，快取寫入則在背景慢慢完成。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "worker.js — where the Worker sits",
+              "zh": "worker.js — Worker 的位置"
+            },
+            "body": "export default {\n  // Cloudflare runs this at the edge PoP, AFTER the WAF and a cache MISS\n  async fetch(request, env, ctx) {\n    const url = new URL(request.url);\n\n    // 1) Try the edge cache first\n    const cache = caches.default;\n    let response = await cache.match(request);\n    if (response) {\n      return response; // cache HIT - the fastest path home\n    }\n\n    // 2) Cache MISS - run back-end logic and read storage\n    if (url.pathname === \"/api/profile\") {\n      const user = await env.DB.prepare(\n        \"SELECT name FROM users WHERE id = ?\"\n      ).bind(url.searchParams.get(\"id\")).first();\n      response = Response.json(user);\n    } else {\n      const html = await env.ASSETS.get(\"index.html\");\n      response = new Response(html, {\n        headers: { \"content-type\": \"text/html\" },\n      });\n    }\n\n    // 3) Save to the edge cache for the next visitor, then return\n    response.headers.append(\"Cache-Control\", \"max-age=60\");\n    ctx.waitUntil(cache.put(request, response.clone()));\n    return response;\n  },\n};"
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "See which PoP you reached",
+                  "zh": "看看你打到了哪個 PoP"
+                },
+                "text": {
+                  "en": "The cf-ray header ends with a 3-letter airport code — that is the edge data center that served you.",
+                  "zh": "cf-ray 標頭結尾有一組 3 個字母的機場代碼——那就是替你服務的邊緣資料中心。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "curl -sI https://example.com | grep -i cf-ray\n# cf-ray: 8a1f...-LHR   (LHR = London)"
+                }
+              },
+              {
+                "title": {
+                  "en": "Watch cache HIT vs MISS",
+                  "zh": "觀察快取 HIT 與 MISS"
+                },
+                "text": {
+                  "en": "Run it twice. The first call is often MISS; the second is usually HIT, served straight from the edge.",
+                  "zh": "連跑兩次。第一次常常是 MISS；第二次通常是 HIT，直接從邊緣送出。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "curl -sI https://example.com/logo.png | grep -i cf-cache-status\n# cf-cache-status: HIT"
+                }
+              },
+              {
+                "title": {
+                  "en": "Confirm the Worker ran",
+                  "zh": "確認 Worker 有跑到"
+                },
+                "text": {
+                  "en": "Add a custom header in your Worker (for example response.headers.set('x-served-by', 'worker')) and look for it in the response to prove your code was the one that answered.",
+                  "zh": "在 Worker 裡加一個自訂標頭（例如 response.headers.set('x-served-by', 'worker')），再去回應裡找它，就能證明是你的程式碼回答的。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key terms, explained",
+          "zh": "關鍵名詞，一次說清楚"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "DNS",
+                  "zh": "DNS（網域名稱系統）"
+                },
+                "text": {
+                  "en": "The internet's phone book. It translates a human name (shop.com) into the numeric IP address a computer can actually connect to.",
+                  "zh": "網際網路的電話簿。它把人看得懂的名字（shop.com）翻譯成電腦真正能連線的數字 IP 位址。"
+                }
+              },
+              {
+                "icon": "travel_explore",
+                "title": {
+                  "en": "Anycast",
+                  "zh": "Anycast（任播）"
+                },
+                "text": {
+                  "en": "One IP address announced from hundreds of locations at once. The network automatically delivers each request to the closest one, so users always hit a nearby edge.",
+                  "zh": "同一個 IP 位址，同時從上百個據點對外宣告。網路會自動把每個請求送到最近的那個，所以使用者永遠打到附近的邊緣節點。"
+                }
+              },
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Edge / PoP",
+                  "zh": "邊緣 / PoP（接入點）"
+                },
+                "text": {
+                  "en": "'Edge' means servers near users instead of one faraway data center. A PoP (Point of Presence) is one such location — Cloudflare has them in 330+ cities.",
+                  "zh": "「邊緣（edge）」指的是靠近使用者的伺服器，而不是一座遙遠的資料中心。PoP（Point of Presence，接入點）就是其中一個據點——Cloudflare 在全球 330 多個城市都有。"
+                }
+              },
+              {
+                "icon": "shield",
+                "title": {
+                  "en": "WAF",
+                  "zh": "WAF（網站應用防火牆）"
+                },
+                "text": {
+                  "en": "Web Application Firewall. It inspects each request at the edge and blocks common attacks (SQL injection, XSS) and abusive bots before they reach your app.",
+                  "zh": "Web Application Firewall（網站應用防火牆）。它在邊緣檢查每個請求，在常見攻擊（SQL 注入、XSS 跨站腳本）和惡意機器人碰到你的應用之前就先擋下來。"
+                }
+              },
+              {
+                "icon": "compare_arrows",
+                "title": {
+                  "en": "Cache HIT / MISS",
+                  "zh": "快取 HIT／MISS（命中／未命中）"
+                },
+                "text": {
+                  "en": "A HIT means the edge already had a fresh copy and answered instantly. A MISS means it had to go fetch a fresh one (from a Worker or your origin) and then store it.",
+                  "zh": "HIT（命中）表示邊緣手上已有新鮮複本，立刻回答。MISS（未命中）表示它得去抓一份新的（向 Worker 或你的來源伺服器），再存起來。"
+                }
+              },
+              {
+                "icon": "home_pin",
+                "title": {
+                  "en": "Origin",
+                  "zh": "Origin（來源伺服器）"
+                },
+                "text": {
+                  "en": "Your own server or service that holds the original content. Cloudflare only goes back to the origin when the edge cannot answer from cache or a Worker — that round trip is 'going to origin'.",
+                  "zh": "你自己那台存放原始內容的伺服器或服務。只有當邊緣無法用快取或 Worker 回答時，Cloudflare 才會回到來源伺服器——這趟來回就叫「回源」。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips & gotchas",
+          "zh": "小提示與常見陷阱"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "Never cache per-user pages",
+              "zh": "千萬別快取每位使用者專屬的頁面"
+            },
+            "text": {
+              "en": "If a logged-in dashboard is cached at the edge, one user could be served another user's page. Mark private responses with Cache-Control: private, no-store so they always go through the Worker.",
+              "zh": "如果把已登入的儀表板快取在邊緣，某位使用者可能會看到別人的頁面。請替私人回應加上 Cache-Control: private, no-store，讓它們一定走 Worker。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "The whole chain (DNS, edge, WAF, cache) only kicks in when your DNS record is proxied — the orange cloud in the dashboard.",
+                "Static files (images, CSS, JS) cache beautifully; dynamic, personalized responses usually should not.",
+                "A cache HIT never runs your Worker, so it costs no Worker requests and adds no latency.",
+                "cf-ray identifies the PoP and the exact request; keep it when filing a support ticket.",
+                "Read the chapters on DNS, CDN, WAF, and Workers next — each one is a single hop in this diagram."
+              ],
+              "zh": [
+                "整條鏈（DNS、邊緣、WAF、快取）只有在你的 DNS 紀錄「經過代理」時才會啟動——也就是儀表板上的橘色雲朵。",
+                "靜態檔案（圖片、CSS、JS）非常適合快取；動態、個人化的回應通常不該快取。",
+                "快取命中（HIT）完全不會執行你的 Worker，所以不計 Worker 請求、也不增加延遲。",
+                "cf-ray 能標示是哪個 PoP、哪一個請求；回報問題給客服時請保留它。",
+                "接下來去讀 DNS、CDN、WAF 和 Workers 的章節——每一章都正好是這張圖裡的一個站點。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "dns",
+        "label": {
+          "en": "DNS",
+          "zh": "DNS"
+        }
+      },
+      {
+        "slug": "cdn",
+        "label": {
+          "en": "CDN & Cache",
+          "zh": "CDN 與快取"
+        }
+      },
+      {
+        "slug": "waf",
+        "label": {
+          "en": "WAF",
+          "zh": "WAF"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "cache-flow",
+        "label": {
+          "en": "Cache flow",
+          "zh": "快取流程"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "auth-flow-diagram",
+    "category": "integrations",
+    "group": {
+      "en": "Flows & Lifecycles",
+      "zh": "流程圖解"
+    },
+    "icon": "key",
+    "title": {
+      "en": "Auth flows, diagrammed",
+      "zh": "各種登入授權流程圖解"
+    },
+    "subtitle": {
+      "en": "See how four common login and authorization flows actually work, drawn step by step as sequence diagrams.",
+      "zh": "用一張張循序圖,一步步看懂四種常見的登入與授權流程到底是怎麼運作的。"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "SSO, session cookies, JWT bearer tokens, and OAuth — each one drawn as a picture you can follow.",
+        "zh": "SSO、session cookie、JWT bearer 權杖、OAuth —— 每一種都畫成看得懂的圖。"
+      }
+    },
+    "stats": [
+      {
+        "value": "4",
+        "label": {
+          "en": "Flows diagrammed",
+          "zh": "流程圖解"
+        }
+      },
+      {
+        "value": "5",
+        "label": {
+          "en": "Mermaid diagrams",
+          "zh": "Mermaid 圖"
+        }
+      },
+      {
+        "value": "0 code",
+        "label": {
+          "en": "For Access SSO",
+          "zh": "Access SSO 免寫程式"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we diagramming?",
+          "zh": "我們要圖解什麼?"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Authentication can feel abstract because the important parts happen invisibly between the browser, your server, and an identity provider. This guide draws four of the most common login flows as sequence diagrams, so you can literally see who talks to whom, in what order, and what gets passed along.",
+              "zh": "登入驗證之所以難懂,是因為最關鍵的步驟都「看不見」—— 它們發生在瀏覽器、你的伺服器、身分提供者之間。這篇把四種最常見的登入流程畫成循序圖(sequence diagram),讓你親眼看到:誰跟誰說話、順序是什麼、中間傳了什麼東西。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "lightbulb",
+            "title": {
+              "en": "Authentication vs authorization",
+              "zh": "驗證(Authentication) vs 授權(Authorization)"
+            },
+            "text": {
+              "en": "Authentication answers 'who are you?' (showing your ID at the door). Authorization answers 'what are you allowed to do?' (whether your ticket lets you into the VIP room). Every flow below does authentication first, then carries proof of it on each later request.",
+              "zh": "驗證(authentication)回答的是「你是誰?」(在門口出示證件);授權(authorization)回答的是「你被允許做什麼?」(你的票能不能進 VIP 室)。底下每一種流程,都是先做一次驗證,之後每次請求再帶著「我已驗證過」的憑證。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Which auth flow should I use?",
+              "zh": "我該用哪一種登入流程?"
+            },
+            "code": {
+              "en": "flowchart TD\n  Start[\"Who is logging in?\"] --> Q1{\"Internal team app?\"}\n  Q1 -->|\"Yes\"| A[\"Cloudflare Access SSO\"]\n  Q1 -->|\"No\"| Q2{\"Web app with a login page?\"}\n  Q2 -->|\"Server sessions\"| S[\"Session cookie\"]\n  Q2 -->|\"API or mobile app\"| J[\"JWT bearer token\"]\n  Q2 -->|\"Sign in with Google\"| O[\"OAuth third-party\"]",
+              "zh": "flowchart TD\n  Start[\"誰要登入?\"] --> Q1{\"內部團隊用的應用程式?\"}\n  Q1 -->|\"是\"| A[\"Cloudflare Access SSO\"]\n  Q1 -->|\"否\"| Q2{\"有登入頁的網頁應用?\"}\n  Q2 -->|\"伺服器 session\"| S[\"Session cookie\"]\n  Q2 -->|\"API 或手機 App\"| J[\"JWT bearer 權杖\"]\n  Q2 -->|\"用 Google 登入\"| O[\"OAuth 第三方\"]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sso",
+        "icon": "badge",
+        "heading": {
+          "en": "1. Cloudflare Access SSO",
+          "zh": "1. Cloudflare Access SSO"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "SSO (Single Sign-On) means you log in once with one identity provider and then reach many apps without logging in again. With Cloudflare Access, Cloudflare sits in front of your app and handles the whole login — you write no auth code. After login, Cloudflare gives the browser a signed cookie that your app can trust.",
+              "zh": "SSO(Single Sign-On,單一登入)是指:你只在一個身分提供者登入一次,之後就能進到很多應用程式、不用重複登入。用 Cloudflare Access 時,Cloudflare 會擋在你的應用程式前面、把整個登入流程包辦掉 —— 你完全不用自己寫驗證程式碼。登入後,Cloudflare 會給瀏覽器一個「已簽章的 cookie」,讓你的應用程式可以信任。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Access SSO login",
+              "zh": "Access SSO 登入"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant CF as \"Cloudflare Access\"\n  participant IdP as \"Identity provider\"\n  participant App as \"Your app\"\n  U->>CF: Open the app URL\n  CF->>U: No session, redirect to login\n  U->>IdP: Sign in with Google\n  IdP-->>CF: Identity confirmed\n  CF->>U: Set signed Access cookie\n  U->>App: Request with Access cookie\n  App->>CF: Verify the cookie\n  CF-->>App: Token is valid\n  App-->>U: Show the protected page",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant CF as \"Cloudflare Access\"\n  participant IdP as \"身分提供者\"\n  participant App as \"你的應用程式\"\n  U->>CF: 打開應用程式網址\n  CF->>U: 沒有登入狀態,導回登入頁\n  U->>IdP: 用 Google 登入\n  IdP-->>CF: 身分確認成功\n  CF->>U: 發出已簽章的 Access cookie\n  U->>App: 帶著 Access cookie 發出請求\n  App->>CF: 驗證這個 cookie\n  CF-->>App: 權杖有效\n  App-->>U: 顯示受保護的頁面"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "verified_user",
+            "title": {
+              "en": "Why teams love it",
+              "zh": "為什麼團隊愛用它"
+            },
+            "text": {
+              "en": "Your app never sees passwords and you write zero login logic. Cloudflare enforces the policy (who is allowed) and only forwards verified requests. Perfect for internal dashboards and admin panels.",
+              "zh": "你的應用程式永遠看不到密碼,你也不用寫任何登入邏輯。Cloudflare 負責執行政策(誰能進),只把「已驗證」的請求轉給你。拿來保護內部儀表板、後台管理頁面最適合。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "session",
+        "icon": "cookie",
+        "heading": {
+          "en": "2. Session-cookie login",
+          "zh": "2. Session cookie 登入"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A session is the server's memory of one logged-in visitor. After you log in, the server stores a session record (here in Workers KV) and hands the browser a cookie holding only a random session id. The browser sends that cookie on every later request, and the server looks the id up to know who you are. This is the classic flow for server-rendered web apps.",
+              "zh": "session(連線階段)是伺服器對「某一位已登入訪客」的記憶。登入成功後,伺服器會存一筆 session 紀錄(這裡放在 Workers KV),並發給瀏覽器一個 cookie,裡面只放一串隨機的 session id。瀏覽器之後每次請求都會自動帶上這個 cookie,伺服器再用這個 id 去查出「你是誰」。這是傳統伺服器渲染網頁最經典的流程。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Session cookie lifecycle",
+              "zh": "Session cookie 生命週期"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: POST email and password\n  W->>W: Verify the password\n  W->>KV: Store a new session\n  KV-->>W: Saved\n  W-->>U: Reply with session cookie\n  Note over U,W: Next request, cookie attached\n  U->>W: GET dashboard with cookie\n  W->>KV: Look up the session id\n  KV-->>W: Session valid, user id\n  W-->>U: Render the dashboard",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: 送出 email 和密碼\n  W->>W: 驗證密碼\n  W->>KV: 建立並儲存一筆 session\n  KV-->>W: 已儲存\n  W-->>U: 回傳 session cookie\n  Note over U,W: 下一次請求會自動帶上 cookie\n  U->>W: 帶 cookie 取得儀表板\n  W->>KV: 用 session id 查詢\n  KV-->>W: session 有效,回傳 user id\n  W-->>U: 渲染儀表板"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "lock",
+            "title": {
+              "en": "Keep the cookie safe",
+              "zh": "把 cookie 顧好"
+            },
+            "text": {
+              "en": "Set the cookie as HttpOnly (JavaScript cannot read it), Secure (HTTPS only), and SameSite to reduce CSRF. Give the KV session a TTL so it expires automatically. The cookie itself holds no user data — just the lookup key.",
+              "zh": "把 cookie 設成 HttpOnly(JavaScript 讀不到)、Secure(只走 HTTPS)、SameSite(降低 CSRF 跨站偽造請求)。並給 KV 的 session 設一個 TTL(存活時間)讓它自動過期。cookie 本身不放任何使用者資料 —— 它只是一把查表用的鑰匙。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "jwt",
+        "icon": "token",
+        "heading": {
+          "en": "3. JWT bearer-token API auth",
+          "zh": "3. JWT bearer 權杖 API 驗證"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A JWT (JSON Web Token) is a signed string that carries claims like the user id and an expiry time. Because it is signed with a secret, the server can trust it without storing anything — it just checks the signature. The client sends it in an Authorization header as a 'bearer' token, meaning 'whoever bears this token is allowed in'. This is the go-to flow for APIs, single-page apps, and mobile apps.",
+              "zh": "JWT(JSON Web Token)是一段「已簽章的字串」,裡面帶有 claims(聲明),例如 user id 和到期時間。因為它是用密鑰簽出來的,伺服器不用存任何東西就能信任它 —— 只要驗章就好。用戶端會把它放在 Authorization 標頭裡當作 bearer(持有者)權杖送出,意思是「誰持有這個權杖,誰就能進」。這是 API、單頁應用(SPA)、手機 App 最常用的流程。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "JWT bearer-token flow",
+              "zh": "JWT bearer 權杖流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant C as \"Client\"\n  participant W as \"Worker API\"\n  C->>W: POST login with credentials\n  W->>W: Sign a JWT with the secret\n  W-->>C: Return the JWT\n  Note over C: Store token in memory\n  C->>W: GET data with bearer header\n  W->>W: Verify the JWT signature\n  W-->>C: Return JSON data",
+              "zh": "sequenceDiagram\n  participant C as \"用戶端\"\n  participant W as \"Worker API\"\n  C->>W: 帶帳號密碼呼叫登入\n  W->>W: 用密鑰簽出一個 JWT\n  W-->>C: 回傳 JWT\n  Note over C: 把權杖存在記憶體\n  C->>W: 用 bearer 標頭取資料\n  W->>W: 驗證 JWT 簽章\n  W-->>C: 回傳 JSON 資料"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "worker-verify-bearer.js",
+              "zh": "worker-verify-bearer.js"
+            },
+            "body": "export default {\n  async fetch(req, env) {\n    const header = req.headers.get(\"Authorization\") || \"\";\n    const [scheme, token] = header.split(\" \");\n    if (scheme !== \"Bearer\" || !token) {\n      return new Response(\"Missing bearer token\", { status: 401 });\n    }\n    const valid = await verifyJWT(token, env.JWT_SECRET);\n    if (!valid) return new Response(\"Invalid token\", { status: 401 });\n    return Response.json({ ok: true, message: \"Welcome back!\" });\n  }\n};\n\n// Verify an HS256 JWT signature with the Web Crypto API\nasync function verifyJWT(token, secret) {\n  const [head, body, sig] = token.split(\".\");\n  if (!head || !body || !sig) return false;\n  const key = await crypto.subtle.importKey(\n    \"raw\",\n    new TextEncoder().encode(secret),\n    { name: \"HMAC\", hash: \"SHA-256\" },\n    false,\n    [\"verify\"]\n  );\n  const signed = new TextEncoder().encode(head + \".\" + body);\n  const bytes = Uint8Array.from(\n    atob(sig.replace(/-/g, \"+\").replace(/_/g, \"/\")),\n    (c) => c.charCodeAt(0)\n  );\n  return crypto.subtle.verify(\"HMAC\", key, bytes, signed);\n}"
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "schedule",
+            "title": {
+              "en": "Verifying the signature is not enough",
+              "zh": "光驗簽章還不夠"
+            },
+            "text": {
+              "en": "After the signature checks out, also decode the payload and reject the token if its exp (expiry) has passed. Keep tokens short-lived (minutes to an hour) and store the secret in a Worker secret, never in code.",
+              "zh": "簽章驗過之後,還要解開 payload(內容),如果 exp(到期時間)已經過了就拒絕。權杖要設短效期(幾分鐘到一小時),而密鑰要放在 Worker secret(密鑰)裡,絕對不要寫死在程式碼。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "oauth",
+        "icon": "link",
+        "heading": {
+          "en": "4. OAuth third-party login",
+          "zh": "4. OAuth 第三方登入"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "OAuth lets users log in with an account they already have, like Google or GitHub, without giving your app their password. Your app redirects the user to the provider, the user approves, and the provider redirects back with a short-lived code. Your app then swaps that code for an access token on the server side. The 'authorization code' style below is the secure, recommended pattern.",
+              "zh": "OAuth 讓使用者用「他原本就有的帳號」(例如 Google、GitHub)登入,而不用把密碼交給你的應用程式。你的應用程式把使用者導向提供者,使用者按下同意,提供者再帶著一組短效的「授權碼(code)」導回來。接著你的應用程式在伺服器端用這組 code 去換取存取權杖(access token)。底下這種「authorization code(授權碼)」流程,就是最安全、最推薦的做法。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "OAuth authorization code flow",
+              "zh": "OAuth 授權碼流程"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant App as \"Your app\"\n  participant P as \"OAuth provider\"\n  U->>App: Click sign in with Google\n  App->>U: Redirect to the provider\n  U->>P: Review and approve consent\n  P-->>U: Redirect back with a code\n  U->>App: Deliver the code\n  App->>P: Exchange code for a token\n  P-->>App: Access token and profile\n  App-->>U: Logged in, set a session",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant App as \"你的應用程式\"\n  participant P as \"OAuth 提供者\"\n  U->>App: 點選用 Google 登入\n  App->>U: 導向 OAuth 提供者\n  U->>P: 檢視並同意授權\n  P-->>U: 帶著授權碼導回\n  U->>App: 把授權碼交給應用程式\n  App->>P: 用授權碼換取權杖\n  P-->>App: 回傳存取權杖與個資\n  App-->>U: 完成登入,建立 session"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "shield",
+            "title": {
+              "en": "Code, not token, in the browser",
+              "zh": "瀏覽器拿到的是 code,不是 token"
+            },
+            "text": {
+              "en": "The browser only ever sees a one-time code; the real token is fetched server-to-server so it never leaks. Keep the client secret on the server, and use a state value plus PKCE to block forged callbacks.",
+              "zh": "瀏覽器自始至終只看得到一次性的 code;真正的權杖是伺服器對伺服器去拿的,所以不會外洩。client secret(用戶端密鑰)要留在伺服器,並用 state 參數加上 PKCE 來擋掉偽造的 callback(回呼)。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "when",
+        "icon": "target",
+        "heading": {
+          "en": "When to use each",
+          "zh": "什麼時候用哪一種?"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "badge",
+                "title": {
+                  "en": "Access SSO",
+                  "zh": "Access SSO"
+                },
+                "text": {
+                  "en": "Internal tools for your own team. No login code to write — Cloudflare guards the door and enforces who gets in.",
+                  "zh": "給自己團隊用的內部工具。不用寫登入程式碼 —— Cloudflare 替你守門,並決定誰能進。"
+                }
+              },
+              {
+                "icon": "cookie",
+                "title": {
+                  "en": "Session cookie",
+                  "zh": "Session cookie"
+                },
+                "text": {
+                  "en": "Traditional, server-rendered websites where the browser is the only client. Simple to reason about and easy to revoke.",
+                  "zh": "傳統、伺服器渲染的網站,而且只有瀏覽器這一種用戶端。觀念簡單,也容易隨時讓登入失效。"
+                }
+              },
+              {
+                "icon": "token",
+                "title": {
+                  "en": "JWT bearer",
+                  "zh": "JWT bearer"
+                },
+                "text": {
+                  "en": "APIs, single-page apps, mobile apps, and service-to-service calls. Stateless — no session store needed.",
+                  "zh": "API、單頁應用、手機 App,以及服務對服務的呼叫。無狀態(stateless)—— 不需要 session 儲存區。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "OAuth",
+                  "zh": "OAuth"
+                },
+                "text": {
+                  "en": "Let users sign in with Google, GitHub, or similar — or access their data on those services with their permission.",
+                  "zh": "讓使用者用 Google、GitHub 等帳號登入 —— 或在取得他們同意後,存取他們在那些服務上的資料。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key terms",
+          "zh": "重點術語"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "key",
+                "title": {
+                  "en": "SSO",
+                  "zh": "SSO 單一登入"
+                },
+                "text": {
+                  "en": "Single Sign-On: log in once, reach many apps without logging in again.",
+                  "zh": "Single Sign-On:登入一次,就能進到很多應用程式、不用重複登入。"
+                }
+              },
+              {
+                "icon": "history",
+                "title": {
+                  "en": "Session",
+                  "zh": "Session 連線階段"
+                },
+                "text": {
+                  "en": "The server's record of one logged-in visitor, usually kept in a store like KV.",
+                  "zh": "伺服器對「某一位已登入訪客」的紀錄,通常存在 KV 這類儲存區。"
+                }
+              },
+              {
+                "icon": "cookie",
+                "title": {
+                  "en": "Cookie",
+                  "zh": "Cookie"
+                },
+                "text": {
+                  "en": "A small value the browser stores and resends on every request — here it carries the session id.",
+                  "zh": "瀏覽器存起來、每次請求都會自動再送出的一小段值 —— 這裡用來帶 session id。"
+                }
+              },
+              {
+                "icon": "token",
+                "title": {
+                  "en": "JWT",
+                  "zh": "JWT"
+                },
+                "text": {
+                  "en": "A signed JSON token holding claims (user id, expiry) that the server can trust without a lookup.",
+                  "zh": "一個已簽章的 JSON 權杖,帶有 claims(user id、到期時間),伺服器不用查表就能信任。"
+                }
+              },
+              {
+                "icon": "vpn_key",
+                "title": {
+                  "en": "Bearer token",
+                  "zh": "Bearer 權杖"
+                },
+                "text": {
+                  "en": "Sent as 'Authorization: Bearer <token>'. Whoever holds it is treated as authorized.",
+                  "zh": "用 'Authorization: Bearer <token>' 送出。誰持有它,就被當作已獲授權。"
+                }
+              },
+              {
+                "icon": "link",
+                "title": {
+                  "en": "OAuth",
+                  "zh": "OAuth"
+                },
+                "text": {
+                  "en": "A standard for logging in with another service's account without sharing your password.",
+                  "zh": "一套標準,讓你用別的服務的帳號登入,而不用把密碼分享出去。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Tips & gotchas",
+          "zh": "小提示與陷阱"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "https",
+            "title": {
+              "en": "Always over HTTPS",
+              "zh": "一律走 HTTPS"
+            },
+            "text": {
+              "en": "Cookies and bearer tokens are like keys — anyone who copies them can impersonate the user. HTTPS keeps them from being read in transit, and is on by default for any Cloudflare-proxied domain.",
+              "zh": "cookie 和 bearer 權杖就像鑰匙 —— 誰複製到就能假冒使用者。HTTPS 能讓它們在傳輸途中不被偷看,而且只要網域掛在 Cloudflare 代理後面,預設就已開啟。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Never store a raw JWT or session id in localStorage if you can avoid it — an HttpOnly cookie is safer against XSS.",
+                "Always verify a JWT's signature AND its expiry on the server; never trust the payload alone.",
+                "For pure internal tools, Cloudflare Access often replaces all of this with zero auth code.",
+                "Add Turnstile to your login form to block bots before they ever reach your password check.",
+                "Give sessions and tokens a short lifetime, and provide a real logout that deletes the server-side session."
+              ],
+              "zh": [
+                "能避免就別把原始 JWT 或 session id 存在 localStorage —— 用 HttpOnly cookie 對 XSS(跨站腳本)更安全。",
+                "在伺服器端「同時」驗證 JWT 的簽章「和」到期時間;絕對不要只信 payload 內容。",
+                "純內部工具的話,Cloudflare Access 常常能取代上面這一切,完全免寫驗證程式碼。",
+                "在登入表單加上 Turnstile,在機器人碰到你的密碼檢查之前就先擋掉。",
+                "給 session 和權杖設短效期,並做一個真正的登出 —— 會刪掉伺服器端的 session。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "access",
+        "label": {
+          "en": "Cloudflare Access",
+          "zh": "Cloudflare Access"
+        }
+      },
+      {
+        "slug": "auth-fullstack",
+        "label": {
+          "en": "Full-stack auth",
+          "zh": "全端身分驗證"
+        }
+      },
+      {
+        "slug": "kv",
+        "label": {
+          "en": "Workers KV",
+          "zh": "Workers KV"
+        }
+      },
+      {
+        "slug": "turnstile",
+        "label": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/cloudflare-one/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "cache-flow",
+    "category": "integrations",
+    "group": {
+      "en": "Flows & Lifecycles",
+      "zh": "流程圖解"
+    },
+    "icon": "cached",
+    "title": {
+      "en": "How caching works (hit, miss, revalidate)",
+      "zh": "快取是怎麼運作的（命中、未命中、重新驗證）"
+    },
+    "subtitle": {
+      "en": "Follow one request through Cloudflare's cache — hit, miss, store, expire, and revalidate",
+      "zh": "跟著一個請求走過 Cloudflare 快取——命中、未命中、儲存、過期與重新驗證"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "See exactly when the edge answers instantly, when it calls your origin, and when it refreshes a stale copy.",
+        "zh": "看清楚邊緣節點何時秒回、何時回源、何時把過期的複本刷新。"
+      }
+    },
+    "stats": [
+      {
+        "value": "330+",
+        "label": {
+          "en": "Edge cities that cache",
+          "zh": "提供快取的邊緣城市"
+        }
+      },
+      {
+        "value": "2",
+        "label": {
+          "en": "Loads to go MISS then HIT",
+          "zh": "兩次載入由 MISS 變 HIT"
+        }
+      },
+      {
+        "value": "0",
+        "label": {
+          "en": "Origin trips on a cache HIT",
+          "zh": "命中時的回源次數"
+        }
+      },
+      {
+        "value": "5",
+        "label": {
+          "en": "cf-cache-status values to know",
+          "zh": "要懂的 cf-cache-status 狀態"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What we are visualizing",
+          "zh": "我們要看懂什麼？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Every time a browser asks Cloudflare for a file, an edge node runs the same quick decision: do I already have a fresh copy? If yes, it answers in milliseconds (a cache HIT). If no, it fetches from your origin server or Worker, optionally stores the response, then serves it (a cache MISS). This guide draws that whole lifecycle as diagrams so you can picture it.",
+              "zh": "每當瀏覽器向 Cloudflare 要一個檔案，邊緣節點（edge node，離訪客最近的快取伺服器）都會跑同一個快速判斷：我手上有沒有還新鮮的複本？有的話，它在幾毫秒內就回覆（快取命中 HIT）。沒有的話，它就去你的來源伺服器（origin，你真正放網站的那台主機）或 Worker 抓取，視情況把回應存起來，再送出（快取未命中 MISS）。這篇用圖把整個生命週期畫出來，讓你一眼看懂。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The cache decision (one request)",
+              "zh": "快取判斷流程（單一請求）"
+            },
+            "code": {
+              "en": "flowchart TD\n  A[\"Request hits the edge\"] --> B{\"In cache and still fresh?\"}\n  B -->|\"Yes\"| C[\"Serve from cache (HIT)\"]\n  B -->|\"No\"| D[\"Fetch from origin / Worker\"]\n  D --> E{\"Cacheable?\"}\n  E -->|\"Yes\"| F[\"Store per Cache-Control / TTL\"]\n  E -->|\"No\"| G[\"Serve uncached (DYNAMIC / BYPASS)\"]\n  F --> H[\"Serve to visitor (MISS)\"]",
+              "zh": "flowchart TD\n  A[\"請求抵達邊緣節點\"] --> B{\"快取裡有且還新鮮？\"}\n  B -->|\"是\"| C[\"由快取直接送出（HIT）\"]\n  B -->|\"否\"| D[\"回源抓取 / 執行 Worker\"]\n  D --> E{\"可以快取嗎？\"}\n  E -->|\"是\"| F[\"依 Cache-Control / TTL 儲存\"]\n  E -->|\"否\"| G[\"不快取直接送出（DYNAMIC / BYPASS）\"]\n  F --> H[\"送給訪客（MISS）\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "kitchen",
+            "title": {
+              "en": "Think of it like a fridge",
+              "zh": "把它想成一台冰箱"
+            },
+            "text": {
+              "en": "The edge cache is your fridge; the origin is the supermarket. If the milk is in the fridge and not past its date (TTL), you drink it right away (HIT). If it is gone, you go to the shop (MISS). If it is just past the date, you sniff-check before buying new (revalidate).",
+              "zh": "邊緣快取就是你家冰箱，來源伺服器則是超市。牛奶在冰箱裡又還沒過期（TTL）就直接喝（HIT）；冰箱裡沒有就跑一趟超市（MISS）；剛好過期一點點，就先聞一下確認再決定要不要買新的（重新驗證 revalidate）。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "The words on the diagrams",
+          "zh": "圖上這些名詞的意思"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Before reading the flows, here are the five terms that show up again and again. Each one maps to a box or arrow you will see in the diagrams below.",
+              "zh": "在看流程圖之前，先認識五個一直出現的名詞。每一個都對應到下面圖裡的某個方框或箭頭。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "hub",
+                "title": {
+                  "en": "Edge cache",
+                  "zh": "邊緣快取（edge cache）"
+                },
+                "text": {
+                  "en": "Cloudflare's nearby server that stores a copy of your response so it can answer without bothering your origin.",
+                  "zh": "Cloudflare 離訪客很近的伺服器，存著你回應的複本，能直接回覆而不用打擾你的來源伺服器。"
+                }
+              },
+              {
+                "icon": "dns",
+                "title": {
+                  "en": "Origin",
+                  "zh": "來源伺服器（origin）"
+                },
+                "text": {
+                  "en": "Your real server or Worker that produces the original response. The edge only goes here on a MISS or to revalidate.",
+                  "zh": "你真正產生回應的伺服器或 Worker。只有 MISS 或要重新驗證時，邊緣節點才會回到這裡。"
+                }
+              },
+              {
+                "icon": "timer",
+                "title": {
+                  "en": "TTL",
+                  "zh": "TTL（存活時間）"
+                },
+                "text": {
+                  "en": "Time To Live — how many seconds a cached copy counts as fresh. Set by Cache-Control max-age / s-maxage or a Cache Rule.",
+                  "zh": "Time To Live，快取複本被當成新鮮的秒數。由 Cache-Control 的 max-age / s-maxage 或快取規則（Cache Rule）決定。"
+                }
+              },
+              {
+                "icon": "schedule",
+                "title": {
+                  "en": "Fresh vs stale",
+                  "zh": "新鮮 vs 過期（fresh / stale）"
+                },
+                "text": {
+                  "en": "Inside its TTL a copy is fresh and served instantly. Past the TTL it turns stale and must be revalidated or refetched.",
+                  "zh": "在 TTL 內的複本是新鮮的，可立即送出；超過 TTL 就變過期（stale），必須重新驗證或重新抓取。"
+                }
+              },
+              {
+                "icon": "mop",
+                "title": {
+                  "en": "Purge / invalidation",
+                  "zh": "清除 / 失效（purge）"
+                },
+                "text": {
+                  "en": "Manually evicting a cached copy now, before its TTL ends — by URL, tag, or everything — so the next request rebuilds it.",
+                  "zh": "在 TTL 還沒到之前就手動把快取複本踢掉——可依網址、標籤或全部清除——讓下一個請求重新建立。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "Cache key",
+                  "zh": "快取鍵（cache key）"
+                },
+                "text": {
+                  "en": "What the edge uses to look a copy up — by default the full URL. Two different URLs are two different cache entries.",
+                  "zh": "邊緣節點用來查複本的依據，預設就是完整網址。兩個不同網址就是兩筆不同的快取。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "HIT vs MISS vs revalidate",
+          "zh": "命中 vs 未命中 vs 重新驗證"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "The same URL behaves differently depending on what the edge already holds. This sequence shows the same /logo.png requested three times: first cold (MISS), then warm (HIT), then after the TTL expires (revalidate).",
+              "zh": "同一個網址，會因為邊緣節點手上有什麼而表現不同。這張時序圖示範同一個 /logo.png 被請求三次：第一次是冷的（MISS）、接著是熱的（HIT）、最後是 TTL 過期之後（重新驗證）。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Three requests, three outcomes",
+              "zh": "三次請求，三種結果"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant E as \"Edge cache\"\n  participant O as \"Origin / Worker\"\n  Note over U,O: First visit, nothing cached\n  U->>E: GET /logo.png\n  E->>O: Cache empty, fetch from origin\n  O-->>E: 200 plus Cache-Control max-age\n  E-->>U: cf-cache-status MISS\n  Note over U,O: Within TTL, copy is fresh\n  U->>E: GET /logo.png\n  E-->>U: cf-cache-status HIT\n  Note over U,O: After TTL, copy is stale\n  U->>E: GET /logo.png\n  E->>O: Revalidate with If-None-Match\n  O-->>E: 304 Not Modified\n  E-->>U: cf-cache-status REVALIDATED",
+              "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant E as \"邊緣快取\"\n  participant O as \"來源 / Worker\"\n  Note over U,O: 第一次造訪，尚未快取\n  U->>E: GET /logo.png\n  E->>O: 快取是空的，回源抓取\n  O-->>E: 200 加上 Cache-Control max-age\n  E-->>U: cf-cache-status MISS\n  Note over U,O: TTL 內，複本還新鮮\n  U->>E: GET /logo.png\n  E-->>U: cf-cache-status HIT\n  Note over U,O: 超過 TTL，複本過期\n  U->>E: GET /logo.png\n  E->>O: 用 If-None-Match 重新驗證\n  O-->>E: 304 Not Modified\n  E-->>U: cf-cache-status REVALIDATED"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "verified",
+            "title": {
+              "en": "Revalidate saves bandwidth",
+              "zh": "重新驗證很省頻寬"
+            },
+            "text": {
+              "en": "On revalidate, the edge asks 'has this changed?' with a validator (ETag / Last-Modified). A 304 Not Modified means it can keep the copy it already has and only refresh the timer — no full re-download.",
+              "zh": "重新驗證時，邊緣節點用驗證碼（ETag / Last-Modified）去問「這個有沒有變？」。回 304 Not Modified 代表它可以繼續用手上那份複本，只要把計時器刷新就好，不必整份重新下載。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ttl-timeline",
+        "icon": "timeline",
+        "heading": {
+          "en": "TTL over time: fresh, stale, revalidate",
+          "zh": "TTL 隨時間變化：新鮮、過期、重新驗證"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "A cached copy has a clock on it. From the moment it is stored, it stays FRESH until max-age runs out, then becomes STALE. The next request after that is what triggers a revalidation, and the result resets the clock back to FRESH.",
+              "zh": "每份快取複本都附帶一個計時器。從被儲存的那一刻起，它在 max-age 用完前都算 FRESH（新鮮），之後變成 STALE（過期）。過期後的下一個請求才會觸發重新驗證，而驗證結果會把計時器重設回 FRESH。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The life of one cached copy",
+              "zh": "一份快取複本的一生"
+            },
+            "code": {
+              "en": "flowchart LR\n  A[\"Stored (t = 0)\"] --> B[\"FRESH within max-age\"]\n  B --> C[\"TTL reached\"]\n  C --> D[\"STALE past max-age\"]\n  D --> E[\"Next request triggers revalidate\"]\n  E --> F[\"304: keep copy, reset to FRESH\"]\n  E --> G[\"200: store new copy, reset to FRESH\"]",
+              "zh": "flowchart LR\n  A[\"已儲存（t = 0）\"] --> B[\"max-age 內為 FRESH\"]\n  B --> C[\"到達 TTL\"]\n  C --> D[\"超過 max-age 變 STALE\"]\n  D --> E[\"下一個請求觸發重新驗證\"]\n  E --> F[\"304：保留複本，重設為 FRESH\"]\n  E --> G[\"200：存入新複本，重設為 FRESH\"]"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "bolt",
+            "title": {
+              "en": "stale-while-revalidate",
+              "zh": "stale-while-revalidate（過期照送、背景刷新）"
+            },
+            "text": {
+              "en": "With Cache-Control: max-age=60, stale-while-revalidate=600 the edge can instantly serve the stale copy to the user while refreshing it from origin in the background. Visitors never wait for the revalidation.",
+              "zh": "用 Cache-Control: max-age=60, stale-while-revalidate=600 時，邊緣節點可以先把過期的複本立刻送給使用者，同時在背景回源刷新。訪客完全不用等重新驗證。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "status",
+        "icon": "fact_check",
+        "heading": {
+          "en": "Reading cf-cache-status",
+          "zh": "看懂 cf-cache-status"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Cloudflare tells you which branch of the diagram a request took with a response header named cf-cache-status. These are the values you will meet most often.",
+              "zh": "Cloudflare 會用一個叫 cf-cache-status 的回應標頭（response header），告訴你這個請求走了流程圖的哪一條分支。下面是你最常遇到的幾個值。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "check_circle",
+                "title": {
+                  "en": "HIT",
+                  "zh": "HIT（命中）"
+                },
+                "text": {
+                  "en": "A fresh copy was in the edge cache and served instantly. No origin trip — the fastest, cheapest result.",
+                  "zh": "邊緣快取裡有新鮮的複本，立刻送出。完全不用回源，是最快也最省的結果。"
+                }
+              },
+              {
+                "icon": "cancel",
+                "title": {
+                  "en": "MISS",
+                  "zh": "MISS（未命中）"
+                },
+                "text": {
+                  "en": "Nothing cached for this key, so the edge fetched from origin and, if allowed, stored it for next time.",
+                  "zh": "這個鍵沒有快取，所以邊緣節點回源抓取，若允許就存起來給下次用。"
+                }
+              },
+              {
+                "icon": "history",
+                "title": {
+                  "en": "EXPIRED",
+                  "zh": "EXPIRED（過期）"
+                },
+                "text": {
+                  "en": "A copy existed but its TTL ran out, so the edge revalidated or refetched a fresh version from origin.",
+                  "zh": "原本有複本，但 TTL 到了，所以邊緣節點重新驗證或回源抓一份新的。"
+                }
+              },
+              {
+                "icon": "auto_mode",
+                "title": {
+                  "en": "DYNAMIC",
+                  "zh": "DYNAMIC（動態）"
+                },
+                "text": {
+                  "en": "The content was treated as dynamic and not eligible to cache by default — every request goes to origin.",
+                  "zh": "內容被視為動態、預設不適合快取，所以每個請求都回源。"
+                }
+              },
+              {
+                "icon": "block",
+                "title": {
+                  "en": "BYPASS",
+                  "zh": "BYPASS（略過）"
+                },
+                "text": {
+                  "en": "Caching was deliberately skipped — by a Cache Rule, a no-store header, or a setting telling the edge not to cache.",
+                  "zh": "刻意略過快取——可能是某條快取規則、no-store 標頭，或設定要求邊緣節點不要快取。"
+                }
+              },
+              {
+                "icon": "verified",
+                "title": {
+                  "en": "REVALIDATED",
+                  "zh": "REVALIDATED（已重新驗證）"
+                },
+                "text": {
+                  "en": "The stale copy was checked against origin (ETag / If-None-Match), origin replied 304, and the same copy was reused.",
+                  "zh": "過期複本拿去跟來源核對（ETag / If-None-Match），來源回 304，於是同一份複本被重複使用。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Control it: headers + verify",
+          "zh": "動手控制：設標頭 + 驗證"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "You steer all of the above with one HTTP header your origin or Worker sends: Cache-Control. max-age is the browser TTL; s-maxage is the edge (shared cache) TTL and overrides max-age at Cloudflare.",
+              "zh": "上面這一切，都是用來源或 Worker 送出的一個 HTTP 標頭來操控：Cache-Control。max-age 是瀏覽器 TTL；s-maxage 是邊緣（共用快取）TTL，在 Cloudflare 會蓋過 max-age。"
+            }
+          },
+          {
+            "type": "code",
+            "lang": "http",
+            "title": {
+              "en": "Cache-Control header recipes",
+              "zh": "Cache-Control 標頭配方"
+            },
+            "body": "# Static asset: 1 hour in browsers, 1 day on the edge\nCache-Control: public, max-age=3600, s-maxage=86400\n\n# Serve stale instantly, refresh in the background for 10 min\nCache-Control: public, max-age=60, stale-while-revalidate=600\n\n# Per-user / logged-in page: never cache anywhere\nCache-Control: private, no-store"
+          },
+          {
+            "type": "code",
+            "lang": "js",
+            "title": {
+              "en": "worker.js — set Cache-Control",
+              "zh": "worker.js — 設定 Cache-Control"
+            },
+            "body": "export default {\n  async fetch(request) {\n    const body = JSON.stringify({ hello: \"world\" });\n    return new Response(body, {\n      headers: {\n        \"Content-Type\": \"application/json\",\n        // Browser keeps it 1h; Cloudflare edge keeps it 1 day\n        \"Cache-Control\": \"public, max-age=3600, s-maxage=86400\"\n      }\n    });\n  }\n};"
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "Send the header",
+                  "zh": "送出標頭"
+                },
+                "text": {
+                  "en": "Deploy your Worker or configure your origin so cacheable responses carry a public Cache-Control with an s-maxage.",
+                  "zh": "部署你的 Worker，或設定來源伺服器，讓可快取的回應帶上 public 的 Cache-Control 並設定 s-maxage。"
+                }
+              },
+              {
+                "title": {
+                  "en": "Request it twice",
+                  "zh": "連續請求兩次"
+                },
+                "text": {
+                  "en": "Run curl -sI twice. The first is usually MISS (cold), the second should be HIT (warm) from the same edge city.",
+                  "zh": "用 curl -sI 跑兩次。第一次通常是 MISS（冷的），第二次從同一個邊緣城市應該變成 HIT（熱的）。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# -s silent, -I headers only; look at cf-cache-status\ncurl -sI https://example.com/logo.png | grep -i cf-cache-status\n# 1st run -> cf-cache-status: MISS\n# 2nd run -> cf-cache-status: HIT"
+                }
+              },
+              {
+                "title": {
+                  "en": "Purge after an update",
+                  "zh": "更新後清除快取"
+                },
+                "text": {
+                  "en": "Changed the file before its TTL ends? Purge it so the next request rebuilds a fresh copy.",
+                  "zh": "在 TTL 還沒到就改了檔案？清除它，讓下一個請求重建一份新的複本。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "# Purge a single URL via the API\ncurl -X POST \\\n  \"https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache\" \\\n  -H \"Authorization: Bearer $CF_API_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  --data '{\"files\":[\"https://example.com/logo.png\"]}'"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cdn-vs-kv",
+        "icon": "compare_arrows",
+        "heading": {
+          "en": "CDN cache vs KV cache",
+          "zh": "CDN 快取 vs KV 快取"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "People say 'cache' for two very different things on Cloudflare. The CDN cache (this guide) is automatic and keyed by URL. Workers KV is an application cache you read and write by key from your own code. They solve different problems.",
+              "zh": "在 Cloudflare，「快取」這個詞常指兩種很不一樣的東西。CDN 快取（也就是本篇）是自動的、以網址為鍵；Workers KV 則是應用層快取，由你自己的程式以 key 讀寫。兩者解決的是不同的問題。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Which cache catches the request",
+              "zh": "請求會落在哪一種快取"
+            },
+            "code": {
+              "en": "flowchart TD\n  R[\"Incoming request\"] --> Q{\"Static and same for everyone?\"}\n  Q -->|\"Yes\"| CDN[\"CDN edge cache: automatic, URL-keyed\"]\n  Q -->|\"No\"| APP[\"Worker logic runs\"]\n  APP --> K{\"Reusable computed data?\"}\n  K -->|\"Yes\"| KV[\"Workers KV: read/write by key in code\"]\n  K -->|\"No\"| DB[\"Origin / database\"]",
+              "zh": "flowchart TD\n  R[\"進來的請求\"] --> Q{\"靜態且大家都一樣？\"}\n  Q -->|\"是\"| CDN[\"CDN 邊緣快取：自動、以網址為鍵\"]\n  Q -->|\"否\"| APP[\"執行 Worker 邏輯\"]\n  APP --> K{\"是可重複使用的運算結果？\"}\n  K -->|\"是\"| KV[\"Workers KV：在程式中以 key 讀寫\"]\n  K -->|\"否\"| DB[\"來源伺服器 / 資料庫\"]"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "public",
+                "title": {
+                  "en": "CDN cache",
+                  "zh": "CDN 快取"
+                },
+                "text": {
+                  "en": "Caches whole HTTP responses, keyed by URL, shared across all users. Controlled by Cache-Control and Cache Rules. Great for assets and pages.",
+                  "zh": "快取的是整個 HTTP 回應，以網址為鍵，所有使用者共用。由 Cache-Control 與快取規則控制。最適合靜態資源與頁面。"
+                }
+              },
+              {
+                "icon": "key",
+                "title": {
+                  "en": "KV cache",
+                  "zh": "KV 快取"
+                },
+                "text": {
+                  "en": "You store arbitrary values under keys you choose, read/written in Worker code. Good for computed API results, config, and per-key data.",
+                  "zh": "你用自己挑的 key 存任意的值，在 Worker 程式裡讀寫。適合存運算後的 API 結果、設定，與以 key 區分的資料。"
+                }
+              },
+              {
+                "icon": "auto_awesome",
+                "title": {
+                  "en": "Automatic vs manual",
+                  "zh": "自動 vs 手動"
+                },
+                "text": {
+                  "en": "CDN caching just happens once content is proxied. KV does nothing until your code calls KV.get and KV.put — you own the logic.",
+                  "zh": "內容一經代理，CDN 快取就自動發生。KV 在你的程式呼叫 KV.get、KV.put 之前什麼都不做——邏輯由你掌控。"
+                }
+              },
+              {
+                "icon": "layers",
+                "title": {
+                  "en": "Use both together",
+                  "zh": "兩者可以併用"
+                },
+                "text": {
+                  "en": "A Worker can read from KV to build a response, then send Cache-Control so the CDN caches that response at the edge — two layers, one fast path.",
+                  "zh": "Worker 可以先讀 KV 組出回應，再送出 Cache-Control 讓 CDN 把這個回應快取在邊緣——兩層快取，一條快路。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Gotchas & tips",
+          "zh": "陷阱與小提示"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "lock_person",
+            "title": {
+              "en": "Never cache per-user pages",
+              "zh": "千萬別快取每位使用者專屬頁面"
+            },
+            "text": {
+              "en": "If a logged-in dashboard gets cached publicly, one user can see another user's data. Always send Cache-Control: private, no-store for personalized or authenticated responses.",
+              "zh": "如果已登入的後台被公開快取，某位使用者就可能看到別人的資料。針對個人化或需驗證的回應，一律送出 Cache-Control: private, no-store。"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "A 200 with no Cache-Control often becomes DYNAMIC — set the header to make it cacheable.",
+                "cf-cache-status is per edge location, so a fresh MISS in a new city is normal.",
+                "Version your filenames (app.v2.js) so updates create a new cache key instead of needing a purge.",
+                "Query strings change the cache key by default — /a?x=1 and /a?x=2 are cached separately.",
+                "Use stale-while-revalidate so users never wait on a revalidation round-trip."
+              ],
+              "zh": [
+                "回 200 但沒有 Cache-Control，常會變成 DYNAMIC——設好標頭才會被快取。",
+                "cf-cache-status 是各邊緣據點各自記錄，所以新城市出現一次 MISS 很正常。",
+                "在檔名加版本（app.v2.js），更新就會產生新的快取鍵，不必特地清除。",
+                "查詢字串預設會改變快取鍵——/a?x=1 和 /a?x=2 是分開快取的。",
+                "善用 stale-while-revalidate，讓使用者永遠不必等重新驗證的來回。"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "cdn",
+        "label": {
+          "en": "CDN & Cache",
+          "zh": "CDN 與快取"
+        }
+      },
+      {
+        "slug": "speed",
+        "label": {
+          "en": "Speed",
+          "zh": "速度優化"
+        }
+      },
+      {
+        "slug": "kv-cache-layer",
+        "label": {
+          "en": "KV cache layer",
+          "zh": "KV 快取層"
+        }
+      },
+      {
+        "slug": "dns",
+        "label": {
+          "en": "DNS",
+          "zh": "DNS"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/cache/",
+    "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "event-driven-queues",
+    "category": "integrations",
+    "group": {
+      "en": "Flows & Lifecycles",
+      "zh": "流程圖解"
+    },
+    "icon": "conveyor_belt",
+    "title": {
+      "en": "Event-driven apps with Queues",
+      "zh": "用 Queues 打造事件驅動應用"
+    },
+    "subtitle": {
+      "en": "Accept a request, reply in milliseconds, and let a queue do the slow work later — with batching, retries, dead-letter queues and idempotency.",
+      "zh": "接下請求、幾毫秒內回覆，再把慢工作交給佇列稍後處理——還帶批次、重試、死信佇列與冪等性。"
+    },
+    "hero": {
+      "badge": {
+        "en": "Integration",
+        "zh": "整合實戰"
+      },
+      "tagline": {
+        "en": "Stop making users wait for emails, thumbnails and syncs. A producer Worker says 'got it (202)' instantly; a consumer Worker drains the queue in batches, retries failures, and dead-letters the hopeless ones.",
+        "zh": "別再讓使用者乾等寄信、縮圖、同步。生產者 Worker 立刻回一句『收到了（202）』；消費者 Worker 之後成批清空佇列、失敗自動重試、無解的就丟進死信佇列。"
+      }
+    },
+    "stats": [
+      {
+        "value": "202",
+        "label": {
+          "en": "Returned instantly",
+          "zh": "立即回傳狀態碼"
+        }
+      },
+      {
+        "value": "100",
+        "label": {
+          "en": "Messages per batch",
+          "zh": "每批訊息數"
+        }
+      },
+      {
+        "value": "≤100",
+        "label": {
+          "en": "Auto retries",
+          "zh": "自動重試上限"
+        }
+      },
+      {
+        "value": "$0",
+        "label": {
+          "en": "Egress fees",
+          "zh": "流出流量費"
+        }
+      }
+    ],
+    "sections": [
+      {
+        "id": "overview",
+        "icon": "insights",
+        "heading": {
+          "en": "What are we wiring together?",
+          "zh": "我們要把什麼串起來？"
+        },
+        "blocks": [
+          {
+            "type": "lead",
+            "text": {
+              "en": "Some work is slow: sending an email, generating a thumbnail, syncing data to another system. If you do it while the user waits, the page feels sluggish and one hiccup can lose the work. An event-driven design fixes both problems: the request only records 'this needs doing' and returns immediately; the actual work happens later, in the background, reliably.",
+              "zh": "有些工作很慢：寄一封 email、產生縮圖、把資料同步到別的系統。如果你在使用者等待時才做，頁面會卡卡的，而且一個小閃失就把工作弄丟了。事件驅動（event-driven）設計同時解決這兩個問題：請求只先記下『這件事要做』就立刻返回；真正的工作之後在背景可靠地進行。"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "On Cloudflare the glue is Queues — a reliable waiting line for messages. A producer Worker accepts the request and drops a message into the queue. A consumer Worker is invoked later with a batch of messages and does the heavy lifting (write to D1, store a file in R2, call an external API). The two Workers never call each other directly; the queue sits in the middle. That separation is called decoupling.",
+              "zh": "在 Cloudflare 上，把它們黏起來的膠水就是 Queues——一條可靠的訊息排隊線。生產者（producer）Worker 接下請求，把一則訊息丟進佇列；消費者（consumer）Worker 之後被叫來，帶著一批訊息做粗重工作（寫進 D1、把檔案存到 R2、呼叫外部 API）。這兩個 Worker 從不直接互相呼叫，佇列就坐在中間。這種分離就叫做「解耦（decoupling）」。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "analogy",
+            "icon": "local_post_office",
+            "title": {
+              "en": "Think of it like a coat check",
+              "zh": "把它想成寄物櫃"
+            },
+            "text": {
+              "en": "You hand over your coat and get a ticket back in seconds — you don't stand there while it's hung up. Later, a worker in the back room hangs coats in batches. The ticket is your guarantee: the work will get done even though you already walked away.",
+              "zh": "你把外套交出去，幾秒就拿到一張號碼牌——你不用站在那裡等它被掛好。之後，後場的工作人員會成批把外套掛起來。那張號碼牌就是你的保證：就算你已經走開了，工作還是會被完成。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "The whole pipeline at a glance",
+              "zh": "整條管線一眼看懂"
+            },
+            "code": {
+              "en": "flowchart LR\n  REQ[\"Incoming request\"] -->|\"POST /upload\"| P[\"Producer Worker\"]\n  P -->|\"send(msg)\"| Q[\"Queue\"]\n  P -->|\"202 Accepted\"| REQ\n  Q -->|\"batch\"| C[\"Consumer Worker\"]\n  C -->|\"write rows\"| D1[\"D1 database\"]\n  C -->|\"store file\"| R2[\"R2 storage\"]\n  C -->|\"call API\"| EXT[\"External API\"]",
+              "zh": "flowchart LR\n  REQ[\"進來的請求\"] -->|\"POST /upload\"| P[\"生產者 Worker\"]\n  P -->|\"send(msg)\"| Q[\"佇列\"]\n  P -->|\"202 Accepted\"| REQ\n  Q -->|\"成批取出\"| C[\"消費者 Worker\"]\n  C -->|\"寫入資料列\"| D1[\"D1 資料庫\"]\n  C -->|\"存檔案\"| R2[\"R2 儲存\"]\n  C -->|\"呼叫 API\"| EXT[\"外部 API\"]"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Notice the two arrows leaving the producer. One goes into the queue (send the message). The other goes straight back to the caller with 202 Accepted — before any slow work has happened. That fork is the heart of an event-driven app.",
+              "zh": "注意從生產者出發有兩個箭頭：一個進入佇列（送出訊息）；另一個直接回到呼叫端，回傳 202 Accepted——而且是在任何慢工作開始之前。這個分岔，就是事件驅動應用的核心。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "roles",
+        "icon": "account_tree",
+        "heading": {
+          "en": "The moving parts and who does what",
+          "zh": "各個角色與它們的職責"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "An event-driven flow has five concepts you keep meeting: the producer, the queue, the consumer, plus the reliability features — batching, retries and the dead-letter queue. Here is each in one line.",
+              "zh": "事件驅動流程裡有五個你會一直碰到的概念：生產者、佇列、消費者，再加上可靠度三寶——批次、重試、死信佇列。下面用一句話講清楚每一個。"
+            }
+          },
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "outbox",
+                "title": {
+                  "en": "Producer",
+                  "zh": "Producer（生產者）"
+                },
+                "text": {
+                  "en": "The Worker that accepts a request and calls env.MY_QUEUE.send(msg). It returns instantly without waiting for the work.",
+                  "zh": "接下請求、呼叫 env.MY_QUEUE.send(msg) 的那個 Worker。它立刻返回，不等工作做完。"
+                }
+              },
+              {
+                "icon": "inbox",
+                "title": {
+                  "en": "Consumer",
+                  "zh": "Consumer（消費者）"
+                },
+                "text": {
+                  "en": "The queue() handler Cloudflare invokes in the background with a batch of messages to actually process.",
+                  "zh": "Cloudflare 在背景帶著一批訊息來呼叫的 queue() 處理函式，負責真正去處理工作。"
+                }
+              },
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "Batch",
+                  "zh": "Batch（批次）"
+                },
+                "text": {
+                  "en": "Up to 100 messages handed to the consumer together, so bulk work (DB writes, API calls) is far more efficient.",
+                  "zh": "一次最多 100 則訊息一起交給消費者，讓大量工作（寫 DB、呼叫 API）效率高很多。"
+                }
+              },
+              {
+                "icon": "replay",
+                "title": {
+                  "en": "Retry",
+                  "zh": "Retry（重試）"
+                },
+                "text": {
+                  "en": "If a message fails, Queues redelivers it automatically — up to max_retries — so transient errors heal themselves.",
+                  "zh": "訊息失敗時，Queues 會自動重新投遞——最多到 max_retries 次——讓暫時性的錯誤自我修復。"
+                }
+              },
+              {
+                "icon": "report",
+                "title": {
+                  "en": "Dead Letter Queue",
+                  "zh": "死信佇列（DLQ）"
+                },
+                "text": {
+                  "en": "A separate queue where messages land after exhausting all retries, so they are never lost — you inspect and replay them later.",
+                  "zh": "訊息用完所有重試後會落到的另一個佇列，所以永遠不會弄丟——你之後可以檢查並重新處理它們。"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "bolt",
+            "title": {
+              "en": "One Worker can be both",
+              "zh": "一個 Worker 可身兼兩職"
+            },
+            "text": {
+              "en": "A single Worker can export both fetch (the producer) and queue (the consumer). They live in one project but run at different times: fetch on each request, queue later in the background. We split them into two files below only to make the roles obvious.",
+              "zh": "同一個 Worker 可以同時匯出 fetch（生產者）和 queue（消費者）。它們住在同一個專案，但在不同時間執行：fetch 在每次請求時跑，queue 之後在背景跑。下面把它們拆成兩個檔案，只是為了讓角色更清楚。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "icon": "swap_vert",
+        "heading": {
+          "en": "Follow one request: fast 202, slow work later",
+          "zh": "跟著一個請求走：先回 202，工作稍後做"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Imagine a sign-up form. The user submits, and we owe them a welcome email. The trick is: reply 202 Accepted the moment the job is queued, and send the email afterwards. Here is the whole round trip — watch how the user is set free before the email is ever sent.",
+              "zh": "想像一個註冊表單。使用者送出後，我們欠他一封歡迎信。訣竅是：工作一進佇列就回 202 Accepted，之後再寄信。下面是完整的來回——注意使用者在信還沒寄出之前，就已經被放走了。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Request returns in ms; the email is sent async",
+              "zh": "請求幾毫秒返回；email 非同步寄出"
+            },
+            "code": {
+              "en": "sequenceDiagram\n  participant U as Client\n  participant P as Producer\n  participant Q as Queue\n  participant C as Consumer\n  participant X as Mail\n  U->>P: POST /signup\n  P->>Q: queue email job\n  P-->>U: 202 Accepted\n  Note over U,P: request is done in ms\n  Q->>C: deliver batch later\n  C->>X: send the email\n  X-->>C: delivered\n  C->>C: ack the message",
+              "zh": "sequenceDiagram\n  participant U as \"用戶端\"\n  participant P as \"生產者\"\n  participant Q as \"佇列\"\n  participant C as \"消費者\"\n  participant X as \"信件服務\"\n  U->>P: POST /signup\n  P->>Q: 把寄信工作丟進佇列\n  P-->>U: 202 Accepted\n  Note over U,P: 請求幾毫秒就結束\n  Q->>C: 稍後成批投遞\n  C->>X: 寄出 email\n  X-->>C: 已送達\n  C->>C: ack 確認訊息"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "What each step means",
+              "zh": "每一步在做什麼"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "POST /signup: the browser submits the form to the producer Worker.",
+                "queue email job: the producer calls send() to drop a message describing the work.",
+                "202 Accepted: the producer replies right away — '202' means 'I accepted this; I'll process it later'.",
+                "deliver batch later: Cloudflare invokes the consumer with a batch when messages are ready.",
+                "send the email: the consumer does the actual slow work against the mail service.",
+                "ack the message: on success the consumer acknowledges, so the message leaves the queue for good."
+              ],
+              "zh": [
+                "POST /signup：瀏覽器把表單送到生產者 Worker。",
+                "把寄信工作丟進佇列：生產者呼叫 send()，丟出一則描述這份工作的訊息。",
+                "202 Accepted：生產者馬上回應——『202』的意思是『我收下了，之後會處理』。",
+                "稍後成批投遞：訊息備妥時，Cloudflare 帶著一批訊息來呼叫消費者。",
+                "寄出 email：消費者向信件服務做真正的慢工作。",
+                "ack 確認訊息：成功後消費者送出確認，訊息就永遠離開佇列了。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "schedule",
+            "title": {
+              "en": "Why 202, not 200?",
+              "zh": "為什麼是 202，不是 200？"
+            },
+            "text": {
+              "en": "200 OK usually means 'done'. 202 Accepted is the honest answer here: the request was accepted and will be processed asynchronously — the result isn't ready yet. It tells the client not to expect the finished work in this response.",
+              "zh": "200 OK 通常表示『做完了』。在這裡，202 Accepted 才是誠實的答案：請求已被接受、會以非同步（asynchronously）方式處理——結果還沒好。它告訴用戶端：別期待在這個回應裡拿到完成的工作。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "reliability",
+        "icon": "shield",
+        "heading": {
+          "en": "Retries, dead-letter queues & idempotency",
+          "zh": "重試、死信佇列與冪等性"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Background work fails sometimes — a mail server is down, an API times out. Queues handles this with a simple rule: a message stays alive until it is acked. If processing throws (or you call retry()), the message is redelivered later. After max_retries failed attempts it is moved to a dead-letter queue (DLQ) instead of being dropped.",
+              "zh": "背景工作有時會失敗——信件伺服器掛了、API 逾時。Queues 用一條簡單規則處理：訊息會一直活著，直到被 ack 為止。如果處理時丟出錯誤（或你呼叫 retry()），訊息之後會被重新投遞。失敗達到 max_retries 次後，它會被移到死信佇列（DLQ），而不是被丟掉。"
+            }
+          },
+          {
+            "type": "mermaid",
+            "title": {
+              "en": "Success → ack; fail → retry → DLQ after N",
+              "zh": "成功 → ack；失敗 → 重試 → N 次後進 DLQ"
+            },
+            "code": {
+              "en": "flowchart TD\n  M[\"Message delivered\"] --> PROC[\"Consumer processes it\"]\n  PROC --> OK{\"Success?\"}\n  OK -->|\"yes\"| ACK[\"ack: drop from queue\"]\n  OK -->|\"no\"| RT{\"Tries < max_retries?\"}\n  RT -->|\"yes\"| WAIT[\"Wait, then redeliver\"]\n  WAIT --> PROC\n  RT -->|\"no\"| DLQ[\"Dead Letter Queue\"]\n  DLQ --> SEE[\"Inspect and alert\"]",
+              "zh": "flowchart TD\n  M[\"訊息被投遞\"] --> PROC[\"消費者開始處理\"]\n  PROC --> OK{\"成功？\"}\n  OK -->|\"是\"| ACK[\"ack：移出佇列\"]\n  OK -->|\"否\"| RT{\"次數 < max_retries？\"}\n  RT -->|\"是\"| WAIT[\"稍等後重新投遞\"]\n  WAIT --> PROC\n  RT -->|\"否\"| DLQ[\"死信佇列 DLQ\"]\n  DLQ --> SEE[\"檢查並告警\"]"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Idempotency: surviving duplicates",
+              "zh": "冪等性：扛得住重複"
+            }
+          },
+          {
+            "type": "p",
+            "text": {
+              "en": "Queues delivers at-least-once: a message may occasionally be delivered more than once (for example, the consumer succeeds but crashes before acking). So your handler must be idempotent — running it twice with the same message produces the same result as running it once. The classic trick: give every message a unique id, record ids you've finished, and skip any id you've already seen.",
+              "zh": "Queues 是「至少一次（at-least-once）」投遞：同一則訊息偶爾可能被投遞超過一次（例如消費者處理成功了，卻在 ack 之前當機）。所以你的處理函式必須是「冪等的（idempotent）」——用同一則訊息跑兩次，結果要跟跑一次一樣。經典做法：給每則訊息一個唯一 id，把做完的 id 記下來，遇到已經看過的 id 就略過。"
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "content_copy",
+            "title": {
+              "en": "Assume every message can arrive twice",
+              "zh": "假設每則訊息都可能來兩次"
+            },
+            "text": {
+              "en": "Without an idempotency check, a single retry could send two welcome emails or charge a card twice. Before doing the work, ask 'have I already handled this id?' — if yes, ack and move on. This one guard makes retries and DLQs safe to rely on.",
+              "zh": "少了冪等性檢查，一次重試就可能寄出兩封歡迎信、或刷兩次卡。動手之前先問『這個 id 我是不是處理過了？』——如果是，直接 ack 然後跳過。這一道防線，讓你可以安心依賴重試與 DLQ。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "build",
+        "icon": "construction",
+        "heading": {
+          "en": "Build it: producer, consumer, config",
+          "zh": "親手做：生產者、消費者、設定"
+        },
+        "blocks": [
+          {
+            "type": "p",
+            "text": {
+              "en": "Here is a complete, runnable example: a producer Worker that queues a job and returns 202, a consumer Worker that processes a batch idempotently and acks, the wrangler.toml that wires the queue (with retries and a DLQ), the D1 table that tracks finished ids, and the commands to create everything and deploy.",
+              "zh": "下面是一個完整、可跑的範例：一個把工作丟進佇列並回 202 的生產者 Worker、一個成批冪等處理並 ack 的消費者 Worker、把佇列接好（含重試與 DLQ）的 wrangler.toml、追蹤已完成 id 的 D1 資料表，以及把所有東西建好並部署的指令。"
+            }
+          },
+          {
+            "type": "steps",
+            "items": [
+              {
+                "title": {
+                  "en": "1. Producer Worker — accept & return 202",
+                  "zh": "1. 生產者 Worker — 接下請求、回 202"
+                },
+                "text": {
+                  "en": "On each request it builds a message with a unique id, sends it to the queue via the MY_QUEUE binding, and replies 202 immediately. No slow work happens here.",
+                  "zh": "每次請求時，它建一則帶唯一 id 的訊息，透過 MY_QUEUE 綁定送進佇列，然後立刻回 202。這裡不做任何慢工作。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/producer.js\nexport default {\n  // PRODUCER: runs on every HTTP request\n  async fetch(request, env, ctx) {\n    const { email } = await request.json();\n\n    // Build a job with a unique id (used later for idempotency)\n    const msg = {\n      id: crypto.randomUUID(),\n      type: \"welcome_email\",\n      email,\n      ts: Date.now(),\n    };\n\n    // Hand the slow work to the queue, then reply immediately\n    await env.MY_QUEUE.send(msg);\n\n    return new Response(JSON.stringify({ queued: true }), {\n      status: 202,\n      headers: { \"content-type\": \"application/json\" },\n    });\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "2. Consumer Worker — process a batch & ack",
+                  "zh": "2. 消費者 Worker — 成批處理並 ack"
+                },
+                "text": {
+                  "en": "Cloudflare calls queue() with a batch. We loop over batch.messages, skip ids already done (idempotency), do the slow work, then ack on success or retry on failure. Failed messages are redelivered and, after max_retries, go to the DLQ automatically.",
+                  "zh": "Cloudflare 帶著一批訊息呼叫 queue()。我們對 batch.messages 跑迴圈，略過已完成的 id（冪等），做慢工作，成功就 ack、失敗就 retry。失敗的訊息會被重新投遞，達到 max_retries 後自動進 DLQ。"
+                },
+                "code": {
+                  "lang": "js",
+                  "body": "// src/consumer.js\nexport default {\n  // CONSUMER: Cloudflare calls this with a batch of messages\n  async queue(batch, env, ctx) {\n    for (const m of batch.messages) {\n      try {\n        const job = m.body;\n\n        // Idempotency: skip if this id was already handled\n        const done = await env.DB\n          .prepare(\"SELECT 1 FROM processed WHERE id = ?\")\n          .bind(job.id)\n          .first();\n        if (done) {\n          m.ack();\n          continue;\n        }\n\n        // Do the slow work: send the email\n        await sendEmail(env, job.email);\n\n        // Record the id so a retry never sends twice\n        await env.DB\n          .prepare(\"INSERT INTO processed (id, ts) VALUES (?, ?)\")\n          .bind(job.id, Date.now())\n          .run();\n\n        m.ack(); // success -> remove from the queue\n      } catch (err) {\n        m.retry(); // failure -> redeliver later, then DLQ\n      }\n    }\n  },\n};"
+                }
+              },
+              {
+                "title": {
+                  "en": "3. wrangler.toml — wire producer, consumer & DLQ",
+                  "zh": "3. wrangler.toml — 接好生產者、消費者與 DLQ"
+                },
+                "text": {
+                  "en": "queues.producers exposes the queue to your code as env.MY_QUEUE. queues.consumers tells Cloudflare to invoke queue() with batches, and sets batch size, retries and the dead_letter_queue where exhausted messages land.",
+                  "zh": "queues.producers 把佇列以 env.MY_QUEUE 的名義開放給你的程式碼。queues.consumers 告訴 Cloudflare 用一批批訊息來呼叫 queue()，並設定批次大小、重試次數，以及用盡重試的訊息要落到的 dead_letter_queue。"
+                },
+                "code": {
+                  "lang": "toml",
+                  "body": "name = \"queue-app\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-01-01\"\n\n# PRODUCER: send to the \"jobs\" queue as env.MY_QUEUE\n[[queues.producers]]\nqueue = \"jobs\"\nbinding = \"MY_QUEUE\"\n\n# CONSUMER: Cloudflare invokes queue() with batches from \"jobs\"\n[[queues.consumers]]\nqueue = \"jobs\"\nmax_batch_size = 10\nmax_batch_timeout = 5\nmax_retries = 3\ndead_letter_queue = \"jobs-dlq\"\n\n# D1 used for idempotency bookkeeping (env.DB)\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"queue-app-db\"\ndatabase_id = \"<paste-your-database-id>\""
+                }
+              },
+              {
+                "title": {
+                  "en": "4. D1 table — remember finished ids",
+                  "zh": "4. D1 資料表 — 記住已完成的 id"
+                },
+                "text": {
+                  "en": "A tiny table keyed by the message id. The consumer inserts a row after finishing, and checks this table first to stay idempotent across retries and duplicate deliveries.",
+                  "zh": "一張以訊息 id 為主鍵的小表。消費者做完後插入一列，並在動手前先查這張表，讓它在重試與重複投遞之間保持冪等。"
+                },
+                "code": {
+                  "lang": "sql",
+                  "body": "-- schema.sql\nCREATE TABLE IF NOT EXISTS processed (\n  id  TEXT PRIMARY KEY,\n  ts  INTEGER NOT NULL\n);"
+                }
+              },
+              {
+                "title": {
+                  "en": "5. Create queues + DLQ, then deploy",
+                  "zh": "5. 建立佇列 + DLQ，然後部署"
+                },
+                "text": {
+                  "en": "Create the main queue and the dead-letter queue (it's just another queue), create the D1 database, load the schema, deploy, and tail the logs to watch messages being consumed live.",
+                  "zh": "建立主佇列和死信佇列（它就是另一個普通佇列），建立 D1 資料庫、載入 schema、部署，再用 tail 即時看到訊息被消費的過程。"
+                },
+                "code": {
+                  "lang": "bash",
+                  "body": "npx wrangler queues create jobs\nnpx wrangler queues create jobs-dlq\nnpx wrangler d1 create queue-app-db\nnpx wrangler d1 execute queue-app-db --remote --file=./schema.sql\nnpx wrangler deploy\nnpx wrangler tail"
+                }
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "variant": "tip",
+            "icon": "north_east",
+            "title": {
+              "en": "Next: a real image pipeline",
+              "zh": "下一步：真正的圖片管線"
+            },
+            "text": {
+              "en": "Swap 'send email' for 'resize an upload and store it in R2' and you have a media pipeline. The companion blueprint wires exactly that with R2 and Images end to end.",
+              "zh": "把『寄信』換成『把上傳的圖縮圖並存到 R2』，你就有了一條媒體管線。姊妹藍圖用 R2 與 Images 從頭到尾串好的正是這個。"
+            }
+          }
+        ]
+      },
+      {
+        "id": "concepts",
+        "icon": "school",
+        "heading": {
+          "en": "Key terms in one place",
+          "zh": "重點術語一次看懂"
+        },
+        "blocks": [
+          {
+            "type": "cards",
+            "items": [
+              {
+                "icon": "schedule",
+                "title": {
+                  "en": "Asynchronous",
+                  "zh": "非同步（Async）"
+                },
+                "text": {
+                  "en": "Work that happens later, not while the caller waits. The response comes back before the work is finished.",
+                  "zh": "稍後才發生、而不是讓呼叫端乾等的工作。回應會在工作完成之前就先回來。"
+                }
+              },
+              {
+                "icon": "link_off",
+                "title": {
+                  "en": "Decoupling",
+                  "zh": "解耦（Decoupling）"
+                },
+                "text": {
+                  "en": "Producer and consumer don't call each other directly; the queue sits between them, so each can fail, scale or deploy on its own.",
+                  "zh": "生產者與消費者不直接互相呼叫，佇列坐在中間，所以兩邊可以各自失敗、各自擴展、各自部署。"
+                }
+              },
+              {
+                "icon": "inventory_2",
+                "title": {
+                  "en": "Batch",
+                  "zh": "批次（Batch）"
+                },
+                "text": {
+                  "en": "A group of up to 100 messages delivered together, so bulk operations run far more efficiently than one-by-one.",
+                  "zh": "一次最多 100 則訊息一起送來，讓批量操作比一則一則做高效許多。"
+                }
+              },
+              {
+                "icon": "replay",
+                "title": {
+                  "en": "Retry",
+                  "zh": "重試（Retry）"
+                },
+                "text": {
+                  "en": "Automatic redelivery of a failed message, up to max_retries, so transient errors recover without custom code.",
+                  "zh": "失敗訊息的自動重新投遞，最多到 max_retries，讓暫時性錯誤不用寫程式就能復原。"
+                }
+              },
+              {
+                "icon": "fingerprint",
+                "title": {
+                  "en": "Idempotency",
+                  "zh": "冪等性（Idempotency）"
+                },
+                "text": {
+                  "en": "Processing the same message twice gives the same result as once. A unique id plus a 'seen' check makes retries safe.",
+                  "zh": "同一則訊息處理兩次，結果跟處理一次一樣。一個唯一 id 加上『看過了嗎』的檢查，就讓重試變安全。"
+                }
+              },
+              {
+                "icon": "report",
+                "title": {
+                  "en": "Dead Letter Queue",
+                  "zh": "死信佇列（DLQ）"
+                },
+                "text": {
+                  "en": "A separate queue that catches messages after they exhaust all retries, so nothing is silently lost.",
+                  "zh": "一個專門承接『用盡所有重試』訊息的另一個佇列，讓任何東西都不會默默消失。"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tips",
+        "icon": "tips_and_updates",
+        "heading": {
+          "en": "Pitfalls, limits & pricing",
+          "zh": "常見陷阱、限制與計費"
+        },
+        "blocks": [
+          {
+            "type": "callout",
+            "variant": "warn",
+            "icon": "report",
+            "title": {
+              "en": "Always configure a DLQ",
+              "zh": "一定要設一個 DLQ"
+            },
+            "text": {
+              "en": "Without a dead-letter queue, messages that keep failing are dropped once retries run out. With one, they wait somewhere you can inspect, fix the bug, and replay them. Treat the DLQ as your safety net, not an afterthought.",
+              "zh": "沒有死信佇列，一直失敗的訊息在重試用完後就被丟掉。有了它，這些訊息會待在一個你能檢查、修 bug、再重新處理的地方。把 DLQ 當成你的安全網，而不是事後才想到的東西。"
+            }
+          },
+          {
+            "type": "h3",
+            "text": {
+              "en": "Things beginners trip over",
+              "zh": "初學者常踩的雷"
+            }
+          },
+          {
+            "type": "ul",
+            "items": {
+              "en": [
+                "Forgetting to ack: an un-acked message is treated as failed and redelivered — call m.ack() on success.",
+                "No idempotency: at-least-once delivery means duplicates happen; guard every side effect with a unique id check.",
+                "Doing the slow work in the producer: keep fetch() fast — only send() and return 202; the consumer does the heavy lifting.",
+                "Tiny batches: tune max_batch_size and max_batch_timeout so consumers process efficiently instead of one message at a time.",
+                "Ignoring the DLQ: messages can sit there silently — add an alert or a periodic check so you notice failures."
+              ],
+              "zh": [
+                "忘了 ack：沒被 ack 的訊息會被當成失敗、重新投遞——成功時記得呼叫 m.ack()。",
+                "沒有冪等：至少一次投遞代表會出現重複；每個副作用都要用唯一 id 檢查擋一下。",
+                "把慢工作塞進生產者：讓 fetch() 保持快——只 send() 然後回 202，粗重工作交給消費者。",
+                "批次太小：調整 max_batch_size 與 max_batch_timeout，讓消費者高效處理，而不是一則一則做。",
+                "忽略 DLQ：訊息可能默默躺在那裡——加個告警或定期檢查，才會發現失敗。"
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "variant": "note",
+            "icon": "savings",
+            "title": {
+              "en": "Limits worth remembering",
+              "zh": "值得記住的限制"
+            },
+            "text": {
+              "en": "Max message size 128 KB; up to 100 messages (or 256 KB) per batch; up to 5,000 messages/sec per queue; retries up to 100. Queues never charges egress fees and works on Free and Paid plans (Free keeps messages 24 hours). Check the docs for current numbers before launch.",
+              "zh": "最大訊息 128 KB；每批最多 100 則（或合計 256 KB）；每佇列最多 5,000 則/秒；重試最多 100 次。Queues 永不收 egress（流出）費用，免費與付費方案都能用（免費方案訊息保留 24 小時）。上線前請到官方文件確認最新數字。"
+            }
+          }
+        ]
+      }
+    ],
+    "related": [
+      {
+        "slug": "queues",
+        "label": {
+          "en": "Queues",
+          "zh": "Queues"
+        }
+      },
+      {
+        "slug": "workers",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "slug": "d1",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "slug": "r2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "slug": "blueprint-image-pipeline",
+        "label": {
+          "en": "Image pipeline blueprint",
+          "zh": "圖片管線藍圖"
+        }
+      }
+    ],
+    "docs": "https://developers.cloudflare.com/queues/",
     "layout": "lesson",
     "nav": false
   }

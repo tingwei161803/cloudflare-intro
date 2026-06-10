@@ -1,0 +1,472 @@
+{
+  "slug": "fullstack-overview",
+  "category": "integrations",
+  "group": { "en": "Full-stack Basics", "zh": "全端串接基礎" },
+  "icon": "account_tree",
+  "title": {
+    "en": "How front-end, back-end and DB connect",
+    "zh": "前端、後端、資料庫是怎麼串起來的"
+  },
+  "subtitle": {
+    "en": "The big-picture mental model of a full-stack app on Cloudflare — and how a single request travels through every layer",
+    "zh": "用一張大局觀地圖，看懂 Cloudflare 上的全端應用——以及一個請求是怎麼穿過每一層的"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "A browser, a Worker, and a database. Three small pieces, wired together with bindings. Once you see how they fit, the whole Integrations section clicks.",
+      "zh": "一個瀏覽器、一個 Worker、一個資料庫。三個小元件，用 bindings（綁定）串在一起。只要看懂它們怎麼接，整個「整合實戰」章節就通了。"
+    }
+  },
+  "stats": [
+    { "value": "3", "label": { "en": "Layers to wire", "zh": "要串接的層" } },
+    { "value": "1", "label": { "en": "Command to deploy", "zh": "一行指令部署" } },
+    { "value": "0", "label": { "en": "Servers to manage", "zh": "要管理的伺服器" } },
+    { "value": "330+", "label": { "en": "Cities serving it", "zh": "供應它的城市" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring together?", "zh": "我們到底要把什麼串起來？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Almost every web app is made of three jobs: showing things to a person, running logic and rules, and remembering data. On Cloudflare those three jobs map to three pieces — the browser (front-end), a Worker (your back-end API), and a database (D1, KV, R2, or Durable Objects). This guide gives you the mental map for how they connect.",
+            "zh": "幾乎每個網頁應用都在做三件事：把東西「呈現」給人看、執行「邏輯與規則」、以及「記住」資料。在 Cloudflare 上，這三件事分別對應到三個元件——瀏覽器（前端 front-end）、一個 Worker（你的後端 API）、以及一個資料庫（D1、KV、R2 或 Durable Objects）。這篇就是要給你一張「它們怎麼接」的心智地圖。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Front-end means the part that runs inside the user's browser — the HTML, CSS and JavaScript they actually see and click. Back-end means code that runs on a server (here, a Worker) which the user never sees directly; it does the thinking and talks to the database. A database is just where data is stored so it survives after the request ends.",
+            "zh": "「前端（front-end）」指的是跑在使用者瀏覽器裡的那一部分——也就是使用者真正看到、點得到的 HTML、CSS 和 JavaScript。「後端（back-end）」則是跑在伺服器上的程式碼（這裡就是 Worker），使用者不會直接看到它；它負責「思考」並跟資料庫溝通。「資料庫（database）」就是把資料存起來的地方，讓資料在這次請求結束後還活著。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "restaurant",
+          "title": { "en": "Think of it like a restaurant", "zh": "把它想成一間餐廳" },
+          "text": {
+            "en": "The browser is the dining room where the customer sits and orders. The Worker is the kitchen that receives orders and decides what to do. The database is the pantry where ingredients are stored. The customer never walks into the pantry — they ask the kitchen, and the kitchen fetches from the pantry.",
+            "zh": "瀏覽器是「用餐區」，客人坐在那裡點餐；Worker 是「廚房」，收到點單後決定怎麼處理；資料庫則是放食材的「儲藏室」。客人不會自己跑進儲藏室——他跟廚房點餐，廚房再去儲藏室拿食材。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Big picture: how a full-stack app fits together", "zh": "大局觀：全端應用是怎麼拼起來的" },
+          "code": {
+            "en": "flowchart LR\n  U[\"User\"] --> B[\"Browser (front-end)\"]\n  B -->|\"load page\"| A[\"Static assets: HTML/CSS/JS\"]\n  B -->|\"fetch /api\"| W[\"Worker (back-end API)\"]\n  W -->|\"query\"| D[\"Database: D1/KV/R2\"]\n  D -->|\"data\"| W\n  W -->|\"JSON\"| B",
+            "zh": "flowchart LR\n  U[\"使用者\"] --> B[\"瀏覽器（前端）\"]\n  B -->|\"載入頁面\"| A[\"靜態資源：HTML/CSS/JS\"]\n  B -->|\"fetch /api\"| W[\"Worker（後端 API）\"]\n  W -->|\"查詢\"| D[\"資料庫：D1/KV/R2\"]\n  D -->|\"資料\"| W\n  W -->|\"JSON\"| B"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Notice two different arrows leaving the browser. One loads the static files that make up the page (the look). The other is an API call that asks the Worker for fresh data (the content). Keeping these separate is the heart of the whole model.",
+            "zh": "注意從瀏覽器出發有兩種不同的箭頭：一種去載入組成頁面的靜態檔案（也就是「外觀」）；另一種是 API 呼叫，向 Worker 要最新的資料（也就是「內容」）。把這兩件事分開，正是整個模型的核心。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layers",
+      "icon": "account_tree",
+      "heading": { "en": "The three layers, and who does what", "zh": "三層各自的職責" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Each layer has one clear job. Mixing the jobs up is the most common beginner mistake (for example, putting your database password in front-end code, where anyone can read it). Keep the responsibilities separated like this:",
+            "zh": "每一層都有一個明確的職責。把職責混在一起，是初學者最常犯的錯（例如把資料庫密碼寫在前端程式碼裡，結果任何人都看得到）。請像下面這樣，把責任分清楚："
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "devices",
+              "title": { "en": "Front-end — the browser", "zh": "前端 — 瀏覽器" },
+              "text": {
+                "en": "Renders the UI and reacts to clicks. It owns nothing secret. It asks the back-end for data using fetch() and shows the result.",
+                "zh": "負責畫出畫面（UI）並回應點擊。它不掌握任何機密。它用 fetch() 向後端要資料，再把結果顯示出來。"
+              }
+            },
+            {
+              "icon": "dns",
+              "title": { "en": "Back-end — the Worker", "zh": "後端 — Worker" },
+              "text": {
+                "en": "Receives requests, applies your rules and security checks, holds the secrets, and is the only layer allowed to touch the database.",
+                "zh": "負責接收請求、套用你的規則與安全檢查、保管機密，而且是唯一被允許碰資料庫的那一層。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "Data — the database", "zh": "資料層 — 資料庫" },
+              "text": {
+                "en": "Remembers data between requests. On Cloudflare this can be D1 (SQL), KV (key-value), R2 (files), or Durable Objects (live state).",
+                "zh": "負責在不同請求之間「記住」資料。在 Cloudflare 上可以是 D1（SQL）、KV（鍵值）、R2（檔案）或 Durable Objects（即時狀態）。"
+              }
+            },
+            {
+              "icon": "lock",
+              "title": { "en": "Why the split matters", "zh": "為什麼要這樣分" },
+              "text": {
+                "en": "Anything in the browser is public — users can open dev tools and read it. Secrets and database access must stay in the Worker, never the front-end.",
+                "zh": "瀏覽器裡的任何東西都是公開的——使用者打開開發者工具就看得到。所以機密和資料庫存取一定要留在 Worker，絕不能放在前端。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Three layers as a stack", "zh": "把三層疊起來看" },
+          "code": {
+            "en": "flowchart TD\n  B[\"Front-end: Browser (HTML/CSS/JS)\"] -->|\"fetch\"| W[\"Back-end: Worker (API)\"]\n  W -->|\"read / write\"| DB[\"Data: D1 / KV / R2 / Durable Objects\"]\n  W -->|\"JSON\"| B",
+            "zh": "flowchart TD\n  B[\"前端：瀏覽器（HTML/CSS/JS）\"] -->|\"fetch\"| W[\"後端：Worker（API）\"]\n  W -->|\"讀 / 寫\"| DB[\"資料層：D1 / KV / R2 / Durable Objects\"]\n  W -->|\"JSON\"| B"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "bolt",
+          "title": { "en": "One Worker can be both", "zh": "一個 Worker 可以身兼兩職" },
+          "text": {
+            "en": "On Cloudflare a single Worker often serves the static front-end files AND runs the back-end API. They live in one project but stay logically separate: static files on most paths, API logic on paths like /api/*.",
+            "zh": "在 Cloudflare 上，常常用「同一個 Worker」同時供應靜態前端檔案、又執行後端 API。它們住在同一個專案，但邏輯上仍然分開：大部分路徑給靜態檔案，像 /api/* 這類路徑則交給 API 邏輯。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Follow one request, end to end", "zh": "跟著一個請求，從頭走到尾" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "The fastest way to understand a full-stack app is to trace a single click. Imagine a page with a \"Load todos\" button. Here is exactly what happens, step by step, when the user presses it.",
+            "zh": "理解全端應用最快的方法，就是「跟著一次點擊走一遍」。想像一個頁面上有一顆「載入待辦」按鈕。下面就是使用者按下去時，一步一步到底發生了什麼事。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Click → fetch → Worker → DB → JSON back", "zh": "點擊 → fetch → Worker → 資料庫 → JSON 回傳" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as Browser\n  participant W as Worker\n  participant D as Database\n  U->>U: user clicks the button\n  U->>W: fetch GET /api/todos\n  W->>D: SELECT id, title FROM todos\n  D-->>W: rows\n  W-->>U: JSON response\n  U->>U: render the list on screen",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant D as \"資料庫\"\n  U->>U: 使用者點擊按鈕\n  U->>W: fetch GET /api/todos\n  W->>D: SELECT id, title FROM todos\n  D-->>W: 資料列\n  W-->>U: JSON 回應\n  U->>U: 把清單畫到畫面上"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "What each step means", "zh": "每一步在做什麼" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Click: the browser's JavaScript reacts to the button press and calls fetch().",
+              "fetch GET /api/todos: an HTTP request leaves the browser and is routed to your Worker.",
+              "SELECT ...: the Worker asks the database for the rows it needs.",
+              "rows: the database hands the matching data back to the Worker.",
+              "JSON response: the Worker turns that data into JSON (a simple text format) and replies.",
+              "render: the browser receives the JSON and updates the page — no full reload needed."
+            ],
+            "zh": [
+              "點擊：瀏覽器的 JavaScript 偵測到按鈕被按下，呼叫 fetch()。",
+              "fetch GET /api/todos：一個 HTTP 請求離開瀏覽器，被導向你的 Worker。",
+              "SELECT ...：Worker 向資料庫要它需要的那些列（rows）。",
+              "資料列：資料庫把符合的資料交還給 Worker。",
+              "JSON 回應：Worker 把資料轉成 JSON（一種簡單的文字格式）回傳。",
+              "畫出來：瀏覽器收到 JSON 後更新頁面——完全不用整頁重新載入。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "data_object",
+          "title": { "en": "Why JSON?", "zh": "為什麼用 JSON？" },
+          "text": {
+            "en": "JSON (JavaScript Object Notation) is a lightweight text format that both the Worker and the browser understand natively. The back-end sends data, not HTML, so the front-end is free to display it however it likes.",
+            "zh": "JSON（JavaScript Object Notation，JavaScript 物件表示法）是一種輕量的文字格式，Worker 和瀏覽器天生都看得懂。後端送的是「資料」而不是 HTML，所以前端可以自由決定要怎麼把它呈現出來。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bindings",
+      "icon": "cable",
+      "heading": { "en": "Bindings: how a Worker reaches storage", "zh": "Bindings：Worker 怎麼接到儲存" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A Worker doesn't connect to a database with a password and a connection string the way old servers did. Instead you declare a binding — a named, secure connection that Cloudflare wires up for you. In your code the binding appears as a property on the env object, like env.DB.",
+            "zh": "Worker 連資料庫的方式，不像舊式伺服器那樣靠「密碼 + 連線字串」。取而代之的是宣告一個 binding（綁定）——一條有名字、又安全的連線，由 Cloudflare 幫你接好。在程式碼裡，這個 binding 會以 env 物件上的屬性出現，例如 env.DB。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "One Worker, many bindings", "zh": "一個 Worker，多種綁定" },
+          "code": {
+            "en": "flowchart TD\n  CFG[\"wrangler.toml bindings\"] -->|\"wires up\"| W[\"Worker (back-end)\"]\n  W -->|\"env.DB\"| D1[\"D1 (SQL database)\"]\n  W -->|\"env.CACHE\"| KV[\"KV (key-value store)\"]\n  W -->|\"env.BUCKET\"| R2[\"R2 (file storage)\"]\n  W -->|\"env.ROOM\"| DO[\"Durable Objects (live state)\"]",
+            "zh": "flowchart TD\n  CFG[\"wrangler.toml 綁定設定\"] -->|\"接上\"| W[\"Worker（後端）\"]\n  W -->|\"env.DB\"| D1[\"D1（SQL 資料庫）\"]\n  W -->|\"env.CACHE\"| KV[\"KV（鍵值儲存）\"]\n  W -->|\"env.BUCKET\"| R2[\"R2（檔案儲存）\"]\n  W -->|\"env.ROOM\"| DO[\"Durable Objects（即時狀態）\"]"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "table_rows",
+              "title": { "en": "D1 → env.DB", "zh": "D1 → env.DB" },
+              "text": {
+                "en": "A SQL database for structured, related data like users and orders. Query it with SELECT / INSERT / UPDATE.",
+                "zh": "一個 SQL 資料庫，適合有結構、有關聯的資料，例如使用者和訂單。用 SELECT / INSERT / UPDATE 查詢。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "KV → env.CACHE", "zh": "KV → env.CACHE" },
+              "text": {
+                "en": "A key-value store for simple lookups read very often, like settings or cached pages. Super fast reads worldwide.",
+                "zh": "一個鍵值（key-value）儲存，適合常常被讀取的簡單查找，例如設定值或快取頁面。全球讀取都超快。"
+              }
+            },
+            {
+              "icon": "folder",
+              "title": { "en": "R2 → env.BUCKET", "zh": "R2 → env.BUCKET" },
+              "text": {
+                "en": "Object storage for large files — images, videos, PDFs, backups. Like a folder in the cloud, with no egress fees.",
+                "zh": "物件儲存，適合大檔案——圖片、影片、PDF、備份。就像雲端上的資料夾，而且沒有流量輸出費用。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Durable Objects → env.ROOM", "zh": "Durable Objects → env.ROOM" },
+              "text": {
+                "en": "A single, consistent place to keep live state — perfect for chat rooms, game lobbies, or counters that many users share.",
+                "zh": "一個單一、一致的地方來保存即時狀態——很適合聊天室、遊戲大廳，或多位使用者共用的計數器。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "settings",
+          "title": { "en": "The name is yours to choose", "zh": "綁定名稱由你自己取" },
+          "text": {
+            "en": "DB, CACHE, BUCKET and ROOM are just names you pick in wrangler.toml. Whatever you write as the binding name is exactly what appears on env in your code. Pick clear names and you'll never get lost.",
+            "zh": "DB、CACHE、BUCKET、ROOM 都只是你在 wrangler.toml 裡自己取的名字。你把 binding 名稱寫成什麼，程式碼裡的 env 上就會出現一模一樣的名字。取清楚一點，你就不會搞混。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Wire it up yourself", "zh": "親手把它串起來" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the smallest possible version of all three layers working together: a front-end that calls fetch, a Worker that returns JSON from D1, the wrangler.toml that binds them, and the SQL that creates the data. Copy these into one project and you have a real full-stack app.",
+            "zh": "下面是三層一起運作的「最小版本」：一段會呼叫 fetch 的前端、一個從 D1 回傳 JSON 的 Worker、把它們綁在一起的 wrangler.toml，以及建立資料的 SQL。把這幾段放進同一個專案，你就有一個真正的全端應用了。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "1. The front-end (runs in the browser)", "zh": "1. 前端（跑在瀏覽器裡）" },
+              "text": {
+                "en": "Plain JavaScript that calls your API on click and paints the result. No framework needed to understand the idea.",
+                "zh": "純 JavaScript，點擊時呼叫你的 API，再把結果畫出來。不用任何框架就能看懂這個概念。"
+              },
+              "code": { "lang": "html", "body": "<!-- public/index.html -->\n<button id=\"load\">Load todos</button>\n<ul id=\"list\"></ul>\n\n<script>\n  async function loadTodos() {\n    // Ask the Worker (back-end) for data\n    const res = await fetch(\"/api/todos\");\n    const todos = await res.json();\n    // Paint the result into the page\n    document.querySelector(\"#list\").innerHTML =\n      todos.map((t) => `<li>${t.title}</li>`).join(\"\");\n  }\n  document.querySelector(\"#load\").addEventListener(\"click\", loadTodos);\n</script>" }
+            },
+            {
+              "title": { "en": "2. The back-end Worker (returns JSON)", "zh": "2. 後端 Worker（回傳 JSON）" },
+              "text": {
+                "en": "It serves static files for normal paths, and for /api/todos it reads D1 via env.DB and replies with JSON. Notice the user's request never touches the database directly — only the Worker does.",
+                "zh": "一般路徑它供應靜態檔案；遇到 /api/todos 時，它透過 env.DB 讀取 D1，再回傳 JSON。注意：使用者的請求從不直接碰資料庫——只有 Worker 會。"
+              },
+              "code": { "lang": "js", "body": "// src/index.js\nexport default {\n  async fetch(request, env, ctx) {\n    const url = new URL(request.url);\n    if (url.pathname === \"/api/todos\") {\n      // env.DB is the D1 binding from wrangler.toml\n      const { results } = await env.DB\n        .prepare(\"SELECT id, title FROM todos\")\n        .all();\n      return Response.json(results);\n    }\n    // Everything else is served as a static asset\n    return env.ASSETS.fetch(request);\n  },\n};" }
+            },
+            {
+              "title": { "en": "3. The wrangler.toml (wires the binding)", "zh": "3. wrangler.toml（接好綁定）" },
+              "text": {
+                "en": "This config file tells Cloudflare your Worker's entry file, where the static files live, and which database to expose as env.DB.",
+                "zh": "這個設定檔告訴 Cloudflare：你的 Worker 進入檔在哪、靜態檔案放哪、以及要把哪個資料庫以 env.DB 的名義開放出來。"
+              },
+              "code": { "lang": "toml", "body": "name = \"my-fullstack-app\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-01-01\"\n\n# Serve the front-end from ./public, exposed as env.ASSETS\n[assets]\ndirectory = \"./public\"\nbinding = \"ASSETS\"\n\n# Bind a D1 database; reach it in code as env.DB\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"my-app-db\"\ndatabase_id = \"<paste-your-database-id>\"" }
+            },
+            {
+              "title": { "en": "4. The data layer (create the table)", "zh": "4. 資料層（建立資料表）" },
+              "text": {
+                "en": "Run this SQL once to create the todos table and add a couple of rows, so your /api/todos endpoint has something to return.",
+                "zh": "把這段 SQL 跑一次，建立 todos 資料表並塞幾筆資料，這樣你的 /api/todos 端點才有東西可以回傳。"
+              },
+              "code": { "lang": "sql", "body": "CREATE TABLE IF NOT EXISTS todos (\n  id INTEGER PRIMARY KEY,\n  title TEXT NOT NULL\n);\n\nINSERT INTO todos (title) VALUES\n  ('Learn the full-stack model'),\n  ('Wire a Worker to D1');" }
+            },
+            {
+              "title": { "en": "5. Run it, then deploy", "zh": "5. 先在本機跑，再部署" },
+              "text": {
+                "en": "wrangler dev starts everything locally at http://localhost:8787. When it looks good, wrangler deploy puts all three layers live on Cloudflare's global network in one shot.",
+                "zh": "wrangler dev 會在本機把所有東西跑起來，網址是 http://localhost:8787。覺得 OK 後，wrangler deploy 一次就把三層全部部署到 Cloudflare 的全球網路上。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 execute my-app-db --local --file=./schema.sql\nnpx wrangler dev\nnpx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "north_east",
+          "title": { "en": "Next step: full CRUD", "zh": "下一步：完整 CRUD" },
+          "text": {
+            "en": "This guide is read-only (it only loads data). To also create, update and delete rows from the browser, follow the companion guide \"Front-end ↔ Worker ↔ D1: full CRUD\".",
+            "zh": "這篇只示範「讀取」資料。如果還想從瀏覽器「新增、更新、刪除」資料，請接著看姊妹篇〈前端 ↔ Worker ↔ D1：完整 CRUD 串接〉。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key terms in one place", "zh": "重點術語一次看懂" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "language",
+              "title": { "en": "Front-end", "zh": "前端（Front-end）" },
+              "text": {
+                "en": "Code that runs in the user's browser: the HTML, CSS and JavaScript they see and interact with.",
+                "zh": "跑在使用者瀏覽器裡的程式碼：他們看到、會互動的 HTML、CSS 和 JavaScript。"
+              }
+            },
+            {
+              "icon": "dns",
+              "title": { "en": "Back-end", "zh": "後端（Back-end）" },
+              "text": {
+                "en": "Code that runs on a server — here a Worker — handling logic, security, and database access out of the user's sight.",
+                "zh": "跑在伺服器上的程式碼（這裡是 Worker），在使用者看不到的地方處理邏輯、安全和資料庫存取。"
+              }
+            },
+            {
+              "icon": "http",
+              "title": { "en": "API", "zh": "API" },
+              "text": {
+                "en": "Application Programming Interface — the set of URLs (like /api/todos) the front-end calls to ask the back-end for things.",
+                "zh": "Application Programming Interface（應用程式介面）——前端用來向後端要東西的一組網址（例如 /api/todos）。"
+              }
+            },
+            {
+              "icon": "sync",
+              "title": { "en": "fetch()", "zh": "fetch()" },
+              "text": {
+                "en": "The built-in browser function for sending an HTTP request to a URL and reading the response — how the front-end talks to the API.",
+                "zh": "瀏覽器內建的函式，用來向某個網址發 HTTP 請求並讀取回應——這就是前端跟 API 對話的方式。"
+              }
+            },
+            {
+              "icon": "cable",
+              "title": { "en": "Binding", "zh": "Binding（綁定）" },
+              "text": {
+                "en": "A named, secure connection from a Worker to another service (D1, KV, R2, Durable Objects), accessed via the env object.",
+                "zh": "從 Worker 連到其他服務（D1、KV、R2、Durable Objects）的一條有名字、又安全的連線，透過 env 物件存取。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "wrangler.toml", "zh": "wrangler.toml" },
+              "text": {
+                "en": "The config file where you name your Worker and declare its bindings. Wrangler reads it when you run or deploy.",
+                "zh": "設定檔，你在裡面替 Worker 取名字並宣告它的 bindings。你執行或部署時，Wrangler 會讀取它。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": "JSON", "zh": "JSON" },
+              "text": {
+                "en": "A lightweight text format for data. The back-end usually replies in JSON so the front-end can easily read it.",
+                "zh": "一種輕量的資料文字格式。後端通常用 JSON 回應，這樣前端就能輕鬆讀取。"
+              }
+            },
+            {
+              "icon": "storage",
+              "title": { "en": "Database", "zh": "資料庫（Database）" },
+              "text": {
+                "en": "Where data is stored so it survives between requests. On Cloudflare: D1, KV, R2, or Durable Objects.",
+                "zh": "資料被存放的地方，讓它在不同請求之間還活著。在 Cloudflare 上有：D1、KV、R2、Durable Objects。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Common pitfalls & tips", "zh": "常見陷阱與小提示" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "vpn_key",
+          "title": { "en": "Never put secrets in the front-end", "zh": "機密絕不能放在前端" },
+          "text": {
+            "en": "API keys, database credentials and tokens belong in the Worker only. Anything shipped to the browser can be read by anyone using dev tools. Keep secrets server-side with Wrangler secrets (wrangler secret put).",
+            "zh": "API 金鑰、資料庫憑證、權杖（token）只能放在 Worker。任何送到瀏覽器的東西，任何人用開發者工具都讀得到。請用 Wrangler 的機密功能（wrangler secret put）把機密留在伺服器端。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Things beginners trip over", "zh": "初學者常踩的雷" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "CORS errors: if your front-end and API are on the same Worker, you usually avoid them entirely — serving both from one origin is the simplest setup.",
+              "Forgetting await: fetch() and D1 queries are asynchronous; always await them or you'll get a Promise instead of data.",
+              "Returning HTML when you meant JSON: use Response.json(data) so the front-end can call res.json() cleanly.",
+              "Binding name mismatch: the name in wrangler.toml must match what you read on env (env.DB needs binding = \"DB\").",
+              "Editing local vs remote DB: --local touches your machine's copy; drop it (or use --remote) to change the deployed database."
+            ],
+            "zh": [
+              "CORS 錯誤：如果前端和 API 在同一個 Worker 上，通常就完全避開了——用同一個來源（origin）供應兩者是最簡單的做法。",
+              "忘了 await：fetch() 和 D1 查詢都是非同步的；一定要 await，不然你拿到的會是 Promise 而不是資料。",
+              "想回 JSON 卻回了 HTML：用 Response.json(data)，前端才能乾淨地呼叫 res.json()。",
+              "綁定名稱對不上：wrangler.toml 裡的名字要和你在 env 上讀的一致（env.DB 就要有 binding = \"DB\"）。",
+              "改到本機還是遠端資料庫：--local 動的是你電腦上的副本；拿掉它（或用 --remote）才會改到已部署的資料庫。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "It's cheap to start", "zh": "起步成本很低" },
+          "text": {
+            "en": "Workers' free plan gives 100,000 requests a day and D1 includes a generous free tier — plenty to build and learn a full-stack app before paying anything. Check the docs for current limits before you launch.",
+            "zh": "Workers 免費方案每天有 10 萬次請求，D1 也有大方的免費額度——足夠你開發、學習一個全端應用，完全不用先付費。正式上線前，記得到官方文件確認最新的限制數字。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "frontend-worker-d1-crud", "label": { "en": "Front-end ↔ Worker ↔ D1: full CRUD", "zh": "前端 ↔ Worker ↔ D1：完整 CRUD" } }
+  ],
+  "docs": "https://developers.cloudflare.com/workers/"
+}

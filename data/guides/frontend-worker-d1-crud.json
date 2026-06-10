@@ -1,0 +1,382 @@
+{
+  "slug": "frontend-worker-d1-crud",
+  "category": "integrations",
+  "group": { "en": "Full-stack Basics", "zh": "全端串接基礎" },
+  "icon": "sync_alt",
+  "title": {
+    "en": "Front-end ↔ Worker ↔ D1: full CRUD",
+    "zh": "前端 ↔ Worker ↔ D1：完整 CRUD 串接"
+  },
+  "subtitle": {
+    "en": "Wire a web page to a Worker API backed by a SQL database",
+    "zh": "把網頁串到 Worker API，再接上 SQL 資料庫"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Build a real todo app: an HTML page that creates, reads, updates and deletes rows in a cloud SQL database — all through one Worker.",
+      "zh": "做一個真正能跑的待辦事項 App：用一個 HTML 頁面，透過一個 Worker 對雲端 SQL 資料庫做新增、讀取、更新、刪除。"
+    }
+  },
+  "stats": [
+    { "value": "3", "label": { "en": "Layers wired", "zh": "層串接" } },
+    { "value": "4", "label": { "en": "CRUD verbs", "zh": "CRUD 動詞" } },
+    { "value": "1", "label": { "en": "SQL database", "zh": "SQL 資料庫" } },
+    { "value": "0", "label": { "en": "Servers to manage", "zh": "要管的伺服器" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring up?", "zh": "我們要串什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "CRUD stands for Create, Read, Update, Delete — the four things almost every app does with data. In this guide we build a tiny todo app where the browser talks to a Worker (a small program running on Cloudflare's edge), and the Worker reads and writes a D1 database (a serverless SQL database built on SQLite).",
+            "zh": "CRUD 是 Create、Read、Update、Delete（新增、讀取、更新、刪除）的縮寫，幾乎每個 App 對資料都在做這四件事。這篇我們要做一個小小的待辦事項 App：瀏覽器跟 Worker（跑在 Cloudflare 邊緣上的小程式）講話，Worker 再去讀寫 D1 資料庫（一個以 SQLite 為底的無伺服器 SQL 資料庫）。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Three layers, one data flow. The front-end never touches the database directly — it always goes through the Worker, which is the only thing holding the database binding. Here is the big picture:",
+            "zh": "三層、一條資料流。前端永遠不會直接碰資料庫——它一律透過 Worker，而唯一拿著資料庫綁定（binding）的也只有 Worker。先看一下全貌："
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Architecture: Browser → Worker → D1", "zh": "架構：瀏覽器 → Worker → D1" },
+          "code": {
+            "en": "flowchart LR\n  B[\"Browser (HTML / JS)\"] -->|\"fetch /api/todos\"| W[\"Worker API\"]\n  W -->|\"prepare().bind()\"| D[\"D1 (SQLite)\"]\n  D -->|\"rows\"| W\n  W -->|\"JSON\"| B",
+            "zh": "flowchart LR\n  B[\"瀏覽器（HTML / JS）\"] -->|\"fetch /api/todos\"| W[\"Worker API\"]\n  W -->|\"prepare().bind()\"| D[\"D1（SQLite）\"]\n  D -->|\"資料列\"| W\n  W -->|\"JSON 回應\"| B"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "restaurant",
+          "title": { "en": "Think of it like a restaurant", "zh": "把它想成一間餐廳" },
+          "text": {
+            "en": "The browser is the customer placing an order, the Worker is the waiter who takes it to the kitchen and brings food back, and D1 is the kitchen pantry where all the ingredients (your data) are stored. The customer never walks into the pantry — they always ask the waiter.",
+            "zh": "瀏覽器是點餐的客人，Worker 是把點單送進廩房、再把菜端出來的服務生，而 D1 就是存放所有食材（你的資料）的廩房。客人不會自己走進廩房——一律跟服務生點。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "哪一層負責什麼？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": { "en": "Front-end (Browser)", "zh": "前端（瀏覽器）" },
+              "text": {
+                "en": "Renders the UI and calls the API with fetch(). It only knows the URL and the JSON shape — nothing about SQL.",
+                "zh": "負責畫面並用 fetch() 呼叫 API。它只知道網址和 JSON 長什麼樣——完全不碰 SQL。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Worker (API)", "zh": "Worker（API）" },
+              "text": {
+                "en": "Receives HTTP requests, validates input, routes by method, runs SQL through the env.DB binding, and returns JSON.",
+                "zh": "接收 HTTP 請求、驗證輸入、依方法分流，透過 env.DB 綁定跑 SQL，再回傳 JSON。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "D1 (Database)", "zh": "D1（資料庫）" },
+              "text": {
+                "en": "Stores the todos table and runs the actual SELECT / INSERT / UPDATE / DELETE statements safely.",
+                "zh": "存放 todos 資料表，安全地執行真正的 SELECT / INSERT / UPDATE / DELETE 語句。"
+              }
+            },
+            {
+              "icon": "vpn_key",
+              "title": { "en": "The binding", "zh": "綁定（binding）" },
+              "text": {
+                "en": "wrangler.toml connects the Worker to D1 under the name env.DB — no connection string or password needed.",
+                "zh": "wrangler.toml 把 Worker 和 D1 以 env.DB 這個名字接起來——不用連線字串、也不用密碼。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "All four CRUD operations hit the same /api/todos path; the Worker decides what to do based on the HTTP method (GET, POST, PUT, DELETE). This is the routing logic in one picture:",
+            "zh": "四個 CRUD 動作都打到同一條 /api/todos 路徑；Worker 依 HTTP 方法（GET、POST、PUT、DELETE）決定要做什麼。一張圖看懂路由邏輯："
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Worker routing by HTTP method", "zh": "Worker 依 HTTP 方法路由" },
+          "code": {
+            "en": "flowchart TD\n  R[\"Request /api/todos\"] --> M{\"HTTP method?\"}\n  M -->|GET| S1[\"SELECT * FROM todos\"]\n  M -->|POST| S2[\"INSERT INTO todos\"]\n  M -->|PUT| S3[\"UPDATE todos SET ...\"]\n  M -->|DELETE| S4[\"DELETE FROM todos\"]\n  S1 --> J[\"Response.json(...)\"]\n  S2 --> J\n  S3 --> J\n  S4 --> J",
+            "zh": "flowchart TD\n  R[\"請求 /api/todos\"] --> M{\"HTTP 方法？\"}\n  M -->|GET| S1[\"SELECT * FROM todos\"]\n  M -->|POST| S2[\"INSERT INTO todos\"]\n  M -->|PUT| S3[\"UPDATE todos SET ...\"]\n  M -->|DELETE| S4[\"DELETE FROM todos\"]\n  S1 --> J[\"Response.json(...)\"]\n  S2 --> J\n  S3 --> J\n  S4 --> J"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The data model", "zh": "資料模型" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Our app needs just one table: todos. Each row is one task. id is the primary key (PK — a unique number that identifies the row), title is the task text, done is 0 or 1 (SQLite has no real boolean, so we use an integer), and created_at is a timestamp filled in automatically.",
+            "zh": "我們的 App 只需要一張資料表：todos。每一列就是一件待辦事項。id 是主鍵（PK，用來唯一識別一列的號碼），title 是待辦內容，done 是 0 或 1（SQLite 沒有真正的布林型別，所以用整數代替），created_at 則是自動填上的時間戳記。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "todos table (ER diagram)", "zh": "todos 資料表（ER 圖）" },
+          "code": {
+            "en": "erDiagram\n  TODOS {\n    integer id PK \"auto increment\"\n    text title \"task text\"\n    integer done \"0 or 1\"\n    text created_at \"timestamp\"\n  }",
+            "zh": "erDiagram\n  TODOS {\n    integer id PK \"自動遞增\"\n    text title \"待辦內容\"\n    integer done \"0 或 1\"\n    text created_at \"建立時間\"\n  }"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Translated into SQL, that table looks like this. Save it as schema.sql — we apply it to D1 in the build steps below.",
+            "zh": "轉成 SQL，這張表長這樣。把它存成 schema.sql——下面的動手步驟會把它套用到 D1。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": { "en": "schema.sql", "zh": "schema.sql" },
+          "body": "CREATE TABLE IF NOT EXISTS todos (\n  id         INTEGER PRIMARY KEY AUTOINCREMENT,\n  title      TEXT    NOT NULL,\n  done       INTEGER NOT NULL DEFAULT 0,\n  created_at TEXT    NOT NULL DEFAULT (datetime('now'))\n);"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "One full round trip", "zh": "一次完整的往返" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Let's trace a Create from start to finish: the user types a task and submits the form. The browser sends POST /api/todos with a JSON body, the Worker validates it and runs an INSERT, D1 returns the freshly created row (thanks to RETURNING *), and the Worker hands that JSON back so the UI can show it instantly.",
+            "zh": "我們跟蹤一次 Create 從頭到尾：使用者打完待辦事項、送出表單。瀏覽器發出 POST /api/todos（帶著 JSON 資料），Worker 驗證後跑 INSERT，D1 透過 RETURNING * 回傳剛建好的那一列，Worker 再把那筆 JSON 送回來，畫面就能馬上顯示。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Create round trip (POST)", "zh": "新增往返（POST）" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker\"\n  participant D as \"D1\"\n  U->>W: POST /api/todos (title)\n  W->>W: validate title\n  W->>D: INSERT INTO todos RETURNING *\n  D-->>W: new row\n  W-->>U: 201 Created + JSON\n  U->>U: render new todo",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant D as \"D1\"\n  U->>W: POST /api/todos（title）\n  W->>W: 驗證 title\n  W->>D: INSERT INTO todos RETURNING *\n  D-->>W: 新資料列\n  W-->>U: 201 Created + JSON\n  U->>U: 畫出新待辦事項"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "bolt",
+          "title": { "en": "Why RETURNING *?", "zh": "為什麼用 RETURNING *？" },
+          "text": {
+            "en": "Without RETURNING you would have to run a second SELECT to learn the new id and created_at. RETURNING * gives you the whole inserted row in one query — fewer round trips, simpler code.",
+            "zh": "沒有 RETURNING 的話，你得再跑一次 SELECT 才能拿到新的 id 跟 created_at。RETURNING * 讓你一個查詢就拿到整列資料——往返更少、程式更簡單。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it step by step", "zh": "一步一步串起來" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Follow these seven steps and you will have a deployed full-stack todo app. You need Node.js installed; everything else runs through npx wrangler (Cloudflare's command-line tool).",
+            "zh": "跟著這七個步驟走，你就會有一個部署上線的全端待辦事項 App。你只需要裝好 Node.js；其他全都透過 npx wrangler（Cloudflare 的命令列工具）來跑。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the D1 database", "zh": "建立 D1 資料庫" },
+              "text": {
+                "en": "Wrangler prints a database_id — copy it, you will paste it into wrangler.toml next.",
+                "zh": "Wrangler 會印出一組 database_id——複製起來，下一步要貼進 wrangler.toml。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 create todo-db" }
+            },
+            {
+              "title": { "en": "Bind D1 to the Worker", "zh": "把 D1 綁定到 Worker" },
+              "text": {
+                "en": "The [[d1_databases]] block exposes the database to your Worker as env.DB. Paste the id from step 1.",
+                "zh": "[[d1_databases]] 這段讓資料庫以 env.DB 的名字出現在 Worker 裡。把步驟 1 的 id 貼進來。"
+              },
+              "code": { "lang": "toml", "body": "name = \"todo-api\"\nmain = \"src/index.js\"\ncompatibility_date = \"2024-09-23\"\n\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"todo-db\"\ndatabase_id = \"<paste-your-id-here>\"" }
+            },
+            {
+              "title": { "en": "Apply the table schema", "zh": "套用資料表結構" },
+              "text": {
+                "en": "Run schema.sql against the real cloud database. Use --local instead of --remote to test on your machine first.",
+                "zh": "把 schema.sql 跑在雲端真正的資料庫上。想先在本機測試的話，把 --remote 換成 --local。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 execute todo-db --remote --file=./schema.sql\n\n# quick check it worked\nnpx wrangler d1 execute todo-db --remote --command \"SELECT name FROM sqlite_master WHERE type='table';\"" }
+            },
+            {
+              "title": { "en": "Write the Worker (src/index.js)", "zh": "寫 Worker（src/index.js）" },
+              "text": {
+                "en": "One fetch handler routes all four CRUD verbs to D1 using prepare().bind() plus .all() / .first() / .run(). The CORS headers let a browser on another origin call this API.",
+                "zh": "一個 fetch 處理函式用 prepare().bind() 加上 .all() / .first() / .run()，把四個 CRUD 動詞全都路由到 D1。CORS 標頭則讓另一個來源（origin）的瀏覽器能呼叫這個 API。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const id = url.pathname.match(/^\\/api\\/todos\\/(\\d+)$/);\n    const cors = {\n      \"Access-Control-Allow-Origin\": \"*\",\n      \"Access-Control-Allow-Methods\": \"GET,POST,PUT,DELETE,OPTIONS\",\n      \"Access-Control-Allow-Headers\": \"Content-Type\"\n    };\n\n    if (request.method === \"OPTIONS\") return new Response(null, { headers: cors });\n\n    try {\n      // READ: list every todo\n      if (url.pathname === \"/api/todos\" && request.method === \"GET\") {\n        const { results } = await env.DB\n          .prepare(\"SELECT * FROM todos ORDER BY created_at DESC\")\n          .all();\n        return json(results, 200, cors);\n      }\n\n      // CREATE: insert one todo\n      if (url.pathname === \"/api/todos\" && request.method === \"POST\") {\n        const { title } = await request.json();\n        if (!title) return json({ error: \"title required\" }, 400, cors);\n        const row = await env.DB\n          .prepare(\"INSERT INTO todos (title) VALUES (?) RETURNING *\")\n          .bind(title)\n          .first();\n        return json(row, 201, cors);\n      }\n\n      // UPDATE: toggle done or edit title\n      if (id && request.method === \"PUT\") {\n        const { title, done } = await request.json();\n        const row = await env.DB\n          .prepare(\"UPDATE todos SET title = COALESCE(?, title), done = COALESCE(?, done) WHERE id = ? RETURNING *\")\n          .bind(title ?? null, done ?? null, Number(id[1]))\n          .first();\n        return row ? json(row, 200, cors) : json({ error: \"not found\" }, 404, cors);\n      }\n\n      // DELETE: remove one todo\n      if (id && request.method === \"DELETE\") {\n        const info = await env.DB\n          .prepare(\"DELETE FROM todos WHERE id = ?\")\n          .bind(Number(id[1]))\n          .run();\n        return json({ deleted: info.meta.changes }, 200, cors);\n      }\n\n      return json({ error: \"not found\" }, 404, cors);\n    } catch (err) {\n      return json({ error: err.message }, 500, cors);\n    }\n  }\n};\n\nfunction json(data, status, cors) {\n  return new Response(JSON.stringify(data), {\n    status,\n    headers: { \"Content-Type\": \"application/json\", ...cors }\n  });\n}" }
+            },
+            {
+              "title": { "en": "Front-end: the four fetch calls", "zh": "前端：四個 fetch 呼叫" },
+              "text": {
+                "en": "These helpers map one-to-one to CRUD: GET reads, POST creates, PUT updates, DELETE removes. Point API at your deployed Worker URL.",
+                "zh": "這幾個小函式跟 CRUD 一對一：GET 讀、POST 新增、PUT 更新、DELETE 刪除。把 API 指向你部署好的 Worker 網址。"
+              },
+              "code": { "lang": "js", "body": "const API = \"https://todo-api.<your-subdomain>.workers.dev/api/todos\";\n\n// READ — GET all todos\nexport async function listTodos() {\n  const res = await fetch(API);\n  return res.json();\n}\n\n// CREATE — POST a new todo\nexport async function addTodo(title) {\n  const res = await fetch(API, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ title })\n  });\n  return res.json();\n}\n\n// UPDATE — PUT to toggle done (or edit title)\nexport async function toggleTodo(id, done) {\n  const res = await fetch(`${API}/${id}`, {\n    method: \"PUT\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ done })\n  });\n  return res.json();\n}\n\n// DELETE — remove a todo\nexport async function removeTodo(id) {\n  const res = await fetch(`${API}/${id}`, { method: \"DELETE\" });\n  return res.json();\n}" }
+            },
+            {
+              "title": { "en": "Wire it into a page (index.html)", "zh": "接進網頁（index.html）" },
+              "text": {
+                "en": "A complete, runnable page: a form that POSTs new todos, a list that GETs them, a checkbox that PUTs done, and a button that DELETEs. Open it with any static server.",
+                "zh": "一個完整、能跑的頁面：表單負責 POST 新增、清單負責 GET 讀取、勾選框負責 PUT 切換完成、按鈕負責 DELETE。用任何靜態伺服器打開即可。"
+              },
+              "code": { "lang": "html", "body": "<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>Todo</title>\n</head>\n<body>\n  <h1>My Todos</h1>\n  <form id=\"new\">\n    <input id=\"title\" placeholder=\"What needs doing?\" required />\n    <button type=\"submit\">Add</button>\n  </form>\n  <ul id=\"list\"></ul>\n\n  <script type=\"module\">\n    const API = \"https://todo-api.<your-subdomain>.workers.dev/api/todos\";\n\n    async function load() {\n      const todos = await (await fetch(API)).json();\n      const ul = document.getElementById(\"list\");\n      ul.innerHTML = \"\";\n      for (const t of todos) {\n        const li = document.createElement(\"li\");\n        const box = document.createElement(\"input\");\n        box.type = \"checkbox\";\n        box.checked = !!t.done;\n        box.onchange = () => update(t.id, box.checked ? 1 : 0);\n        const span = document.createElement(\"span\");\n        span.textContent = \" \" + t.title + \" \";\n        const del = document.createElement(\"button\");\n        del.textContent = \"x\";\n        del.onclick = () => remove(t.id);\n        li.append(box, span, del);\n        ul.appendChild(li);\n      }\n    }\n\n    async function update(id, done) {\n      await fetch(`${API}/${id}`, {\n        method: \"PUT\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ done })\n      });\n      load();\n    }\n\n    async function remove(id) {\n      await fetch(`${API}/${id}`, { method: \"DELETE\" });\n      load();\n    }\n\n    document.getElementById(\"new\").addEventListener(\"submit\", async (e) => {\n      e.preventDefault();\n      const title = document.getElementById(\"title\").value.trim();\n      if (!title) return;\n      await fetch(API, {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ title })\n      });\n      e.target.reset();\n      load();\n    });\n\n    load();\n  </script>\n</body>\n</html>" }
+            },
+            {
+              "title": { "en": "Run locally, then deploy", "zh": "本機跑跑看，再部署" },
+              "text": {
+                "en": "wrangler dev runs the Worker on your machine; wrangler deploy publishes it to the world and prints your live workers.dev URL.",
+                "zh": "wrangler dev 在本機跑 Worker；wrangler deploy 把它發布到全世界，並印出你上線的 workers.dev 網址。"
+              },
+              "code": { "lang": "bash", "body": "# develop with live reload\nnpx wrangler dev\n\n# ship it\nnpx wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shield",
+              "title": { "en": "Prepared statements", "zh": "預備語句" },
+              "text": {
+                "en": "prepare(\"... ?\").bind(value) keeps user input out of the SQL text, blocking SQL injection. Never build SQL with string concatenation.",
+                "zh": "prepare(\"... ?\").bind(value) 把使用者輸入和 SQL 文字分開，擋掉 SQL 注入攻擊。千萬不要用字串拼接來組 SQL。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": ".all() vs .first() vs .run()", "zh": ".all()、.first()、.run()" },
+              "text": {
+                "en": "all() returns many rows, first() returns one row (or null), run() is for writes where you only need the change count.",
+                "zh": "all() 回傳多列，first() 回傳一列（或 null），run() 用在只需要知道改了幾列的寫入操作。"
+              }
+            },
+            {
+              "icon": "swap_horiz",
+              "title": { "en": "HTTP method = intent", "zh": "HTTP 方法就是意圖" },
+              "text": {
+                "en": "GET reads, POST creates, PUT/PATCH updates, DELETE removes. Same URL, different verb — that is REST in a nutshell.",
+                "zh": "GET 讀、POST 新增、PUT/PATCH 更新、DELETE 刪除。同一網址、不同動詞——這就是 REST 的精髓。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "CORS", "zh": "CORS（跨來源存取）" },
+              "text": {
+                "en": "Browsers block cross-origin calls unless the server replies with Access-Control-* headers. That's why the Worker adds them to every response.",
+                "zh": "除非伺服器回以 Access-Control-* 標頭，否則瀏覽器會擋掉跨來源呼叫。這就是為什麼 Worker 每個回應都要加上它們。"
+              }
+            },
+            {
+              "icon": "cloud_sync",
+              "title": { "en": "Local vs remote D1", "zh": "本機與遠端 D1" },
+              "text": {
+                "en": "--local hits a SQLite file on your disk for fast tests; --remote hits the real cloud database. They are separate — seed both.",
+                "zh": "--local 打的是你磁碟上的 SQLite 檔、測試很快；--remote 打的是雲端真資料庫。兩邊是分開的，記得都要填資料。"
+              }
+            },
+            {
+              "icon": "playlist_add_check",
+              "title": { "en": "RETURNING *", "zh": "RETURNING *" },
+              "text": {
+                "en": "An SQLite feature that hands back the affected row from an INSERT/UPDATE in the same query — no second SELECT needed.",
+                "zh": "SQLite 的功能，讓 INSERT/UPDATE 在同一查詢裡就把受影響的那列送回來——不用再 SELECT 一次。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls & pricing", "zh": "陷阱與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Don't expose D1 to the browser", "zh": "不要把 D1 直接露給瀏覽器" },
+          "text": {
+            "en": "The env.DB binding only exists inside the Worker. Never try to query D1 from front-end JavaScript — always go through the Worker so validation and auth stay server-side.",
+            "zh": "env.DB 綁定只存在於 Worker 內部。千萬不要想從前端 JavaScript 查 D1——一律走 Worker，讓驗證和權限判斷都留在伺服器端。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "payments",
+          "title": { "en": "Billed by rows, not by time", "zh": "依列數計費，不看時間" },
+          "text": {
+            "en": "D1 counts rows read and rows written, plus storage. The free tier gives 5 million rows read and 100,000 rows written per day with 5 GB storage — plenty for a todo app.",
+            "zh": "D1 算的是讀取列數、寫入列數，再加上儲存量。免費額度每天給 500 萬列讀取、10 萬列寫入、加上 5 GB 儲存——做個待辦 App 綽綽有餘。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Validate input in the Worker (e.g. reject empty titles) before touching the database.",
+              "Add an index on columns you filter or sort by often to read fewer rows and save money.",
+              "Use status codes meaningfully: 201 for created, 404 for not found, 400 for bad input.",
+              "Remember --local and --remote D1 are separate databases; seed the one you are testing.",
+              "Serve the front-end from Cloudflare Pages so HTML and API share one domain (and you can drop CORS)."
+            ],
+            "zh": [
+              "在 Worker 裡先驗證輸入（例如拒絕空白的 title），再去碰資料庫。",
+              "在常用來篩選或排序的欄位上建索引（index），可以少讀很多列、同時省錢。",
+              "狀態碼要用得有意義：201 代表建立成功、404 找不到、400 輸入有誤。",
+              "記得 --local 與 --remote 的 D1 是兩個不同的資料庫；你在測哪個就要填哪個。",
+              "把前端放到 Cloudflare Pages，讓 HTML 和 API 共用同一個網域（連 CORS 都可以省）。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "rest-api-worker", "label": { "en": "REST API on a Worker", "zh": "用 Worker 做 REST API" } },
+    { "slug": "form-to-database", "label": { "en": "Form to database", "zh": "表單存進資料庫" } }
+  ],
+  "docs": "https://developers.cloudflare.com/d1/"
+}

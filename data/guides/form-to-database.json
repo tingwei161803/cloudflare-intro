@@ -1,0 +1,583 @@
+{
+  "slug": "form-to-database",
+  "category": "integrations",
+  "group": {
+    "en": "Full-stack Basics",
+    "zh": "全端串接基礎"
+  },
+  "icon": "dynamic_form",
+  "title": {
+    "en": "HTML form → Worker → database",
+    "zh": "HTML 表單 → Worker → 資料庫"
+  },
+  "subtitle": {
+    "en": "The classic flow: submit a form, save it, show it back — with real server-side validation",
+    "zh": "最經典的流程：送出表單、存起來、再顯示出來——搭配真正的伺服器端驗證"
+  },
+  "hero": {
+    "badge": {
+      "en": "Integration",
+      "zh": "整合實戰"
+    },
+    "tagline": {
+      "en": "A contact or signup form that posts to a Worker, gets validated, and is saved to a D1 database.",
+      "zh": "一個聯絡或註冊表單：POST 到 Worker、通過驗證，再存進 D1 資料庫。"
+    }
+  },
+  "stats": [
+    {
+      "value": "3",
+      "label": {
+        "en": "Layers wired",
+        "zh": "層串接"
+      }
+    },
+    {
+      "value": "1",
+      "label": {
+        "en": "Table to store rows",
+        "zh": "個資料表存資料"
+      }
+    },
+    {
+      "value": "201",
+      "label": {
+        "en": "Created on success",
+        "zh": "成功建立"
+      }
+    },
+    {
+      "value": "400",
+      "label": {
+        "en": "On invalid input",
+        "zh": "輸入不合法"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": {
+        "en": "What are we wiring up?",
+        "zh": "我們要串什麼？"
+      },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "This is the most common job in web development: a visitor fills in a form, you save what they typed, and you confirm it worked. We will wire three layers together — a front-end HTML form, a Cloudflare Worker (your server-side code that runs at the edge), and a D1 database (a serverless SQL database) where each submission becomes one row.",
+            "zh": "這是網頁開發最常見的任務：訪客填寫表單、你把他輸入的內容存起來、再回覆他成功了。我們要把三個層串在一起——前端 HTML 表單、一個 Cloudflare Worker（在邊緣執行的伺服器端程式碼）、以及一個 D1 資料庫（無伺服器的 SQL 資料庫），每一筆送出都會變成資料表裡的一列。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_post_office",
+          "title": {
+            "en": "Think of it like…",
+            "zh": "把它想成…"
+          },
+          "text": {
+            "en": "A reception desk. The visitor hands over a paper form (the HTML form). The receptionist checks it is filled in correctly (the Worker validating), then files it in a drawer (D1). If a field is blank, the receptionist hands it back and points at the problem — it never goes in the drawer.",
+            "zh": "一個服務櫃台。訪客遞交一張紙本表單（HTML 表單）。櫃台人員檢查是不是都填對了（Worker 驗證），再歸檔進抽屜（D1）。如果有欄位空白，櫃台會把表單退回來、指出問題——它永遠不會進抽屜。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Architecture at a glance",
+            "zh": "架構一眼看"
+          },
+          "code": {
+            "en": "flowchart TD\n  U[\"Visitor / Browser\"] -->|\"Fill in and submit\"| F[\"Front-end page (HTML + JS)\"]\n  F -->|\"fetch POST /api/submit\"| W[\"Worker (validate + logic)\"]\n  W -->|\"INSERT one row\"| D[\"D1 database\"]\n  D -->|\"success / failure\"| W\n  W -->|\"JSON response\"| F\n  F -->|\"Show success or error\"| U",
+            "zh": "flowchart TD\n  U[\"訪客 / 瀏覽器\"] -->|\"填寫並送出\"| F[\"前端網頁 (HTML + JS)\"]\n  F -->|\"fetch POST /api/submit\"| W[\"Worker (驗證 + 邏輯)\"]\n  W -->|\"INSERT 一筆資料\"| D[\"D1 資料庫\"]\n  D -->|\"成功 / 失敗\"| W\n  W -->|\"JSON 回應\"| F\n  F -->|\"顯示成功或錯誤\"| U"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": {
+        "en": "Who does what",
+        "zh": "每一層負責什麼"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Each layer has one clear job. Keeping them separate is what makes the app easy to reason about and secure.",
+            "zh": "每一層都只負責一件事。把它們分開，才能讓應用既好理解又安全。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": {
+                "en": "Front-end (the form)",
+                "zh": "前端（表單）"
+              },
+              "text": {
+                "en": "HTML for the fields, plus JS that intercepts submit and sends the data with fetch. It also shows success or error messages.",
+                "zh": "用 HTML 做出欄位，再用 JS 攔截送出動作、用 fetch 把資料傳出去，並負責顯示成功或錯誤訊息。"
+              }
+            },
+            {
+              "icon": "verified_user",
+              "title": {
+                "en": "Worker (the gatekeeper)",
+                "zh": "Worker（把關人）"
+              },
+              "text": {
+                "en": "Receives the POST, validates every field, and only then writes to the database. This is the one place you can actually trust.",
+                "zh": "接收 POST、驗證每一個欄位，確認無誤才寫進資料庫。這是唯一你真正能信任的地方。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": {
+                "en": "D1 (the storage)",
+                "zh": "D1（儲存）"
+              },
+              "text": {
+                "en": "A SQL database that keeps every submission as a row. The Worker talks to it through the env.DB binding.",
+                "zh": "一個 SQL 資料庫，把每筆送出存成一列。Worker 透過 env.DB binding（綁定）跟它溝通。"
+              }
+            },
+            {
+              "icon": "shield_lock",
+              "title": {
+                "en": "Turnstile (optional)",
+                "zh": "Turnstile（選配）"
+              },
+              "text": {
+                "en": "A free, puzzle-free bot check. Add it to stop spam from flooding your table.",
+                "zh": "免費、不用解拼圖的機器人檢查。加上它可以防止垃圾訊息灌爆你的資料表。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "dns",
+          "title": {
+            "en": "One origin, two paths",
+            "zh": "同一個網域、兩條路徑"
+          },
+          "text": {
+            "en": "With Workers static assets, the same Worker can serve your HTML page (e.g. /) and handle the API (/api/submit). Because they share an origin, the fetch needs no CORS setup.",
+            "zh": "透過 Workers 静態資源（static assets），同一個 Worker 可以同時伺服你的 HTML 頁面（例如 /）跟處理 API（/api/submit）。因為同源，fetch 就不需要設定 CORS。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": {
+        "en": "The data model",
+        "zh": "資料模型"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "We only need one table: submissions. Each row is one filled-in form. The id auto-increments, and created_at is stamped automatically so you know when each message arrived.",
+            "zh": "我們只需要一個資料表：submissions。每一列就是一筆填好的表單。id 會自動遞增，created_at 會自動蓋上時間，讓你知道每筆訊息什麼時候進來的。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "submissions table",
+            "zh": "submissions 資料表"
+          },
+          "code": {
+            "en": "erDiagram\n  SUBMISSIONS {\n    integer id PK \"primary key\"\n    text name \"visitor name\"\n    text email \"contact email\"\n    text message \"message body\"\n    text created_at \"created time\"\n  }",
+            "zh": "erDiagram\n  SUBMISSIONS {\n    integer id PK \"主鍵\"\n    text name \"訪客姓名\"\n    text email \"聯絡信箱\"\n    text message \"訊息內容\"\n    text created_at \"建立時間\"\n  }"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": {
+            "en": "schema.sql",
+            "zh": "schema.sql"
+          },
+          "body": "-- schema.sql\nCREATE TABLE IF NOT EXISTS submissions (\n  id         INTEGER PRIMARY KEY AUTOINCREMENT,\n  name       TEXT NOT NULL,\n  email      TEXT NOT NULL,\n  message    TEXT NOT NULL,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);"
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "schedule",
+          "title": {
+            "en": "Let the database stamp the time",
+            "zh": "讓資料庫蓋時間戳"
+          },
+          "text": {
+            "en": "Using DEFAULT (datetime('now')) means you never have to send created_at from the client — the server decides the time, so it cannot be faked.",
+            "zh": "用 DEFAULT (datetime('now')) 代表你永遠不用從前端傳 created_at——時間由伺服器決定，所以偽造不了。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": {
+        "en": "The request flow",
+        "zh": "請求流程"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Follow one submission from click to confirmation. Notice that validation happens on the Worker, and the database is only touched when every field is valid.",
+            "zh": "跟著一筆送出，從點擊一路看到回覆。注意驗證是在 Worker 上進行，而且只有當每個欄位都合法時，才會動到資料庫。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Submit → validate → save → confirm",
+            "zh": "送出 → 驗證 → 儲存 → 回覆"
+          },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Visitor\"\n  participant F as \"Front-end page\"\n  participant W as \"Worker\"\n  participant D as \"D1 database\"\n  U->>F: Fill in form and click submit\n  F->>W: POST /api/submit (JSON)\n  W->>W: Validate fields (name / email / message)\n  alt Fields valid\n    W->>D: INSERT INTO submissions\n    D-->>W: Write succeeded\n    W-->>F: 201 Created + JSON\n    F-->>U: Show success message\n  else Fields invalid\n    W-->>F: 400 + error list\n    F-->>U: Show field errors\n  end",
+            "zh": "sequenceDiagram\n  participant U as \"訪客\"\n  participant F as \"前端網頁\"\n  participant W as \"Worker\"\n  participant D as \"D1 資料庫\"\n  U->>F: 填寫表單並按下送出\n  F->>W: POST /api/submit (JSON)\n  W->>W: 驗證欄位 (姓名 / 信箱 / 訊息)\n  alt 欄位有效\n    W->>D: INSERT INTO submissions\n    D-->>W: 寫入成功\n    W-->>F: 201 Created + JSON\n    F-->>U: 顯示成功訊息\n  else 欄位無效\n    W-->>F: 400 + 錯誤清單\n    F-->>U: 顯示欄位錯誤\n  end"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "swap_horiz",
+          "title": {
+            "en": "Status codes are the contract",
+            "zh": "狀態碼就是約定"
+          },
+          "text": {
+            "en": "The Worker answers 201 (created) on success and 400 (bad request) on invalid input. The front-end reads res.ok to decide whether to clear the form or show errors.",
+            "zh": "Worker 成功時回 201（已建立）、輸入不合法時回 400（請求有誤）。前端看 res.ok 來決定要清空表單還是顯示錯誤。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": {
+        "en": "Build it step by step",
+        "zh": "一步步動手串"
+      },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Here is the whole thing: the database and table, the wrangler config, the front-end form, and the Worker that ties it together. Copy each piece into the matching file.",
+            "zh": "下面是全部：資料庫與資料表、wrangler 設定、前端表單，以及把它們串起來的 Worker。把每一段貼進對應的檔案里。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": {
+                "en": "Create the database and table",
+                "zh": "建立資料庫與資料表"
+              },
+              "text": {
+                "en": "Save the CREATE TABLE above as schema.sql, then run these. The --remote flag means 'apply to the real cloud database' (leave it off to test locally).",
+                "zh": "把上面的 CREATE TABLE 存成 schema.sql，再跑這兩行。--remote 代表「套用到雲端上真正的資料庫」（不加就是在本機測試）。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# 1) Create the database (copy the printed database_id)\nnpx wrangler d1 create contact-db\n\n# 2) Apply the table from schema.sql to the real cloud database\nnpx wrangler d1 execute contact-db --remote --file=./schema.sql"
+              }
+            },
+            {
+              "title": {
+                "en": "Bind D1 in wrangler.jsonc",
+                "zh": "在 wrangler.jsonc 綁定 D1"
+              },
+              "text": {
+                "en": "Paste the database_id from step 1. The binding name DB is how your Worker reaches the database as env.DB. The assets block lets the same Worker serve your HTML.",
+                "zh": "貼上第 1 步拿到的 database_id。binding 名稱 DB 就是你的 Worker 用 env.DB 存取資料庫的方式。assets 那段讓同一個 Worker 能伺服你的 HTML。"
+              },
+              "code": {
+                "lang": "json",
+                "body": "{\n  \"name\": \"contact-form\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"assets\": { \"directory\": \"./public\" },\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"contact-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Build the front-end form",
+                "zh": "做出前端表單"
+              },
+              "text": {
+                "en": "Save this as public/index.html. It uses FormData to gather the fields, sends them as JSON with fetch, and updates the status line based on the response.",
+                "zh": "把這個存成 public/index.html。它用 FormData 收集欄位、用 fetch 以 JSON 送出，再依回應更新狀態文字。"
+              },
+              "code": {
+                "lang": "html",
+                "body": "<!doctype html>\n<html lang=\"zh-Hant\">\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Contact us</title>\n</head>\n<body>\n  <form id=\"contact-form\">\n    <input name=\"name\" type=\"text\" placeholder=\"Your name\" required />\n    <input name=\"email\" type=\"email\" placeholder=\"you@example.com\" required />\n    <textarea name=\"message\" placeholder=\"Message\" required></textarea>\n    <button type=\"submit\">Send</button>\n    <p id=\"status\"></p>\n  </form>\n\n  <script>\n    const form = document.getElementById('contact-form');\n    const statusEl = document.getElementById('status');\n\n    form.addEventListener('submit', async (e) => {\n      e.preventDefault();                 // stop the normal full-page reload\n      statusEl.textContent = 'Sending...';\n\n      // FormData -> plain object -> JSON the Worker can read\n      const data = Object.fromEntries(new FormData(form));\n\n      const res = await fetch('/api/submit', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify(data),\n      });\n\n      const result = await res.json();\n      if (res.ok) {\n        statusEl.textContent = 'Thanks! We received your message.';\n        form.reset();\n      } else {\n        // result.errors looks like { email: 'Invalid email' }\n        statusEl.textContent = 'Please fix: ' + Object.values(result.errors).join(', ');\n      }\n    });\n  </script>\n</body>\n</html>"
+              }
+            },
+            {
+              "title": {
+                "en": "Write the Worker (validate + insert)",
+                "zh": "寫 Worker（驗證 + 寫入）"
+              },
+              "text": {
+                "en": "Save this as src/index.js. It checks the method and path, validates every field, and uses a prepared statement with bind() so user input can never become SQL.",
+                "zh": "把這個存成 src/index.js。它檢查方法與路徑、驗證每個欄位，並用帶 bind() 的預備語句，讓使用者輸入永遠不會變成 SQL。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // Only the form endpoint is handled here\n    if (request.method !== 'POST' || url.pathname !== '/api/submit') {\n      return new Response('Not found', { status: 404 });\n    }\n\n    // 1. Read the body safely (bad JSON must not crash the Worker)\n    let body;\n    try {\n      body = await request.json();\n    } catch {\n      return Response.json({ errors: { form: 'Invalid JSON' } }, { status: 400 });\n    }\n\n    // 2. Validate EVERY field on the server. Never trust the client.\n    const errors = {};\n    const name = String(body.name || '').trim();\n    const email = String(body.email || '').trim();\n    const message = String(body.message || '').trim();\n\n    if (name.length < 2) errors.name = 'Name is too short';\n    if (!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(email)) errors.email = 'Invalid email';\n    if (message.length < 5) errors.message = 'Message is too short';\n    if (message.length > 2000) errors.message = 'Message is too long';\n\n    if (Object.keys(errors).length > 0) {\n      return Response.json({ errors }, { status: 400 });\n    }\n\n    // 3. Insert with a prepared statement. bind() fills the ? holes\n    //    so user input can never become SQL (blocks SQL injection).\n    await env.DB\n      .prepare('INSERT INTO submissions (name, email, message) VALUES (?, ?, ?)')\n      .bind(name, email, message)\n      .run();\n\n    // 4. Confirm success with 201 Created\n    return Response.json({ ok: true }, { status: 201 });\n  },\n};"
+              }
+            },
+            {
+              "title": {
+                "en": "(Optional) Stop bots with Turnstile",
+                "zh": "（選配）用 Turnstile 擋機器人"
+              },
+              "text": {
+                "en": "Add the Turnstile widget to the form, then verify the token at the very top of the Worker — before validation — so bots are rejected before they ever touch your validation or database.",
+                "zh": "在表單加上 Turnstile widget，再在 Worker 最上方（驗證之前）驗證 token——讓機器人在碰到你的驗證或資料庫之前就被擋下。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// Optional: block bots BEFORE you validate or insert.\n// Add a Turnstile widget to the form (see the Turnstile guide),\n// it adds a \"cf-turnstile-response\" token to the submitted data.\n\nconst token = body['cf-turnstile-response'];\n\nconst verify = await fetch(\n  'https://challenges.cloudflare.com/turnstile/v0/siteverify',\n  {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n    body: new URLSearchParams({\n      secret: env.TURNSTILE_SECRET_KEY, // a Worker secret, never hardcoded\n      response: token || '',\n      remoteip: request.headers.get('CF-Connecting-IP') || '',\n    }),\n  }\n);\n\nconst outcome = await verify.json();\nif (!outcome.success) {\n  return Response.json({ errors: { form: 'Bot check failed' } }, { status: 403 });\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Deploy",
+                "zh": "部署上線"
+              },
+              "text": {
+                "en": "Publish the Worker. Your form page and API go live on the same URL.",
+                "zh": "發布這個 Worker。你的表單頁面跟 API 就在同一個網址上線了。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "npx wrangler deploy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Server-side validation, branch by branch",
+            "zh": "伺服器端驗證，一條條分支"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "This is the decision the Worker makes for every request. There is exactly one happy path (save and return 201) and one rejection path (return 400 with a list of what is wrong).",
+            "zh": "這就是 Worker 對每個請求做的判斷。恰好只有一條順利路徑（儲存並回 201）和一條拒絕路徑（回 400 並附上哪裡有問題的清單）。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Validation branches",
+            "zh": "驗證分支"
+          },
+          "code": {
+            "en": "flowchart TD\n  A[\"Receive POST request\"] --> B[\"Parse JSON body\"]\n  B --> C{\"All fields valid?\"}\n  C -->|\"Yes\"| D[\"INSERT INTO submissions\"]\n  D --> E[\"Return 201 + success\"]\n  C -->|\"No\"| F[\"Collect error messages\"]\n  F --> G[\"Return 400 + error list\"]",
+            "zh": "flowchart TD\n  A[\"收到 POST 請求\"] --> B[\"解析 JSON 內容\"]\n  B --> C{\"欄位全部通過?\"}\n  C -->|\"是\"| D[\"INSERT INTO submissions\"]\n  D --> E[\"回傳 201 + 成功\"]\n  C -->|\"否\"| F[\"收集錯誤訊息\"]\n  F --> G[\"回傳 400 + 錯誤清單\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "gpp_bad",
+          "title": {
+            "en": "Never trust the client — why?",
+            "zh": "絕不要信任前端——為什麼？"
+          },
+          "text": {
+            "en": "HTML attributes like required or type=email are only hints for honest users. Anyone can open the dev tools, or send a raw request with curl, and skip the page entirely. The Worker is the real guard: it must re-check length, format, and required fields itself, because it is the only code an attacker cannot edit.",
+            "zh": "HTML 上的 required 或 type=email 只是給老實使用者的提示。任何人都可以打開開發者工具，或用 curl 直接送一個原始請求，完全跳過頁面。Worker 才是真正的守門員：它必須自己重新檢查長度、格式與必填欄位，因為它是攻擊者唯一改不了的程式碼。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": {
+        "en": "Key concepts",
+        "zh": "重點概念"
+      },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "block",
+              "title": {
+                "en": "preventDefault()",
+                "zh": "preventDefault()"
+              },
+              "text": {
+                "en": "Stops the browser's default form submit (a full-page reload) so your JS can send the data with fetch instead.",
+                "zh": "阻止瀏覽器預設的表單送出（整頁重新載入），讓你的 JS 改用 fetch 把資料送出。"
+              }
+            },
+            {
+              "icon": "dataset",
+              "title": {
+                "en": "FormData",
+                "zh": "FormData"
+              },
+              "text": {
+                "en": "A built-in object that grabs all named inputs from a form. Object.fromEntries turns it into a plain object ready for JSON.stringify.",
+                "zh": "一個內建物件，能抓出表單裡所有有 name 的欄位。Object.fromEntries 再把它變成可以交給 JSON.stringify 的純物件。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": {
+                "en": "Prepared statement",
+                "zh": "預備語句"
+              },
+              "text": {
+                "en": "prepare() + bind() keep user input out of the SQL text. The ? placeholders are filled as values, so input can never run as code — this blocks SQL injection.",
+                "zh": "prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。? 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": {
+                "en": "Binding (env.DB)",
+                "zh": "Binding（env.DB）"
+              },
+              "text": {
+                "en": "A binding is a named connection from your Worker to a resource. wrangler.jsonc maps the name DB to your database; in code it appears as env.DB.",
+                "zh": "binding 是你 Worker 到某個資源的一條具名連線。wrangler.jsonc 把名稱 DB 對到你的資料庫；程式裡就是 env.DB。"
+              }
+            },
+            {
+              "icon": "tag",
+              "title": {
+                "en": "HTTP status codes",
+                "zh": "HTTP 狀態碼"
+              },
+              "text": {
+                "en": "201 = created (success). 400 = bad request (your input is wrong). 403 = forbidden (e.g. bot check failed). The front-end branches on them.",
+                "zh": "201 = 已建立（成功）。400 = 請求有誤（你的輸入不對）。403 = 禁止（例如機器人檢查未通過）。前端依這些狀態碼分支。"
+              }
+            },
+            {
+              "icon": "smart_toy",
+              "title": {
+                "en": "Turnstile token",
+                "zh": "Turnstile token"
+              },
+              "text": {
+                "en": "A one-time pass the widget adds to the form. The Worker sends it to Cloudflare's Siteverify API to confirm a real human submitted it.",
+                "zh": "widget 加進表單的一次性通行證。Worker 把它送到 Cloudflare 的 Siteverify API，確認是真人送出的。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": {
+        "en": "Pitfalls & tips",
+        "zh": "陷阱與小提示"
+      },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": {
+            "en": "Validate, then store — in that order",
+            "zh": "先驗證、再儲存——順序別錯"
+          },
+          "text": {
+            "en": "A common bug is inserting first and validating later. Always reject bad input before the INSERT so your table never fills with junk or oversized rows.",
+            "zh": "一個常見的 bug 是先 INSERT 再驗證。請務必在 INSERT 之前就拒絕不合法的輸入，你的資料表才不會被垃圾或超大的資料塞滿。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Return a structured errors object (per field) so the front-end can point at each problem, not just say 'failed'.",
+              "Trim inputs and cap their length on the server; never rely on maxlength in HTML alone.",
+              "Wrap request.json() in try/catch — a malformed body should give a clean 400, not a crash.",
+              "Add an index on created_at if you list recent submissions often, to read fewer rows.",
+              "Store the Turnstile secret with 'wrangler secret put TURNSTILE_SECRET_KEY' — never hardcode it.",
+              "D1's free tier gives 5M rows read and 100K rows written per day — plenty for a contact form."
+            ],
+            "zh": [
+              "回傳一個結構化的 errors 物件（每個欄位一個），讓前端能指出每個問題，而不是只說「失敗」。",
+              "在伺服器端 trim 輸入並限制長度；千萬不要只靠 HTML 的 maxlength。",
+              "把 request.json() 包進 try/catch——格式不對的 body 應該回一個乾淨的 400，而不是讓程式崩潰。",
+              "如果你常列出最近的送出，在 created_at 建立索引（index）以減少讀取的列數。",
+              "用 'wrangler secret put TURNSTILE_SECRET_KEY' 存放 Turnstile 密鑰——絕不要寫死在程式裡。",
+              "D1 免費額度每天給 500 萬列讀取、10 萬列寫入——對一個聯絡表單絕對夠用。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "verified",
+          "title": {
+            "en": "Defense in depth",
+            "zh": "縱深防禦"
+          },
+          "text": {
+            "en": "Layer your defenses: HTML hints for UX, Worker validation for correctness, prepared statements against injection, and Turnstile against bots. No single layer is enough on its own.",
+            "zh": "把防禦分層疊起來：HTML 提示管體驗、Worker 驗證管正確性、預備語句擋注入、Turnstile 擋機器人。單靠任一層都不夠。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "slug": "d1",
+      "label": {
+        "en": "D1",
+        "zh": "D1"
+      }
+    },
+    {
+      "slug": "turnstile",
+      "label": {
+        "en": "Turnstile",
+        "zh": "Turnstile"
+      }
+    },
+    {
+      "slug": "workers",
+      "label": {
+        "en": "Workers",
+        "zh": "Workers"
+      }
+    },
+    {
+      "slug": "frontend-worker-d1-crud",
+      "label": {
+        "en": "Front-end ↔ Worker ↔ D1 CRUD",
+        "zh": "前端 ↔ Worker ↔ D1 CRUD"
+      }
+    }
+  ],
+  "docs": "https://developers.cloudflare.com/d1/"
+}

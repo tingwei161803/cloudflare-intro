@@ -1,0 +1,721 @@
+{
+  "slug": "auth-fullstack",
+  "category": "integrations",
+  "group": {
+    "en": "Full-stack Basics",
+    "zh": "全端串接基礎"
+  },
+  "icon": "lock_person",
+  "title": {
+    "en": "Authentication across front-end and back-end",
+    "zh": "前後端認證串接"
+  },
+  "subtitle": {
+    "en": "Two ways to wire login on Cloudflare: Zero Trust Access, or your own sessions in KV",
+    "zh": "在 Cloudflare 串接登入的兩種做法:零信任 Access,或自己用 KV 管 session"
+  },
+  "hero": {
+    "badge": {
+      "en": "Integration",
+      "zh": "整合實戰"
+    },
+    "tagline": {
+      "en": "From a no-code login wall to a hand-built session cookie — see exactly how auth flows across the stack.",
+      "zh": "從免寫程式的登入牆,到手刻的 session cookie —— 看清認證如何在整個技術棧裡流動。"
+    }
+  },
+  "stats": [
+    {
+      "value": "2",
+      "label": {
+        "en": "Auth approaches",
+        "zh": "種認證做法"
+      }
+    },
+    {
+      "value": "50 users",
+      "label": {
+        "en": "Free Access seats",
+        "zh": "免費 Access 名額"
+      }
+    },
+    {
+      "value": "0 lines",
+      "label": {
+        "en": "Code for Access",
+        "zh": "Access 免寫程式"
+      }
+    },
+    {
+      "value": "HttpOnly",
+      "label": {
+        "en": "Cookie hardening",
+        "zh": "Cookie 強化"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": {
+        "en": "What are we wiring up?",
+        "zh": "我們要串接什麼?"
+      },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "\"Authentication\" just means proving who a user is before letting them in. On Cloudflare you have two clean ways to do it, and this guide walks through both so you can pick the right one.",
+            "zh": "「認證(Authentication)」其實就是:在放使用者進來之前,先確認他是誰。在 Cloudflare 上有兩種乾淨的做法,本篇會帶你走過兩種,讓你挑對適合自己的那一種。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Approach A is Cloudflare Access (Zero Trust): identity sits in front of your whole app and you write zero code. Approach B is app-level sessions: your own Worker checks the password, stores a session in Workers KV, and hands the browser a cookie.",
+            "zh": "做法 A 是 Cloudflare Access(零信任):身分驗證直接擋在整個應用程式前面,你完全不用寫程式。做法 B 是應用程式層級的 session:你自己的 Worker 檢查密碼、把 session 存進 Workers KV,再發一個 cookie 給瀏覽器。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "The two paths at a glance",
+            "zh": "兩條路線一眼看懂"
+          },
+          "code": {
+            "en": "flowchart LR\n  U[\"Browser\"] --> Choice{\"Which auth?\"}\n  Choice -->|\"Zero Trust\"| CA[\"Cloudflare Access\"]\n  Choice -->|\"App login\"| W[\"Your Worker\"]\n  CA --> App[\"Protected app\"]\n  W --> KV[\"Workers KV sessions\"]\n  W --> App",
+            "zh": "flowchart LR\n  U[\"瀏覽器\"] --> Choice{\"用哪種認證?\"}\n  Choice -->|\"零信任\"| CA[\"Cloudflare Access\"]\n  Choice -->|\"應用程式登入\"| W[\"你的 Worker\"]\n  CA --> App[\"受保護的應用程式\"]\n  W --> KV[\"Workers KV session\"]\n  W --> App"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "verified_user",
+              "title": {
+                "en": "A. Cloudflare Access",
+                "zh": "A. Cloudflare Access"
+              },
+              "text": {
+                "en": "Identity check in front of the app. No code, managed in the Zero Trust dashboard. Great for internal tools.",
+                "zh": "在應用程式前面做身分檢查。免寫程式,在 Zero Trust 儀表板設定。很適合內部工具。"
+              }
+            },
+            {
+              "icon": "cookie",
+              "title": {
+                "en": "B. Sessions in KV",
+                "zh": "B. KV session"
+              },
+              "text": {
+                "en": "Your Worker verifies the login, stores a session in KV, and sets a cookie. Full control, needs code. Great for public apps.",
+                "zh": "你的 Worker 驗證登入、把 session 存進 KV、再設一個 cookie。完全掌控、但要寫程式。很適合公開的應用程式。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "meeting_room",
+          "title": {
+            "en": "Think of it like…",
+            "zh": "把它想成…"
+          },
+          "text": {
+            "en": "Access is hiring a security guard for the whole building's front door. Building your own session is giving each visitor a numbered wristband at your own reception desk and checking that band at every room.",
+            "zh": "Access 就像幫整棟大樓的大門請一位保全。自建 session 則是你在自家櫃檯給每位訪客一條有編號的手環,之後每進一個房間都核對那條手環。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "approach-access",
+      "icon": "verified_user",
+      "heading": {
+        "en": "Approach A — Cloudflare Access (no code)",
+        "zh": "做法 A — Cloudflare Access(免寫程式)"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Cloudflare Access puts a login wall in front of your app at the edge. The user never reaches your app until Access has confirmed their identity with a provider you trust (Google, GitHub, Microsoft Entra ID, or a one-time email PIN).",
+            "zh": "Cloudflare Access 在邊緣(edge)幫你的應用程式擋一道登入牆。在 Access 用你信任的提供者(Google、GitHub、Microsoft Entra ID,或寄到 email 的一次性密碼)確認身分之前,使用者根本碰不到你的應用程式。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "This is Single Sign-On (SSO): the user logs in once with their existing account and Access issues a signed token (a JWT) as a cookie. Your app can stay completely unaware of passwords.",
+            "zh": "這就是單一登入(SSO,Single Sign-On):使用者用既有帳號登入一次,Access 就發一個已簽章的權杖(JWT)當作 cookie。你的應用程式可以完全不用碰密碼。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Cloudflare Access SSO flow",
+            "zh": "Cloudflare Access SSO 流程"
+          },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant CA as \"Cloudflare Access\"\n  participant IdP as \"Identity Provider\"\n  participant App as \"Your App\"\n  U->>CA: Open the app URL\n  CA-->>U: Redirect to login\n  U->>IdP: Sign in with Google\n  IdP-->>CA: Identity confirmed\n  CA->>CA: Check Access policy\n  CA-->>U: Set signed JWT cookie\n  U->>App: Request carries the JWT\n  App-->>U: Protected page",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant CA as \"Cloudflare Access\"\n  participant IdP as \"身分提供者\"\n  participant App as \"你的應用程式\"\n  U->>CA: 打開應用程式網址\n  CA-->>U: 轉址到登入頁\n  U->>IdP: 用 Google 登入\n  IdP-->>CA: 身分確認完成\n  CA->>CA: 檢查 Access 政策\n  CA-->>U: 設定已簽章的 JWT cookie\n  U->>App: 請求帶著 JWT\n  App-->>U: 受保護的頁面"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "code_off",
+              "title": {
+                "en": "Zero code",
+                "zh": "零程式碼"
+              },
+              "text": {
+                "en": "Add the app and a policy in the dashboard. Nothing to write, build, or deploy.",
+                "zh": "在儀表板新增應用程式和一條政策即可。不用寫、不用建置、也不用部署。"
+              }
+            },
+            {
+              "icon": "groups",
+              "title": {
+                "en": "Reuse company logins",
+                "zh": "沿用公司帳號"
+              },
+              "text": {
+                "en": "Plug in Google Workspace, GitHub, or Entra ID so people use accounts they already have.",
+                "zh": "接上 Google Workspace、GitHub 或 Entra ID,大家直接用既有帳號。"
+              }
+            },
+            {
+              "icon": "policy",
+              "title": {
+                "en": "Identity-based policies",
+                "zh": "以身分為基礎的政策"
+              },
+              "text": {
+                "en": "Allow only @yourcompany.com emails, require MFA, or restrict by group.",
+                "zh": "只允許 @yourcompany.com 的 email、要求多因素驗證,或依群組限制。"
+              }
+            },
+            {
+              "icon": "history",
+              "title": {
+                "en": "Built-in audit log",
+                "zh": "內建稽核紀錄"
+              },
+              "text": {
+                "en": "Every login attempt is recorded — who, what, and when — with no extra work.",
+                "zh": "每次登入嘗試都會被記錄(誰、做了什麼、何時),不用額外做任何事。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "verified",
+          "title": {
+            "en": "Your app can still trust the token",
+            "zh": "你的應用程式仍可信任這個權杖"
+          },
+          "text": {
+            "en": "Access forwards a signed Cf-Access-Jwt-Assertion header. If you want, your Worker can verify that JWT against Cloudflare's public keys to read the user's email — but you never have to handle the login itself.",
+            "zh": "Access 會轉發一個已簽章的 Cf-Access-Jwt-Assertion 標頭。需要的話,你的 Worker 可以拿 Cloudflare 的公鑰驗證這個 JWT 來讀出使用者 email —— 但你完全不必自己處理登入。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "approach-sessions",
+      "icon": "cookie",
+      "heading": {
+        "en": "Approach B — App-level sessions in KV",
+        "zh": "做法 B — 應用程式層級的 KV session"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "When you run your own sign-up and login (public app, custom UI, your own user table), you handle auth in code. The classic, robust pattern is the server-side session backed by a cookie.",
+            "zh": "當你要自己做註冊和登入(公開的應用程式、自訂介面、你自己的使用者資料表)時,認證就由程式碼處理。最經典、最穩健的模式就是「伺服器端 session + cookie」。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The Worker checks the password, creates a random session id, stores the real session data in Workers KV with an expiry, and sends the browser a cookie holding only that id. On later requests the browser auto-sends the cookie and the Worker looks the session up in KV.",
+            "zh": "Worker 檢查密碼、產生一個隨機的 session id、把真正的 session 資料連同到期時間存進 Workers KV,然後發給瀏覽器一個「只裝這個 id」的 cookie。之後每次請求,瀏覽器會自動帶上 cookie,Worker 再用它去 KV 查出 session。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "App-level login flow",
+            "zh": "應用程式登入流程"
+          },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: POST /login email and password\n  W->>W: Verify the password hash\n  W->>KV: put session id and user json\n  KV-->>W: stored with a TTL\n  W-->>U: Set-Cookie session id\n  U->>W: GET /me with the cookie\n  W->>KV: get session id\n  KV-->>W: user json\n  W-->>U: Profile JSON",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: POST /login 帶 email 與密碼\n  W->>W: 驗證密碼雜湊\n  W->>KV: put 寫入 session id 與使用者 json\n  KV-->>W: 已存入並設定 TTL\n  W-->>U: Set-Cookie 回傳 session id\n  U->>W: GET /me 帶著 cookie\n  W->>KV: get 查 session id\n  KV-->>W: 使用者 json\n  W-->>U: 個人資料 JSON"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": {
+                "en": "Opaque session id",
+                "zh": "不透明的 session id"
+              },
+              "text": {
+                "en": "The cookie holds a random id only. User data lives server-side in KV, never in the browser.",
+                "zh": "cookie 只裝一個隨機 id。使用者資料放在伺服器端的 KV,絕不放在瀏覽器裡。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": {
+                "en": "Auto-expiring",
+                "zh": "自動過期"
+              },
+              "text": {
+                "en": "expirationTtl makes KV delete the session automatically — logout-by-timeout for free.",
+                "zh": "expirationTtl 會讓 KV 自動刪掉 session —— 等於免費的「逾時自動登出」。"
+              }
+            },
+            {
+              "icon": "logout",
+              "title": {
+                "en": "Instant revoke",
+                "zh": "即時撤銷"
+              },
+              "text": {
+                "en": "Delete the KV key and that session is dead immediately, even before it expires.",
+                "zh": "刪掉那個 KV key,該 session 立刻失效,就算還沒到期也一樣。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": {
+                "en": "Full control",
+                "zh": "完全掌控"
+              },
+              "text": {
+                "en": "Your routes, your cookie flags, your rules. You can add roles, refresh, anything.",
+                "zh": "你的路由、你的 cookie 旗標、你的規則。可以加角色、加更新機制,什麼都行。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "lan",
+          "title": {
+            "en": "Why KV fits sessions",
+            "zh": "為什麼 KV 適合存 session"
+          },
+          "text": {
+            "en": "Sessions are read on almost every request and KV is built for read-heavy, globally-replicated lookups with a built-in TTL. That makes it a natural home for session data on Workers.",
+            "zh": "幾乎每個請求都要讀 session,而 KV 正是為「讀多、全球同步、內建 TTL」的查詢而設計的,所以拿來放 Workers 上的 session 資料剛剛好。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "decide",
+      "icon": "call_split",
+      "heading": {
+        "en": "Which one should I use?",
+        "zh": "我該用哪一種?"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Pick by audience. If you are gating an internal tool or staff dashboard, Access wins — it's faster and safer than anything you'd hand-roll. If you are building a public product where strangers sign up, you need your own sessions.",
+            "zh": "依「對象」來選。如果你要把關的是內部工具或員工後台,Access 勝出 —— 它比你自己手刻的任何東西都更快也更安全。如果你在做一個對外、讓陌生人自行註冊的產品,那你就需要自己的 session。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Decision: Access vs build-your-own",
+            "zh": "決策:Access 還是自建 session"
+          },
+          "code": {
+            "en": "flowchart TD\n  Start[\"Need to protect something\"] --> Q1{\"Internal tool or staff app?\"}\n  Q1 -->|Yes| Access[\"Use Cloudflare Access\"]\n  Q1 -->|No| Q2{\"Public app with user accounts?\"}\n  Q2 -->|Yes| Build[\"Build sessions in KV\"]\n  Q2 -->|No| Q3{\"Just block bots on a form?\"}\n  Q3 -->|Yes| Turnstile[\"Add Turnstile\"]\n  Q3 -->|No| Access\n  Access --> Done[\"Login wall ready\"]\n  Build --> Done\n  Turnstile --> Done",
+            "zh": "flowchart TD\n  Start[\"需要保護某個東西\"] --> Q1{\"內部工具或員工系統?\"}\n  Q1 -->|是| Access[\"用 Cloudflare Access\"]\n  Q1 -->|否| Q2{\"公開且有使用者帳號?\"}\n  Q2 -->|是| Build[\"自建 KV session\"]\n  Q2 -->|否| Q3{\"只是想擋表單機器人?\"}\n  Q3 -->|是| Turnstile[\"加上 Turnstile\"]\n  Q3 -->|否| Access\n  Access --> Done[\"登入牆完成\"]\n  Build --> Done\n  Turnstile --> Done"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "badge",
+              "title": {
+                "en": "Choose Access when…",
+                "zh": "選 Access 的時機…"
+              },
+              "text": {
+                "en": "Internal apps, admin panels, staging sites, SSH/RDP, or anything for a known set of people.",
+                "zh": "內部應用程式、管理後台、測試站、SSH／遠端桌面,或任何給「已知一群人」用的東西。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": {
+                "en": "Build your own when…",
+                "zh": "自建 session 的時機…"
+              },
+              "text": {
+                "en": "Public sign-up, custom login UI, social accounts, per-user data, or a mobile/SPA backend.",
+                "zh": "對外開放註冊、自訂登入介面、社群帳號、每位使用者各自的資料,或行動／SPA 後端。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": {
+                "en": "Or just Turnstile…",
+                "zh": "或只要 Turnstile…"
+              },
+              "text": {
+                "en": "If you only need to stop bots on a contact or signup form, add Turnstile and skip auth entirely.",
+                "zh": "如果你只是要擋住聯絡或註冊表單上的機器人,加個 Turnstile 就好,完全不用做認證。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "merge",
+          "title": {
+            "en": "You can combine them",
+            "zh": "兩者可以混用"
+          },
+          "text": {
+            "en": "It's common to use Access for the admin area and your own KV sessions for end-user accounts in the same project. They don't conflict.",
+            "zh": "同一個專案裡,用 Access 守後台、用自己的 KV session 處理一般使用者帳號,是很常見的組合。兩者並不衝突。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": {
+        "en": "Build it: a session Worker end to end",
+        "zh": "動手做:一個完整的 session Worker"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is approach B in full: create the KV namespaces, bind them, seed a demo user, then the Worker (login + middleware + logout) and a tiny front-end. Approach A needs no code — just the dashboard steps from the Access section.",
+            "zh": "以下是做法 B 的完整版:建立 KV 命名空間、綁定、塞一個示範使用者,接著是 Worker(登入 + 中介層 + 登出)和一個小小的前端。做法 A 不用寫程式,照前面 Access 那段的儀表板步驟做即可。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": {
+                "en": "Create two KV namespaces",
+                "zh": "建立兩個 KV 命名空間"
+              },
+              "text": {
+                "en": "One stores sessions, one stores the demo users. Wrangler prints an id for each.",
+                "zh": "一個存 session,一個存示範使用者。Wrangler 會各印出一個 id。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Two namespaces: one for sessions, one for the demo user store\nnpx wrangler kv namespace create SESSIONS\nnpx wrangler kv namespace create USERS"
+              }
+            },
+            {
+              "title": {
+                "en": "Bind them in wrangler.jsonc",
+                "zh": "在 wrangler.jsonc 綁定"
+              },
+              "text": {
+                "en": "Paste the ids so the Worker can reach them as env.SESSIONS and env.USERS.",
+                "zh": "把 id 貼進來,Worker 就能用 env.SESSIONS 和 env.USERS 取用。"
+              },
+              "code": {
+                "lang": "json",
+                "body": "{\n  \"name\": \"auth-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"kv_namespaces\": [\n    { \"binding\": \"SESSIONS\", \"id\": \"<paste-sessions-id>\" },\n    { \"binding\": \"USERS\", \"id\": \"<paste-users-id>\" }\n  ]\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Seed a demo user",
+                "zh": "塞一個示範使用者"
+              },
+              "text": {
+                "en": "Store one user whose passwordHash is the SHA-256 of the password \"hunter2\".",
+                "zh": "存一位使用者,他的 passwordHash 就是密碼「hunter2」的 SHA-256。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Seed one demo user. passwordHash below is SHA-256 of \"hunter2\".\nnpx wrangler kv key put --binding USERS \\\n  \"user:alice@example.com\" \\\n  '{\"email\":\"alice@example.com\",\"passwordHash\":\"f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7\"}' \\\n  --remote"
+              }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "The Worker: login, middleware, logout",
+            "zh": "Worker:登入、中介層、登出"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Note the password check uses SHA-256 only to keep the demo short. In production, hash passwords with a real KDF (key derivation function) such as Argon2id, scrypt, or bcrypt, or PBKDF2 via Web Crypto with a high iteration count and a per-user salt.",
+            "zh": "注意:這裡密碼檢查只用 SHA-256 是為了讓示範簡短。正式環境請改用真正的 KDF(金鑰衍生函式)來雜湊密碼,例如 Argon2id、scrypt、bcrypt,或用 Web Crypto 的 PBKDF2 搭配高迭代次數與每位使用者各自的鹽(salt)。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": {
+            "en": "src/index.js",
+            "zh": "src/index.js"
+          },
+          "body": "// src/index.js -- app-level sessions stored in Workers KV\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // Public: log in and receive a session cookie\n    if (url.pathname === \"/login\" && request.method === \"POST\") {\n      return handleLogin(request, env);\n    }\n    // Public: drop the session\n    if (url.pathname === \"/logout\" && request.method === \"POST\") {\n      return handleLogout(request, env);\n    }\n    // Protected: only reachable with a valid session cookie\n    if (url.pathname === \"/me\") {\n      return requireSession(request, env, (session) =>\n        Response.json({ email: session.email })\n      );\n    }\n    return new Response(\"Not found\", { status: 404 });\n  },\n};\n\n// --- Login: verify password, create a session in KV, set a cookie ---\nasync function handleLogin(request, env) {\n  const { email, password } = await request.json();\n\n  const record = await env.USERS.get(`user:${email}`);\n  if (!record) return new Response(\"Invalid login\", { status: 401 });\n  const user = JSON.parse(record);\n\n  // DEMO ONLY: comparing SHA-256 hashes.\n  // In production hash passwords with a real KDF (Argon2id / scrypt / bcrypt,\n  // or PBKDF2 via Web Crypto with many iterations and a per-user salt).\n  if ((await sha256(password)) !== user.passwordHash) {\n    return new Response(\"Invalid login\", { status: 401 });\n  }\n\n  // Opaque random id -- the cookie holds only this id, never user data.\n  const sessionId = crypto.randomUUID();\n  const session = { email: user.email, createdAt: Date.now() };\n  const ttl = 60 * 60 * 24 * 7; // 7 days, in seconds\n\n  await env.SESSIONS.put(`session:${sessionId}`, JSON.stringify(session), {\n    expirationTtl: ttl,\n  });\n\n  return new Response(JSON.stringify({ ok: true }), {\n    headers: {\n      \"Content-Type\": \"application/json\",\n      \"Set-Cookie\": cookie(\"session\", sessionId, ttl),\n    },\n  });\n}\n\n// --- Middleware: read the cookie, look the session up in KV ---\nasync function requireSession(request, env, handler) {\n  const id = getCookie(request, \"session\");\n  if (!id) return new Response(\"Unauthorized\", { status: 401 });\n\n  const record = await env.SESSIONS.get(`session:${id}`);\n  if (!record) return new Response(\"Unauthorized\", { status: 401 });\n\n  return handler(JSON.parse(record));\n}\n\n// --- Logout: delete the session and clear the cookie ---\nasync function handleLogout(request, env) {\n  const id = getCookie(request, \"session\");\n  if (id) await env.SESSIONS.delete(`session:${id}`);\n  return new Response(JSON.stringify({ ok: true }), {\n    headers: {\n      \"Content-Type\": \"application/json\",\n      \"Set-Cookie\": cookie(\"session\", \"\", 0),\n    },\n  });\n}\n\n// --- Helpers ---\nfunction cookie(name, value, maxAge) {\n  return [\n    `${name}=${value}`,\n    \"HttpOnly\",\n    \"Secure\",\n    \"SameSite=Lax\",\n    \"Path=/\",\n    `Max-Age=${maxAge}`,\n  ].join(\"; \");\n}\n\nfunction getCookie(request, name) {\n  const header = request.headers.get(\"Cookie\") || \"\";\n  for (const part of header.split(\";\")) {\n    const [key, ...rest] = part.trim().split(\"=\");\n    if (key === name) return rest.join(\"=\");\n  }\n  return null;\n}\n\nasync function sha256(text) {\n  const data = new TextEncoder().encode(text);\n  const digest = await crypto.subtle.digest(\"SHA-256\", data);\n  return [...new Uint8Array(digest)]\n    .map((b) => b.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n}"
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "The front-end: a login form",
+            "zh": "前端:登入表單"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "credentials: \"include\" is the key detail — it tells the browser to store the Set-Cookie response and resend the cookie on later requests, so /me just works.",
+            "zh": "credentials: \"include\" 是關鍵 —— 它叫瀏覽器存下回應的 Set-Cookie,並在之後的請求自動帶上 cookie,這樣 /me 才會直接通。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "html",
+          "title": {
+            "en": "login.html",
+            "zh": "login.html"
+          },
+          "body": "<!-- A plain login form posting JSON to the Worker -->\n<form id=\"login\">\n  <input name=\"email\" type=\"email\" placeholder=\"Email\" required />\n  <input name=\"password\" type=\"password\" placeholder=\"Password\" required />\n  <button>Log in</button>\n</form>\n\n<script>\n  const form = document.getElementById(\"login\");\n  form.addEventListener(\"submit\", async (e) => {\n    e.preventDefault();\n    const res = await fetch(\"/login\", {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      credentials: \"include\", // let the browser store & resend the cookie\n      body: JSON.stringify({\n        email: form.email.value,\n        password: form.password.value,\n      }),\n    });\n    if (res.ok) {\n      // The session cookie is set; protected fetches now work automatically.\n      const me = await fetch(\"/me\", { credentials: \"include\" }).then((r) => r.json());\n      alert(`Welcome, ${me.email}`);\n    } else {\n      alert(\"Login failed\");\n    }\n  });\n</script>"
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "gpp_maybe",
+          "title": {
+            "en": "Before going live",
+            "zh": "上線前必看"
+          },
+          "text": {
+            "en": "Always serve over HTTPS (the Secure flag needs it), keep cookies HttpOnly so JavaScript can't read them, use a real password KDF, and add rate limiting plus Turnstile on the login route to slow down credential-stuffing.",
+            "zh": "一定要走 HTTPS(Secure 旗標需要它)、cookie 保持 HttpOnly 讓 JavaScript 讀不到、使用真正的密碼 KDF,並在登入路由加上速率限制和 Turnstile,拖慢撞庫攻擊(credential stuffing)。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": {
+        "en": "Key terms, in plain words",
+        "zh": "重點術語,白話版"
+      },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "verified_user",
+              "title": {
+                "en": "Zero Trust",
+                "zh": "零信任"
+              },
+              "text": {
+                "en": "Never trust by default; verify identity on every request, inside or outside the network. Access is built on this idea.",
+                "zh": "預設誰都不信任;每個請求都驗證身分,不管在網路內外。Access 就建立在這個概念上。"
+              }
+            },
+            {
+              "icon": "badge",
+              "title": {
+                "en": "Session",
+                "zh": "Session(連線階段)"
+              },
+              "text": {
+                "en": "Server-side proof that a user already logged in. Stored in KV here, identified by a random id.",
+                "zh": "伺服器端「這位使用者已經登入過」的憑證。這裡存在 KV,用一個隨機 id 來辨識。"
+              }
+            },
+            {
+              "icon": "cookie",
+              "title": {
+                "en": "Cookie",
+                "zh": "Cookie"
+              },
+              "text": {
+                "en": "A small value the browser stores and auto-resends to your domain. We put only the session id in it.",
+                "zh": "瀏覽器儲存、並會自動回送到你網域的一小段值。我們只在裡面放 session id。"
+              }
+            },
+            {
+              "icon": "token",
+              "title": {
+                "en": "JWT",
+                "zh": "JWT"
+              },
+              "text": {
+                "en": "A signed, self-contained token that carries claims (like the user's email). Access issues one after SSO.",
+                "zh": "一個已簽章、自帶內容的權杖,裡面裝著聲明(claims,例如使用者 email)。Access 在 SSO 後會發一個。"
+              }
+            },
+            {
+              "icon": "shield_lock",
+              "title": {
+                "en": "HttpOnly / Secure",
+                "zh": "HttpOnly／Secure"
+              },
+              "text": {
+                "en": "Cookie flags: HttpOnly hides it from JavaScript (anti-XSS); Secure sends it only over HTTPS.",
+                "zh": "Cookie 旗標:HttpOnly 讓 JavaScript 讀不到它(防 XSS);Secure 只在 HTTPS 下傳送。"
+              }
+            },
+            {
+              "icon": "swap_horiz",
+              "title": {
+                "en": "SameSite",
+                "zh": "SameSite"
+              },
+              "text": {
+                "en": "Controls whether the cookie rides along on cross-site requests. Lax is a sensible default against CSRF.",
+                "zh": "控制 cookie 是否跟著跨站請求一起送出。Lax 是對抗 CSRF 的合理預設值。"
+              }
+            },
+            {
+              "icon": "password",
+              "title": {
+                "en": "KDF / password hash",
+                "zh": "KDF／密碼雜湊"
+              },
+              "text": {
+                "en": "A slow, salted one-way function (Argon2/bcrypt/scrypt) for storing passwords safely. Not plain SHA-256.",
+                "zh": "一種慢、加鹽的單向函式(Argon2／bcrypt／scrypt),用來安全地保存密碼。不是單純的 SHA-256。"
+              }
+            },
+            {
+              "icon": "login",
+              "title": {
+                "en": "SSO",
+                "zh": "單一登入(SSO)"
+              },
+              "text": {
+                "en": "Log in once with one identity provider and gain access to multiple apps. That's the Access experience.",
+                "zh": "用一個身分提供者登入一次,就能進入多個應用程式。這就是 Access 的體驗。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": {
+        "en": "Pitfalls & billing",
+        "zh": "常見陷阱與計費"
+      },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": {
+            "en": "Never store passwords or user data in the cookie",
+            "zh": "千萬別把密碼或使用者資料放進 cookie"
+          },
+          "text": {
+            "en": "The cookie should carry only an opaque session id. Anything you put in a plain cookie is visible and tamperable by the user; keep the real data in KV on the server.",
+            "zh": "cookie 只應該帶一個不透明的 session id。任何放進一般 cookie 的東西,使用者都看得到也能竄改;真正的資料要放在伺服器端的 KV。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "KV is eventually consistent: a brand-new session is readable almost immediately, but allow a moment for global propagation in edge cases.",
+              "Set expirationTtl on every session so stale sessions clean themselves up; mirror it in the cookie Max-Age.",
+              "Cloudflare Zero Trust (Access) is free for up to 50 users — perfect for internal tools.",
+              "KV pricing is per read/write/delete with a generous free tier; one session lookup per request is cheap.",
+              "Add Turnstile to the login form to blunt brute-force and credential-stuffing attacks.",
+              "On logout, delete the KV key AND send a Max-Age=0 cookie so both sides forget the session."
+            ],
+            "zh": [
+              "KV 是最終一致性(eventually consistent):剛建立的 session 幾乎能立刻讀到,但極端情況下要留一點全球同步的時間。",
+              "每個 session 都設 expirationTtl,讓過期的 session 自己清掉;cookie 的 Max-Age 也設成一樣。",
+              "Cloudflare Zero Trust(Access)最多 50 位使用者免費 —— 內部工具超適合。",
+              "KV 以讀／寫／刪次數計費,且有大方的免費額度;每個請求查一次 session 很便宜。",
+              "在登入表單加上 Turnstile,削弱暴力破解和撞庫攻擊。",
+              "登出時,要刪掉 KV key「並且」回送一個 Max-Age=0 的 cookie,讓兩邊都忘掉這個 session。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "auto_awesome",
+          "title": {
+            "en": "Rule of thumb",
+            "zh": "一句話原則"
+          },
+          "text": {
+            "en": "Internal? Reach for Access first. Public sign-up? Own your sessions in KV. Either way, let Cloudflare's edge do the heavy lifting.",
+            "zh": "內部用?先想到 Access。對外註冊?自己用 KV 掌管 session。不論哪種,都讓 Cloudflare 的邊緣幫你扛重活。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "slug": "access",
+      "label": {
+        "en": "Cloudflare Access",
+        "zh": "Cloudflare Access"
+      }
+    },
+    {
+      "slug": "kv",
+      "label": {
+        "en": "Workers KV",
+        "zh": "Workers KV"
+      }
+    },
+    {
+      "slug": "turnstile",
+      "label": {
+        "en": "Turnstile",
+        "zh": "Turnstile"
+      }
+    },
+    {
+      "slug": "workers",
+      "label": {
+        "en": "Workers",
+        "zh": "Workers"
+      }
+    }
+  ],
+  "docs": "https://developers.cloudflare.com/cloudflare-one/policies/access/"
+}

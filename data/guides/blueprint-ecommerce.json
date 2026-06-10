@@ -1,0 +1,679 @@
+{
+  "slug": "blueprint-ecommerce",
+  "category": "integrations",
+  "group": {
+    "en": "Architecture Blueprints",
+    "zh": "架構藍圖"
+  },
+  "icon": "shopping_cart",
+  "title": {
+    "en": "Blueprint: an online store",
+    "zh": "架構藍圖：線上商店"
+  },
+  "subtitle": {
+    "en": "A reference architecture for e-commerce on Cloudflare: storefront, API, database, cart, images and a payment provider.",
+    "zh": "在 Cloudflare 上打造電商的參考架構：商店前台、API、資料庫、購物車、圖片，再接上金流。"
+  },
+  "hero": {
+    "badge": {
+      "en": "Integration",
+      "zh": "整合實戰"
+    },
+    "tagline": {
+      "en": "Wire Pages, Workers, D1, Durable Objects, R2, KV and Turnstile into one checkout that actually holds up.",
+      "zh": "把 Pages、Workers、D1、Durable Objects、R2、KV、Turnstile 串成一條真正撐得住的結帳流程。"
+    }
+  },
+  "stats": [
+    {
+      "value": "7",
+      "label": {
+        "en": "Cloudflare products",
+        "zh": "Cloudflare 產品"
+      }
+    },
+    {
+      "value": "4",
+      "label": {
+        "en": "Core tables",
+        "zh": "核心資料表"
+      }
+    },
+    {
+      "value": "3",
+      "label": {
+        "en": "Checkout steps",
+        "zh": "結帳步驟"
+      }
+    },
+    {
+      "value": "1",
+      "label": {
+        "en": "Platform",
+        "zh": "單一平台"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": {
+        "en": "What are we building?",
+        "zh": "我們要蓋什麼？"
+      },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "We will build a small online store entirely on Cloudflare. Customers browse products, drop items into a cart, and check out with a card — and every moving part runs on Cloudflare's edge, with one external service: the payment provider.",
+            "zh": "我們要完全用 Cloudflare 蓋一間小型線上商店。客人逛商品、把東西丟進購物車、用信用卡結帳——而所有環節都跑在 Cloudflare 的邊緣網路上，只有一個外部服務：金流商。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Think of this page as a wiring diagram. Each Cloudflare product does one job: Pages serves the storefront, a Worker is the API brain, D1 is the SQL database, Durable Objects keep each cart and the stock count consistent, R2 holds product images, KV caches the catalog, and Turnstile plus the WAF guard the checkout.",
+            "zh": "把這頁當成一張接線圖。每個 Cloudflare 產品各司其職：Pages 負責前台、Worker 是 API 大腦、D1 是 SQL 資料庫、Durable Objects 讓每台購物車和庫存數字維持一致、R2 放商品圖片、KV 快取商品目錄，而 Turnstile 加上 WAF 守住結帳關卡。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "storefront",
+          "title": {
+            "en": "Think of it like…",
+            "zh": "把它想成…"
+          },
+          "text": {
+            "en": "A physical shop: Pages is the shop window, the Worker is the cashier, D1 is the ledger in the back office, the Durable Object is the single basket in your hands (no one else can touch it), R2 is the stockroom of photos, and the payment provider is the bank's card terminal.",
+            "zh": "一間實體店面：Pages 是櫥窗、Worker 是收銀員、D1 是後台帳本、Durable Object 是你手上那只獨一無二的提籃（別人碰不到）、R2 是放照片的倉庫，而金流商就是銀行的刷卡機。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "System architecture",
+            "zh": "系統架構"
+          },
+          "code": {
+            "en": "flowchart TD\n  U[\"Shopper browser\"] --> WAF[\"WAF and DDoS shield\"]\n  WAF --> P[\"Pages storefront\"]\n  WAF --> W[\"Worker API\"]\n  P -->|\"product images\"| R2[\"R2 image bucket\"]\n  P -->|\"checkout challenge\"| TS[\"Turnstile\"]\n  W -->|\"catalog cache\"| KV[\"Workers KV\"]\n  W -->|\"products and orders\"| D1[\"D1 database\"]\n  W -->|\"cart and inventory\"| DO[\"Cart Durable Objects\"]\n  W -->|\"charge card\"| PAY[\"External payment\"]",
+            "zh": "flowchart TD\n  U[\"購物者瀏覽器\"] --> WAF[\"WAF 與 DDoS 防護\"]\n  WAF --> P[\"Pages 商店前台\"]\n  WAF --> W[\"Worker API\"]\n  P -->|\"商品圖片\"| R2[\"R2 圖片儲存桶\"]\n  P -->|\"結帳驗證\"| TS[\"Turnstile\"]\n  W -->|\"目錄快取\"| KV[\"Workers KV\"]\n  W -->|\"商品與訂單\"| D1[\"D1 資料庫\"]\n  W -->|\"購物車與庫存\"| DO[\"購物車 Durable Objects\"]\n  W -->|\"刷卡扣款\"| PAY[\"外部金流\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": {
+        "en": "Each product's role",
+        "zh": "每個產品的角色"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Seven Cloudflare products plus one external payment service make up the whole store. Here is exactly what each one is responsible for.",
+            "zh": "整間商店由七個 Cloudflare 產品，加上一個外部金流服務組成。以下是每一個各自負責什麼。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": {
+                "en": "Pages — storefront",
+                "zh": "Pages — 前台"
+              },
+              "text": {
+                "en": "Hosts the static/React shop UI on the global CDN. The browser talks to it first.",
+                "zh": "把靜態或 React 商店介面放在全球 CDN 上。瀏覽器最先接觸的就是它。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": {
+                "en": "Workers — API",
+                "zh": "Workers — API"
+              },
+              "text": {
+                "en": "The brain: routes /api requests, runs business logic, and talks to every storage layer.",
+                "zh": "大腦：負責路由 /api 請求、跑商業邏輯，並與每個儲存層溝通。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": {
+                "en": "D1 — SQL database",
+                "zh": "D1 — SQL 資料庫"
+              },
+              "text": {
+                "en": "Stores products, customers, orders and order_items as relational tables.",
+                "zh": "用關聯式資料表存放商品、客戶、訂單與訂單明細。"
+              }
+            },
+            {
+              "icon": "lock_clock",
+              "title": {
+                "en": "Durable Objects — cart & stock",
+                "zh": "Durable Objects — 購物車與庫存"
+              },
+              "text": {
+                "en": "One instance per cart; serialises stock changes so two buyers can't oversell the last item.",
+                "zh": "每台購物車一個實例；把庫存變動排成一列，避免兩個買家把最後一件商品同時賣掉。"
+              }
+            },
+            {
+              "icon": "image",
+              "title": {
+                "en": "R2 — product images",
+                "zh": "R2 — 商品圖片"
+              },
+              "text": {
+                "en": "Object storage for photos, served with zero egress fees. The image_key column points here.",
+                "zh": "存照片的物件儲存，下載免流量費。資料表的 image_key 欄位就指向這裡。"
+              }
+            },
+            {
+              "icon": "bolt_outline",
+              "title": {
+                "en": "KV — catalog cache",
+                "zh": "KV — 目錄快取"
+              },
+              "text": {
+                "en": "Caches the product list at the edge so browsing doesn't hit D1 on every page view.",
+                "zh": "在邊緣快取商品清單，讓每次瀏覽不必都打到 D1。"
+              }
+            },
+            {
+              "icon": "verified_user",
+              "title": {
+                "en": "Turnstile — human check",
+                "zh": "Turnstile — 真人驗證"
+              },
+              "text": {
+                "en": "A friendly CAPTCHA on the checkout form; the Worker verifies the token before charging.",
+                "zh": "結帳表單上的友善驗證碼；Worker 會在扣款前驗證它的 token。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": {
+                "en": "WAF — firewall",
+                "zh": "WAF — 防火牆"
+              },
+              "text": {
+                "en": "Blocks malicious traffic and bots before they ever reach Pages or the Worker.",
+                "zh": "在惡意流量與機器人觸及 Pages 或 Worker 之前就先擋下。"
+              }
+            },
+            {
+              "icon": "credit_card",
+              "title": {
+                "en": "Payment provider — external",
+                "zh": "金流商 — 外部"
+              },
+              "text": {
+                "en": "The only off-Cloudflare service. The Worker calls its API server-to-server to charge the card.",
+                "zh": "唯一不在 Cloudflare 上的服務。Worker 以伺服器對伺服器方式呼叫它的 API 來刷卡。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "hub",
+          "title": {
+            "en": "One platform, many bindings",
+            "zh": "同一平台，多個綁定"
+          },
+          "text": {
+            "en": "Because every product lives on Cloudflare, the Worker reaches them through bindings (env.DB, env.CART, env.IMAGES, env.CATALOG) instead of network calls with URLs and credentials. Less config, fewer secrets, lower latency.",
+            "zh": "因為每個產品都住在 Cloudflare 上，Worker 透過綁定（env.DB、env.CART、env.IMAGES、env.CATALOG）就能存取它們，不必用網址加金鑰去打網路請求。設定更少、密鑰更少、延遲更低。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": {
+        "en": "The data model",
+        "zh": "資料模型"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Four tables cover a basic store. A customer places many orders; each order contains many order_items; each order_item points at one product. The order_items table is the join that records how many of each product were bought, at what price.",
+            "zh": "四張資料表就能撐起一間基本商店。一位客戶可以下很多筆訂單；每筆訂單包含許多訂單明細（order_items）；每筆明細指向一個商品。order_items 這張中介表記錄了每樣商品買了幾個、單價多少。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Entity relationships",
+            "zh": "實體關聯圖"
+          },
+          "code": {
+            "en": "erDiagram\n  CUSTOMERS ||--o{ ORDERS : places\n  ORDERS ||--o{ ORDER_ITEMS : contains\n  PRODUCTS ||--o{ ORDER_ITEMS : \"listed in\"\n  CUSTOMERS {\n    int id PK\n    text email\n    text name\n  }\n  PRODUCTS {\n    int id PK\n    text title\n    int price_cents\n    int stock\n  }\n  ORDERS {\n    int id PK\n    int customer_id FK\n    text status\n    int total_cents\n  }\n  ORDER_ITEMS {\n    int id PK\n    int order_id FK\n    int product_id FK\n    int qty\n  }",
+            "zh": "erDiagram\n  CUSTOMERS ||--o{ ORDERS : \"下單\"\n  ORDERS ||--o{ ORDER_ITEMS : \"包含\"\n  PRODUCTS ||--o{ ORDER_ITEMS : \"列於\"\n  CUSTOMERS {\n    int id PK\n    text email\n    text name\n  }\n  PRODUCTS {\n    int id PK\n    text title\n    int price_cents\n    int stock\n  }\n  ORDERS {\n    int id PK\n    int customer_id FK\n    text status\n    int total_cents\n  }\n  ORDER_ITEMS {\n    int id PK\n    int order_id FK\n    int product_id FK\n    int qty\n  }"
+          }
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Create the tables",
+            "zh": "建立資料表"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": {
+            "en": "schema.sql",
+            "zh": "schema.sql"
+          },
+          "body": "-- schema.sql : the four core tables of the store\nCREATE TABLE customers (\n  id    INTEGER PRIMARY KEY,\n  email TEXT UNIQUE NOT NULL,\n  name  TEXT\n);\n\nCREATE TABLE products (\n  id          INTEGER PRIMARY KEY,\n  title       TEXT NOT NULL,\n  price_cents INTEGER NOT NULL,\n  stock       INTEGER NOT NULL DEFAULT 0,\n  image_key   TEXT                      -- object key inside the R2 bucket\n);\n\nCREATE TABLE orders (\n  id          INTEGER PRIMARY KEY,\n  customer_id INTEGER REFERENCES customers(id),\n  email       TEXT,\n  status      TEXT NOT NULL DEFAULT 'pending',  -- pending | paid | failed\n  total_cents INTEGER NOT NULL,\n  created_at  TEXT DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE order_items (\n  id               INTEGER PRIMARY KEY,\n  order_id         INTEGER NOT NULL REFERENCES orders(id),\n  product_id       INTEGER NOT NULL REFERENCES products(id),\n  qty              INTEGER NOT NULL,\n  unit_price_cents INTEGER NOT NULL\n);\n\nCREATE INDEX idx_items_order ON order_items(order_id);"
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "payments",
+          "title": {
+            "en": "Store money as integers",
+            "zh": "金額用整數存"
+          },
+          "text": {
+            "en": "Notice price_cents and total_cents — we store money as whole cents (an integer), never as a floating-point dollar amount. Floats round badly and lose pennies; integers never do.",
+            "zh": "注意 price_cents 與 total_cents——金額一律用「整數分」存，絕不要用浮點數的「元」。浮點數會亂進位、掉零頭；整數不會。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": {
+        "en": "The checkout flow",
+        "zh": "結帳流程"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Browsing is easy (read from KV/D1, show images from R2). The interesting part is checkout, where five things must happen in the right order — and roll back cleanly if the card is declined.",
+            "zh": "瀏覽很簡單（從 KV／D1 讀取、用 R2 顯示圖片）。真正有趣的是結帳：五件事必須照正確順序發生——而且一旦刷卡失敗，要能乾淨地回滾。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": {
+            "en": "Checkout sequence",
+            "zh": "結帳時序"
+          },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as Browser\n  participant W as \"Worker API\"\n  participant TS as Turnstile\n  participant DO as \"Cart DO\"\n  participant D as D1\n  participant PAY as Payment\n  U->>W: POST checkout with token\n  W->>TS: verify token\n  TS-->>W: human ok\n  W->>DO: reserve stock\n  DO->>D: decrement stock\n  D-->>DO: rows updated\n  DO-->>W: reserved and total\n  W->>D: INSERT order pending\n  D-->>W: order id\n  W->>PAY: create charge\n  PAY-->>W: paid\n  W->>D: UPDATE order paid\n  W-->>U: order confirmed",
+            "zh": "sequenceDiagram\n  participant U as 瀏覽器\n  participant W as \"Worker API\"\n  participant TS as Turnstile\n  participant DO as \"購物車 DO\"\n  participant D as D1\n  participant PAY as 金流\n  U->>W: POST 結帳並附 token\n  W->>TS: 驗證 token\n  TS-->>W: 確認是真人\n  W->>DO: 預扣庫存\n  DO->>D: 扣減庫存\n  D-->>DO: 更新成功\n  DO-->>W: 已預扣與總金額\n  W->>D: 寫入待付款訂單\n  D-->>W: 訂單編號\n  W->>PAY: 建立扣款\n  PAY-->>W: 已付款\n  W->>D: 更新訂單為已付款\n  W-->>U: 訂單完成"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Verify the Turnstile token so bots can't hammer checkout.",
+              "Reserve stock inside the Cart Durable Object (atomic, no overselling).",
+              "Write a 'pending' order to D1 and get its id.",
+              "Call the external payment provider to charge the card.",
+              "On success mark the order 'paid'; on failure mark it 'failed' and release the stock."
+            ],
+            "zh": [
+              "先驗證 Turnstile token，讓機器人無法猛攻結帳。",
+              "在購物車 Durable Object 內預扣庫存（原子操作、不超賣）。",
+              "把一筆「待付款」訂單寫進 D1，取得訂單編號。",
+              "呼叫外部金流商來刷卡扣款。",
+              "成功就把訂單標為「已付款」；失敗就標為「失敗」並把庫存還回去。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": {
+            "en": "Reserve before you charge",
+            "zh": "先預扣，再扣款"
+          },
+          "text": {
+            "en": "Always reserve stock before calling the payment provider. If you charge first and then discover the item is sold out, you have taken money for goods you can't ship — and now owe a refund.",
+            "zh": "務必在呼叫金流之前先預扣庫存。如果先扣款才發現商品賣完了，你就收了一筆無法出貨的錢——還得辦退款。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": {
+        "en": "Build it: bindings & code",
+        "zh": "動手做：綁定與程式碼"
+      },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the real wiring: the wrangler bindings that connect the Worker to every product, the secrets, the storefront front-end, the checkout Worker, and the Cart Durable Object.",
+            "zh": "以下是真正的接線：把 Worker 連到每個產品的 wrangler 綁定、密鑰、前台前端、結帳 Worker，以及購物車 Durable Object。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": {
+                "en": "Declare all bindings",
+                "zh": "宣告所有綁定"
+              },
+              "text": {
+                "en": "In wrangler.jsonc, bind D1, KV, R2 and the Cart Durable Object so the Worker reaches them as env.DB, env.CATALOG, env.IMAGES and env.CART.",
+                "zh": "在 wrangler.jsonc 裡綁定 D1、KV、R2 和購物車 Durable Object，讓 Worker 能用 env.DB、env.CATALOG、env.IMAGES、env.CART 存取它們。"
+              },
+              "code": {
+                "lang": "jsonc",
+                "body": "{\n  \"name\": \"store-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"store-db\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"kv_namespaces\": [\n    { \"binding\": \"CATALOG\", \"id\": \"<your-kv-id>\" }\n  ],\n  \"r2_buckets\": [\n    { \"binding\": \"IMAGES\", \"bucket_name\": \"store-images\" }\n  ],\n  \"durable_objects\": {\n    \"bindings\": [\n      { \"name\": \"CART\", \"class_name\": \"Cart\" }\n    ]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"Cart\"] }\n  ]\n}"
+              }
+            },
+            {
+              "title": {
+                "en": "Store the secrets",
+                "zh": "設定密鑰"
+              },
+              "text": {
+                "en": "Turnstile and the payment key never go in code — push them as encrypted secrets.",
+                "zh": "Turnstile 與金流金鑰絕不寫進程式碼——用加密密鑰推上去。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Turnstile secret key (verifies the checkout challenge)\nnpx wrangler secret put TURNSTILE_SECRET\n\n# Your payment provider API key (Stripe, etc.)\nnpx wrangler secret put PAYMENT_KEY"
+              }
+            },
+            {
+              "title": {
+                "en": "Apply the schema",
+                "zh": "套用資料表結構"
+              },
+              "text": {
+                "en": "Create the four tables in the remote D1 database from schema.sql.",
+                "zh": "用 schema.sql 在遠端 D1 資料庫建立那四張資料表。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "npx wrangler d1 execute store-db --remote --file=./schema.sql"
+              }
+            },
+            {
+              "title": {
+                "en": "Upload images to R2",
+                "zh": "上傳圖片到 R2"
+              },
+              "text": {
+                "en": "Put each photo in the bucket, then save its key in the product row.",
+                "zh": "把每張照片放進儲存桶，再把它的 key 存到商品那一列。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Upload a product image to the R2 bucket, then store its key in D1\nnpx wrangler r2 object put store-images/tshirt-blue.jpg --file ./tshirt-blue.jpg\n\nnpx wrangler d1 execute store-db --remote \\\n  --command \"UPDATE products SET image_key = 'tshirt-blue.jpg' WHERE id = 1;\""
+              }
+            },
+            {
+              "title": {
+                "en": "Deploy",
+                "zh": "部署"
+              },
+              "text": {
+                "en": "Ship the Worker; the storefront on Pages deploys from its own git push.",
+                "zh": "發布 Worker；Pages 上的前台則由它自己的 git push 來部署。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "npx wrangler deploy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Front-end (Pages storefront)",
+            "zh": "前端（Pages 前台）"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": {
+            "en": "public/store.js",
+            "zh": "public/store.js"
+          },
+          "body": "// public/store.js -- runs in the browser on the Pages storefront\nconst API = \"https://store-api.example.workers.dev\";\n\n// A stable id for this browser's cart (used to find its Durable Object)\nconst cartId = localStorage.getItem(\"cartId\") || crypto.randomUUID();\nlocalStorage.setItem(\"cartId\", cartId);\n\n// 1) Browse products (images load straight from R2)\nasync function loadProducts() {\n  const res = await fetch(`${API}/api/products`);\n  const products = await res.json();\n  for (const p of products) {\n    // <img src=\"https://images.example.com/<image_key>\"> served by R2\n    renderCard(p);\n  }\n}\n\n// 2) Add to cart\nasync function addToCart(productId) {\n  await fetch(`${API}/api/cart/add`, {\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ cartId, productId, qty: 1 }),\n  });\n}\n\n// 3) Checkout -- token comes from the Turnstile widget on the page\nasync function checkout(email) {\n  const token = window.turnstile.getResponse();   // proves you are human\n  const res = await fetch(`${API}/api/checkout`, {\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ cartId, token, email }),\n  });\n  const { orderId, status } = await res.json();\n  alert(`Order ${orderId}: ${status}`);\n}"
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Checkout Worker (the API)",
+            "zh": "結帳 Worker（API）"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": {
+            "en": "src/index.js",
+            "zh": "src/index.js"
+          },
+          "body": "// src/index.js -- the store Worker API (router)\nexport default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // Browse catalog: serve from the KV cache, fall back to D1\n    if (url.pathname === \"/api/products\") {\n      let catalog = await env.CATALOG.get(\"catalog\", \"json\");\n      if (!catalog) {\n        const { results } = await env.DB\n          .prepare(\"SELECT id, title, price_cents, stock, image_key FROM products\")\n          .all();\n        catalog = results;\n        await env.CATALOG.put(\"catalog\", JSON.stringify(results), { expirationTtl: 60 });\n      }\n      return Response.json(catalog);\n    }\n\n    // Add to cart: route to THIS shopper's Cart Durable Object\n    if (url.pathname === \"/api/cart/add\" && request.method === \"POST\") {\n      const { cartId, productId, qty } = await request.json();\n      const stub = env.CART.get(env.CART.idFromName(cartId));\n      return stub.fetch(\"https://do/add\", {\n        method: \"POST\",\n        body: JSON.stringify({ productId, qty }),\n      });\n    }\n\n    // Checkout\n    if (url.pathname === \"/api/checkout\" && request.method === \"POST\") {\n      const { cartId, token, email } = await request.json();\n\n      // 1) Turnstile: prove the buyer is a human, not a bot\n      if (!(await verifyTurnstile(token, env.TURNSTILE_SECRET)))\n        return new Response(\"Failed challenge\", { status: 403 });\n\n      // 2) Reserve stock atomically inside the Cart Durable Object\n      const cart = env.CART.get(env.CART.idFromName(cartId));\n      const reserved = await (await cart.fetch(\"https://do/reserve\", { method: \"POST\" })).json();\n      if (!reserved.ok) return new Response(\"Out of stock\", { status: 409 });\n\n      // 3) Create a pending order in D1\n      const order = await env.DB\n        .prepare(\"INSERT INTO orders (email, status, total_cents) VALUES (?, 'pending', ?) RETURNING id\")\n        .bind(email, reserved.total_cents)\n        .first();\n\n      // 4) Charge the external payment provider\n      const charge = await chargePayment(env.PAYMENT_KEY, order.id, reserved.total_cents);\n\n      // 5) Confirm, or roll the stock back on failure\n      const status = charge.paid ? \"paid\" : \"failed\";\n      await env.DB.prepare(\"UPDATE orders SET status = ? WHERE id = ?\")\n        .bind(status, order.id).run();\n      if (!charge.paid) await cart.fetch(\"https://do/release\", { method: \"POST\" });\n\n      return Response.json({ orderId: order.id, status });\n    }\n\n    return new Response(\"Not found\", { status: 404 });\n  },\n};\n\nasync function verifyTurnstile(token, secret) {\n  const r = await fetch(\"https://challenges.cloudflare.com/turnstile/v0/siteverify\", {\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ secret, response: token }),\n  });\n  return (await r.json()).success === true;\n}\n\nasync function chargePayment(apiKey, orderId, amountCents) {\n  // Swap this for your provider's SDK / REST call\n  const r = await fetch(\"https://api.payments.example/v1/charges\", {\n    method: \"POST\",\n    headers: { authorization: \"Bearer \" + apiKey, \"content-type\": \"application/json\" },\n    body: JSON.stringify({ amount: amountCents, currency: \"twd\", reference: orderId }),\n  });\n  return r.json();\n}"
+        },
+        {
+          "type": "h3",
+          "text": {
+            "en": "Cart / inventory Durable Object",
+            "zh": "購物車／庫存 Durable Object"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": {
+            "en": "src/cart.js",
+            "zh": "src/cart.js"
+          },
+          "body": "// src/cart.js -- one Durable Object instance per shopper cart.\n// A single DO is single-threaded, so stock checks never race each other.\nexport class Cart {\n  constructor(state, env) {\n    this.state = state;   // durable, consistent storage for THIS cart\n    this.env = env;\n  }\n\n  async fetch(request) {\n    const url = new URL(request.url);\n    let items = (await this.state.storage.get(\"items\")) || [];\n\n    if (url.pathname === \"/add\") {\n      const { productId, qty } = await request.json();\n      items = [...items, { productId, qty }];           // immutable update\n      await this.state.storage.put(\"items\", items);\n      return Response.json({ items });\n    }\n\n    if (url.pathname === \"/reserve\") {\n      // Decrement stock for every line, all-or-nothing.\n      // 'WHERE stock >= ?' makes each decrement safe under load.\n      let total = 0;\n      for (const it of items) {\n        const row = await this.env.DB\n          .prepare(\"UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ? RETURNING price_cents\")\n          .bind(it.qty, it.productId, it.qty)\n          .first();\n        if (!row) return Response.json({ ok: false });  // sold out -> abort\n        total += row.price_cents * it.qty;\n      }\n      return Response.json({ ok: true, total_cents: total });\n    }\n\n    if (url.pathname === \"/release\") {\n      // Payment failed: give the reserved stock back.\n      for (const it of items) {\n        await this.env.DB\n          .prepare(\"UPDATE products SET stock = stock + ? WHERE id = ?\")\n          .bind(it.qty, it.productId).run();\n      }\n      await this.state.storage.delete(\"items\");\n      return Response.json({ ok: true });\n    }\n\n    return new Response(\"DO route not found\", { status: 404 });\n  }\n}"
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": {
+        "en": "Why it works: the hard parts",
+        "zh": "為什麼能成立：那些難的部分"
+      },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shopping_basket",
+              "title": {
+                "en": "Cart consistency",
+                "zh": "購物車一致性"
+              },
+              "text": {
+                "en": "Each cart maps to exactly one Durable Object via idFromName(cartId). All adds/reserves for that cart run on one instance, in order, so reads and writes never interleave or lose updates.",
+                "zh": "每台購物車透過 idFromName(cartId) 對應到剛好一個 Durable Object。該購物車的所有加入／預扣都在同一個實例上、依序執行，所以讀寫不會交錯，也不會掉更新。"
+              }
+            },
+            {
+              "icon": "lock",
+              "title": {
+                "en": "DO for inventory",
+                "zh": "用 DO 管庫存"
+              },
+              "text": {
+                "en": "A Durable Object is single-threaded. Funnelling stock decrements through it means two shoppers grabbing the last item are handled one after another — no race, no overselling.",
+                "zh": "Durable Object 是單執行緒。把庫存扣減都導進它，兩個搶最後一件的客人就會一前一後被處理——沒有競態、不會超賣。"
+              }
+            },
+            {
+              "icon": "shield_lock",
+              "title": {
+                "en": "Protecting checkout",
+                "zh": "保護結帳"
+              },
+              "text": {
+                "en": "WAF blocks bad traffic at the edge; Turnstile proves a human is checking out; the Worker verifies the token server-side before it ever calls the payment provider.",
+                "zh": "WAF 在邊緣擋掉惡意流量；Turnstile 證明是真人在結帳；Worker 在呼叫金流之前，會在伺服器端先驗證那個 token。"
+              }
+            },
+            {
+              "icon": "cached",
+              "title": {
+                "en": "Cache then fall back",
+                "zh": "先快取，再回源"
+              },
+              "text": {
+                "en": "Browsing reads the catalog from KV first and only queries D1 on a cache miss, then refills KV. Fast pages, far fewer D1 reads.",
+                "zh": "瀏覽時先從 KV 讀目錄，只有快取沒命中才查 D1，查完再回填 KV。頁面更快，D1 讀取也少很多。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": {
+                "en": "Bindings, not URLs",
+                "zh": "用綁定，不用網址"
+              },
+              "text": {
+                "en": "env.DB / env.CART / env.IMAGES are bindings injected at deploy time. No connection strings, no API keys between your own services.",
+                "zh": "env.DB／env.CART／env.IMAGES 是部署時注入的綁定。自家服務之間不需要連線字串、也不需要 API 金鑰。"
+              }
+            },
+            {
+              "icon": "undo",
+              "title": {
+                "en": "Roll back on failure",
+                "zh": "失敗就回滾"
+              },
+              "text": {
+                "en": "If the card is declined, the order is marked 'failed' and the DO releases the reserved stock, so the shelf count stays honest.",
+                "zh": "如果刷卡被拒，訂單標為「失敗」，DO 會把預扣的庫存還回去，讓架上數量始終誠實。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": {
+        "en": "Pitfalls & tips",
+        "zh": "陷阱與小提示"
+      },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "verified",
+          "title": {
+            "en": "Always verify payment server-side",
+            "zh": "金流一律在伺服器端驗證"
+          },
+          "text": {
+            "en": "Never trust the browser to tell you an order was paid. Confirm payment by calling the provider's API (or a signed webhook) from the Worker, then update the order status from that result.",
+            "zh": "永遠不要相信瀏覽器說「這筆已付款」。要從 Worker 呼叫金流商的 API（或用有簽章的 webhook）來確認付款，再依結果更新訂單狀態。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Keep the KV catalog TTL short (e.g. 60s) or purge the key whenever a product changes, so prices never go stale.",
+              "Make the payment call idempotent — pass the order id as the reference so a retried request never double-charges.",
+              "Store only image keys in D1; build the public R2 URL in the front-end. This keeps rows small and URLs swappable.",
+              "Use a webhook from the payment provider as a backstop in case the shopper closes the tab before the Worker sees 'paid'.",
+              "Add a periodic job (Cron Trigger) to release stock from carts that started checkout but never completed."
+            ],
+            "zh": [
+              "把 KV 目錄的 TTL 設短（例如 60 秒），或在商品變動時就清掉那個 key，價格才不會過期。",
+              "讓金流呼叫具備冪等性——把訂單編號當作 reference 傳過去，重送的請求就不會重複扣款。",
+              "D1 只存圖片 key；公開的 R2 網址在前端組出來。這讓資料列小、網址也好替換。",
+              "用金流商的 webhook 當後援，以防客人在 Worker 看到「已付款」之前就關掉分頁。",
+              "加一個定時工作（Cron Trigger），把那些開始結帳卻沒完成的購物車所預扣的庫存釋放掉。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "rocket_launch",
+          "title": {
+            "en": "Start small, grow into it",
+            "zh": "先小做，再長大"
+          },
+          "text": {
+            "en": "You don't need all seven products on day one. Begin with Pages + Worker + D1, add R2 when you have images, KV when browsing gets heavy, Durable Objects when stock races appear, and Turnstile/WAF before you take real money.",
+            "zh": "第一天不必七個產品全上。先從 Pages＋Worker＋D1 開始，有圖片再加 R2、瀏覽量變大再加 KV、出現庫存競態再加 Durable Objects，而在真正收錢之前先把 Turnstile／WAF 補上。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "slug": "workers",
+      "label": {
+        "en": "Workers",
+        "zh": "Workers"
+      }
+    },
+    {
+      "slug": "d1",
+      "label": {
+        "en": "D1",
+        "zh": "D1"
+      }
+    },
+    {
+      "slug": "durable-objects",
+      "label": {
+        "en": "Durable Objects",
+        "zh": "Durable Objects"
+      }
+    },
+    {
+      "slug": "r2",
+      "label": {
+        "en": "R2",
+        "zh": "R2"
+      }
+    },
+    {
+      "slug": "turnstile",
+      "label": {
+        "en": "Turnstile",
+        "zh": "Turnstile"
+      }
+    },
+    {
+      "slug": "waf",
+      "label": {
+        "en": "WAF",
+        "zh": "WAF"
+      }
+    }
+  ],
+  "docs": "https://developers.cloudflare.com/"
+}

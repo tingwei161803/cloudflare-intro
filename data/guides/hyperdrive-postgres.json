@@ -1,0 +1,348 @@
+{
+  "slug": "hyperdrive-postgres",
+  "category": "integrations",
+  "group": { "en": "Data & Storage", "zh": "資料庫與儲存" },
+  "icon": "database",
+  "title": {
+    "en": "Connect a Worker to existing Postgres via Hyperdrive",
+    "zh": "用 Hyperdrive 讓 Worker 連既有的 Postgres"
+  },
+  "subtitle": {
+    "en": "Pool and cache queries to your regional Postgres so Workers stay fast",
+    "zh": "對你的區域 Postgres 做連線池與查詢快取，讓 Workers 維持飛快"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "You already have a Postgres. Hyperdrive makes it fast and safe to query from Workers — no migration needed.",
+      "zh": "你已經有一個 Postgres，Hyperdrive 讓 Workers 連它又快又穩——完全不用搬家。"
+    }
+  },
+  "stats": [
+    { "value": "60s", "label": { "en": "Default cache TTL", "zh": "預設快取時間" } },
+    { "value": "0", "label": { "en": "DB migrations", "zh": "資料庫搬遷" } },
+    { "value": "Pooling", "label": { "en": "Connection reuse", "zh": "連線重複利用" } },
+    { "value": "Free", "label": { "en": "Works on Free plan", "zh": "免費方案可用" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring?", "zh": "我們要串什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "You have a regional Postgres already running — maybe on Neon, Supabase, AWS RDS, or your own server. It lives in one place. Your Workers, on the other hand, run in hundreds of cities. This guide wires a Worker to that database through Hyperdrive, so every request reuses warm connections and reads from cache instead of paying full latency each time.",
+            "zh": "你已經有一個區域型 Postgres 在跑——可能在 Neon、Supabase、AWS RDS，或你自己的伺服器上。它只住在一個地方。但你的 Workers 卻跑在數百個城市裡。這篇教學會用 Hyperdrive 把 Worker 接到那個資料庫，讓每個請求都能重複利用已經接通的連線、並從快取讀資料，而不是每次都付完整的延遲成本。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Hyperdrive sits in the middle as a connection pooler plus query cache. Your code still uses a normal Postgres driver — the only change is that it connects to env.HYPERDRIVE.connectionString instead of your database's real URL.",
+            "zh": "Hyperdrive 夾在中間，同時扮演「連線池（connection pooler，把連線存起來共用的中介）」和「查詢快取（query cache，把查詢結果記起來）」。你的程式碼照樣用一般的 Postgres 驅動程式——唯一的差別是它連到的是 env.HYPERDRIVE.connectionString，而不是資料庫真正的網址。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Many Worker calls share one pool", "zh": "多個 Worker 呼叫共用一個連線池" },
+          "code": {
+            "en": "flowchart LR\n  W1[\"Worker call 1\"] --> HD\n  W2[\"Worker call 2\"] --> HD\n  W3[\"Worker call 3\"] --> HD\n  HD[\"Hyperdrive\"] --> POOL[\"Connection pool: shared warm links\"]\n  HD --> CACHE[\"Query cache: remembers hot SELECTs\"]\n  POOL --> DB[(\"Your existing Postgres\")]\n  CACHE -->|\"Cache hit returns instantly\"| HD",
+            "zh": "flowchart LR\n  W1[\"Worker 呼叫 1\"] --> HD\n  W2[\"Worker 呼叫 2\"] --> HD\n  W3[\"Worker 呼叫 3\"] --> HD\n  HD[\"Hyperdrive\"] --> POOL[\"連線池：共用的熱連線\"]\n  HD --> CACHE[\"查詢快取：記住熱門 SELECT\"]\n  POOL --> DB[(\"你既有的 Postgres\")]\n  CACHE -->|\"快取命中直接回傳\"| HD"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "fast_forward",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A taxi rank outside your database. Instead of every Worker calling a brand-new cab and waiting for it to arrive (a fresh connection), Hyperdrive keeps a few engines running at the curb and remembers popular destinations — so most riders leave immediately.",
+            "zh": "資料庫門口的一排待客計程車。與其每個 Worker 都重新叫一台新車、再等它開過來（重開一條連線），Hyperdrive 直接在路邊備好幾台發動中的車，還記得熱門目的地——所以大多數乘客上車就走。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "各層負責什麼？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "dns",
+              "title": { "en": "Your Worker", "zh": "你的 Worker" },
+              "text": {
+                "en": "Runs globally and stays stateless. It opens a client against env.HYPERDRIVE.connectionString and runs SQL.",
+                "zh": "跑遍全球、保持無狀態。它對 env.HYPERDRIVE.connectionString 開一個客戶端，然後執行 SQL。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Hyperdrive", "zh": "Hyperdrive" },
+              "text": {
+                "en": "The pooling + caching layer in front of your DB. Reuses connections and serves cached reads.",
+                "zh": "擋在資料庫前面的連線池＋快取層。重複利用連線、並回傳已快取的讀取結果。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "Your Postgres", "zh": "你的 Postgres" },
+              "text": {
+                "en": "Still the single source of truth. Schema, data, and provider all stay exactly as they are.",
+                "zh": "依然是唯一的真實來源。資料表結構、資料、供應商通通維持原樣。"
+              }
+            },
+            {
+              "icon": "vpn_key",
+              "title": { "en": "Connection string", "zh": "連線字串" },
+              "text": {
+                "en": "Stored inside the Hyperdrive config, not in your Worker code — your DB password never ships in the bundle.",
+                "zh": "存放在 Hyperdrive 設定裡，而不是 Worker 程式碼裡——資料庫密碼不會被打包進程式。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "How one query is served", "zh": "一筆查詢怎麼被處理" },
+          "code": {
+            "en": "flowchart TD\n  REQ[\"Worker receives request\"] --> Q{\"Is the query cacheable?\"}\n  Q -->|\"Yes and cached\"| HIT[\"Return straight from cache\"]\n  Q -->|\"No or not cached\"| POOL[\"Borrow a warm link from the pool\"]\n  POOL --> DB[(\"Postgres runs the query\")]\n  DB --> RET[\"Return rows and fill the cache\"]\n  HIT --> DONE[\"Respond to user\"]\n  RET --> DONE",
+            "zh": "flowchart TD\n  REQ[\"Worker 收到請求\"] --> Q{\"這筆查詢可以快取嗎？\"}\n  Q -->|\"可以且已快取\"| HIT[\"直接從快取回傳\"]\n  Q -->|\"不可或尚未快取\"| POOL[\"向連線池借一條熱連線\"]\n  POOL --> DB[(\"Postgres 執行查詢\")]\n  DB --> RET[\"回傳資料列並寫入快取\"]\n  HIT --> DONE[\"回應使用者\"]\n  RET --> DONE"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "help",
+          "title": { "en": "Why not connect directly?", "zh": "為什麼不直接連資料庫？" },
+          "text": {
+            "en": "A direct connection from a far-away Worker pays a TCP + TLS + auth handshake every single time, and serverless invocations can quickly exhaust your database's connection limit. Pooling reuses warm links; caching skips the round-trip entirely for repeated reads.",
+            "zh": "從遠方的 Worker 直接連線，每一次都要付 TCP ＋ TLS ＋ 身分驗證的握手成本，而且無伺服器（serverless）的大量呼叫很快就會把資料庫的連線數上限用光。連線池讓你重複利用熱連線；快取則讓重複的讀取查詢完全省掉那趟來回。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Without vs with Hyperdrive", "zh": "沒有 vs 有 Hyperdrive" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "The diagram below shows the same workload twice. The top half connects directly and rebuilds a connection on every request. The bottom half goes through Hyperdrive and reuses a warm, pooled link — often answering straight from cache.",
+            "zh": "下面這張圖把同一份工作畫了兩次。上半部直接連線、每次請求都重建一條連線；下半部走 Hyperdrive，重複利用已接通、進到連線池的連線——常常直接從快取回答。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Connection lifecycle comparison", "zh": "連線生命週期比較" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"User\"\n  participant W as \"Worker\"\n  participant H as \"Hyperdrive\"\n  participant D as \"Postgres\"\n  Note over U,D: Without Hyperdrive - new connection every time (slow)\n  U->>W: Request A\n  W->>D: Open new connection + TLS handshake\n  D-->>W: Connection ready\n  W->>D: SELECT query\n  D-->>W: rows\n  W-->>U: Response (slower)\n  Note over U,D: With Hyperdrive - pooled + cached (fast)\n  U->>W: Request B\n  W->>H: Query via warm pooled link\n  H-->>W: Cache hit or shared connection\n  W-->>U: Response (faster)",
+            "zh": "sequenceDiagram\n  participant U as \"使用者\"\n  participant W as \"Worker\"\n  participant H as \"Hyperdrive\"\n  participant D as \"Postgres\"\n  Note over U,D: 沒有 Hyperdrive - 每次都重開連線（慢）\n  U->>W: 請求 A\n  W->>D: 建立新連線 + TLS 握手\n  D-->>W: 連線就緒\n  W->>D: SELECT 查詢\n  D-->>W: 資料列\n  W-->>U: 回應（較慢）\n  Note over U,D: 有 Hyperdrive - 連線池 + 快取（快）\n  U->>W: 請求 B\n  W->>H: 用熱連線池查詢\n  H-->>W: 快取命中或共用連線\n  W-->>U: 回應（較快）"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "speed",
+          "title": { "en": "Where the time goes", "zh": "時間都花在哪" },
+          "text": {
+            "en": "On a cold direct connection, the handshake can cost several round-trips before a single byte of data moves. Hyperdrive pays that cost once and shares the result across many requests.",
+            "zh": "在一條全新的直接連線上，光是握手就可能花掉好幾趟來回，資料都還沒開始傳。Hyperdrive 把這個成本只付一次，再分攤給大量的請求共用。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Wire it up", "zh": "動手串起來" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Five steps: create a Hyperdrive config pointing at your DB, add the binding to wrangler.toml, install a Postgres driver, query through env.HYPERDRIVE.connectionString, and deploy.",
+            "zh": "五個步驟：建立一個指向你資料庫的 Hyperdrive 設定、把綁定加進 wrangler.toml、安裝 Postgres 驅動程式、透過 env.HYPERDRIVE.connectionString 查詢，然後部署。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a Hyperdrive config", "zh": "建立 Hyperdrive 設定" },
+              "text": {
+                "en": "Hand Hyperdrive your existing connection string. Wrangler prints an id — copy it for the next step.",
+                "zh": "把你既有的連線字串交給 Hyperdrive。Wrangler 會印出一組 id——複製起來下一步要用。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler hyperdrive create my-postgres \\\n  --connection-string=\"postgres://user:password@db.example.com:5432/appdb\"" }
+            },
+            {
+              "title": { "en": "Add the [[hyperdrive]] binding", "zh": "加入 [[hyperdrive]] 綁定" },
+              "text": {
+                "en": "Paste the id into wrangler.toml. The nodejs_compat flag is required, because Postgres drivers depend on Node APIs.",
+                "zh": "把 id 貼進 wrangler.toml。一定要開 nodejs_compat 旗標，因為 Postgres 驅動程式會用到 Node 的 API。"
+              },
+              "code": { "lang": "toml", "body": "name = \"my-worker\"\nmain = \"src/index.js\"\ncompatibility_date = \"2024-09-23\"\ncompatibility_flags = [\"nodejs_compat\"]\n\n[[hyperdrive]]\nbinding = \"HYPERDRIVE\"\nid = \"<paste-the-id-from-step-1>\"" }
+            },
+            {
+              "title": { "en": "Install a Postgres driver", "zh": "安裝 Postgres 驅動程式" },
+              "text": {
+                "en": "We use postgres.js here; the node-postgres pg package works too.",
+                "zh": "這裡用 postgres.js；node-postgres 的 pg 套件也可以。"
+              },
+              "code": { "lang": "bash", "body": "npm i postgres" }
+            },
+            {
+              "title": { "en": "Query through Hyperdrive", "zh": "透過 Hyperdrive 查詢" },
+              "text": {
+                "en": "Connect to env.HYPERDRIVE.connectionString — never the real DB URL. Keep a small per-isolate pool and close it in the background.",
+                "zh": "連到 env.HYPERDRIVE.connectionString——絕對不是資料庫真正的網址。每個 isolate 維持一個小連線池，並在背景關閉它。"
+              },
+              "code": { "lang": "js", "body": "import postgres from \"postgres\";\n\nexport default {\n  async fetch(request, env, ctx) {\n    // Connect to Hyperdrive, not the database directly\n    const sql = postgres(env.HYPERDRIVE.connectionString, {\n      max: 5,            // small pool per Worker isolate\n      fetch_types: false // skip an extra round-trip\n    });\n\n    try {\n      const products = await sql`SELECT id, name, price FROM products LIMIT 10`;\n      // Close in the background so it does not delay the response\n      ctx.waitUntil(sql.end());\n      return Response.json(products);\n    } catch (err) {\n      console.error(err);\n      return Response.json({ error: String(err) }, { status: 500 });\n    }\n  }\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish the Worker. Queries now flow through the pooled, cached fast lane.",
+                "zh": "發布 Worker。查詢就會走上有連線池、有快取的快速通道了。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Reads and writes, safely", "zh": "安全地讀取與寫入" }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "queries.js", "zh": "queries.js" },
+          "body": "// Parameterized values are sent separately, never string-concatenated\nconst id = 42;\nconst rows = await sql`SELECT id, name FROM products WHERE id = ${id}`;\n\n// Writes (INSERT/UPDATE/DELETE) are never cached — they always hit Postgres\nawait sql`INSERT INTO views (product_id) VALUES (${id})`;"
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "key",
+          "title": { "en": "Keep the real URL out of your code", "zh": "別把真實網址寫進程式碼" },
+          "text": {
+            "en": "The database password lives only inside the Hyperdrive config you created in step 1. Always connect via env.HYPERDRIVE.connectionString so the secret never ends up in your source or bundle.",
+            "zh": "資料庫密碼只存在你第一步建立的 Hyperdrive 設定裡。一律透過 env.HYPERDRIVE.connectionString 連線，這樣機密就不會跑進你的原始碼或打包檔裡。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "link",
+              "title": { "en": "Connection string", "zh": "連線字串" },
+              "text": {
+                "en": "The URL with host, port, user, password, and DB name. Hyperdrive hides yours behind env.HYPERDRIVE.connectionString.",
+                "zh": "包含主機、連接埠、帳號、密碼與資料庫名稱的那串 URL。Hyperdrive 把你的藏在 env.HYPERDRIVE.connectionString 後面。"
+              }
+            },
+            {
+              "icon": "pool",
+              "title": { "en": "Connection pool", "zh": "連線池" },
+              "text": {
+                "en": "A set of warm, ready connections shared across requests so nobody pays the setup cost twice.",
+                "zh": "一組已接通、隨時可用的連線，在請求之間共用，沒人需要重複付建立連線的成本。"
+              }
+            },
+            {
+              "icon": "cached",
+              "title": { "en": "Query cache", "zh": "查詢快取" },
+              "text": {
+                "en": "Cacheable SELECT results are remembered (default 60s) so identical repeats skip the database.",
+                "zh": "可快取的 SELECT 結果會被記住（預設 60 秒），一模一樣的重複查詢就能跳過資料庫。"
+              }
+            },
+            {
+              "icon": "hourglass_empty",
+              "title": { "en": "Setup latency", "zh": "建立連線延遲" },
+              "text": {
+                "en": "The TCP + TLS + auth handshake a fresh connection must finish before any query runs. Pooling pays it once.",
+                "zh": "一條全新連線在能跑查詢之前，必須先完成 TCP ＋ TLS ＋ 驗證的握手。連線池讓這個成本只付一次。"
+              }
+            },
+            {
+              "icon": "block",
+              "title": { "en": "Connection limits", "zh": "連線數上限" },
+              "text": {
+                "en": "Every Postgres has a max connection count. Bursty serverless traffic can exhaust it — pooling keeps usage flat.",
+                "zh": "每個 Postgres 都有連線數上限。爆量的無伺服器流量很容易把它用光——連線池讓用量維持平穩。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "DB stays the source", "zh": "資料庫仍是來源" },
+              "text": {
+                "en": "Hyperdrive only accelerates access. Your real rows always live in your own Postgres.",
+                "zh": "Hyperdrive 只負責加速存取。你真正的資料永遠存放在你自己的 Postgres 裡。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & gotchas", "zh": "小提示與陷阱" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "tune",
+          "title": { "en": "Tune caching for freshness", "zh": "依新鮮度調整快取" },
+          "text": {
+            "en": "Caching is on by default with a 60s max age (configurable up to 1 hour). For data that must always be live, disable it with: npx wrangler hyperdrive update <id> --caching-disabled true",
+            "zh": "快取預設開啟、最長保留 60 秒（可調到最多 1 小時）。如果某些資料一定要即時，可以用 npx wrangler hyperdrive update <id> --caching-disabled true 關掉它。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Without compatibility_flags = [\"nodejs_compat\"] and a recent compatibility_date, the Postgres driver fails to load.",
+              "Only read-only SELECTs are cached; INSERT/UPDATE/DELETE always reach Postgres.",
+              "Queries using NOW(), RANDOM(), or CURRENT_DATE are treated as uncacheable — even just naming one in a SQL comment disables caching for that query.",
+              "Always close with ctx.waitUntil(sql.end()) so cleanup never delays the response.",
+              "Keep the per-isolate pool small (e.g. max: 5); Hyperdrive multiplexes across them anyway.",
+              "Works with Postgres and Postgres-compatibles (Neon, Supabase, RDS, CockroachDB, Timescale) — and MySQL too.",
+              "Need a Cloudflare-native SQL database instead of bringing your own? See D1."
+            ],
+            "zh": [
+              "沒有 compatibility_flags = [\"nodejs_compat\"] 和夠新的 compatibility_date，Postgres 驅動程式會載入失敗。",
+              "只有唯讀的 SELECT 會被快取；INSERT／UPDATE／DELETE 一定會到 Postgres。",
+              "用到 NOW()、RANDOM()、CURRENT_DATE 的查詢會被視為不可快取——甚至只在 SQL 註解裡提到這些函式名稱，也會讓那筆查詢不快取。",
+              "一律用 ctx.waitUntil(sql.end()) 收尾，清理才不會拖慢回應。",
+              "每個 isolate 的連線池維持小一點（例如 max: 5）；Hyperdrive 反正會在背後多工共用。",
+              "支援 Postgres 與相容資料庫（Neon、Supabase、RDS、CockroachDB、Timescale）——也支援 MySQL。",
+              "想要 Cloudflare 原生的 SQL 資料庫、而不是自備？可以看看 D1。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "hyperdrive", "label": { "en": "Hyperdrive", "zh": "Hyperdrive" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "choose-your-database", "label": { "en": "Choose your database", "zh": "選擇你的資料庫" } }
+  ],
+  "docs": "https://developers.cloudflare.com/hyperdrive/"
+}

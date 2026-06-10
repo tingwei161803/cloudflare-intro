@@ -1,0 +1,421 @@
+{
+  "slug": "blueprint-saas",
+  "category": "integrations",
+  "group": { "en": "Architecture Blueprints", "zh": "架構藍圖" },
+  "icon": "apartment",
+  "title": { "en": "Blueprint: a multi-tenant SaaS", "zh": "架構藍圖：多租戶 SaaS" },
+  "subtitle": {
+    "en": "A reference architecture for serving many customers from one app, with each customer's data safely isolated",
+    "zh": "一套參考架構：用同一個應用程式服務很多客戶，而且每個客戶的資料都安全地彼此隔離"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Pages + Worker API + Access JWT + D1 (tenant_id on every row) + KV + Durable Objects + Web Analytics — wired into one secure multi-tenant blueprint.",
+      "zh": "Pages + Worker API + Access JWT + D1（每一列都帶 tenant_id）+ KV + Durable Objects + Web Analytics —— 串成一套安全的多租戶藍圖。"
+    }
+  },
+  "stats": [
+    { "value": "1 DB", "label": { "en": "Shared database, many tenants", "zh": "一個資料庫、多個租戶" } },
+    { "value": "tenant_id", "label": { "en": "On every row", "zh": "每一列都有" } },
+    { "value": "7", "label": { "en": "Cloudflare services wired", "zh": "串接的 Cloudflare 服務" } },
+    { "value": "100/min", "label": { "en": "Per-tenant rate limit", "zh": "每租戶限流" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we building?", "zh": "我們要蓋什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A multi-tenant SaaS is one application that serves many separate customers (called tenants) from the same codebase and the same database. Think of an office building: one building, one front desk, but each company gets its own locked floor. Our job is to make sure Tenant A can never see Tenant B's data.",
+            "zh": "多租戶 SaaS（multi-tenant SaaS）是「一套應用程式同時服務很多獨立客戶」的架構，這些客戶稱為「租戶（tenant）」，大家共用同一份程式碼、同一個資料庫。可以想成一棟辦公大樓：一棟樓、一個櫃台，但每間公司都有自己上鎖的樓層。我們的任務，就是確保「租戶 A」永遠看不到「租戶 B」的資料。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "apartment",
+          "title": { "en": "Think of it like an apartment building", "zh": "把它想成一棟公寓大樓" },
+          "text": {
+            "en": "Everyone shares the lobby, the elevators and the plumbing (shared infrastructure), but each tenant has a key that only opens their own apartment (tenant_id). The doorman (Access) checks ID at the entrance; the key (tenant_id) decides which door opens inside.",
+            "zh": "大家共用大廳、電梯和水管（共用的基礎設施），但每位住戶手上的鑰匙只能打開自己那一戶（tenant_id）。門口的管理員（Access）在大門口查證件；進到裡面後，鑰匙（tenant_id）決定哪一扇門能打開。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the whole system on one page. A user opens the front-end (hosted on Pages), Cloudflare Access verifies who they are and hands the Worker a signed token (JWT). The Worker reads the tenant_id out of that token, checks a per-tenant rate limit, loads per-tenant config, and finally runs a database query that is scoped to that one tenant.",
+            "zh": "下面這張圖把整個系統濃縮在一頁。使用者打開前端（放在 Pages 上），Cloudflare Access 先確認他是誰，並交給 Worker 一個簽章過的權杖（JWT）。Worker 從權杖裡讀出 tenant_id，檢查該租戶的限流額度、載入該租戶的設定，最後執行一個「只查這一個租戶」的資料庫查詢。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "System architecture", "zh": "系統架構" },
+          "code": {
+            "en": "flowchart TD\n  U[\"Browser (Pages)\"] --> ACC[\"Access: verify JWT\"]\n  ACC --> W[\"Worker API\"]\n  W --> MW[\"Middleware: resolve tenant_id\"]\n  MW --> RL[\"Durable Object: per-tenant rate limit\"]\n  RL --> CFG[\"KV: per-tenant config\"]\n  CFG --> Q[\"D1 query: WHERE tenant_id = ?\"]\n  Q --> RES[\"Tenant-scoped data\"]\n  W --> WA[\"Web Analytics\"]",
+            "zh": "flowchart TD\n  U[\"瀏覽器 (Pages)\"] --> ACC[\"Access：驗證 JWT\"]\n  ACC --> W[\"Worker API\"]\n  W --> MW[\"中介層：解析 tenant_id\"]\n  MW --> RL[\"Durable Object：每租戶限流\"]\n  RL --> CFG[\"KV：每租戶設定\"]\n  CFG --> Q[\"D1 查詢：WHERE tenant_id = ?\"]\n  Q --> RES[\"租戶隔離的資料\"]\n  W --> WA[\"Web Analytics\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "每個角色負責什麼？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Each Cloudflare service in the blueprint has one clear job. Keeping responsibilities separate is what makes the system easy to reason about and secure.",
+            "zh": "藍圖裡每個 Cloudflare 服務都只負責一件清楚的事。把職責切乾淨，系統才好理解、也才安全。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "web",
+              "title": { "en": "Pages — front-end", "zh": "Pages —— 前端" },
+              "text": {
+                "en": "Hosts the static web app (HTML/JS/CSS) on Cloudflare's global edge. It calls the Worker API with fetch and shows the results.",
+                "zh": "把靜態網頁應用程式（HTML/JS/CSS）放在 Cloudflare 全球邊緣節點上。它用 fetch 呼叫 Worker API，再把結果顯示出來。"
+              }
+            },
+            {
+              "icon": "dns",
+              "title": { "en": "Worker — API", "zh": "Worker —— API" },
+              "text": {
+                "en": "The brain. It runs the auth/tenant middleware, enforces limits, and is the only thing that talks to the database. The front-end never touches D1 directly.",
+                "zh": "系統的大腦。它執行身分／租戶中介層、強制限流，而且是唯一會跟資料庫對話的角色。前端絕不直接碰 D1。"
+              }
+            },
+            {
+              "icon": "badge",
+              "title": { "en": "Access — identity", "zh": "Access —— 身分驗證" },
+              "text": {
+                "en": "The doorman. It logs the user in (Google, GitHub, email PIN) and hands the Worker a signed JWT carrying claims like email and tenant_id.",
+                "zh": "門口管理員。它讓使用者登入（Google、GitHub、email PIN），並交給 Worker 一個簽章過的 JWT，裡面帶著 email、tenant_id 等聲明（claims）。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "D1 — SQL database", "zh": "D1 —— SQL 資料庫" },
+              "text": {
+                "en": "One shared SQLite database for everyone. Every tenant-owned table carries a tenant_id column, and every query filters by it.",
+                "zh": "一個大家共用的 SQLite 資料庫。每個屬於租戶的資料表都帶一個 tenant_id 欄位，而且每次查詢都用它來過濾。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "KV — per-tenant config", "zh": "KV —— 每租戶設定" },
+              "text": {
+                "en": "A fast key-value store for small, read-heavy data: each tenant's feature flags, plan limits and cached settings, keyed by tenant_id.",
+                "zh": "一個快速的鍵值（key-value）儲存，放小而常讀的資料：每個租戶的功能旗標、方案上限、快取設定，用 tenant_id 當鍵。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Durable Objects — rate limit", "zh": "Durable Objects —— 限流" },
+              "text": {
+                "en": "One tiny stateful instance per tenant, named by tenant_id. It counts requests so one noisy tenant can't slow down everyone else.",
+                "zh": "每個租戶配一個有狀態的小實例，用 tenant_id 命名。它負責計算請求數，讓某個流量爆量的租戶不會拖慢其他人。"
+              }
+            },
+            {
+              "icon": "monitoring",
+              "title": { "en": "Web Analytics — insight", "zh": "Web Analytics —— 觀測" },
+              "text": {
+                "en": "Privacy-first, cookie-free traffic stats for the front-end, so you can watch usage and performance without slowing the page down.",
+                "zh": "為前端提供「隱私優先、不用 cookie」的流量統計，讓你觀察使用情況與效能，又不拖慢頁面。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "How data isolation actually works", "zh": "資料隔離實際上怎麼運作" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "We use the simplest, most common pattern: a shared database where every row is tagged with its tenant_id. There are no separate databases per customer. Isolation comes from one iron rule — every single query adds WHERE tenant_id = ?, and the Worker fills that value in from the verified JWT, never from anything the user typed.",
+            "zh": "我們用最簡單、也最常見的做法：共用一個資料庫，每一列都標上自己的 tenant_id。不需要為每個客戶開一個獨立資料庫。隔離來自一條鐵律 —— 每一個查詢都加上 WHERE tenant_id = ?，而且這個值是 Worker 從「已驗證的 JWT」填進去的，絕不採用使用者自己輸入的任何內容。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Shared table, isolated rows", "zh": "共用資料表、隔離資料列" },
+          "code": {
+            "en": "flowchart LR\n  TA[\"Tenant A\"] -->|\"tenant_id = A\"| DB[\"Shared D1 table\"]\n  TB[\"Tenant B\"] -->|\"tenant_id = B\"| DB\n  DB -->|\"filtered\"| OA[\"A sees only A rows\"]\n  DB -->|\"filtered\"| OB[\"B sees only B rows\"]",
+            "zh": "flowchart LR\n  TA[\"租戶 A\"] -->|\"tenant_id = A\"| DB[\"共用的 D1 資料表\"]\n  TB[\"租戶 B\"] -->|\"tenant_id = B\"| DB\n  DB -->|\"已過濾\"| OA[\"A 只看到 A 的資料列\"]\n  DB -->|\"已過濾\"| OB[\"B 只看到 B 的資料列\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The data model", "zh": "資料模型" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Three tables show the pattern: tenants (the customers), users (people who belong to a tenant), and projects (an example resource). Notice that every table except tenants carries a tenant_id foreign key — that column is what makes isolation possible.",
+            "zh": "三張表就能說明這個模式：tenants（客戶本身）、users（屬於某個租戶的人）、projects（一個範例資源）。注意：除了 tenants 以外，每張表都帶一個 tenant_id 外鍵（foreign key）—— 正是這個欄位讓隔離成為可能。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Entity relationships", "zh": "實體關聯圖" },
+          "code": {
+            "en": "erDiagram\n  TENANTS ||--o{ USERS : \"has\"\n  TENANTS ||--o{ PROJECTS : \"owns\"\n  USERS ||--o{ PROJECTS : \"creates\"\n  TENANTS {\n    text id PK\n    text name\n    text plan\n  }\n  USERS {\n    text id PK\n    text tenant_id FK\n    text email\n    text role\n  }\n  PROJECTS {\n    text id PK\n    text tenant_id FK\n    text owner_id FK\n    text name\n  }",
+            "zh": "erDiagram\n  TENANTS ||--o{ USERS : \"擁有\"\n  TENANTS ||--o{ PROJECTS : \"擁有\"\n  USERS ||--o{ PROJECTS : \"建立\"\n  TENANTS {\n    text id PK\n    text name\n    text plan\n  }\n  USERS {\n    text id PK\n    text tenant_id FK\n    text email\n    text role\n  }\n  PROJECTS {\n    text id PK\n    text tenant_id FK\n    text owner_id FK\n    text name\n  }"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "key",
+          "title": { "en": "Why tenant_id is a foreign key", "zh": "為什麼 tenant_id 要當外鍵" },
+          "text": {
+            "en": "Making tenant_id a foreign key to tenants(id) means the database itself refuses to create a row pointing at a tenant that doesn't exist. It is a cheap, built-in safety net on top of your application logic.",
+            "zh": "把 tenant_id 設成指向 tenants(id) 的外鍵，等於讓資料庫本身拒絕建立「指向不存在租戶」的資料列。這是在應用程式邏輯之上、免費又內建的一層安全網。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "One authenticated request, step by step", "zh": "一次帶身分的請求，逐步拆解" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Follow a single API call from the browser all the way to the database and back. The key moment is in the middle: the Worker resolves tenant_id from the JWT and then scopes the SQL query to that tenant.",
+            "zh": "跟著一次 API 呼叫，從瀏覽器一路走到資料庫再回來。關鍵時刻在中間：Worker 從 JWT 解析出 tenant_id，然後把 SQL 查詢限縮到該租戶。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Authenticated request flow", "zh": "帶身分的請求流程" },
+          "code": {
+            "en": "sequenceDiagram\n  participant B as \"Browser\"\n  participant AC as \"Access\"\n  participant W as \"Worker API\"\n  participant DO as \"Durable Object\"\n  participant KV as \"KV\"\n  participant D1 as \"D1\"\n  B->>AC: Request + JWT\n  AC->>W: Verified JWT\n  W->>W: Resolve tenant_id\n  W->>DO: Check tenant rate limit\n  DO-->>W: Allowed\n  W->>KV: Load tenant config\n  KV-->>W: Config\n  W->>D1: SELECT WHERE tenant_id = ?\n  D1-->>W: Tenant rows only\n  W-->>B: JSON",
+            "zh": "sequenceDiagram\n  participant B as \"瀏覽器\"\n  participant AC as \"Access\"\n  participant W as \"Worker API\"\n  participant DO as \"Durable Object\"\n  participant KV as \"KV\"\n  participant D1 as \"D1\"\n  B->>AC: 請求 + JWT\n  AC->>W: 已驗證的 JWT\n  W->>W: 解析 tenant_id\n  W->>DO: 檢查租戶限流\n  DO-->>W: 放行\n  W->>KV: 載入租戶設定\n  KV-->>W: 設定\n  W->>D1: SELECT WHERE tenant_id = ?\n  D1-->>W: 只回該租戶的資料列\n  W-->>B: JSON"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "gpp_maybe",
+          "title": { "en": "Never trust the client for tenant_id", "zh": "tenant_id 絕不能信任前端" },
+          "text": {
+            "en": "The tenant_id must come from the signed JWT that Access verified — not from a URL parameter, request body, or header the user controls. If you let the client pick the tenant_id, anyone could just ask for another tenant's data.",
+            "zh": "tenant_id 一定要來自 Access 驗證過的簽章 JWT —— 不能來自網址參數、請求內容、或使用者能控制的標頭。如果讓前端自己挑 tenant_id，任何人都能直接索取別的租戶的資料。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it: middleware + tenant-scoped queries", "zh": "動手做：中介層 + 租戶範圍查詢" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Here is the whole thing in real, runnable code: the SQL schema, the front-end, the auth/tenant middleware, the per-tenant rate limiter, the tenant-scoped query, and the wrangler config that binds it all together.",
+            "zh": "下面是整套東西的真實、可執行程式碼：SQL 結構、前端、身分／租戶中介層、每租戶限流器、租戶範圍查詢，以及把全部綁在一起的 wrangler 設定。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "1. Create the D1 schema (tenant_id everywhere)", "zh": "1. 建立 D1 結構（到處都有 tenant_id）" },
+              "text": {
+                "en": "Every tenant-owned table gets a tenant_id column with a foreign key, plus an index so scoped queries stay fast as data grows.",
+                "zh": "每張屬於租戶的表都加上一個帶外鍵的 tenant_id 欄位，再建索引，讓資料變多後範圍查詢依然很快。"
+              },
+              "code": {
+                "lang": "sql",
+                "body": "-- Every tenant-owned table carries tenant_id. Index it for fast, scoped queries.\nCREATE TABLE tenants (\n  id    TEXT PRIMARY KEY,\n  name  TEXT NOT NULL,\n  plan  TEXT NOT NULL DEFAULT 'free'\n);\n\nCREATE TABLE users (\n  id         TEXT PRIMARY KEY,\n  tenant_id  TEXT NOT NULL REFERENCES tenants(id),\n  email      TEXT NOT NULL,\n  role       TEXT NOT NULL DEFAULT 'member'\n);\n\nCREATE TABLE projects (\n  id         TEXT PRIMARY KEY,\n  tenant_id  TEXT NOT NULL REFERENCES tenants(id),\n  owner_id   TEXT NOT NULL REFERENCES users(id),\n  name       TEXT NOT NULL\n);\n\n-- Index tenant_id so WHERE tenant_id = ? stays fast as rows grow.\nCREATE INDEX idx_projects_tenant ON projects(tenant_id);\nCREATE INDEX idx_users_tenant    ON users(tenant_id);"
+              }
+            },
+            {
+              "title": { "en": "2. Front-end (Pages) calls the API", "zh": "2. 前端（Pages）呼叫 API" },
+              "text": {
+                "en": "The page just calls /api/projects with fetch. Access has already verified the user, so the auth cookie rides along automatically — the front-end never sees or sends the tenant_id.",
+                "zh": "頁面只要用 fetch 呼叫 /api/projects。Access 早已驗證過使用者，所以驗證用的 cookie 會自動帶上 —— 前端根本不會看到、也不會送出 tenant_id。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// public/app.js - served by Cloudflare Pages\n// Access already verified the user; the auth cookie rides along automatically.\nasync function loadProjects() {\n  const res = await fetch('/api/projects', {\n    headers: { 'Accept': 'application/json' },\n    credentials: 'include'\n  });\n  if (!res.ok) {\n    document.getElementById('status').textContent = 'Error ' + res.status;\n    return;\n  }\n  const data = await res.json();\n  document.getElementById('list').innerHTML =\n    data.projects.map(p => `<li>${p.name}</li>`).join('');\n}\nloadProjects();"
+              }
+            },
+            {
+              "title": { "en": "3. Auth + tenant middleware", "zh": "3. 身分 + 租戶中介層" },
+              "text": {
+                "en": "Read the JWT that Access already verified and pull the tenant_id claim out of it. This is the one place a tenant is decided — from the token, never from user input.",
+                "zh": "讀取 Access 已經驗證過的 JWT，從中取出 tenant_id 聲明。租戶只在這一個地方被決定 —— 來自權杖，絕不來自使用者輸入。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// src/index.js - Worker API entry\nexport { RateLimiter } from './rate-limiter.js';\n\n// Auth + tenant middleware: read the JWT Access already verified,\n// then pull the tenant_id claim out of it.\nfunction resolveTenant(request) {\n  const jwt = request.headers.get('Cf-Access-Jwt-Assertion');\n  if (!jwt) return null;\n  const parts = jwt.split('.');\n  if (parts.length !== 3) return null;\n  const json = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));\n  const claims = JSON.parse(json);\n  if (!claims.tenant_id) return null;\n  return { tenantId: claims.tenant_id, email: claims.email };\n}"
+              }
+            },
+            {
+              "title": { "en": "4. Per-tenant rate limiter (Durable Object)", "zh": "4. 每租戶限流器（Durable Object）" },
+              "text": {
+                "en": "One Durable Object instance per tenant (named by tenant_id) keeps an isolated counter. A 100-request-per-minute window means one busy tenant can never use up another tenant's budget.",
+                "zh": "每個租戶一個 Durable Object 實例（用 tenant_id 命名），各自維護一個獨立計數器。「每分鐘 100 次」的視窗，代表某個忙碌的租戶永遠用不掉別的租戶的額度。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// src/rate-limiter.js - one Durable Object instance per tenant.\nexport class RateLimiter {\n  constructor(state) {\n    this.state = state;\n  }\n  async fetch() {\n    const now = Date.now();\n    const windowMs = 60000;   // 1-minute window\n    const limit = 100;        // 100 requests / minute / tenant\n    let w = (await this.state.storage.get('w')) || { start: now, count: 0 };\n    if (now - w.start > windowMs) w = { start: now, count: 0 };\n    w.count += 1;\n    await this.state.storage.put('w', w);\n    const ok = w.count <= limit;\n    return new Response(ok ? 'ok' : 'limited', { status: ok ? 200 : 429 });\n  }\n}"
+              }
+            },
+            {
+              "title": { "en": "5. The request pipeline + tenant-scoped query", "zh": "5. 請求流水線 + 租戶範圍查詢" },
+              "text": {
+                "en": "Tie it together: resolve the tenant, check its rate limit, read its KV config, then run the D1 query with WHERE tenant_id = ?, binding the value from the JWT. That bind is what guarantees isolation.",
+                "zh": "把全部串起來：解析租戶、檢查限流、讀取它的 KV 設定，然後執行帶 WHERE tenant_id = ? 的 D1 查詢，並把 JWT 來的值綁定（bind）進去。這個綁定就是隔離的保證。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// src/index.js (continued) - the request pipeline\nexport default {\n  async fetch(request, env) {\n    // 1) Who is this, and which tenant do they belong to?\n    const tenant = resolveTenant(request);\n    if (!tenant) return new Response('Unauthorized', { status: 401 });\n\n    // 2) Per-tenant rate limit: one Durable Object named after the tenant.\n    const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(tenant.tenantId));\n    const rl = await stub.fetch('https://do/check');\n    if (rl.status === 429) return new Response('Too Many Requests', { status: 429 });\n\n    // 3) Per-tenant config from KV (cheap, cached at the edge).\n    const raw = await env.TENANT_KV.get('cfg:' + tenant.tenantId);\n    const cfg = raw ? JSON.parse(raw) : { maxProjects: 100 };\n\n    // 4) Tenant-scoped query: EVERY statement filters WHERE tenant_id = ?\n    const { results } = await env.DB\n      .prepare('SELECT id, name FROM projects WHERE tenant_id = ? ORDER BY name')\n      .bind(tenant.tenantId)\n      .all();\n\n    return Response.json({ tenant: tenant.tenantId, config: cfg, projects: results });\n  }\n};"
+              }
+            },
+            {
+              "title": { "en": "6. Wire the bindings in wrangler", "zh": "6. 在 wrangler 設定綁定" },
+              "text": {
+                "en": "Declare the D1, KV and Durable Object bindings so the Worker can reach them as env.DB, env.TENANT_KV and env.RATE_LIMITER. The migration registers the Durable Object class.",
+                "zh": "宣告 D1、KV 和 Durable Object 的綁定，Worker 才能用 env.DB、env.TENANT_KV、env.RATE_LIMITER 存取它們。migration 則用來註冊 Durable Object 類別。"
+              },
+              "code": {
+                "lang": "jsonc",
+                "body": "// wrangler.jsonc\n{\n  \"name\": \"saas-api\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"saas\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"kv_namespaces\": [\n    { \"binding\": \"TENANT_KV\", \"id\": \"<your-kv-id>\" }\n  ],\n  \"durable_objects\": {\n    \"bindings\": [{ \"name\": \"RATE_LIMITER\", \"class_name\": \"RateLimiter\" }]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"RateLimiter\"] }\n  ]\n}"
+              }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Create resources and deploy", "zh": "建立資源並部署" },
+          "body": "# create the database, the KV namespace, load the schema, then deploy\nnpx wrangler d1 create saas\nnpx wrangler kv namespace create TENANT_KV\nnpx wrangler d1 execute saas --remote --file=./schema.sql\nnpx wrangler deploy"
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "groups",
+              "title": { "en": "Multi-tenancy", "zh": "多租戶" },
+              "text": {
+                "en": "One running app and one database serving many customers (tenants). Cheaper and simpler to operate than spinning up a separate copy per customer.",
+                "zh": "一個運作中的應用程式、一個資料庫，服務很多客戶（租戶）。比起為每個客戶開一份獨立副本，營運更便宜、更單純。"
+              }
+            },
+            {
+              "icon": "shield_lock",
+              "title": { "en": "Data isolation", "zh": "資料隔離" },
+              "text": {
+                "en": "The guarantee that one tenant can never read or write another tenant's data. Here it is enforced by always filtering on tenant_id.",
+                "zh": "保證某個租戶永遠無法讀取或寫入另一個租戶的資料。這裡是靠「永遠用 tenant_id 過濾」來達成。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "tenant_id", "zh": "tenant_id" },
+              "text": {
+                "en": "A column on every tenant-owned row that says which tenant it belongs to. The Worker sets it from the JWT — never from client input.",
+                "zh": "每一列租戶資料上的欄位，標明它屬於哪個租戶。Worker 從 JWT 設定它 —— 絕不取自前端輸入。"
+              }
+            },
+            {
+              "icon": "verified_user",
+              "title": { "en": "JWT claims", "zh": "JWT 聲明" },
+              "text": {
+                "en": "A JWT is a signed token; the data inside (email, tenant_id) are its claims. Because Access signs it, the Worker can trust those values.",
+                "zh": "JWT 是一個簽章過的權杖；裡面的資料（email、tenant_id）就是它的聲明（claims）。因為由 Access 簽章，Worker 才能信任這些值。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Per-tenant rate limiting", "zh": "每租戶限流" },
+              "text": {
+                "en": "Each tenant gets its own request budget via a dedicated Durable Object, so a single heavy tenant cannot degrade service for the others.",
+                "zh": "每個租戶透過專屬的 Durable Object 擁有自己的請求額度，所以單一重度租戶不會拖垮其他人的服務品質。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Per-tenant config in KV", "zh": "KV 裡的每租戶設定" },
+              "text": {
+                "en": "Small per-tenant settings (plan, feature flags) live in KV keyed by tenant_id — read in microseconds at the edge, no database round-trip.",
+                "zh": "每個租戶的小型設定（方案、功能旗標）放在 KV，用 tenant_id 當鍵 —— 在邊緣以微秒讀取，不必往返資料庫。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls & billing", "zh": "陷阱與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "checklist",
+          "title": { "en": "Make the safe path the only path", "zh": "讓安全的路成為唯一的路" },
+          "text": {
+            "en": "Wrap D1 access in a tiny helper that always takes a tenantId argument and always injects WHERE tenant_id = ?. If no query can run without a tenant, you can't forget the filter by accident.",
+            "zh": "把存取 D1 的程式碼包成一個小工具函式，強制每次都要傳入 tenantId，並且自動加上 WHERE tenant_id = ?。只要沒有 tenant 就無法查詢，你就不可能不小心漏掉過濾條件。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Forgetting WHERE tenant_id = ? on even one query leaks data across tenants — review every SQL statement for it.",
+              "Always .bind() the tenant_id as a parameter; never string-concatenate it into SQL (that invites SQL injection).",
+              "Index tenant_id on every tenant table, or scoped queries get slow as tenants accumulate rows.",
+              "Trust tenant_id only from the verified JWT, not from URLs, bodies or headers the client controls.",
+              "Name each rate-limit Durable Object by tenant_id so counters never bleed between tenants.",
+              "D1, KV, Durable Objects and Workers all have generous free tiers; you pay per request/read/write as you scale — check current pricing in the docs."
+            ],
+            "zh": [
+              "只要有一個查詢漏掉 WHERE tenant_id = ?，就會跨租戶外洩資料 —— 每一條 SQL 都要檢查。",
+              "一律用 .bind() 把 tenant_id 當參數綁定；絕不要用字串拼接塞進 SQL（那會招來 SQL 注入）。",
+              "每張租戶表都要替 tenant_id 建索引，否則租戶累積資料後，範圍查詢會變慢。",
+              "tenant_id 只信任來自驗證過的 JWT，不要採用網址、請求內容或前端可控的標頭。",
+              "每個限流 Durable Object 都用 tenant_id 命名，計數器才不會在租戶之間互相污染。",
+              "D1、KV、Durable Objects、Workers 都有大方的免費額度；規模變大後依請求／讀／寫計費 —— 最新價格請查官方文件。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "access", "label": { "en": "Access", "zh": "Access" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "auth-fullstack", "label": { "en": "Auth (full-stack)", "zh": "全端身分驗證" } },
+    { "slug": "web-analytics", "label": { "en": "Web Analytics", "zh": "Web Analytics" } }
+  ],
+  "docs": "https://developers.cloudflare.com/"
+}

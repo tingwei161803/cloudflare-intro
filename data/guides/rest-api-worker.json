@@ -1,0 +1,418 @@
+{
+  "slug": "rest-api-worker",
+  "category": "integrations",
+  "group": { "en": "Full-stack Basics", "zh": "全端串接基礎" },
+  "icon": "api",
+  "title": { "en": "Designing a REST API with Workers", "zh": "用 Workers 設計 REST API" },
+  "subtitle": {
+    "en": "Build a clean HTTP back-end on a single Worker: route by method and path, parse requests, return JSON with the right status codes, and open it up to a browser front-end with CORS.",
+    "zh": "在單一個 Worker 上打造乾淨的 HTTP 後端：用「方法 + 路徑」做路由、解析請求、回傳帶正確狀態碼的 JSON，並用 CORS 讓瀏覽器前端可以直接呼叫它。"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "This is the back-end half of front-end ↔ back-end: one Worker file that answers GET, POST, PUT, and DELETE like a proper REST API.",
+      "zh": "這是「前端 ↔ 後端」裡的後端那一半：用一個 Worker 檔案，像正規的 REST API 一樣回應 GET、POST、PUT、DELETE。"
+    }
+  },
+  "stats": [
+    { "value": "4", "label": { "en": "CRUD verbs", "zh": "CRUD 動詞" } },
+    { "value": "1", "label": { "en": "Worker file", "zh": "個 Worker 檔" } },
+    { "value": "0ms", "label": { "en": "Cold starts", "zh": "冷啟動" } },
+    { "value": "CORS", "label": { "en": "Browser-ready", "zh": "瀏覽器可直連" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we building?", "zh": "我們要做什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "We're building a REST API on a single Cloudflare Worker. A \"REST API\" (Representational State Transfer) is just an agreed-upon way for a front-end to ask a back-end for data over HTTP: you pick a URL path for a resource (like /api/users) and an HTTP method (GET, POST, PUT, DELETE) that says what you want to do to it.",
+            "zh": "我們要在單一個 Cloudflare Worker 上做一個 REST API。所謂「REST API」（Representational State Transfer，表現層狀態轉換）其實就是前端跟後端「用 HTTP 要資料」的一套共同約定：你用一段網址路徑代表一種資源（例如 /api/users），再用一個 HTTP 方法（GET、POST、PUT、DELETE）表示你想對它做什麼。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The whole back-end lives in one Worker. When a request arrives, the Worker reads two things — the method and the path — decides which handler should run, does the work, and sends back a JSON response with a status code. That's it. No framework required.",
+            "zh": "整個後端就放在一個 Worker 裡。當一個請求進來，Worker 會讀兩樣東西——方法（method）跟路徑（path）——決定該跑哪一段處理程式，做完事，再回傳一個帶狀態碼的 JSON 回應。就這樣，連框架都不用。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The big picture", "zh": "整體架構" },
+          "code": {
+            "en": "flowchart LR\n  B[\"Browser front-end (fetch)\"] -->|\"HTTP request\"| W[\"Worker REST API\"]\n  W --> R[\"Router (method + path)\"]\n  R --> H1[\"GET handler\"]\n  R --> H2[\"POST handler\"]\n  R --> H3[\"PUT handler\"]\n  R --> H4[\"DELETE handler\"]\n  H1 --> J[\"JSON + status code\"]\n  H2 --> J\n  H3 --> J\n  H4 --> J\n  J -->|\"with CORS headers\"| B",
+            "zh": "flowchart LR\n  B[\"瀏覽器前端 (fetch)\"] -->|\"HTTP 請求\"| W[\"Worker REST API\"]\n  W --> R[\"路由器 (方法 + 路徑)\"]\n  R --> H1[\"GET 處理函式\"]\n  R --> H2[\"POST 處理函式\"]\n  R --> H3[\"PUT 處理函式\"]\n  R --> H4[\"DELETE 處理函式\"]\n  H1 --> J[\"JSON + 狀態碼\"]\n  H2 --> J\n  H3 --> J\n  H4 --> J\n  J -->|\"附上 CORS 標頭\"| B"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "restaurant_menu",
+          "title": { "en": "Think of it like a restaurant", "zh": "把它想成一家餐廳" },
+          "text": {
+            "en": "The URL path is the table number (which resource), and the HTTP method is what you say to the waiter: GET = \"show me the menu\", POST = \"I'd like to order this\", PUT = \"change my order\", DELETE = \"cancel it\". The status code is the waiter's reply: 200 \"here you go\", 201 \"order placed\", 404 \"we don't have that\".",
+            "zh": "網址路徑就像桌號（指哪一種資源），HTTP 方法就是你對服務生說的話：GET =「給我看菜單」、POST =「我要點這個」、PUT =「改一下我的餐點」、DELETE =「取消」。狀態碼則是服務生的回覆：200「好的給你」、201「已幫你下單」、404「我們沒有這個」。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "How the router decides", "zh": "路由器怎麼做決定" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Inside the Worker, routing is just branching on two values you read from the incoming request: request.method and the pathname from new URL(request.url). Each method/path combination maps to one handler, and each handler returns a response with an appropriate status code.",
+            "zh": "在 Worker 內部，路由其實就是依據兩個從請求讀到的值來分流：request.method，以及 new URL(request.url) 取出的 pathname（路徑）。每一組「方法/路徑」對應到一個處理函式，每個處理函式都回傳一個帶有合適狀態碼的回應。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "front_hand",
+              "title": { "en": "OPTIONS — preflight", "zh": "OPTIONS — 預檢" },
+              "text": {
+                "en": "The browser's CORS safety check. Answer it first with 204 and the CORS headers, before any real work.",
+                "zh": "瀏覽器的 CORS 安全檢查。最先處理它，回 204 加上 CORS 標頭，再談後面的事。"
+              }
+            },
+            {
+              "icon": "download",
+              "title": { "en": "GET — read", "zh": "GET — 讀取" },
+              "text": {
+                "en": "List a collection (/api/users) or fetch one item (/api/users/:id). Returns 200, or 404 if not found.",
+                "zh": "列出整批（/api/users）或拿單一筆（/api/users/:id）。回 200，找不到就回 404。"
+              }
+            },
+            {
+              "icon": "add_circle",
+              "title": { "en": "POST — create", "zh": "POST — 新增" },
+              "text": {
+                "en": "Read the JSON body, validate it, create the resource. Returns 201 Created, or 400 if the body is invalid.",
+                "zh": "讀取 JSON 內容、驗證、建立資源。回 201 Created，內容不合法就回 400。"
+              }
+            },
+            {
+              "icon": "edit",
+              "title": { "en": "PUT — update", "zh": "PUT — 更新" },
+              "text": {
+                "en": "Find the item by :id and replace its fields. Returns 200, 400 for bad input, or 404 if missing.",
+                "zh": "用 :id 找到該筆並替換欄位。回 200、輸入不對回 400、找不到回 404。"
+              }
+            },
+            {
+              "icon": "delete",
+              "title": { "en": "DELETE — remove", "zh": "DELETE — 刪除" },
+              "text": {
+                "en": "Remove the item by :id. Returns 200 when it's gone, or 404 if there was nothing to delete.",
+                "zh": "用 :id 刪掉該筆。刪掉了回 200，本來就沒有就回 404。"
+              }
+            },
+            {
+              "icon": "block",
+              "title": { "en": "Anything else", "zh": "其他情況" },
+              "text": {
+                "en": "An unknown path is 404; a path that exists but with the wrong method is 405 Method Not Allowed.",
+                "zh": "不認識的路徑回 404；路徑存在但方法不對，回 405 Method Not Allowed（方法不允許）。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Request router", "zh": "請求路由器" },
+          "code": {
+            "en": "flowchart TD\n  REQ[\"Incoming request\"] --> M{\"method?\"}\n  M -->|OPTIONS| CORS[\"204 + CORS headers\"]\n  M -->|GET| P{\"path?\"}\n  M -->|POST| C[\"create → 201 / 400\"]\n  M -->|PUT| U[\"update → 200 / 400 / 404\"]\n  M -->|DELETE| D[\"remove → 200 / 404\"]\n  M -->|other| NA[\"405 not allowed\"]\n  P -->|\"/api/users\"| LIST[\"list → 200\"]\n  P -->|\"/api/users/:id\"| ONE[\"one → 200 / 404\"]",
+            "zh": "flowchart TD\n  REQ[\"收到請求\"] --> M{\"method?\"}\n  M -->|OPTIONS| CORS[\"204 + CORS 標頭\"]\n  M -->|GET| P{\"path?\"}\n  M -->|POST| C[\"新增 → 201 / 400\"]\n  M -->|PUT| U[\"更新 → 200 / 400 / 404\"]\n  M -->|DELETE| D[\"刪除 → 200 / 404\"]\n  M -->|other| NA[\"405 方法不允許\"]\n  P -->|\"/api/users\"| LIST[\"列出 → 200\"]\n  P -->|\"/api/users/:id\"| ONE[\"單筆 → 200 / 404\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "A browser call, step by step", "zh": "瀏覽器呼叫的逐步流程" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "When a web page on one domain calls an API on another domain, the browser enforces CORS (Cross-Origin Resource Sharing) — a rule that protects users from sneaky cross-site requests. For some requests the browser first sends a \"preflight\": an OPTIONS request that asks the API \"are you OK with me calling you?\". Only if the API answers with the right Access-Control-* headers does the browser send the real request.",
+            "zh": "當某個網域上的網頁去呼叫另一個網域的 API 時，瀏覽器會執行 CORS（Cross-Origin Resource Sharing，跨來源資源共用）——這是一條保護使用者、避免被偷偷跨站請求的規則。對某些請求，瀏覽器會先送出一個「預檢（preflight）」：一個 OPTIONS 請求，問 API「你同意我呼叫你嗎？」。只有當 API 回應正確的 Access-Control-* 標頭，瀏覽器才會送出真正的請求。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Preflight then GET", "zh": "先預檢再 GET" },
+          "code": {
+            "en": "sequenceDiagram\n  participant B as Browser\n  participant W as \"Worker API\"\n  Note over B,W: CORS preflight\n  B->>W: OPTIONS /api/users\n  W-->>B: 204 + Access-Control-Allow-*\n  Note over B,W: Real request\n  B->>W: GET /api/users\n  W->>W: route by method + path\n  W-->>B: 200 JSON + CORS headers",
+            "zh": "sequenceDiagram\n  participant B as 瀏覽器\n  participant W as \"Worker API\"\n  Note over B,W: CORS 預檢\n  B->>W: OPTIONS /api/users\n  W-->>B: 204 + Access-Control-Allow-*\n  Note over B,W: 真正的請求\n  B->>W: GET /api/users\n  W->>W: 依方法與路徑路由\n  W-->>B: 200 JSON + CORS 標頭"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "Not every request is preflighted", "zh": "不是每個請求都會預檢" },
+          "text": {
+            "en": "\"Simple\" requests (a plain GET, or a POST with a basic content type) skip the OPTIONS step. The moment you send Content-Type: application/json or a custom header, the browser preflights — which is why a JSON API must always handle OPTIONS.",
+            "zh": "「簡單請求」（單純的 GET，或用基本內容類型的 POST）會跳過 OPTIONS 那一步。但只要你送出 Content-Type: application/json 或自訂標頭，瀏覽器就會預檢——這就是為什麼 JSON API 一定要處理 OPTIONS。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Inside one handler", "zh": "單一處理函式內部" },
+          "code": {
+            "en": "flowchart TD\n  H[\"Handler runs\"] --> T{\"outcome?\"}\n  T -->|\"ok\"| OK[\"200 / 201 JSON\"]\n  T -->|\"bad input\"| BAD[\"400 error JSON\"]\n  T -->|\"not found\"| NF[\"404 error JSON\"]\n  T -->|\"threw error\"| ERR[\"500 error JSON\"]\n  OK --> ADD[\"attach CORS headers\"]\n  BAD --> ADD\n  NF --> ADD\n  ERR --> ADD\n  ADD --> SEND[\"send to browser\"]",
+            "zh": "flowchart TD\n  H[\"處理函式執行\"] --> T{\"結果?\"}\n  T -->|\"成功\"| OK[\"200 / 201 JSON\"]\n  T -->|\"輸入錯誤\"| BAD[\"400 錯誤 JSON\"]\n  T -->|\"找不到\"| NF[\"404 錯誤 JSON\"]\n  T -->|\"程式爆錯\"| ERR[\"500 錯誤 JSON\"]\n  OK --> ADD[\"附上 CORS 標頭\"]\n  BAD --> ADD\n  NF --> ADD\n  ERR --> ADD\n  ADD --> SEND[\"回傳給瀏覽器\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it", "zh": "動手做" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the full back-end in one file, a matching front-end fetch example, and the wrangler config. The Worker uses a tiny in-memory array as a stand-in \"database\" so you can focus on routing — swap in D1 or KV for real, persistent data.",
+            "zh": "以下是完整後端（單一檔案）、對應的前端 fetch 範例，以及 wrangler 設定。Worker 用一個小小的記憶體陣列當作「假資料庫」，讓你專心看路由——要真正持久保存資料時，再換成 D1 或 KV。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a Worker project", "zh": "建立 Worker 專案" },
+              "text": {
+                "en": "Scaffold a plain \"Hello World\" Worker in JavaScript, then open src/index.js.",
+                "zh": "用 JavaScript 產生一個最單純的「Hello World」Worker，然後打開 src/index.js。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest -- my-api\ncd my-api" }
+            },
+            {
+              "title": { "en": "Write the REST router", "zh": "寫 REST 路由器" },
+              "text": {
+                "en": "Replace src/index.js with the back-end code below. It reads the method and path, routes to a handler, and returns Response.json(...) with the right status and CORS headers.",
+                "zh": "把 src/index.js 換成下面的後端程式碼。它會讀取方法與路徑、路由到對應的處理函式，並用 Response.json(...) 回傳正確狀態碼與 CORS 標頭。"
+              }
+            },
+            {
+              "title": { "en": "Run locally, then deploy", "zh": "先本機跑，再部署" },
+              "text": {
+                "en": "Test at http://localhost:8787/api/users, then publish to a public *.workers.dev URL.",
+                "zh": "在 http://localhost:8787/api/users 測試，再發佈到公開的 *.workers.dev 網址。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler dev\nnpx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/index.js — the REST API", "zh": "src/index.js — REST API" },
+          "body": "// A single-file REST API on one Worker.\n\n// CORS = Cross-Origin Resource Sharing（跨來源資源共用）：\n// 這些標頭讓「別的網域」的瀏覽器前端可以呼叫我們。\nconst CORS = {\n  \"Access-Control-Allow-Origin\": \"*\", // 誰可以呼叫（* = 任何人；正式環境請鎖成你的網域）\n  \"Access-Control-Allow-Methods\": \"GET, POST, PUT, DELETE, OPTIONS\",\n  \"Access-Control-Allow-Headers\": \"Content-Type\",\n};\n\n// 一個小小的記憶體資料（重啟會清空——正式請改用 D1 / KV）。\nlet users = [\n  { id: 1, name: \"Ada\" },\n  { id: 2, name: \"Linus\" },\n];\nlet nextId = 3;\n\n// 用一個 helper 統一產生每個 JSON 回應：資料 + 狀態碼 + CORS 標頭。\nfunction json(data, status = 200) {\n  return Response.json(data, { status, headers: CORS });\n}\n\nexport default {\n  async fetch(request) {\n    const { pathname } = new URL(request.url); // 例如 \"/api/users/2\"\n    const method = request.method;             // 例如 \"GET\"\n\n    // 1) CORS 預檢：瀏覽器在真正跨站請求前會先送 OPTIONS。\n    if (method === \"OPTIONS\") {\n      return new Response(null, { status: 204, headers: CORS });\n    }\n\n    // 2) 只服務我們的 API 路徑；其餘一律 404 Not Found（找不到）。\n    if (!pathname.startsWith(\"/api/users\")) {\n      return json({ error: \"Not found\" }, 404);\n    }\n\n    // 3) 從 /api/users/:id 取出可有可無的 id。\n    const parts = pathname.split(\"/\").filter(Boolean); // [\"api\",\"users\",\"2\"]\n    const id = parts[2] ? Number(parts[2]) : null;\n\n    try {\n      // GET /api/users → 列出全部（200 OK）\n      if (method === \"GET\" && id === null) {\n        return json(users, 200);\n      }\n\n      // GET /api/users/:id → 取單筆（200，找不到 404）\n      if (method === \"GET\" && id !== null) {\n        const user = users.find((u) => u.id === id);\n        return user ? json(user, 200) : json({ error: \"User not found\" }, 404);\n      }\n\n      // POST /api/users → 新增（201 Created，輸入不合法 400 Bad Request）\n      if (method === \"POST\" && id === null) {\n        const body = await request.json();\n        if (typeof body?.name !== \"string\") {\n          return json({ error: \"name is required\" }, 400);\n        }\n        const user = { id: nextId++, name: body.name };\n        users.push(user);\n        return json(user, 201);\n      }\n\n      // PUT /api/users/:id → 更新（200 / 400 / 404）\n      if (method === \"PUT\" && id !== null) {\n        const user = users.find((u) => u.id === id);\n        if (!user) return json({ error: \"User not found\" }, 404);\n        const body = await request.json();\n        if (typeof body?.name !== \"string\") {\n          return json({ error: \"name is required\" }, 400);\n        }\n        user.name = body.name;\n        return json(user, 200);\n      }\n\n      // DELETE /api/users/:id → 刪除（200，找不到 404）\n      if (method === \"DELETE\" && id !== null) {\n        const before = users.length;\n        users = users.filter((u) => u.id !== id);\n        return before === users.length\n          ? json({ error: \"User not found\" }, 404)\n          : json({ ok: true }, 200);\n      }\n\n      // 路徑存在，但方法不對 → 405 Method Not Allowed（方法不允許）。\n      return json({ error: \"Method not allowed\" }, 405);\n    } catch (err) {\n      // JSON 內容壞掉或其他意外 → 400 Bad Request。\n      return json({ error: \"Invalid request\" }, 400);\n    }\n  },\n};"
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "front-end — calling the API with fetch()", "zh": "前端 — 用 fetch() 呼叫 API" },
+          "body": "// 這段跑在瀏覽器裡。換成你部署後拿到的網址。\nconst API = \"https://my-api.<your-subdomain>.workers.dev/api/users\";\n\n// GET：列出全部使用者\nconst res = await fetch(API);\nconsole.log(res.status, await res.json()); // 200, [ {id:1,...}, ... ]\n\n// POST：新增一筆（把 JSON 放在 body，並標明 Content-Type）\nconst created = await fetch(API, {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ name: \"Grace\" }),\n});\nconsole.log(created.status, await created.json()); // 201, { id: 3, name: \"Grace\" }\n\n// PUT：更新 id = 3 那筆\nawait fetch(`${API}/3`, {\n  method: \"PUT\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ name: \"Grace H.\" }),\n});\n\n// DELETE：刪掉 id = 3 那筆\nawait fetch(`${API}/3`, { method: \"DELETE\" });"
+        },
+        {
+          "type": "code",
+          "lang": "toml",
+          "title": { "en": "wrangler.toml", "zh": "wrangler.toml" },
+          "body": "name = \"my-api\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-01-01\""
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "database",
+          "title": { "en": "In-memory data won't persist", "zh": "記憶體資料不會留存" },
+          "text": {
+            "en": "Each Worker isolate has its own copy of that users array, and it resets over time. It's perfect for learning routing, but for real data you need storage. See the D1 CRUD guide to wire this exact API to a SQL database.",
+            "zh": "每個 Worker isolate（隔離環境）都有自己一份 users 陣列，而且過一段時間就會重置。拿來學路由很完美，但要存真資料就需要儲存層。可參考 D1 CRUD 教學，把這個 API 接到 SQL 資料庫。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "http",
+              "title": { "en": "HTTP method", "zh": "HTTP 方法" },
+              "text": {
+                "en": "The verb of a request — GET reads, POST creates, PUT updates, DELETE removes. Read it from request.method.",
+                "zh": "請求的「動詞」——GET 讀、POST 建立、PUT 更新、DELETE 刪除。用 request.method 讀到它。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "URL & path", "zh": "URL 與路徑" },
+              "text": {
+                "en": "new URL(request.url) parses the address. Its pathname (e.g. /api/users/2) tells you which resource is wanted.",
+                "zh": "new URL(request.url) 會解析網址。它的 pathname（例如 /api/users/2）告訴你對方想要哪個資源。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": "JSON body", "zh": "JSON 內容" },
+              "text": {
+                "en": "POST and PUT carry data in the request body. await request.json() turns it into a JavaScript object — always validate it.",
+                "zh": "POST 與 PUT 會在請求內容（body）裡帶資料。await request.json() 把它轉成 JavaScript 物件——記得一定要驗證。"
+              }
+            },
+            {
+              "icon": "check_circle",
+              "title": { "en": "Status code", "zh": "狀態碼" },
+              "text": {
+                "en": "A 3-digit result: 2xx success, 4xx client mistake, 5xx server error. They let the front-end react without parsing text.",
+                "zh": "三位數的結果：2xx 成功、4xx 用戶端出錯、5xx 伺服器出錯。它讓前端不必解析文字就能判斷狀況。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "Response.json()", "zh": "Response.json()" },
+              "text": {
+                "en": "A Workers helper that serializes an object to JSON and sets Content-Type for you. Pass { status, headers } as the 2nd arg.",
+                "zh": "Workers 的便利函式：把物件序列化成 JSON 並自動設好 Content-Type。第二個參數可放 { status, headers }。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "CORS", "zh": "CORS" },
+              "text": {
+                "en": "Headers that grant a browser on another domain permission to call you. Handle OPTIONS and add Access-Control-Allow-* to every response.",
+                "zh": "授權「別的網域」瀏覽器呼叫你的標頭。要處理 OPTIONS，並在每個回應加上 Access-Control-Allow-*。"
+              }
+            },
+            {
+              "icon": "fork_right",
+              "title": { "en": "Routing", "zh": "路由" },
+              "text": {
+                "en": "Matching method + path to one handler. With a few routes, plain if checks beat any framework; for many, reach for itty-router or Hono.",
+                "zh": "把「方法 + 路徑」對應到一個處理函式。路由不多時，幾個 if 判斷就贏過任何框架；路由很多時，可改用 itty-router 或 Hono。"
+              }
+            },
+            {
+              "icon": "rule",
+              "title": { "en": "Idempotency", "zh": "冪等性" },
+              "text": {
+                "en": "GET, PUT, DELETE should give the same result if repeated; POST usually creates something new each time. It guides which verb to pick.",
+                "zh": "GET、PUT、DELETE 重複呼叫結果應一樣；POST 通常每次都會新建一筆。這會幫你決定該選哪個動詞。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Status codes you'll use most", "zh": "最常用的狀態碼" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "200 OK — request succeeded (GET, PUT, DELETE)",
+              "201 Created — a new resource was created (POST)",
+              "204 No Content — success with no body (great for OPTIONS preflight)",
+              "400 Bad Request — the client sent invalid data",
+              "404 Not Found — no resource at that path / id",
+              "405 Method Not Allowed — path exists but the verb isn't supported",
+              "500 Internal Server Error — something blew up on your side"
+            ],
+            "zh": [
+              "200 OK — 請求成功（GET、PUT、DELETE）",
+              "201 Created — 成功建立了新資源（POST）",
+              "204 No Content — 成功但沒有內容（很適合 OPTIONS 預檢）",
+              "400 Bad Request — 用戶端送了不合法的資料",
+              "404 Not Found — 該路徑 / id 沒有對應的資源",
+              "405 Method Not Allowed — 路徑存在，但不支援這個動詞",
+              "500 Internal Server Error — 你這邊的程式爆掉了"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & common pitfalls", "zh": "小提示與常見陷阱" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": { "en": "The #1 CORS mistake", "zh": "最常見的 CORS 錯誤" },
+          "text": {
+            "en": "If you forget to handle OPTIONS or leave CORS headers off your error responses, the browser blocks the call and the console shows a confusing \"CORS error\" — even though your Worker actually ran. Attach the CORS headers to every single response, success or failure.",
+            "zh": "如果你忘了處理 OPTIONS，或在錯誤回應上漏掉 CORS 標頭，瀏覽器就會擋下這次呼叫，主控台會出現讓人摸不著頭緒的「CORS error」——即使你的 Worker 其實有跑。請在「每一個」回應上都附上 CORS 標頭，不論成功或失敗。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "lock",
+          "title": { "en": "Lock down the origin in production", "zh": "正式環境請鎖定來源" },
+          "text": {
+            "en": "Access-Control-Allow-Origin: * is fine while learning, but in production set it to your real front-end domain (e.g. https://app.example.com) so only your site can call the API from a browser.",
+            "zh": "學習階段用 Access-Control-Allow-Origin: * 沒問題，但正式環境請改成你真正的前端網域（例如 https://app.example.com），這樣才只有你的網站能從瀏覽器呼叫這個 API。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Habits that keep an API clean", "zh": "讓 API 保持乾淨的好習慣" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Always wrap request.json() in try/catch — a malformed body should return 400, not crash the Worker",
+              "Validate every field before you trust it; never write unchecked input into storage",
+              "Return a consistent JSON shape for errors, e.g. { \"error\": \"message\" }, so the front-end can handle them uniformly",
+              "Pick the verb by intent: read = GET, create = POST, replace = PUT, remove = DELETE",
+              "Keep one json() helper so status codes and CORS headers are set in exactly one place",
+              "When routes multiply, move from if-chains to a router library like Hono to stay readable"
+            ],
+            "zh": [
+              "永遠把 request.json() 包在 try/catch 裡——內容壞掉時要回 400，而不是讓 Worker 當掉",
+              "信任任何欄位前都要先驗證；絕不要把未檢查的輸入寫進儲存層",
+              "錯誤一律用一致的 JSON 形狀，例如 { \"error\": \"訊息\" }，前端才能統一處理",
+              "依「意圖」選動詞：讀取 = GET、新增 = POST、整筆替換 = PUT、刪除 = DELETE",
+              "保留單一個 json() helper，讓狀態碼與 CORS 標頭只在一個地方設定",
+              "當路由變多時，從一堆 if 改用 Hono 之類的路由函式庫，維持可讀性"
+            ]
+          }
+        },
+        {
+          "type": "quote",
+          "text": {
+            "en": "A good REST API is boring on purpose: predictable paths, predictable verbs, predictable status codes.",
+            "zh": "好的 REST API 是「刻意無聊」的：路徑可預測、動詞可預測、狀態碼也可預測。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "frontend-worker-d1-crud", "label": { "en": "Front-end ↔ Worker ↔ D1 CRUD", "zh": "前端 ↔ Worker ↔ D1 CRUD" } },
+    { "slug": "auth-fullstack", "label": { "en": "Full-stack Auth", "zh": "全端身分驗證" } }
+  ],
+  "docs": "https://developers.cloudflare.com/workers/"
+}

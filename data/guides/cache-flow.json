@@ -1,0 +1,421 @@
+{
+  "slug": "cache-flow",
+  "category": "integrations",
+  "group": { "en": "Flows & Lifecycles", "zh": "流程圖解" },
+  "icon": "cached",
+  "title": {
+    "en": "How caching works (hit, miss, revalidate)",
+    "zh": "快取是怎麼運作的（命中、未命中、重新驗證）"
+  },
+  "subtitle": {
+    "en": "Follow one request through Cloudflare's cache — hit, miss, store, expire, and revalidate",
+    "zh": "跟著一個請求走過 Cloudflare 快取——命中、未命中、儲存、過期與重新驗證"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "See exactly when the edge answers instantly, when it calls your origin, and when it refreshes a stale copy.",
+      "zh": "看清楚邊緣節點何時秒回、何時回源、何時把過期的複本刷新。"
+    }
+  },
+  "stats": [
+    { "value": "330+", "label": { "en": "Edge cities that cache", "zh": "提供快取的邊緣城市" } },
+    { "value": "2", "label": { "en": "Loads to go MISS then HIT", "zh": "兩次載入由 MISS 變 HIT" } },
+    { "value": "0", "label": { "en": "Origin trips on a cache HIT", "zh": "命中時的回源次數" } },
+    { "value": "5", "label": { "en": "cf-cache-status values to know", "zh": "要懂的 cf-cache-status 狀態" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What we are visualizing", "zh": "我們要看懂什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Every time a browser asks Cloudflare for a file, an edge node runs the same quick decision: do I already have a fresh copy? If yes, it answers in milliseconds (a cache HIT). If no, it fetches from your origin server or Worker, optionally stores the response, then serves it (a cache MISS). This guide draws that whole lifecycle as diagrams so you can picture it.",
+            "zh": "每當瀏覽器向 Cloudflare 要一個檔案，邊緣節點（edge node，離訪客最近的快取伺服器）都會跑同一個快速判斷：我手上有沒有還新鮮的複本？有的話，它在幾毫秒內就回覆（快取命中 HIT）。沒有的話，它就去你的來源伺服器（origin，你真正放網站的那台主機）或 Worker 抓取，視情況把回應存起來，再送出（快取未命中 MISS）。這篇用圖把整個生命週期畫出來，讓你一眼看懂。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The cache decision (one request)", "zh": "快取判斷流程（單一請求）" },
+          "code": {
+            "en": "flowchart TD\n  A[\"Request hits the edge\"] --> B{\"In cache and still fresh?\"}\n  B -->|\"Yes\"| C[\"Serve from cache (HIT)\"]\n  B -->|\"No\"| D[\"Fetch from origin / Worker\"]\n  D --> E{\"Cacheable?\"}\n  E -->|\"Yes\"| F[\"Store per Cache-Control / TTL\"]\n  E -->|\"No\"| G[\"Serve uncached (DYNAMIC / BYPASS)\"]\n  F --> H[\"Serve to visitor (MISS)\"]",
+            "zh": "flowchart TD\n  A[\"請求抵達邊緣節點\"] --> B{\"快取裡有且還新鮮？\"}\n  B -->|\"是\"| C[\"由快取直接送出（HIT）\"]\n  B -->|\"否\"| D[\"回源抓取 / 執行 Worker\"]\n  D --> E{\"可以快取嗎？\"}\n  E -->|\"是\"| F[\"依 Cache-Control / TTL 儲存\"]\n  E -->|\"否\"| G[\"不快取直接送出（DYNAMIC / BYPASS）\"]\n  F --> H[\"送給訪客（MISS）\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "kitchen",
+          "title": { "en": "Think of it like a fridge", "zh": "把它想成一台冰箱" },
+          "text": {
+            "en": "The edge cache is your fridge; the origin is the supermarket. If the milk is in the fridge and not past its date (TTL), you drink it right away (HIT). If it is gone, you go to the shop (MISS). If it is just past the date, you sniff-check before buying new (revalidate).",
+            "zh": "邊緣快取就是你家冰箱，來源伺服器則是超市。牛奶在冰箱裡又還沒過期（TTL）就直接喝（HIT）；冰箱裡沒有就跑一趟超市（MISS）；剛好過期一點點，就先聞一下確認再決定要不要買新的（重新驗證 revalidate）。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "The words on the diagrams", "zh": "圖上這些名詞的意思" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Before reading the flows, here are the five terms that show up again and again. Each one maps to a box or arrow you will see in the diagrams below.",
+            "zh": "在看流程圖之前，先認識五個一直出現的名詞。每一個都對應到下面圖裡的某個方框或箭頭。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "hub",
+              "title": { "en": "Edge cache", "zh": "邊緣快取（edge cache）" },
+              "text": {
+                "en": "Cloudflare's nearby server that stores a copy of your response so it can answer without bothering your origin.",
+                "zh": "Cloudflare 離訪客很近的伺服器，存著你回應的複本，能直接回覆而不用打擾你的來源伺服器。"
+              }
+            },
+            {
+              "icon": "dns",
+              "title": { "en": "Origin", "zh": "來源伺服器（origin）" },
+              "text": {
+                "en": "Your real server or Worker that produces the original response. The edge only goes here on a MISS or to revalidate.",
+                "zh": "你真正產生回應的伺服器或 Worker。只有 MISS 或要重新驗證時，邊緣節點才會回到這裡。"
+              }
+            },
+            {
+              "icon": "timer",
+              "title": { "en": "TTL", "zh": "TTL（存活時間）" },
+              "text": {
+                "en": "Time To Live — how many seconds a cached copy counts as fresh. Set by Cache-Control max-age / s-maxage or a Cache Rule.",
+                "zh": "Time To Live，快取複本被當成新鮮的秒數。由 Cache-Control 的 max-age / s-maxage 或快取規則（Cache Rule）決定。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": { "en": "Fresh vs stale", "zh": "新鮮 vs 過期（fresh / stale）" },
+              "text": {
+                "en": "Inside its TTL a copy is fresh and served instantly. Past the TTL it turns stale and must be revalidated or refetched.",
+                "zh": "在 TTL 內的複本是新鮮的，可立即送出；超過 TTL 就變過期（stale），必須重新驗證或重新抓取。"
+              }
+            },
+            {
+              "icon": "mop",
+              "title": { "en": "Purge / invalidation", "zh": "清除 / 失效（purge）" },
+              "text": {
+                "en": "Manually evicting a cached copy now, before its TTL ends — by URL, tag, or everything — so the next request rebuilds it.",
+                "zh": "在 TTL 還沒到之前就手動把快取複本踢掉——可依網址、標籤或全部清除——讓下一個請求重新建立。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "Cache key", "zh": "快取鍵（cache key）" },
+              "text": {
+                "en": "What the edge uses to look a copy up — by default the full URL. Two different URLs are two different cache entries.",
+                "zh": "邊緣節點用來查複本的依據，預設就是完整網址。兩個不同網址就是兩筆不同的快取。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "HIT vs MISS vs revalidate", "zh": "命中 vs 未命中 vs 重新驗證" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "The same URL behaves differently depending on what the edge already holds. This sequence shows the same /logo.png requested three times: first cold (MISS), then warm (HIT), then after the TTL expires (revalidate).",
+            "zh": "同一個網址，會因為邊緣節點手上有什麼而表現不同。這張時序圖示範同一個 /logo.png 被請求三次：第一次是冷的（MISS）、接著是熱的（HIT）、最後是 TTL 過期之後（重新驗證）。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Three requests, three outcomes", "zh": "三次請求，三種結果" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant E as \"Edge cache\"\n  participant O as \"Origin / Worker\"\n  Note over U,O: First visit, nothing cached\n  U->>E: GET /logo.png\n  E->>O: Cache empty, fetch from origin\n  O-->>E: 200 plus Cache-Control max-age\n  E-->>U: cf-cache-status MISS\n  Note over U,O: Within TTL, copy is fresh\n  U->>E: GET /logo.png\n  E-->>U: cf-cache-status HIT\n  Note over U,O: After TTL, copy is stale\n  U->>E: GET /logo.png\n  E->>O: Revalidate with If-None-Match\n  O-->>E: 304 Not Modified\n  E-->>U: cf-cache-status REVALIDATED",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant E as \"邊緣快取\"\n  participant O as \"來源 / Worker\"\n  Note over U,O: 第一次造訪，尚未快取\n  U->>E: GET /logo.png\n  E->>O: 快取是空的，回源抓取\n  O-->>E: 200 加上 Cache-Control max-age\n  E-->>U: cf-cache-status MISS\n  Note over U,O: TTL 內，複本還新鮮\n  U->>E: GET /logo.png\n  E-->>U: cf-cache-status HIT\n  Note over U,O: 超過 TTL，複本過期\n  U->>E: GET /logo.png\n  E->>O: 用 If-None-Match 重新驗證\n  O-->>E: 304 Not Modified\n  E-->>U: cf-cache-status REVALIDATED"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "verified",
+          "title": { "en": "Revalidate saves bandwidth", "zh": "重新驗證很省頻寬" },
+          "text": {
+            "en": "On revalidate, the edge asks 'has this changed?' with a validator (ETag / Last-Modified). A 304 Not Modified means it can keep the copy it already has and only refresh the timer — no full re-download.",
+            "zh": "重新驗證時，邊緣節點用驗證碼（ETag / Last-Modified）去問「這個有沒有變？」。回 304 Not Modified 代表它可以繼續用手上那份複本，只要把計時器刷新就好，不必整份重新下載。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ttl-timeline",
+      "icon": "timeline",
+      "heading": { "en": "TTL over time: fresh, stale, revalidate", "zh": "TTL 隨時間變化：新鮮、過期、重新驗證" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A cached copy has a clock on it. From the moment it is stored, it stays FRESH until max-age runs out, then becomes STALE. The next request after that is what triggers a revalidation, and the result resets the clock back to FRESH.",
+            "zh": "每份快取複本都附帶一個計時器。從被儲存的那一刻起，它在 max-age 用完前都算 FRESH（新鮮），之後變成 STALE（過期）。過期後的下一個請求才會觸發重新驗證，而驗證結果會把計時器重設回 FRESH。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The life of one cached copy", "zh": "一份快取複本的一生" },
+          "code": {
+            "en": "flowchart LR\n  A[\"Stored (t = 0)\"] --> B[\"FRESH within max-age\"]\n  B --> C[\"TTL reached\"]\n  C --> D[\"STALE past max-age\"]\n  D --> E[\"Next request triggers revalidate\"]\n  E --> F[\"304: keep copy, reset to FRESH\"]\n  E --> G[\"200: store new copy, reset to FRESH\"]",
+            "zh": "flowchart LR\n  A[\"已儲存（t = 0）\"] --> B[\"max-age 內為 FRESH\"]\n  B --> C[\"到達 TTL\"]\n  C --> D[\"超過 max-age 變 STALE\"]\n  D --> E[\"下一個請求觸發重新驗證\"]\n  E --> F[\"304：保留複本，重設為 FRESH\"]\n  E --> G[\"200：存入新複本，重設為 FRESH\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "bolt",
+          "title": { "en": "stale-while-revalidate", "zh": "stale-while-revalidate（過期照送、背景刷新）" },
+          "text": {
+            "en": "With Cache-Control: max-age=60, stale-while-revalidate=600 the edge can instantly serve the stale copy to the user while refreshing it from origin in the background. Visitors never wait for the revalidation.",
+            "zh": "用 Cache-Control: max-age=60, stale-while-revalidate=600 時，邊緣節點可以先把過期的複本立刻送給使用者，同時在背景回源刷新。訪客完全不用等重新驗證。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "icon": "fact_check",
+      "heading": { "en": "Reading cf-cache-status", "zh": "看懂 cf-cache-status" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Cloudflare tells you which branch of the diagram a request took with a response header named cf-cache-status. These are the values you will meet most often.",
+            "zh": "Cloudflare 會用一個叫 cf-cache-status 的回應標頭（response header），告訴你這個請求走了流程圖的哪一條分支。下面是你最常遇到的幾個值。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "check_circle",
+              "title": { "en": "HIT", "zh": "HIT（命中）" },
+              "text": {
+                "en": "A fresh copy was in the edge cache and served instantly. No origin trip — the fastest, cheapest result.",
+                "zh": "邊緣快取裡有新鮮的複本，立刻送出。完全不用回源，是最快也最省的結果。"
+              }
+            },
+            {
+              "icon": "cancel",
+              "title": { "en": "MISS", "zh": "MISS（未命中）" },
+              "text": {
+                "en": "Nothing cached for this key, so the edge fetched from origin and, if allowed, stored it for next time.",
+                "zh": "這個鍵沒有快取，所以邊緣節點回源抓取，若允許就存起來給下次用。"
+              }
+            },
+            {
+              "icon": "history",
+              "title": { "en": "EXPIRED", "zh": "EXPIRED（過期）" },
+              "text": {
+                "en": "A copy existed but its TTL ran out, so the edge revalidated or refetched a fresh version from origin.",
+                "zh": "原本有複本，但 TTL 到了，所以邊緣節點重新驗證或回源抓一份新的。"
+              }
+            },
+            {
+              "icon": "auto_mode",
+              "title": { "en": "DYNAMIC", "zh": "DYNAMIC（動態）" },
+              "text": {
+                "en": "The content was treated as dynamic and not eligible to cache by default — every request goes to origin.",
+                "zh": "內容被視為動態、預設不適合快取，所以每個請求都回源。"
+              }
+            },
+            {
+              "icon": "block",
+              "title": { "en": "BYPASS", "zh": "BYPASS（略過）" },
+              "text": {
+                "en": "Caching was deliberately skipped — by a Cache Rule, a no-store header, or a setting telling the edge not to cache.",
+                "zh": "刻意略過快取——可能是某條快取規則、no-store 標頭，或設定要求邊緣節點不要快取。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "REVALIDATED", "zh": "REVALIDATED（已重新驗證）" },
+              "text": {
+                "en": "The stale copy was checked against origin (ETag / If-None-Match), origin replied 304, and the same copy was reused.",
+                "zh": "過期複本拿去跟來源核對（ETag / If-None-Match），來源回 304，於是同一份複本被重複使用。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Control it: headers + verify", "zh": "動手控制：設標頭 + 驗證" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You steer all of the above with one HTTP header your origin or Worker sends: Cache-Control. max-age is the browser TTL; s-maxage is the edge (shared cache) TTL and overrides max-age at Cloudflare.",
+            "zh": "上面這一切，都是用來源或 Worker 送出的一個 HTTP 標頭來操控：Cache-Control。max-age 是瀏覽器 TTL；s-maxage 是邊緣（共用快取）TTL，在 Cloudflare 會蓋過 max-age。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "http",
+          "title": { "en": "Cache-Control header recipes", "zh": "Cache-Control 標頭配方" },
+          "body": "# Static asset: 1 hour in browsers, 1 day on the edge\nCache-Control: public, max-age=3600, s-maxage=86400\n\n# Serve stale instantly, refresh in the background for 10 min\nCache-Control: public, max-age=60, stale-while-revalidate=600\n\n# Per-user / logged-in page: never cache anywhere\nCache-Control: private, no-store"
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "worker.js — set Cache-Control", "zh": "worker.js — 設定 Cache-Control" },
+          "body": "export default {\n  async fetch(request) {\n    const body = JSON.stringify({ hello: \"world\" });\n    return new Response(body, {\n      headers: {\n        \"Content-Type\": \"application/json\",\n        // Browser keeps it 1h; Cloudflare edge keeps it 1 day\n        \"Cache-Control\": \"public, max-age=3600, s-maxage=86400\"\n      }\n    });\n  }\n};"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Send the header", "zh": "送出標頭" },
+              "text": {
+                "en": "Deploy your Worker or configure your origin so cacheable responses carry a public Cache-Control with an s-maxage.",
+                "zh": "部署你的 Worker，或設定來源伺服器，讓可快取的回應帶上 public 的 Cache-Control 並設定 s-maxage。"
+              }
+            },
+            {
+              "title": { "en": "Request it twice", "zh": "連續請求兩次" },
+              "text": {
+                "en": "Run curl -sI twice. The first is usually MISS (cold), the second should be HIT (warm) from the same edge city.",
+                "zh": "用 curl -sI 跑兩次。第一次通常是 MISS（冷的），第二次從同一個邊緣城市應該變成 HIT（熱的）。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# -s silent, -I headers only; look at cf-cache-status\ncurl -sI https://example.com/logo.png | grep -i cf-cache-status\n# 1st run -> cf-cache-status: MISS\n# 2nd run -> cf-cache-status: HIT"
+              }
+            },
+            {
+              "title": { "en": "Purge after an update", "zh": "更新後清除快取" },
+              "text": {
+                "en": "Changed the file before its TTL ends? Purge it so the next request rebuilds a fresh copy.",
+                "zh": "在 TTL 還沒到就改了檔案？清除它，讓下一個請求重建一份新的複本。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# Purge a single URL via the API\ncurl -X POST \\\n  \"https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache\" \\\n  -H \"Authorization: Bearer $CF_API_TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  --data '{\"files\":[\"https://example.com/logo.png\"]}'"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cdn-vs-kv",
+      "icon": "compare_arrows",
+      "heading": { "en": "CDN cache vs KV cache", "zh": "CDN 快取 vs KV 快取" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "People say 'cache' for two very different things on Cloudflare. The CDN cache (this guide) is automatic and keyed by URL. Workers KV is an application cache you read and write by key from your own code. They solve different problems.",
+            "zh": "在 Cloudflare，「快取」這個詞常指兩種很不一樣的東西。CDN 快取（也就是本篇）是自動的、以網址為鍵；Workers KV 則是應用層快取，由你自己的程式以 key 讀寫。兩者解決的是不同的問題。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Which cache catches the request", "zh": "請求會落在哪一種快取" },
+          "code": {
+            "en": "flowchart TD\n  R[\"Incoming request\"] --> Q{\"Static and same for everyone?\"}\n  Q -->|\"Yes\"| CDN[\"CDN edge cache: automatic, URL-keyed\"]\n  Q -->|\"No\"| APP[\"Worker logic runs\"]\n  APP --> K{\"Reusable computed data?\"}\n  K -->|\"Yes\"| KV[\"Workers KV: read/write by key in code\"]\n  K -->|\"No\"| DB[\"Origin / database\"]",
+            "zh": "flowchart TD\n  R[\"進來的請求\"] --> Q{\"靜態且大家都一樣？\"}\n  Q -->|\"是\"| CDN[\"CDN 邊緣快取：自動、以網址為鍵\"]\n  Q -->|\"否\"| APP[\"執行 Worker 邏輯\"]\n  APP --> K{\"是可重複使用的運算結果？\"}\n  K -->|\"是\"| KV[\"Workers KV：在程式中以 key 讀寫\"]\n  K -->|\"否\"| DB[\"來源伺服器 / 資料庫\"]"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "public",
+              "title": { "en": "CDN cache", "zh": "CDN 快取" },
+              "text": {
+                "en": "Caches whole HTTP responses, keyed by URL, shared across all users. Controlled by Cache-Control and Cache Rules. Great for assets and pages.",
+                "zh": "快取的是整個 HTTP 回應，以網址為鍵，所有使用者共用。由 Cache-Control 與快取規則控制。最適合靜態資源與頁面。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "KV cache", "zh": "KV 快取" },
+              "text": {
+                "en": "You store arbitrary values under keys you choose, read/written in Worker code. Good for computed API results, config, and per-key data.",
+                "zh": "你用自己挑的 key 存任意的值，在 Worker 程式裡讀寫。適合存運算後的 API 結果、設定，與以 key 區分的資料。"
+              }
+            },
+            {
+              "icon": "auto_awesome",
+              "title": { "en": "Automatic vs manual", "zh": "自動 vs 手動" },
+              "text": {
+                "en": "CDN caching just happens once content is proxied. KV does nothing until your code calls KV.get and KV.put — you own the logic.",
+                "zh": "內容一經代理，CDN 快取就自動發生。KV 在你的程式呼叫 KV.get、KV.put 之前什麼都不做——邏輯由你掌控。"
+              }
+            },
+            {
+              "icon": "layers",
+              "title": { "en": "Use both together", "zh": "兩者可以併用" },
+              "text": {
+                "en": "A Worker can read from KV to build a response, then send Cache-Control so the CDN caches that response at the edge — two layers, one fast path.",
+                "zh": "Worker 可以先讀 KV 組出回應，再送出 Cache-Control 讓 CDN 把這個回應快取在邊緣——兩層快取，一條快路。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Gotchas & tips", "zh": "陷阱與小提示" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "lock_person",
+          "title": { "en": "Never cache per-user pages", "zh": "千萬別快取每位使用者專屬頁面" },
+          "text": {
+            "en": "If a logged-in dashboard gets cached publicly, one user can see another user's data. Always send Cache-Control: private, no-store for personalized or authenticated responses.",
+            "zh": "如果已登入的後台被公開快取，某位使用者就可能看到別人的資料。針對個人化或需驗證的回應，一律送出 Cache-Control: private, no-store。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "A 200 with no Cache-Control often becomes DYNAMIC — set the header to make it cacheable.",
+              "cf-cache-status is per edge location, so a fresh MISS in a new city is normal.",
+              "Version your filenames (app.v2.js) so updates create a new cache key instead of needing a purge.",
+              "Query strings change the cache key by default — /a?x=1 and /a?x=2 are cached separately.",
+              "Use stale-while-revalidate so users never wait on a revalidation round-trip."
+            ],
+            "zh": [
+              "回 200 但沒有 Cache-Control，常會變成 DYNAMIC——設好標頭才會被快取。",
+              "cf-cache-status 是各邊緣據點各自記錄，所以新城市出現一次 MISS 很正常。",
+              "在檔名加版本（app.v2.js），更新就會產生新的快取鍵，不必特地清除。",
+              "查詢字串預設會改變快取鍵——/a?x=1 和 /a?x=2 是分開快取的。",
+              "善用 stale-while-revalidate，讓使用者永遠不必等重新驗證的來回。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "cdn", "label": { "en": "CDN & Cache", "zh": "CDN 與快取" } },
+    { "slug": "speed", "label": { "en": "Speed", "zh": "速度優化" } },
+    { "slug": "kv-cache-layer", "label": { "en": "KV cache layer", "zh": "KV 快取層" } },
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } }
+  ],
+  "docs": "https://developers.cloudflare.com/cache/"
+}

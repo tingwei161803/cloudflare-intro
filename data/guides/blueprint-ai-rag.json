@@ -1,0 +1,385 @@
+{
+  "slug": "blueprint-ai-rag",
+  "category": "integrations",
+  "group": { "en": "Architecture Blueprints", "zh": "架構藍圖" },
+  "icon": "neurology",
+  "title": {
+    "en": "Blueprint: an AI Q&A app (RAG)",
+    "zh": "架構藍圖：AI 問答應用（RAG）"
+  },
+  "subtitle": {
+    "en": "A reference architecture for Retrieval-Augmented Generation (RAG) on Cloudflare",
+    "zh": "Cloudflare 上檢索增強生成（RAG）的參考架構"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Combine Workers AI, Vectorize and D1 into an app that reads your own documents and answers questions with sources — the canonical RAG architecture on Cloudflare.",
+      "zh": "把 Workers AI、Vectorize 和 D1 組成一個會讀你自己文件、並且有所本回答問題的應用——這就是 Cloudflare 上最經典的 RAG 架構。"
+    }
+  },
+  "stats": [
+    { "value": "768", "label": { "en": "Embedding dimensions", "zh": "向量維度" } },
+    { "value": "top-5", "label": { "en": "Chunks per question", "zh": "每題取片段" } },
+    { "value": "5", "label": { "en": "Services wired", "zh": "串接服務" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we building?", "zh": "我們要打造什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "We are building a Q&A app that answers questions from your own documents. A plain large language model (LLM) only knows what it saw during training, so it cannot answer about your private handbook — and it may confidently make things up. RAG (Retrieval-Augmented Generation) fixes this: first retrieve the most relevant pieces of your documents, then let the LLM generate an answer using only those pieces.",
+            "zh": "我們要做一個會根據你自己文件回答問題的問答應用。單純的大型語言模型（LLM）只懂得它訓練時看過的東西，所以無法回答你私有手冊裡的內容——而且還可能很有自信地亂編。RAG（Retrieval-Augmented Generation，檢索增強生成）就是來解決這個問題：先「檢索」出文件中最相關的片段，再讓 LLM 只根據這些片段「生成」答案。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "RAG has two phases. An offline ingest phase reads your documents, turns them into vectors (lists of numbers that capture meaning) and stores them. An online query phase takes a user question, finds the closest stored chunks, and feeds them to the LLM as context. Here is the whole picture:",
+            "zh": "RAG 有兩個階段。離線的「匯入」階段會讀進你的文件，把它們變成向量（一串能代表語意的數字）並存起來。線上的「查詢」階段則接收使用者的問題，找出最相近的片段，再把它們當成上下文（context）餵給 LLM。整體長這樣："
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "RAG on Cloudflare — the big picture", "zh": "Cloudflare 上的 RAG —— 全貌" },
+          "code": {
+            "en": "flowchart TD\n  DOC[\"Your documents\"] --> ING[\"Ingest: chunk + embed\"]\n  ING --> VEC[\"Vectorize + D1 (knowledge store)\"]\n  USR[\"User question\"] --> RET[\"Retrieve: search Vectorize\"]\n  VEC --> RET\n  RET --> GEN[\"Generate: Workers AI LLM\"]\n  GEN --> ANS[\"Grounded answer\"]",
+            "zh": "flowchart TD\n  DOC[\"你的文件\"] --> ING[\"匯入：切段 + 向量化\"]\n  ING --> VEC[\"Vectorize + D1（知識儲存層）\"]\n  USR[\"使用者問題\"] --> RET[\"檢索：搜尋 Vectorize\"]\n  VEC --> RET\n  RET --> GEN[\"生成：Workers AI 大型語言模型\"]\n  GEN --> ANS[\"有依據的答案\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "menu_book",
+          "title": { "en": "Think of it like an open-book exam", "zh": "把它想成一場開書考試" },
+          "text": {
+            "en": "A closed-book exam forces you to answer from memory — and you might misremember. RAG turns it into an open-book exam: before answering, you flip to the most relevant pages (retrieval) and write your answer based on what they actually say (generation). The LLM is the student; Vectorize is the index at the back of the book.",
+            "zh": "閉書考試逼你憑記憶作答——可能記錯。RAG 把它變成開書考試：回答前先翻到最相關的那幾頁（檢索），再根據頁面上真正寫的內容作答（生成）。LLM 就是考生，Vectorize 就是書末的索引。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "各元件的職責" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Five Cloudflare pieces work together. The Worker is the conductor; Workers AI provides the brains (both embeddings and the LLM); Vectorize is the searchable memory; D1 keeps the original readable text; R2 holds the raw source files.",
+            "zh": "五個 Cloudflare 元件分工合作。Worker 是指揮；Workers AI 提供大腦（負責向量化與 LLM）；Vectorize 是可搜尋的記憶；D1 保存原始可讀的文字；R2 則存放原始檔案。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "hub",
+              "title": { "en": "Workers — orchestrator", "zh": "Workers —— 指揮" },
+              "text": {
+                "en": "The serverless code that ties everything together: it exposes /ingest and /ask, calls each service in order, and returns JSON.",
+                "zh": "把一切串起來的無伺服器程式碼：對外提供 /ingest 與 /ask，依序呼叫各服務，最後回傳 JSON。"
+              }
+            },
+            {
+              "icon": "neurology",
+              "title": { "en": "Workers AI — brains", "zh": "Workers AI —— 大腦" },
+              "text": {
+                "en": "Runs two models: an embedding model that turns text into vectors, and an LLM (Llama) that writes the final answer from the context.",
+                "zh": "跑兩個模型：一個 embedding 模型把文字變成向量，一個 LLM（Llama）根據上下文寫出最終答案。"
+              }
+            },
+            {
+              "icon": "scatter_plot",
+              "title": { "en": "Vectorize — retrieval", "zh": "Vectorize —— 檢索" },
+              "text": {
+                "en": "The vector database. Stores every chunk's vector and, given the question's vector, returns the top-k most similar chunks in milliseconds.",
+                "zh": "向量資料庫。存放每個片段的向量，給它問題的向量，就能在幾毫秒內回傳最相近的前 k 個片段。"
+              }
+            },
+            {
+              "icon": "table",
+              "title": { "en": "D1 — original text", "zh": "D1 —— 原始文字" },
+              "text": {
+                "en": "Vectorize stores numbers, not words. D1 (a SQL database) keeps each chunk's readable text, looked up by id after the search.",
+                "zh": "Vectorize 存的是數字、不是文字。D1（SQL 資料庫）保存每個片段的可讀文字，搜尋後再用 id 撈回來。"
+              }
+            },
+            {
+              "icon": "folder",
+              "title": { "en": "R2 — raw files", "zh": "R2 —— 原始檔案" },
+              "text": {
+                "en": "Object storage for the source PDFs, Markdown or images you ingest, so you can re-chunk or re-embed later without re-uploading.",
+                "zh": "物件儲存，放你匯入的原始 PDF、Markdown 或圖片，日後要重新切段或重新向量化時不必再上傳一次。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ingest",
+      "icon": "cloud_upload",
+      "heading": { "en": "Phase 1 — Ingest (build the index)", "zh": "階段一 —— 匯入（建立索引）" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Ingest runs once per document (or whenever it changes). We split the document into small chunks, embed each chunk with Workers AI, then store the vectors in Vectorize and the original text in D1. The id links the two: the same id lives in both stores.",
+            "zh": "匯入對每份文件只需跑一次（或在它更新時跑）。我們把文件切成小片段（chunk），用 Workers AI 把每段向量化，再把向量存進 Vectorize、把原始文字存進 D1。靠 id 把兩邊綁在一起：同一個 id 同時存在於兩個儲存層。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Ingest pipeline", "zh": "匯入流程" },
+          "code": {
+            "en": "flowchart TD\n  A[\"Source docs (PDF, MD)\"] --> B[\"Split into chunks\"]\n  B --> C[\"Workers AI: embed each chunk\"]\n  C --> D[\"Vectorize: store vectors\"]\n  B --> E[\"D1: store original text\"]\n  D --> F[\"Searchable knowledge index\"]\n  E --> F",
+            "zh": "flowchart TD\n  A[\"來源文件 (PDF、MD)\"] --> B[\"切成小段落 chunk\"]\n  B --> C[\"Workers AI：把每段做成向量\"]\n  C --> D[\"Vectorize：儲存向量\"]\n  B --> E[\"D1：儲存原始文字\"]\n  D --> F[\"可搜尋的知識索引\"]\n  E --> F"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "content_cut",
+          "title": { "en": "Why chunk at all?", "zh": "為什麼要切段？" },
+          "text": {
+            "en": "Embedding a whole 50-page manual into one vector blurs its meaning, and you could never quote a precise passage. Splitting into ~200-word chunks (with a little overlap so sentences are not cut mid-thought) gives sharp, quotable pieces to retrieve.",
+            "zh": "把整本 50 頁手冊壓成一個向量會讓語意模糊，也無法精準引用某一段。切成約 200 字的片段（並讓相鄰片段稍微重疊，句子才不會被攔腰切斷），就能取得精準、可引用的片段。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "query",
+      "icon": "search",
+      "heading": { "en": "Phase 2 — Query (answer a question)", "zh": "階段二 —— 查詢（回答問題）" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "At query time we embed the question with the SAME model used at ingest, search Vectorize for the top-k closest chunks, pull their original text from D1, and stitch them into a prompt. The LLM reads that context plus the question and writes a grounded answer.",
+            "zh": "查詢時，我們用「和匯入時相同」的模型把問題向量化，到 Vectorize 搜尋最接近的前 k 個片段，從 D1 撈回它們的原始文字，再拼成一段 prompt。LLM 讀完這段上下文加上問題後，寫出有依據的答案。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Query pipeline", "zh": "查詢流程" },
+          "code": {
+            "en": "flowchart LR\n  Q[\"User question\"] --> E[\"Workers AI: embed question\"]\n  E --> V[\"Vectorize: search top-k\"]\n  V --> C[\"Top-k context chunks\"]\n  C --> P[\"Build prompt: context + question\"]\n  P --> L[\"Workers AI LLM: generate\"]\n  L --> A[\"Grounded answer\"]",
+            "zh": "flowchart LR\n  Q[\"使用者問題\"] --> E[\"Workers AI：把問題做成向量\"]\n  E --> V[\"Vectorize：搜尋 top-k\"]\n  V --> C[\"最相關的前 k 段內容\"]\n  C --> P[\"組 prompt：context + 問題\"]\n  P --> L[\"Workers AI 大型語言模型：生成\"]\n  L --> A[\"有依據的答案\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Same model, both sides", "zh": "兩邊要用同一個模型" },
+          "text": {
+            "en": "Documents and questions must be embedded by the exact same model, into the same number of dimensions. Mixing models (or index sizes) puts the vectors in different coordinate systems, so 'nearest' becomes meaningless and search returns garbage.",
+            "zh": "文件和問題必須用「完全相同」的模型、做成「相同維度」的向量。混用不同模型（或不同索引維度）會讓向量落在不同的座標系，「最近」就失去意義，搜尋結果會變垃圾。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "One question, end to end", "zh": "一個問題的完整往返" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is exactly what happens inside the Worker when a user asks one question — every hop between Workers AI, Vectorize and D1:",
+            "zh": "當使用者問一個問題時，Worker 內部到底發生什麼事——Workers AI、Vectorize 和 D1 之間的每一次往返都在這裡："
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Request sequence", "zh": "請求時序" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as User\n  participant W as Worker\n  participant AI as \"Workers AI\"\n  participant V as Vectorize\n  participant D as D1\n  U->>W: POST /ask (question)\n  W->>AI: embed the question\n  AI-->>W: question vector\n  W->>V: query(vector, topK=5)\n  V-->>W: top-5 matches (id, score)\n  W->>D: fetch original text by id\n  D-->>W: chunk texts\n  W->>AI: chat (context + question)\n  AI-->>W: answer\n  W-->>U: JSON (answer)",
+            "zh": "sequenceDiagram\n  participant U as 使用者\n  participant W as Worker\n  participant AI as \"Workers AI\"\n  participant V as Vectorize\n  participant D as D1\n  U->>W: POST /ask（問題）\n  W->>AI: 把問題做成向量\n  AI-->>W: 問題向量\n  W->>V: query(向量, topK=5)\n  V-->>W: 前 5 筆相符（id、分數）\n  W->>D: 依 id 取回原文\n  D-->>W: 各片段文字\n  W->>AI: chat（context + 問題）\n  AI-->>W: 答案\n  W-->>U: JSON（答案）"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it", "zh": "動手實作" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Below is a complete, runnable Worker with two routes: POST /ingest to index a document, and POST /ask to answer a question. Create the resources, define the table, wire the bindings, then add the code.",
+            "zh": "以下是一個完整、可執行的 Worker，包含兩條路由：POST /ingest 用來把文件建索引，POST /ask 用來回答問題。先建立資源、定義資料表、接好繫結（binding），再加上程式碼。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the index & database", "zh": "建立索引與資料庫" },
+              "text": {
+                "en": "The index dimensions (768) must match the embedding model below. cosine is the recommended distance metric for bge models.",
+                "zh": "索引維度（768）必須對應下面的 embedding 模型。bge 系列模型建議用 cosine（餘弦）距離。"
+              },
+              "code": { "lang": "bash", "body": "# Index sized for the bge-base embedding model (768 dims)\nwrangler vectorize create rag-index --dimensions=768 --metric=cosine\n\n# A D1 database to keep each chunk's original text\nwrangler d1 create rag-db" }
+            },
+            {
+              "title": { "en": "Create the chunks table", "zh": "建立 chunks 資料表" },
+              "text": {
+                "en": "Save this as schema.sql, then run: wrangler d1 execute rag-db --remote --file=./schema.sql",
+                "zh": "存成 schema.sql，再執行：wrangler d1 execute rag-db --remote --file=./schema.sql"
+              },
+              "code": { "lang": "sql", "body": "CREATE TABLE IF NOT EXISTS chunks (\n  id      TEXT PRIMARY KEY,\n  doc_id  TEXT,\n  text    TEXT NOT NULL\n);" }
+            },
+            {
+              "title": { "en": "Wire the bindings", "zh": "接好繫結" },
+              "text": {
+                "en": "Bindings expose AI, Vectorize and D1 to your code as env.AI, env.VECTORIZE and env.DB — no API keys in your source. Replace database_id with the id printed by 'wrangler d1 create'.",
+                "zh": "繫結讓程式能用 env.AI、env.VECTORIZE、env.DB 來存取 AI、Vectorize 與 D1——原始碼裡不必放金鑰。把 database_id 換成『wrangler d1 create』印出來的那組 id。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"rag-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  \"ai\": { \"binding\": \"AI\" },\n  \"vectorize\": [\n    { \"binding\": \"VECTORIZE\", \"index_name\": \"rag-index\" }\n  ],\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"rag-db\", \"database_id\": \"<your-d1-id>\" }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Ingest: chunk, embed, store", "zh": "匯入：切段、向量化、儲存" },
+              "text": {
+                "en": "One env.AI.run() call embeds every chunk at once. We upsert vectors into Vectorize (idempotent, so re-ingesting a doc is safe) and INSERT OR REPLACE the text into D1 under the same id.",
+                "zh": "一次 env.AI.run() 就把所有片段一起向量化。我們用 upsert 把向量寫進 Vectorize（具冪等性，重新匯入同一份文件也安全），並用 INSERT OR REPLACE 以相同 id 把文字寫進 D1。"
+              },
+              "code": { "lang": "js", "body": "// POST /ingest  { docId, text }\nasync function ingest(env, docId, fullText) {\n  // 1) Split the document into small overlapping chunks\n  const chunks = chunkText(fullText, 200, 40);\n\n  // 2) Embed every chunk in one Workers AI call\n  const { data } = await env.AI.run(\"@cf/baai/bge-base-en-v1.5\", {\n    text: chunks,\n  });\n\n  // 3) Save original text in D1, vectors in Vectorize\n  const vectors = [];\n  for (let i = 0; i < chunks.length; i++) {\n    const id = docId + \":\" + i;\n    await env.DB.prepare(\n      \"INSERT OR REPLACE INTO chunks (id, doc_id, text) VALUES (?, ?, ?)\"\n    ).bind(id, docId, chunks[i]).run();\n    vectors.push({ id, values: data[i], metadata: { docId } });\n  }\n  await env.VECTORIZE.upsert(vectors);\n  return chunks.length;\n}\n\n// Split text into word chunks with a little overlap for context\nfunction chunkText(text, size, overlap) {\n  const words = text.split(/\\s+/);\n  const out = [];\n  for (let i = 0; i < words.length; i += size - overlap) {\n    out.push(words.slice(i, i + size).join(\" \"));\n  }\n  return out;\n}" }
+            },
+            {
+              "title": { "en": "Ask: embed, retrieve, generate", "zh": "提問：向量化、檢索、生成" },
+              "text": {
+                "en": "This is the heart of RAG. Embed the question, query() Vectorize for the top-5, load those chunks' text from D1, and pass them to the LLM as context. The system prompt forces the model to answer only from that context.",
+                "zh": "這是 RAG 的核心。把問題向量化，用 query() 向 Vectorize 取前 5 名，從 D1 撈回這些片段的文字，當成上下文交給 LLM。系統提示（system prompt）強制模型只能根據這段上下文作答。"
+              },
+              "code": { "lang": "js", "body": "// POST /ask  { question }\nasync function ask(env, question) {\n  // 1) Embed the question with the SAME model used at ingest\n  const { data } = await env.AI.run(\"@cf/baai/bge-base-en-v1.5\", {\n    text: [question],\n  });\n  const queryVector = data[0];\n\n  // 2) Retrieve the top-k most similar chunks from Vectorize\n  const { matches } = await env.VECTORIZE.query(queryVector, {\n    topK: 5,\n    returnMetadata: true,\n  });\n\n  // 3) Load the original text of those chunks from D1\n  const ids = matches.map((m) => m.id);\n  const slots = ids.map(() => \"?\").join(\", \");\n  const { results } = await env.DB.prepare(\n    \"SELECT text FROM chunks WHERE id IN (\" + slots + \")\"\n  ).bind(...ids).all();\n  const context = results.map((r) => r.text).join(\"\\n---\\n\");\n\n  // 4) Generate an answer grounded ONLY in that context\n  const out = await env.AI.run(\"@cf/meta/llama-3.1-8b-instruct\", {\n    messages: [\n      {\n        role: \"system\",\n        content:\n          \"Answer using ONLY the context below. If it is not there, say you do not know.\",\n      },\n      {\n        role: \"user\",\n        content: \"Context:\\n\" + context + \"\\n\\nQuestion: \" + question,\n      },\n    ],\n  });\n  return out.response;\n}" }
+            },
+            {
+              "title": { "en": "Route the requests", "zh": "把請求接到路由" },
+              "text": {
+                "en": "The default export dispatches POST /ingest and POST /ask to the two functions above and returns JSON.",
+                "zh": "default export 把 POST /ingest 與 POST /ask 派發給上面兩個函式，並回傳 JSON。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    if (request.method === \"POST\" && url.pathname === \"/ingest\") {\n      const { docId, text } = await request.json();\n      const count = await ingest(env, docId, text);\n      return Response.json({ ingested: count });\n    }\n\n    if (request.method === \"POST\" && url.pathname === \"/ask\") {\n      const { question } = await request.json();\n      const answer = await ask(env, question);\n      return Response.json({ answer });\n    }\n\n    return new Response(\"POST JSON to /ingest or /ask\", { status: 404 });\n  },\n};" }
+            },
+            {
+              "title": { "en": "Deploy & try it", "zh": "部署並試用" },
+              "text": {
+                "en": "Deploy, ingest a document, then ask about it. The answer should quote your document, not the model's training data.",
+                "zh": "部署、匯入一份文件，再針對它提問。答案應該引用你的文件，而不是模型的訓練資料。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy\n\n# Index a document\ncurl -X POST https://rag-worker.example.workers.dev/ingest \\\n  -d '{ \"docId\": \"handbook\", \"text\": \"Refunds are accepted within 30 days...\" }'\n\n# Ask a question about it\ncurl -X POST https://rag-worker.example.workers.dev/ask \\\n  -d '{ \"question\": \"How long do I have to get a refund?\" }'" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "scatter_plot",
+              "title": { "en": "Embedding 嵌入", "zh": "嵌入（Embedding）" },
+              "text": {
+                "en": "The act of turning text into a vector with an AI model. Pieces with similar meaning get similar vectors. Same model, same dimensions, on both documents and questions.",
+                "zh": "用 AI 模型把文字變成向量的動作。語意相近的內容會得到相近的向量。文件和問題都要用同一個模型、同樣的維度。"
+              }
+            },
+            {
+              "icon": "social_distance",
+              "title": { "en": "Vector & similarity 向量與相似度", "zh": "向量與相似度" },
+              "text": {
+                "en": "A vector is a list of numbers (a point in space). 'Similarity' is how close two points are — cosine distance here. Closest points mean closest meaning, which is how retrieval works.",
+                "zh": "向量就是一串數字（空間中的一個點）。「相似度」是兩個點有多接近——這裡用 cosine（餘弦）距離。點越近，語意越近，檢索就是靠這個。"
+              }
+            },
+            {
+              "icon": "auto_stories",
+              "title": { "en": "RAG 檢索增強生成", "zh": "RAG（檢索增強生成）" },
+              "text": {
+                "en": "Retrieve relevant chunks first, then let the LLM generate from them. It gives the model fresh, private knowledge and cuts down on made-up answers (hallucination).",
+                "zh": "先檢索出相關片段，再讓 LLM 根據它們生成。這讓模型擁有最新、私有的知識，也大幅減少亂編答案（幻覺）。"
+              }
+            },
+            {
+              "icon": "filter_list",
+              "title": { "en": "Top-k 前 k 名", "zh": "Top-k（前 k 名）" },
+              "text": {
+                "en": "How many of the closest chunks you retrieve (here k=5). Too few may miss the answer; too many add noise and cost. Start at 3-8 and tune.",
+                "zh": "你要取回幾個最接近的片段（這裡 k=5）。太少可能漏掉答案；太多會增加雜訊與成本。先從 3 到 8 之間試起再微調。"
+              }
+            },
+            {
+              "icon": "crop",
+              "title": { "en": "Context window 上下文視窗", "zh": "上下文視窗（Context window）" },
+              "text": {
+                "en": "The maximum amount of text an LLM can read at once. Your retrieved chunks plus the question must fit inside it — another reason to retrieve only the top-k, not everything.",
+                "zh": "LLM 一次最多能讀進的文字量。你檢索到的片段加上問題必須塞得進去——這也是為什麼只取 top-k、而不是全部塞進去的原因。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pitfalls", "zh": "小提示與陷阱" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "format_quote",
+          "title": { "en": "Return sources to build trust", "zh": "回傳出處，建立信任" },
+          "text": {
+            "en": "Store a title or URL in each vector's metadata, and return the matched chunks' sources alongside the answer. Users can verify, and you can debug bad answers by seeing exactly what was retrieved.",
+            "zh": "在每個向量的 metadata（中介資料）裡存標題或網址，回答時連同相符片段的出處一起回傳。使用者能查證，你也能藉由看到「實際檢索到什麼」來除錯爛答案。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Dimensions must match: the index size, the embedding model, and the vectors you upsert all have to agree (768 here).",
+              "Always embed questions with the same model used for documents — mismatches silently return irrelevant results.",
+              "Vectorize stores numbers, not text. Keep the readable text in D1 (small chunks) or R2 (whole files) and join by id.",
+              "Tune chunk size and top-k: smaller chunks are more precise, a higher top-k is more thorough but costs more and risks overflowing the context window.",
+              "Put AI Gateway in front of Workers AI to cache, rate-limit and observe both the embedding and LLM calls.",
+              "Re-ingest when documents change; upsert by a stable id so old vectors are replaced, not duplicated."
+            ],
+            "zh": [
+              "維度必須一致：索引維度、embedding 模型、你 upsert 的向量三者都要對得上（這裡是 768）。",
+              "問題一定要用「和文件相同」的模型來向量化——不一致會悄悄回傳不相關的結果。",
+              "Vectorize 存的是數字、不是文字。可讀文字放 D1（小片段）或 R2（整份檔案），再用 id 對接。",
+              "調整片段大小與 top-k：片段越小越精準，top-k 越大越完整但更花錢、也可能撐爆上下文視窗。",
+              "在 Workers AI 前面加上 AI Gateway，可對 embedding 與 LLM 兩種呼叫做快取、限流與觀測。",
+              "文件更新時要重新匯入；用固定的 id 做 upsert，舊向量會被取代而不是重複堆積。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers-ai", "label": { "en": "Workers AI", "zh": "Workers AI" } },
+    { "slug": "vectorize", "label": { "en": "Vectorize", "zh": "Vectorize" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "agents", "label": { "en": "Agents", "zh": "Agents" } }
+  ],
+  "docs": "https://developers.cloudflare.com/vectorize/"
+}

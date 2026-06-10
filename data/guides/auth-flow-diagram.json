@@ -1,0 +1,338 @@
+{
+  "slug": "auth-flow-diagram",
+  "category": "integrations",
+  "group": { "en": "Flows & Lifecycles", "zh": "流程圖解" },
+  "icon": "key",
+  "title": { "en": "Auth flows, diagrammed", "zh": "各種登入授權流程圖解" },
+  "subtitle": {
+    "en": "See how four common login and authorization flows actually work, drawn step by step as sequence diagrams.",
+    "zh": "用一張張循序圖,一步步看懂四種常見的登入與授權流程到底是怎麼運作的。"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "SSO, session cookies, JWT bearer tokens, and OAuth — each one drawn as a picture you can follow.",
+      "zh": "SSO、session cookie、JWT bearer 權杖、OAuth —— 每一種都畫成看得懂的圖。"
+    }
+  },
+  "stats": [
+    { "value": "4", "label": { "en": "Flows diagrammed", "zh": "流程圖解" } },
+    { "value": "5", "label": { "en": "Mermaid diagrams", "zh": "Mermaid 圖" } },
+    { "value": "0 code", "label": { "en": "For Access SSO", "zh": "Access SSO 免寫程式" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we diagramming?", "zh": "我們要圖解什麼?" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Authentication can feel abstract because the important parts happen invisibly between the browser, your server, and an identity provider. This guide draws four of the most common login flows as sequence diagrams, so you can literally see who talks to whom, in what order, and what gets passed along.",
+            "zh": "登入驗證之所以難懂,是因為最關鍵的步驟都「看不見」—— 它們發生在瀏覽器、你的伺服器、身分提供者之間。這篇把四種最常見的登入流程畫成循序圖(sequence diagram),讓你親眼看到:誰跟誰說話、順序是什麼、中間傳了什麼東西。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "lightbulb",
+          "title": { "en": "Authentication vs authorization", "zh": "驗證(Authentication) vs 授權(Authorization)" },
+          "text": {
+            "en": "Authentication answers 'who are you?' (showing your ID at the door). Authorization answers 'what are you allowed to do?' (whether your ticket lets you into the VIP room). Every flow below does authentication first, then carries proof of it on each later request.",
+            "zh": "驗證(authentication)回答的是「你是誰?」(在門口出示證件);授權(authorization)回答的是「你被允許做什麼?」(你的票能不能進 VIP 室)。底下每一種流程,都是先做一次驗證,之後每次請求再帶著「我已驗證過」的憑證。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Which auth flow should I use?", "zh": "我該用哪一種登入流程?" },
+          "code": {
+            "en": "flowchart TD\n  Start[\"Who is logging in?\"] --> Q1{\"Internal team app?\"}\n  Q1 -->|\"Yes\"| A[\"Cloudflare Access SSO\"]\n  Q1 -->|\"No\"| Q2{\"Web app with a login page?\"}\n  Q2 -->|\"Server sessions\"| S[\"Session cookie\"]\n  Q2 -->|\"API or mobile app\"| J[\"JWT bearer token\"]\n  Q2 -->|\"Sign in with Google\"| O[\"OAuth third-party\"]",
+            "zh": "flowchart TD\n  Start[\"誰要登入?\"] --> Q1{\"內部團隊用的應用程式?\"}\n  Q1 -->|\"是\"| A[\"Cloudflare Access SSO\"]\n  Q1 -->|\"否\"| Q2{\"有登入頁的網頁應用?\"}\n  Q2 -->|\"伺服器 session\"| S[\"Session cookie\"]\n  Q2 -->|\"API 或手機 App\"| J[\"JWT bearer 權杖\"]\n  Q2 -->|\"用 Google 登入\"| O[\"OAuth 第三方\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sso",
+      "icon": "badge",
+      "heading": { "en": "1. Cloudflare Access SSO", "zh": "1. Cloudflare Access SSO" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "SSO (Single Sign-On) means you log in once with one identity provider and then reach many apps without logging in again. With Cloudflare Access, Cloudflare sits in front of your app and handles the whole login — you write no auth code. After login, Cloudflare gives the browser a signed cookie that your app can trust.",
+            "zh": "SSO(Single Sign-On,單一登入)是指:你只在一個身分提供者登入一次,之後就能進到很多應用程式、不用重複登入。用 Cloudflare Access 時,Cloudflare 會擋在你的應用程式前面、把整個登入流程包辦掉 —— 你完全不用自己寫驗證程式碼。登入後,Cloudflare 會給瀏覽器一個「已簽章的 cookie」,讓你的應用程式可以信任。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Access SSO login", "zh": "Access SSO 登入" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant CF as \"Cloudflare Access\"\n  participant IdP as \"Identity provider\"\n  participant App as \"Your app\"\n  U->>CF: Open the app URL\n  CF->>U: No session, redirect to login\n  U->>IdP: Sign in with Google\n  IdP-->>CF: Identity confirmed\n  CF->>U: Set signed Access cookie\n  U->>App: Request with Access cookie\n  App->>CF: Verify the cookie\n  CF-->>App: Token is valid\n  App-->>U: Show the protected page",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant CF as \"Cloudflare Access\"\n  participant IdP as \"身分提供者\"\n  participant App as \"你的應用程式\"\n  U->>CF: 打開應用程式網址\n  CF->>U: 沒有登入狀態,導回登入頁\n  U->>IdP: 用 Google 登入\n  IdP-->>CF: 身分確認成功\n  CF->>U: 發出已簽章的 Access cookie\n  U->>App: 帶著 Access cookie 發出請求\n  App->>CF: 驗證這個 cookie\n  CF-->>App: 權杖有效\n  App-->>U: 顯示受保護的頁面"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "verified_user",
+          "title": { "en": "Why teams love it", "zh": "為什麼團隊愛用它" },
+          "text": {
+            "en": "Your app never sees passwords and you write zero login logic. Cloudflare enforces the policy (who is allowed) and only forwards verified requests. Perfect for internal dashboards and admin panels.",
+            "zh": "你的應用程式永遠看不到密碼,你也不用寫任何登入邏輯。Cloudflare 負責執行政策(誰能進),只把「已驗證」的請求轉給你。拿來保護內部儀表板、後台管理頁面最適合。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "session",
+      "icon": "cookie",
+      "heading": { "en": "2. Session-cookie login", "zh": "2. Session cookie 登入" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A session is the server's memory of one logged-in visitor. After you log in, the server stores a session record (here in Workers KV) and hands the browser a cookie holding only a random session id. The browser sends that cookie on every later request, and the server looks the id up to know who you are. This is the classic flow for server-rendered web apps.",
+            "zh": "session(連線階段)是伺服器對「某一位已登入訪客」的記憶。登入成功後,伺服器會存一筆 session 紀錄(這裡放在 Workers KV),並發給瀏覽器一個 cookie,裡面只放一串隨機的 session id。瀏覽器之後每次請求都會自動帶上這個 cookie,伺服器再用這個 id 去查出「你是誰」。這是傳統伺服器渲染網頁最經典的流程。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Session cookie lifecycle", "zh": "Session cookie 生命週期" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: POST email and password\n  W->>W: Verify the password\n  W->>KV: Store a new session\n  KV-->>W: Saved\n  W-->>U: Reply with session cookie\n  Note over U,W: Next request, cookie attached\n  U->>W: GET dashboard with cookie\n  W->>KV: Look up the session id\n  KV-->>W: Session valid, user id\n  W-->>U: Render the dashboard",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant W as \"Worker\"\n  participant KV as \"Workers KV\"\n  U->>W: 送出 email 和密碼\n  W->>W: 驗證密碼\n  W->>KV: 建立並儲存一筆 session\n  KV-->>W: 已儲存\n  W-->>U: 回傳 session cookie\n  Note over U,W: 下一次請求會自動帶上 cookie\n  U->>W: 帶 cookie 取得儀表板\n  W->>KV: 用 session id 查詢\n  KV-->>W: session 有效,回傳 user id\n  W-->>U: 渲染儀表板"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "lock",
+          "title": { "en": "Keep the cookie safe", "zh": "把 cookie 顧好" },
+          "text": {
+            "en": "Set the cookie as HttpOnly (JavaScript cannot read it), Secure (HTTPS only), and SameSite to reduce CSRF. Give the KV session a TTL so it expires automatically. The cookie itself holds no user data — just the lookup key.",
+            "zh": "把 cookie 設成 HttpOnly(JavaScript 讀不到)、Secure(只走 HTTPS)、SameSite(降低 CSRF 跨站偽造請求)。並給 KV 的 session 設一個 TTL(存活時間)讓它自動過期。cookie 本身不放任何使用者資料 —— 它只是一把查表用的鑰匙。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "jwt",
+      "icon": "token",
+      "heading": { "en": "3. JWT bearer-token API auth", "zh": "3. JWT bearer 權杖 API 驗證" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A JWT (JSON Web Token) is a signed string that carries claims like the user id and an expiry time. Because it is signed with a secret, the server can trust it without storing anything — it just checks the signature. The client sends it in an Authorization header as a 'bearer' token, meaning 'whoever bears this token is allowed in'. This is the go-to flow for APIs, single-page apps, and mobile apps.",
+            "zh": "JWT(JSON Web Token)是一段「已簽章的字串」,裡面帶有 claims(聲明),例如 user id 和到期時間。因為它是用密鑰簽出來的,伺服器不用存任何東西就能信任它 —— 只要驗章就好。用戶端會把它放在 Authorization 標頭裡當作 bearer(持有者)權杖送出,意思是「誰持有這個權杖,誰就能進」。這是 API、單頁應用(SPA)、手機 App 最常用的流程。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "JWT bearer-token flow", "zh": "JWT bearer 權杖流程" },
+          "code": {
+            "en": "sequenceDiagram\n  participant C as \"Client\"\n  participant W as \"Worker API\"\n  C->>W: POST login with credentials\n  W->>W: Sign a JWT with the secret\n  W-->>C: Return the JWT\n  Note over C: Store token in memory\n  C->>W: GET data with bearer header\n  W->>W: Verify the JWT signature\n  W-->>C: Return JSON data",
+            "zh": "sequenceDiagram\n  participant C as \"用戶端\"\n  participant W as \"Worker API\"\n  C->>W: 帶帳號密碼呼叫登入\n  W->>W: 用密鑰簽出一個 JWT\n  W-->>C: 回傳 JWT\n  Note over C: 把權杖存在記憶體\n  C->>W: 用 bearer 標頭取資料\n  W->>W: 驗證 JWT 簽章\n  W-->>C: 回傳 JSON 資料"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "worker-verify-bearer.js", "zh": "worker-verify-bearer.js" },
+          "body": "export default {\n  async fetch(req, env) {\n    const header = req.headers.get(\"Authorization\") || \"\";\n    const [scheme, token] = header.split(\" \");\n    if (scheme !== \"Bearer\" || !token) {\n      return new Response(\"Missing bearer token\", { status: 401 });\n    }\n    const valid = await verifyJWT(token, env.JWT_SECRET);\n    if (!valid) return new Response(\"Invalid token\", { status: 401 });\n    return Response.json({ ok: true, message: \"Welcome back!\" });\n  }\n};\n\n// Verify an HS256 JWT signature with the Web Crypto API\nasync function verifyJWT(token, secret) {\n  const [head, body, sig] = token.split(\".\");\n  if (!head || !body || !sig) return false;\n  const key = await crypto.subtle.importKey(\n    \"raw\",\n    new TextEncoder().encode(secret),\n    { name: \"HMAC\", hash: \"SHA-256\" },\n    false,\n    [\"verify\"]\n  );\n  const signed = new TextEncoder().encode(head + \".\" + body);\n  const bytes = Uint8Array.from(\n    atob(sig.replace(/-/g, \"+\").replace(/_/g, \"/\")),\n    (c) => c.charCodeAt(0)\n  );\n  return crypto.subtle.verify(\"HMAC\", key, bytes, signed);\n}"
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "schedule",
+          "title": { "en": "Verifying the signature is not enough", "zh": "光驗簽章還不夠" },
+          "text": {
+            "en": "After the signature checks out, also decode the payload and reject the token if its exp (expiry) has passed. Keep tokens short-lived (minutes to an hour) and store the secret in a Worker secret, never in code.",
+            "zh": "簽章驗過之後,還要解開 payload(內容),如果 exp(到期時間)已經過了就拒絕。權杖要設短效期(幾分鐘到一小時),而密鑰要放在 Worker secret(密鑰)裡,絕對不要寫死在程式碼。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oauth",
+      "icon": "link",
+      "heading": { "en": "4. OAuth third-party login", "zh": "4. OAuth 第三方登入" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "OAuth lets users log in with an account they already have, like Google or GitHub, without giving your app their password. Your app redirects the user to the provider, the user approves, and the provider redirects back with a short-lived code. Your app then swaps that code for an access token on the server side. The 'authorization code' style below is the secure, recommended pattern.",
+            "zh": "OAuth 讓使用者用「他原本就有的帳號」(例如 Google、GitHub)登入,而不用把密碼交給你的應用程式。你的應用程式把使用者導向提供者,使用者按下同意,提供者再帶著一組短效的「授權碼(code)」導回來。接著你的應用程式在伺服器端用這組 code 去換取存取權杖(access token)。底下這種「authorization code(授權碼)」流程,就是最安全、最推薦的做法。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "OAuth authorization code flow", "zh": "OAuth 授權碼流程" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant App as \"Your app\"\n  participant P as \"OAuth provider\"\n  U->>App: Click sign in with Google\n  App->>U: Redirect to the provider\n  U->>P: Review and approve consent\n  P-->>U: Redirect back with a code\n  U->>App: Deliver the code\n  App->>P: Exchange code for a token\n  P-->>App: Access token and profile\n  App-->>U: Logged in, set a session",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant App as \"你的應用程式\"\n  participant P as \"OAuth 提供者\"\n  U->>App: 點選用 Google 登入\n  App->>U: 導向 OAuth 提供者\n  U->>P: 檢視並同意授權\n  P-->>U: 帶著授權碼導回\n  U->>App: 把授權碼交給應用程式\n  App->>P: 用授權碼換取權杖\n  P-->>App: 回傳存取權杖與個資\n  App-->>U: 完成登入,建立 session"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "shield",
+          "title": { "en": "Code, not token, in the browser", "zh": "瀏覽器拿到的是 code,不是 token" },
+          "text": {
+            "en": "The browser only ever sees a one-time code; the real token is fetched server-to-server so it never leaks. Keep the client secret on the server, and use a state value plus PKCE to block forged callbacks.",
+            "zh": "瀏覽器自始至終只看得到一次性的 code;真正的權杖是伺服器對伺服器去拿的,所以不會外洩。client secret(用戶端密鑰)要留在伺服器,並用 state 參數加上 PKCE 來擋掉偽造的 callback(回呼)。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When to use each", "zh": "什麼時候用哪一種?" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "badge",
+              "title": { "en": "Access SSO", "zh": "Access SSO" },
+              "text": {
+                "en": "Internal tools for your own team. No login code to write — Cloudflare guards the door and enforces who gets in.",
+                "zh": "給自己團隊用的內部工具。不用寫登入程式碼 —— Cloudflare 替你守門,並決定誰能進。"
+              }
+            },
+            {
+              "icon": "cookie",
+              "title": { "en": "Session cookie", "zh": "Session cookie" },
+              "text": {
+                "en": "Traditional, server-rendered websites where the browser is the only client. Simple to reason about and easy to revoke.",
+                "zh": "傳統、伺服器渲染的網站,而且只有瀏覽器這一種用戶端。觀念簡單,也容易隨時讓登入失效。"
+              }
+            },
+            {
+              "icon": "token",
+              "title": { "en": "JWT bearer", "zh": "JWT bearer" },
+              "text": {
+                "en": "APIs, single-page apps, mobile apps, and service-to-service calls. Stateless — no session store needed.",
+                "zh": "API、單頁應用、手機 App,以及服務對服務的呼叫。無狀態(stateless)—— 不需要 session 儲存區。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "OAuth", "zh": "OAuth" },
+              "text": {
+                "en": "Let users sign in with Google, GitHub, or similar — or access their data on those services with their permission.",
+                "zh": "讓使用者用 Google、GitHub 等帳號登入 —— 或在取得他們同意後,存取他們在那些服務上的資料。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key terms", "zh": "重點術語" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": { "en": "SSO", "zh": "SSO 單一登入" },
+              "text": {
+                "en": "Single Sign-On: log in once, reach many apps without logging in again.",
+                "zh": "Single Sign-On:登入一次,就能進到很多應用程式、不用重複登入。"
+              }
+            },
+            {
+              "icon": "history",
+              "title": { "en": "Session", "zh": "Session 連線階段" },
+              "text": {
+                "en": "The server's record of one logged-in visitor, usually kept in a store like KV.",
+                "zh": "伺服器對「某一位已登入訪客」的紀錄,通常存在 KV 這類儲存區。"
+              }
+            },
+            {
+              "icon": "cookie",
+              "title": { "en": "Cookie", "zh": "Cookie" },
+              "text": {
+                "en": "A small value the browser stores and resends on every request — here it carries the session id.",
+                "zh": "瀏覽器存起來、每次請求都會自動再送出的一小段值 —— 這裡用來帶 session id。"
+              }
+            },
+            {
+              "icon": "token",
+              "title": { "en": "JWT", "zh": "JWT" },
+              "text": {
+                "en": "A signed JSON token holding claims (user id, expiry) that the server can trust without a lookup.",
+                "zh": "一個已簽章的 JSON 權杖,帶有 claims(user id、到期時間),伺服器不用查表就能信任。"
+              }
+            },
+            {
+              "icon": "vpn_key",
+              "title": { "en": "Bearer token", "zh": "Bearer 權杖" },
+              "text": {
+                "en": "Sent as 'Authorization: Bearer <token>'. Whoever holds it is treated as authorized.",
+                "zh": "用 'Authorization: Bearer <token>' 送出。誰持有它,就被當作已獲授權。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "OAuth", "zh": "OAuth" },
+              "text": {
+                "en": "A standard for logging in with another service's account without sharing your password.",
+                "zh": "一套標準,讓你用別的服務的帳號登入,而不用把密碼分享出去。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & gotchas", "zh": "小提示與陷阱" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "https",
+          "title": { "en": "Always over HTTPS", "zh": "一律走 HTTPS" },
+          "text": {
+            "en": "Cookies and bearer tokens are like keys — anyone who copies them can impersonate the user. HTTPS keeps them from being read in transit, and is on by default for any Cloudflare-proxied domain.",
+            "zh": "cookie 和 bearer 權杖就像鑰匙 —— 誰複製到就能假冒使用者。HTTPS 能讓它們在傳輸途中不被偷看,而且只要網域掛在 Cloudflare 代理後面,預設就已開啟。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Never store a raw JWT or session id in localStorage if you can avoid it — an HttpOnly cookie is safer against XSS.",
+              "Always verify a JWT's signature AND its expiry on the server; never trust the payload alone.",
+              "For pure internal tools, Cloudflare Access often replaces all of this with zero auth code.",
+              "Add Turnstile to your login form to block bots before they ever reach your password check.",
+              "Give sessions and tokens a short lifetime, and provide a real logout that deletes the server-side session."
+            ],
+            "zh": [
+              "能避免就別把原始 JWT 或 session id 存在 localStorage —— 用 HttpOnly cookie 對 XSS(跨站腳本)更安全。",
+              "在伺服器端「同時」驗證 JWT 的簽章「和」到期時間;絕對不要只信 payload 內容。",
+              "純內部工具的話,Cloudflare Access 常常能取代上面這一切,完全免寫驗證程式碼。",
+              "在登入表單加上 Turnstile,在機器人碰到你的密碼檢查之前就先擋掉。",
+              "給 session 和權杖設短效期,並做一個真正的登出 —— 會刪掉伺服器端的 session。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "access", "label": { "en": "Cloudflare Access", "zh": "Cloudflare Access" } },
+    { "slug": "auth-fullstack", "label": { "en": "Full-stack auth", "zh": "全端身分驗證" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "turnstile", "label": { "en": "Turnstile", "zh": "Turnstile" } }
+  ],
+  "docs": "https://developers.cloudflare.com/cloudflare-one/"
+}

@@ -1,0 +1,425 @@
+{
+  "slug": "d1-relationships",
+  "category": "integrations",
+  "group": { "en": "Data & Storage", "zh": "資料庫與儲存" },
+  "icon": "share",
+  "title": { "en": "Relationships & JOINs in D1", "zh": "D1 的關聯與 JOIN 查詢" },
+  "subtitle": {
+    "en": "Model one-to-many and many-to-many data in D1, then query it with JOINs and batch transactions",
+    "zh": "在 D1 裡建立一對多與多對多資料模型，再用 JOIN 查詢與批次交易把它們串起來"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Model users, posts, and tags the relational way — then pull them back together with a single JOIN.",
+      "zh": "用關聯式的方式設計 使用者、貼文、標籤，再用一句 JOIN 把它們重新拼回來。"
+    }
+  },
+  "stats": [
+    { "value": "3", "label": { "en": "Tables linked", "zh": "關聯資料表" } },
+    { "value": "1:N", "label": { "en": "One-to-many", "zh": "一對多" } },
+    { "value": "M:N", "label": { "en": "Many-to-many", "zh": "多對多" } },
+    { "value": "1 txn", "label": { "en": "Atomic batch", "zh": "原子交易" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we modeling?", "zh": "我們要建立什麼模型？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Real apps rarely store everything in one giant table. Instead we split data into focused tables and connect them with relationships (a relationship = a rule that says how rows in one table relate to rows in another). In this guide we build a tiny blog: users write posts, and posts are labeled with tags.",
+            "zh": "真實的應用程式很少把所有東西塞進一張大表。我們會把資料拆成各司其職的小表，再用「關聯」把它們連起來（關聯 = 一條規則，說明某張表的列和另一張表的列怎麼對應）。這篇我們會做一個迷你部落格：使用者（users）會發表貼文（posts），而貼文會被貼上標籤（tags）。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Two kinds of relationship cover almost everything: one-to-many (one user writes many posts) and many-to-many (a post has many tags, and a tag is on many posts). Once the data is split, we use a JOIN to glue it back together in one query.",
+            "zh": "兩種關聯幾乎就涵蓋了大部分情境：一對多（一位使用者寫很多篇貼文）以及多對多（一篇貼文有很多標籤，一個標籤也貼在很多貼文上）。資料拆開之後，我們再用 JOIN（合併查詢）在一次查詢裡把它們黏回來。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "family_history",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A family tree. Each person (a user) can have many children (posts) — that branch is one-to-many. But friendships go both ways: you have many friends and each friend has many friends — that web is many-to-many, and you need a separate list to record who is friends with whom.",
+            "zh": "一棵家族樹。每個人（使用者）可以有很多小孩（貼文）——這條分支就是一對多。但「朋友關係」是雙向的：你有很多朋友、每個朋友也有很多朋友——這張網就是多對多，而你需要一份額外的名單來記錄「誰和誰是朋友」。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The blog at a glance", "zh": "部落格資料一覽" },
+          "code": {
+            "en": "flowchart TD\n  U[\"Users\"] -->|\"1 user writes many posts\"| P[\"Posts\"]\n  P -->|\"each post has many tags\"| PT[\"post_tags\"]\n  T[\"Tags\"] -->|\"each tag on many posts\"| PT",
+            "zh": "flowchart TD\n  U[\"使用者\"] -->|\"一位使用者寫多篇貼文\"| P[\"貼文\"]\n  P -->|\"每篇貼文有多個標籤\"| PT[\"post_tags 中介表\"]\n  T[\"標籤\"] -->|\"每個標籤貼在多篇貼文上\"| PT"
+          }
+        }
+      ]
+    },
+    {
+      "id": "relationship-types",
+      "icon": "account_tree",
+      "heading": { "en": "The two relationship shapes", "zh": "兩種關聯的形狀" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Before any SQL, get a feel for the two patterns. The trick is always asking: 'for one row on this side, how many rows on the other side?'",
+            "zh": "在寫任何 SQL 之前，先抓住這兩種模式的感覺。訣竅永遠是問一句：「這一邊的一列，對應到另一邊的幾列？」"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "call_split",
+              "title": { "en": "One-to-many (1:N)", "zh": "一對多（1:N）" },
+              "text": {
+                "en": "One user writes many posts, but each post has exactly one author. The 'many' side (posts) stores a column pointing back to the 'one' side.",
+                "zh": "一位使用者寫很多篇貼文，但每篇貼文剛好只有一位作者。由「多」的那一邊（貼文）存一個欄位，指回「一」的那一邊。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Many-to-many (M:N)", "zh": "多對多（M:N）" },
+              "text": {
+                "en": "A post has many tags, and a tag is on many posts — both sides are 'many'. Neither table can hold the link on its own.",
+                "zh": "一篇貼文有很多標籤，一個標籤也貼在很多貼文上——兩邊都是「多」。任何一張表都無法靠自己記下這個連結。"
+              }
+            },
+            {
+              "icon": "grid_view",
+              "title": { "en": "Join table for M:N", "zh": "多對多要用中介表" },
+              "text": {
+                "en": "Many-to-many needs a third middle table (post_tags) with one row per link: post 10 ↔ tag 'sql'. This is the only honest way to record it.",
+                "zh": "多對多需要第三張中介表（post_tags），每一個連結存成一列：貼文 10 ↔ 標籤 'sql'。這是唯一誠實記錄它的方式。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": { "en": "Don't stuff lists into one column", "zh": "別把清單塞進一個欄位" },
+          "text": {
+            "en": "It is tempting to store tags as the text 'sql,cloudflare' in a single posts column. Don't. You can't index it, can't JOIN it, and can't ask 'which posts have the sql tag?' efficiently. Use a join table.",
+            "zh": "你可能會想把標籤存成一個 posts 欄位裡的文字 'sql,cloudflare'。別這樣。它無法建索引、無法 JOIN，也無法有效率地問「哪些貼文有 sql 標籤？」請改用中介表。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The data model (ER diagram)", "zh": "資料模型（ER 圖）" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "An ER diagram (entity-relationship diagram) shows tables as boxes and relationships as connectors. The crow's-foot symbol (the little fork) marks the 'many' end. Here users connect to posts as one-to-many, and posts connect to tags as many-to-many — broken into two one-to-many links through post_tags.",
+            "zh": "ER 圖（實體關聯圖）把資料表畫成方塊、把關聯畫成連線。那個像鳥腳的分叉符號（crow's-foot）標示「多」的那一端。這裡 users 對 posts 是一對多，posts 對 tags 是多對多——並透過 post_tags 拆成兩段一對多。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "users · posts · tags", "zh": "users · posts · tags" },
+          "code": {
+            "en": "erDiagram\n  USERS ||--o{ POSTS : \"writes\"\n  POSTS ||--o{ POST_TAGS : \"has\"\n  TAGS ||--o{ POST_TAGS : \"labels\"\n  USERS {\n    int id PK\n    text email\n    text name\n  }\n  POSTS {\n    int id PK\n    int user_id FK\n    text title\n  }\n  TAGS {\n    int id PK\n    text name\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }",
+            "zh": "erDiagram\n  USERS ||--o{ POSTS : \"撰寫\"\n  POSTS ||--o{ POST_TAGS : \"擁有\"\n  TAGS ||--o{ POST_TAGS : \"標記\"\n  USERS {\n    int id PK\n    text email\n    text name\n  }\n  POSTS {\n    int id PK\n    int user_id FK\n    text title\n  }\n  TAGS {\n    int id PK\n    text name\n  }\n  POST_TAGS {\n    int post_id FK\n    int tag_id FK\n  }"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": { "en": "Primary key (PK)", "zh": "主鍵（PK）" },
+              "text": {
+                "en": "Each table's id uniquely names one row, like a national ID number. No two rows share it.",
+                "zh": "每張表的 id 用來唯一指認某一列，像身分證字號。沒有兩列會重複。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "Foreign key (FK)", "zh": "外鍵（FK）" },
+              "text": {
+                "en": "posts.user_id is a foreign key: it must equal some users.id. It's the pointer that creates the one-to-many link.",
+                "zh": "posts.user_id 是外鍵：它的值必須等於某個 users.id。這個指標就是建立一對多連結的關鍵。"
+              }
+            },
+            {
+              "icon": "grid_view",
+              "title": { "en": "Composite PK", "zh": "複合主鍵" },
+              "text": {
+                "en": "post_tags uses (post_id, tag_id) together as its key, so the same post-tag pair can't be linked twice.",
+                "zh": "post_tags 把 (post_id, tag_id) 兩欄合起來當主鍵，所以同一組貼文-標籤配對不會被連結兩次。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "joins",
+      "icon": "join_inner",
+      "heading": { "en": "What a JOIN actually does", "zh": "JOIN 到底在做什麼" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A JOIN takes rows from two tables and stitches matching ones into a single wider row. You tell it how to match with an ON condition — usually 'foreign key equals primary key'. That's it: it's a lookup that happens inside the database instead of in your code.",
+            "zh": "JOIN 把兩張表的列拿出來，依照配對規則把相符的縫成一條更寬的列。你用 ON 條件告訴它怎麼配對——通常就是「外鍵等於主鍵」。就這樣：它是一個發生在資料庫內部、而不是在你程式碼裡的查表動作。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Two rows in, one row out", "zh": "兩列進，一列出" },
+          "code": {
+            "en": "flowchart LR\n  P[\"posts row (user_id = 1)\"] --> J{\"JOIN ON posts.user_id = users.id\"}\n  U[\"users row (id = 1)\"] --> J\n  J --> R[\"One combined row: title + author name\"]",
+            "zh": "flowchart LR\n  P[\"posts 列 (user_id = 1)\"] --> J{\"JOIN ON posts.user_id = users.id\"}\n  U[\"users 列 (id = 1)\"] --> J\n  J --> R[\"合併成一列：標題 + 作者姓名\"]"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "join_inner",
+              "title": { "en": "INNER JOIN", "zh": "INNER JOIN（內部合併）" },
+              "text": {
+                "en": "Keeps only rows that match on both sides. A post with no matching author simply disappears from the result.",
+                "zh": "只保留兩邊都配對成功的列。找不到對應作者的貼文，就會直接從結果裡消失。"
+              }
+            },
+            {
+              "icon": "join_left",
+              "title": { "en": "LEFT JOIN", "zh": "LEFT JOIN（左側合併）" },
+              "text": {
+                "en": "Keeps every row from the left table even with no match — handy so posts with zero tags still show up (tags come back NULL).",
+                "zh": "保留左表的每一列，就算沒配對到也留著——很適合讓「零標籤的貼文」依然出現（標籤欄會是 NULL）。"
+              }
+            },
+            {
+              "icon": "rule",
+              "title": { "en": "The ON condition", "zh": "ON 配對條件" },
+              "text": {
+                "en": "ON posts.user_id = users.id is the rule that pairs rows. Wrong ON = duplicated or missing rows, so double-check it.",
+                "zh": "ON posts.user_id = users.id 就是配對列的規則。ON 寫錯就會多出重複列或漏列，所以務必再三確認。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it end to end", "zh": "從頭到尾動手做" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Now wire the whole thing: create the tables (including the join table with foreign keys), seed data, run both kinds of JOIN, write atomically with a batch transaction, then read it from a Worker and a web page.",
+            "zh": "現在把整條線串起來：建立資料表（含帶外鍵的中介表）、塞入資料、跑兩種 JOIN、用批次交易做原子寫入，最後從 Worker 與網頁讀出來。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Bind the database", "zh": "綁定資料庫" },
+              "text": {
+                "en": "After 'wrangler d1 create blog-db', add the binding so your Worker can reach it as env.DB.",
+                "zh": "跑完 'wrangler d1 create blog-db' 後，加上這個綁定，讓 Worker 能用 env.DB 存取它。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"blog-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Create the schema (with FKs)", "zh": "建立資料表結構（含外鍵）" },
+              "text": {
+                "en": "post_tags is the join table. It has two foreign keys and a composite primary key. ON DELETE CASCADE means deleting a post auto-removes its link rows.",
+                "zh": "post_tags 就是中介表。它有兩個外鍵和一個複合主鍵。ON DELETE CASCADE 代表刪掉一篇貼文時，會自動把它的連結列一併清掉。"
+              },
+              "code": { "lang": "sql", "body": "-- users: one row per author\nCREATE TABLE users (\n  id    INTEGER PRIMARY KEY,\n  email TEXT NOT NULL UNIQUE,\n  name  TEXT NOT NULL\n);\n\n-- posts: each post belongs to exactly ONE user  (one-to-many)\nCREATE TABLE posts (\n  id      INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  title   TEXT NOT NULL,\n  body    TEXT,\n  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n);\n\n-- tags: one row per reusable label\nCREATE TABLE tags (\n  id   INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE\n);\n\n-- post_tags: the JOIN TABLE linking posts and tags  (many-to-many)\nCREATE TABLE post_tags (\n  post_id INTEGER NOT NULL,\n  tag_id  INTEGER NOT NULL,\n  PRIMARY KEY (post_id, tag_id),\n  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,\n  FOREIGN KEY (tag_id)  REFERENCES tags(id)  ON DELETE CASCADE\n);\n\n-- index the foreign-key columns so JOINs stay fast\nCREATE INDEX idx_posts_user_id    ON posts(user_id);\nCREATE INDEX idx_post_tags_tag_id ON post_tags(tag_id);" }
+            },
+            {
+              "title": { "en": "Seed some rows", "zh": "塞入一些資料" },
+              "text": {
+                "en": "Two users, three posts, three tags, and the link rows that connect posts to tags.",
+                "zh": "兩位使用者、三篇貼文、三個標籤，以及把貼文連到標籤的連結列。"
+              },
+              "code": { "lang": "sql", "body": "INSERT INTO users (id, email, name) VALUES\n  (1, 'mei@example.com',  'Mei'),\n  (2, 'alex@example.com', 'Alex');\n\nINSERT INTO posts (id, user_id, title) VALUES\n  (10, 1, 'Hello D1'),\n  (11, 1, 'JOINs explained'),\n  (12, 2, 'Edge databases');\n\nINSERT INTO tags (id, name) VALUES\n  (100, 'sql'),\n  (101, 'cloudflare'),\n  (102, 'beginner');\n\n-- the many-to-many link rows\nINSERT INTO post_tags (post_id, tag_id) VALUES\n  (10, 100), (10, 101),\n  (11, 100), (11, 102),\n  (12, 101);" }
+            },
+            {
+              "title": { "en": "Query one-to-many (post + author)", "zh": "查一對多（貼文 + 作者）" },
+              "text": {
+                "en": "JOIN posts to users on the foreign key. Each result row now carries the author's name pulled from the users table.",
+                "zh": "用外鍵把 posts JOIN 到 users。現在每一列結果都帶著從 users 表取來的作者姓名。"
+              },
+              "code": { "lang": "sql", "body": "-- One-to-many: every post WITH its author's name.\nSELECT posts.id, posts.title, users.name AS author\nFROM posts\nJOIN users ON posts.user_id = users.id\nWHERE users.id = ?\nORDER BY posts.id DESC;" }
+            },
+            {
+              "title": { "en": "Query many-to-many (post + tags)", "zh": "查多對多（貼文 + 標籤）" },
+              "text": {
+                "en": "Hop posts → post_tags → tags. Because a post can match many tags, use GROUP BY + GROUP_CONCAT to fold the tags back into one row per post.",
+                "zh": "從 posts → post_tags → tags 一路跳過去。因為一篇貼文會配對到很多標籤，用 GROUP BY + GROUP_CONCAT 把標籤摺回成「每篇貼文一列」。"
+              },
+              "code": { "lang": "sql", "body": "-- Many-to-many: every post with a comma list of its tags.\nSELECT posts.id,\n       posts.title,\n       GROUP_CONCAT(tags.name) AS tags\nFROM posts\nLEFT JOIN post_tags ON post_tags.post_id = posts.id\nLEFT JOIN tags      ON tags.id = post_tags.tag_id\nGROUP BY posts.id\nORDER BY posts.id;\n\n-- The other direction: which posts carry the 'sql' tag?\nSELECT posts.title\nFROM posts\nJOIN post_tags ON post_tags.post_id = posts.id\nJOIN tags      ON tags.id = post_tags.tag_id\nWHERE tags.name = ?;" }
+            },
+            {
+              "title": { "en": "Write atomically with batch()", "zh": "用 batch() 做原子寫入" },
+              "text": {
+                "en": "Creating a post AND its tag links must be all-or-nothing. env.DB.batch() runs every statement in order inside one transaction; last_insert_rowid() returns the id of the post just inserted on the same connection.",
+                "zh": "建立貼文「以及」它的標籤連結必須是「全有或全無」。env.DB.batch() 會把所有語句依序放進同一個交易執行；last_insert_rowid() 會回傳同一條連線上剛插入那篇貼文的 id。"
+              },
+              "code": { "lang": "js", "body": "// Create a post AND attach two tags as ONE atomic transaction.\n// If any statement fails, D1 rolls the whole batch back.\nconst results = await env.DB.batch([\n  env.DB\n    .prepare(\"INSERT INTO posts (user_id, title, body) VALUES (?, ?, ?)\")\n    .bind(userId, title, body),\n  env.DB\n    .prepare(\"INSERT INTO post_tags (post_id, tag_id) VALUES (last_insert_rowid(), ?)\")\n    .bind(sqlTagId),\n  env.DB\n    .prepare(\"INSERT INTO post_tags (post_id, tag_id) VALUES (last_insert_rowid(), ?)\")\n    .bind(cfTagId),\n]);" }
+            },
+            {
+              "title": { "en": "Serve joined data from a Worker", "zh": "從 Worker 回傳合併好的資料" },
+              "text": {
+                "en": "One endpoint, one query: combine author and tags server-side so the browser receives ready-to-render rows.",
+                "zh": "一個端點、一次查詢：在伺服器端就把作者和標籤合好，讓瀏覽器收到可以直接渲染的列。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n\n    // GET /api/users/:id/posts -> each post joined with author + tags\n    if (request.method === \"GET\" && url.pathname.startsWith(\"/api/users/\")) {\n      const userId = url.pathname.split(\"/\")[3];\n\n      const { results } = await env.DB\n        .prepare(\n          `SELECT posts.id,\n                  posts.title,\n                  users.name              AS author,\n                  GROUP_CONCAT(tags.name) AS tags\n           FROM posts\n           JOIN users          ON posts.user_id    = users.id\n           LEFT JOIN post_tags ON post_tags.post_id = posts.id\n           LEFT JOIN tags      ON tags.id           = post_tags.tag_id\n           WHERE users.id = ?\n           GROUP BY posts.id\n           ORDER BY posts.id DESC`\n        )\n        .bind(userId)\n        .all();\n\n      return Response.json(results);\n    }\n\n    return new Response(\"Not found\", { status: 404 });\n  },\n};" }
+            },
+            {
+              "title": { "en": "Render it in the browser", "zh": "在瀏覽器渲染" },
+              "text": {
+                "en": "The front-end just fetches JSON. Each row already has author and tags — no extra requests, no client-side joining.",
+                "zh": "前端只要 fetch JSON。每一列都已經帶著作者和標籤——不用額外請求，也不用在前端自己合併。"
+              },
+              "code": { "lang": "js", "body": "// Browser: load one author's posts. Each row already carries the\n// author name and tag list, thanks to the JOINs on the server.\nconst res = await fetch(`/api/users/${userId}/posts`);\nconst posts = await res.json();\n\nposts.forEach((post) => {\n  // e.g. 'Hello D1 - by Mei - sql,cloudflare'\n  console.log(`${post.title} - by ${post.author} - ${post.tags}`);\n});" }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Batch = one transaction", "zh": "批次 = 一個交易" },
+          "code": {
+            "en": "sequenceDiagram\n  participant W as Worker\n  participant D as D1\n  W->>D: batch([insert post, link tag1, link tag2])\n  Note over D: All statements run in one transaction\n  alt every statement succeeds\n    D-->>W: commit and return results\n  else any statement fails\n    D-->>W: roll the whole batch back\n  end",
+            "zh": "sequenceDiagram\n  participant W as Worker\n  participant D as D1\n  W->>D: batch([插入貼文, 連結標籤1, 連結標籤2])\n  Note over D: 所有語句在同一個交易中執行\n  alt 每一句都成功\n    D-->>W: 提交並回傳 results\n  else 任一句失敗\n    D-->>W: 整批回滾\n  end"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "bolt",
+          "title": { "en": "One query beats many", "zh": "一次查詢勝過很多次" },
+          "text": {
+            "en": "Without JOIN you'd fetch posts, then loop and fetch each author and each tag separately — the classic 'N+1' problem. A single JOIN lets the database do that matching once, close to the data.",
+            "zh": "沒有 JOIN 的話，你得先抓貼文，再用迴圈一筆筆去抓每個作者、每個標籤——這就是經典的「N+1」問題。一句 JOIN 讓資料庫在貼近資料的地方一次把配對做完。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key terms", "zh": "重點術語" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "call_split",
+              "title": { "en": "One-to-many", "zh": "一對多" },
+              "text": {
+                "en": "One parent row owns many child rows; each child points back at one parent (posts → users).",
+                "zh": "一筆父列擁有很多子列；每筆子列指回唯一的父列（posts → users）。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Many-to-many", "zh": "多對多" },
+              "text": {
+                "en": "Both sides have many of each other (posts ↔ tags); it can't be stored without a middle table.",
+                "zh": "兩邊都互相對應到很多筆（posts ↔ tags）；沒有中介表就存不下來。"
+              }
+            },
+            {
+              "icon": "grid_view",
+              "title": { "en": "Join table", "zh": "中介表" },
+              "text": {
+                "en": "A small table (post_tags) whose only job is to hold one row per link between two other tables.",
+                "zh": "一張小表（post_tags），唯一的工作就是為兩張表之間的每個連結存一列。"
+              }
+            },
+            {
+              "icon": "join_inner",
+              "title": { "en": "JOIN", "zh": "JOIN 合併查詢" },
+              "text": {
+                "en": "A SELECT that matches rows from two tables on an ON condition and merges them into wider rows.",
+                "zh": "一種 SELECT，依 ON 條件配對兩張表的列，再把它們合併成更寬的列。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "Foreign key (FK)", "zh": "外鍵（FK）" },
+              "text": {
+                "en": "A column that must match a primary key in another table — the database can enforce this for you.",
+                "zh": "一個必須對應到另一張表主鍵的欄位——資料庫可以替你強制檢查這件事。"
+              }
+            },
+            {
+              "icon": "lock",
+              "title": { "en": "Transaction", "zh": "交易（transaction）" },
+              "text": {
+                "en": "A group of writes that all succeed or all fail together, leaving the data consistent. batch() gives you one.",
+                "zh": "一組寫入，要嘛全部成功、要嘛全部失敗，讓資料保持一致。batch() 就給你一個交易。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls & tips", "zh": "陷阱與小提示" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "fact_check",
+          "title": { "en": "D1 enforces foreign keys", "zh": "D1 會強制檢查外鍵" },
+          "text": {
+            "en": "Insert parents before children: a posts row needs its users row to exist first. For batches where statements depend on each other, you may add PRAGMA defer_foreign_keys = true; to delay the check until the transaction commits.",
+            "zh": "先插父、再插子：一筆 posts 列需要它對應的 users 列先存在。若批次裡的語句彼此相依，可以加上 PRAGMA defer_foreign_keys = true; 把檢查延到交易提交時再做。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Always index foreign-key columns (user_id, tag_id) so JOINs don't scan whole tables.",
+              "A JOIN can multiply rows (one post × many tags); use GROUP BY + GROUP_CONCAT to fold them back to one row per post.",
+              "Use LEFT JOIN when the left side should appear even with no match (a post with zero tags).",
+              "batch() is atomic and all-or-nothing — ideal for 'create post + its tag links' together.",
+              "D1 bills by rows read and written; a tight JOIN that reads fewer rows is also cheaper.",
+              "Keep your CREATE TABLE statements in schema.sql and apply with wrangler d1 execute --file=./schema.sql."
+            ],
+            "zh": [
+              "一定要在外鍵欄位（user_id、tag_id）上建索引，JOIN 才不會掃整張表。",
+              "JOIN 可能讓列數倍增（一篇貼文 × 多個標籤）；用 GROUP BY + GROUP_CONCAT 摺回成每篇貼文一列。",
+              "當左側就算沒配對到也要出現時（零標籤的貼文），請用 LEFT JOIN。",
+              "batch() 是原子且全有全無的——最適合把「建立貼文 + 它的標籤連結」綁在一起。",
+              "D1 依讀取與寫入列數計費；少讀幾列的精準 JOIN 也比較省錢。",
+              "把 CREATE TABLE 語句放進 schema.sql，再用 wrangler d1 execute --file=./schema.sql 套用。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "d1-schema-design", "label": { "en": "D1 Schema Design", "zh": "D1 資料表設計" } },
+    { "slug": "frontend-worker-d1-crud", "label": { "en": "Front-end ↔ Worker ↔ D1 CRUD", "zh": "前端 ↔ Worker ↔ D1 CRUD" } }
+  ],
+  "docs": "https://developers.cloudflare.com/d1/"
+}

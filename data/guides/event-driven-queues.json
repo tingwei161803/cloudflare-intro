@@ -1,0 +1,431 @@
+{
+  "slug": "event-driven-queues",
+  "category": "integrations",
+  "group": { "en": "Flows & Lifecycles", "zh": "流程圖解" },
+  "icon": "conveyor_belt",
+  "title": {
+    "en": "Event-driven apps with Queues",
+    "zh": "用 Queues 打造事件驅動應用"
+  },
+  "subtitle": {
+    "en": "Accept a request, reply in milliseconds, and let a queue do the slow work later — with batching, retries, dead-letter queues and idempotency.",
+    "zh": "接下請求、幾毫秒內回覆，再把慢工作交給佇列稍後處理——還帶批次、重試、死信佇列與冪等性。"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Stop making users wait for emails, thumbnails and syncs. A producer Worker says 'got it (202)' instantly; a consumer Worker drains the queue in batches, retries failures, and dead-letters the hopeless ones.",
+      "zh": "別再讓使用者乾等寄信、縮圖、同步。生產者 Worker 立刻回一句『收到了（202）』；消費者 Worker 之後成批清空佇列、失敗自動重試、無解的就丟進死信佇列。"
+    }
+  },
+  "stats": [
+    { "value": "202", "label": { "en": "Returned instantly", "zh": "立即回傳狀態碼" } },
+    { "value": "100", "label": { "en": "Messages per batch", "zh": "每批訊息數" } },
+    { "value": "≤100", "label": { "en": "Auto retries", "zh": "自動重試上限" } },
+    { "value": "$0", "label": { "en": "Egress fees", "zh": "流出流量費" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we wiring together?", "zh": "我們要把什麼串起來？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Some work is slow: sending an email, generating a thumbnail, syncing data to another system. If you do it while the user waits, the page feels sluggish and one hiccup can lose the work. An event-driven design fixes both problems: the request only records 'this needs doing' and returns immediately; the actual work happens later, in the background, reliably.",
+            "zh": "有些工作很慢：寄一封 email、產生縮圖、把資料同步到別的系統。如果你在使用者等待時才做，頁面會卡卡的，而且一個小閃失就把工作弄丟了。事件驅動（event-driven）設計同時解決這兩個問題：請求只先記下『這件事要做』就立刻返回；真正的工作之後在背景可靠地進行。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "On Cloudflare the glue is Queues — a reliable waiting line for messages. A producer Worker accepts the request and drops a message into the queue. A consumer Worker is invoked later with a batch of messages and does the heavy lifting (write to D1, store a file in R2, call an external API). The two Workers never call each other directly; the queue sits in the middle. That separation is called decoupling.",
+            "zh": "在 Cloudflare 上，把它們黏起來的膠水就是 Queues——一條可靠的訊息排隊線。生產者（producer）Worker 接下請求，把一則訊息丟進佇列；消費者（consumer）Worker 之後被叫來，帶著一批訊息做粗重工作（寫進 D1、把檔案存到 R2、呼叫外部 API）。這兩個 Worker 從不直接互相呼叫，佇列就坐在中間。這種分離就叫做「解耦（decoupling）」。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_post_office",
+          "title": { "en": "Think of it like a coat check", "zh": "把它想成寄物櫃" },
+          "text": {
+            "en": "You hand over your coat and get a ticket back in seconds — you don't stand there while it's hung up. Later, a worker in the back room hangs coats in batches. The ticket is your guarantee: the work will get done even though you already walked away.",
+            "zh": "你把外套交出去，幾秒就拿到一張號碼牌——你不用站在那裡等它被掛好。之後，後場的工作人員會成批把外套掛起來。那張號碼牌就是你的保證：就算你已經走開了，工作還是會被完成。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The whole pipeline at a glance", "zh": "整條管線一眼看懂" },
+          "code": {
+            "en": "flowchart LR\n  REQ[\"Incoming request\"] -->|\"POST /upload\"| P[\"Producer Worker\"]\n  P -->|\"send(msg)\"| Q[\"Queue\"]\n  P -->|\"202 Accepted\"| REQ\n  Q -->|\"batch\"| C[\"Consumer Worker\"]\n  C -->|\"write rows\"| D1[\"D1 database\"]\n  C -->|\"store file\"| R2[\"R2 storage\"]\n  C -->|\"call API\"| EXT[\"External API\"]",
+            "zh": "flowchart LR\n  REQ[\"進來的請求\"] -->|\"POST /upload\"| P[\"生產者 Worker\"]\n  P -->|\"send(msg)\"| Q[\"佇列\"]\n  P -->|\"202 Accepted\"| REQ\n  Q -->|\"成批取出\"| C[\"消費者 Worker\"]\n  C -->|\"寫入資料列\"| D1[\"D1 資料庫\"]\n  C -->|\"存檔案\"| R2[\"R2 儲存\"]\n  C -->|\"呼叫 API\"| EXT[\"外部 API\"]"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Notice the two arrows leaving the producer. One goes into the queue (send the message). The other goes straight back to the caller with 202 Accepted — before any slow work has happened. That fork is the heart of an event-driven app.",
+            "zh": "注意從生產者出發有兩個箭頭：一個進入佇列（送出訊息）；另一個直接回到呼叫端，回傳 202 Accepted——而且是在任何慢工作開始之前。這個分岔，就是事件驅動應用的核心。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "roles",
+      "icon": "account_tree",
+      "heading": { "en": "The moving parts and who does what", "zh": "各個角色與它們的職責" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "An event-driven flow has five concepts you keep meeting: the producer, the queue, the consumer, plus the reliability features — batching, retries and the dead-letter queue. Here is each in one line.",
+            "zh": "事件驅動流程裡有五個你會一直碰到的概念：生產者、佇列、消費者，再加上可靠度三寶——批次、重試、死信佇列。下面用一句話講清楚每一個。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "outbox",
+              "title": { "en": "Producer", "zh": "Producer（生產者）" },
+              "text": {
+                "en": "The Worker that accepts a request and calls env.MY_QUEUE.send(msg). It returns instantly without waiting for the work.",
+                "zh": "接下請求、呼叫 env.MY_QUEUE.send(msg) 的那個 Worker。它立刻返回，不等工作做完。"
+              }
+            },
+            {
+              "icon": "inbox",
+              "title": { "en": "Consumer", "zh": "Consumer（消費者）" },
+              "text": {
+                "en": "The queue() handler Cloudflare invokes in the background with a batch of messages to actually process.",
+                "zh": "Cloudflare 在背景帶著一批訊息來呼叫的 queue() 處理函式，負責真正去處理工作。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "Batch", "zh": "Batch（批次）" },
+              "text": {
+                "en": "Up to 100 messages handed to the consumer together, so bulk work (DB writes, API calls) is far more efficient.",
+                "zh": "一次最多 100 則訊息一起交給消費者，讓大量工作（寫 DB、呼叫 API）效率高很多。"
+              }
+            },
+            {
+              "icon": "replay",
+              "title": { "en": "Retry", "zh": "Retry（重試）" },
+              "text": {
+                "en": "If a message fails, Queues redelivers it automatically — up to max_retries — so transient errors heal themselves.",
+                "zh": "訊息失敗時，Queues 會自動重新投遞——最多到 max_retries 次——讓暫時性的錯誤自我修復。"
+              }
+            },
+            {
+              "icon": "report",
+              "title": { "en": "Dead Letter Queue", "zh": "死信佇列（DLQ）" },
+              "text": {
+                "en": "A separate queue where messages land after exhausting all retries, so they are never lost — you inspect and replay them later.",
+                "zh": "訊息用完所有重試後會落到的另一個佇列，所以永遠不會弄丟——你之後可以檢查並重新處理它們。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "bolt",
+          "title": { "en": "One Worker can be both", "zh": "一個 Worker 可身兼兩職" },
+          "text": {
+            "en": "A single Worker can export both fetch (the producer) and queue (the consumer). They live in one project but run at different times: fetch on each request, queue later in the background. We split them into two files below only to make the roles obvious.",
+            "zh": "同一個 Worker 可以同時匯出 fetch（生產者）和 queue（消費者）。它們住在同一個專案，但在不同時間執行：fetch 在每次請求時跑，queue 之後在背景跑。下面把它們拆成兩個檔案，只是為了讓角色更清楚。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Follow one request: fast 202, slow work later", "zh": "跟著一個請求走：先回 202，工作稍後做" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Imagine a sign-up form. The user submits, and we owe them a welcome email. The trick is: reply 202 Accepted the moment the job is queued, and send the email afterwards. Here is the whole round trip — watch how the user is set free before the email is ever sent.",
+            "zh": "想像一個註冊表單。使用者送出後，我們欠他一封歡迎信。訣竅是：工作一進佇列就回 202 Accepted，之後再寄信。下面是完整的來回——注意使用者在信還沒寄出之前，就已經被放走了。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Request returns in ms; the email is sent async", "zh": "請求幾毫秒返回；email 非同步寄出" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as Client\n  participant P as Producer\n  participant Q as Queue\n  participant C as Consumer\n  participant X as Mail\n  U->>P: POST /signup\n  P->>Q: queue email job\n  P-->>U: 202 Accepted\n  Note over U,P: request is done in ms\n  Q->>C: deliver batch later\n  C->>X: send the email\n  X-->>C: delivered\n  C->>C: ack the message",
+            "zh": "sequenceDiagram\n  participant U as \"用戶端\"\n  participant P as \"生產者\"\n  participant Q as \"佇列\"\n  participant C as \"消費者\"\n  participant X as \"信件服務\"\n  U->>P: POST /signup\n  P->>Q: 把寄信工作丟進佇列\n  P-->>U: 202 Accepted\n  Note over U,P: 請求幾毫秒就結束\n  Q->>C: 稍後成批投遞\n  C->>X: 寄出 email\n  X-->>C: 已送達\n  C->>C: ack 確認訊息"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "What each step means", "zh": "每一步在做什麼" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "POST /signup: the browser submits the form to the producer Worker.",
+              "queue email job: the producer calls send() to drop a message describing the work.",
+              "202 Accepted: the producer replies right away — '202' means 'I accepted this; I'll process it later'.",
+              "deliver batch later: Cloudflare invokes the consumer with a batch when messages are ready.",
+              "send the email: the consumer does the actual slow work against the mail service.",
+              "ack the message: on success the consumer acknowledges, so the message leaves the queue for good."
+            ],
+            "zh": [
+              "POST /signup：瀏覽器把表單送到生產者 Worker。",
+              "把寄信工作丟進佇列：生產者呼叫 send()，丟出一則描述這份工作的訊息。",
+              "202 Accepted：生產者馬上回應——『202』的意思是『我收下了，之後會處理』。",
+              "稍後成批投遞：訊息備妥時，Cloudflare 帶著一批訊息來呼叫消費者。",
+              "寄出 email：消費者向信件服務做真正的慢工作。",
+              "ack 確認訊息：成功後消費者送出確認，訊息就永遠離開佇列了。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "schedule",
+          "title": { "en": "Why 202, not 200?", "zh": "為什麼是 202，不是 200？" },
+          "text": {
+            "en": "200 OK usually means 'done'. 202 Accepted is the honest answer here: the request was accepted and will be processed asynchronously — the result isn't ready yet. It tells the client not to expect the finished work in this response.",
+            "zh": "200 OK 通常表示『做完了』。在這裡，202 Accepted 才是誠實的答案：請求已被接受、會以非同步（asynchronously）方式處理——結果還沒好。它告訴用戶端：別期待在這個回應裡拿到完成的工作。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "reliability",
+      "icon": "shield",
+      "heading": { "en": "Retries, dead-letter queues & idempotency", "zh": "重試、死信佇列與冪等性" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Background work fails sometimes — a mail server is down, an API times out. Queues handles this with a simple rule: a message stays alive until it is acked. If processing throws (or you call retry()), the message is redelivered later. After max_retries failed attempts it is moved to a dead-letter queue (DLQ) instead of being dropped.",
+            "zh": "背景工作有時會失敗——信件伺服器掛了、API 逾時。Queues 用一條簡單規則處理：訊息會一直活著，直到被 ack 為止。如果處理時丟出錯誤（或你呼叫 retry()），訊息之後會被重新投遞。失敗達到 max_retries 次後，它會被移到死信佇列（DLQ），而不是被丟掉。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Success → ack; fail → retry → DLQ after N", "zh": "成功 → ack；失敗 → 重試 → N 次後進 DLQ" },
+          "code": {
+            "en": "flowchart TD\n  M[\"Message delivered\"] --> PROC[\"Consumer processes it\"]\n  PROC --> OK{\"Success?\"}\n  OK -->|\"yes\"| ACK[\"ack: drop from queue\"]\n  OK -->|\"no\"| RT{\"Tries < max_retries?\"}\n  RT -->|\"yes\"| WAIT[\"Wait, then redeliver\"]\n  WAIT --> PROC\n  RT -->|\"no\"| DLQ[\"Dead Letter Queue\"]\n  DLQ --> SEE[\"Inspect and alert\"]",
+            "zh": "flowchart TD\n  M[\"訊息被投遞\"] --> PROC[\"消費者開始處理\"]\n  PROC --> OK{\"成功？\"}\n  OK -->|\"是\"| ACK[\"ack：移出佇列\"]\n  OK -->|\"否\"| RT{\"次數 < max_retries？\"}\n  RT -->|\"是\"| WAIT[\"稍等後重新投遞\"]\n  WAIT --> PROC\n  RT -->|\"否\"| DLQ[\"死信佇列 DLQ\"]\n  DLQ --> SEE[\"檢查並告警\"]"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Idempotency: surviving duplicates", "zh": "冪等性：扛得住重複" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Queues delivers at-least-once: a message may occasionally be delivered more than once (for example, the consumer succeeds but crashes before acking). So your handler must be idempotent — running it twice with the same message produces the same result as running it once. The classic trick: give every message a unique id, record ids you've finished, and skip any id you've already seen.",
+            "zh": "Queues 是「至少一次（at-least-once）」投遞：同一則訊息偶爾可能被投遞超過一次（例如消費者處理成功了，卻在 ack 之前當機）。所以你的處理函式必須是「冪等的（idempotent）」——用同一則訊息跑兩次，結果要跟跑一次一樣。經典做法：給每則訊息一個唯一 id，把做完的 id 記下來，遇到已經看過的 id 就略過。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "content_copy",
+          "title": { "en": "Assume every message can arrive twice", "zh": "假設每則訊息都可能來兩次" },
+          "text": {
+            "en": "Without an idempotency check, a single retry could send two welcome emails or charge a card twice. Before doing the work, ask 'have I already handled this id?' — if yes, ack and move on. This one guard makes retries and DLQs safe to rely on.",
+            "zh": "少了冪等性檢查，一次重試就可能寄出兩封歡迎信、或刷兩次卡。動手之前先問『這個 id 我是不是處理過了？』——如果是，直接 ack 然後跳過。這一道防線，讓你可以安心依賴重試與 DLQ。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it: producer, consumer, config", "zh": "親手做：生產者、消費者、設定" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is a complete, runnable example: a producer Worker that queues a job and returns 202, a consumer Worker that processes a batch idempotently and acks, the wrangler.toml that wires the queue (with retries and a DLQ), the D1 table that tracks finished ids, and the commands to create everything and deploy.",
+            "zh": "下面是一個完整、可跑的範例：一個把工作丟進佇列並回 202 的生產者 Worker、一個成批冪等處理並 ack 的消費者 Worker、把佇列接好（含重試與 DLQ）的 wrangler.toml、追蹤已完成 id 的 D1 資料表，以及把所有東西建好並部署的指令。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "1. Producer Worker — accept & return 202", "zh": "1. 生產者 Worker — 接下請求、回 202" },
+              "text": {
+                "en": "On each request it builds a message with a unique id, sends it to the queue via the MY_QUEUE binding, and replies 202 immediately. No slow work happens here.",
+                "zh": "每次請求時，它建一則帶唯一 id 的訊息，透過 MY_QUEUE 綁定送進佇列，然後立刻回 202。這裡不做任何慢工作。"
+              },
+              "code": { "lang": "js", "body": "// src/producer.js\nexport default {\n  // PRODUCER: runs on every HTTP request\n  async fetch(request, env, ctx) {\n    const { email } = await request.json();\n\n    // Build a job with a unique id (used later for idempotency)\n    const msg = {\n      id: crypto.randomUUID(),\n      type: \"welcome_email\",\n      email,\n      ts: Date.now(),\n    };\n\n    // Hand the slow work to the queue, then reply immediately\n    await env.MY_QUEUE.send(msg);\n\n    return new Response(JSON.stringify({ queued: true }), {\n      status: 202,\n      headers: { \"content-type\": \"application/json\" },\n    });\n  },\n};" }
+            },
+            {
+              "title": { "en": "2. Consumer Worker — process a batch & ack", "zh": "2. 消費者 Worker — 成批處理並 ack" },
+              "text": {
+                "en": "Cloudflare calls queue() with a batch. We loop over batch.messages, skip ids already done (idempotency), do the slow work, then ack on success or retry on failure. Failed messages are redelivered and, after max_retries, go to the DLQ automatically.",
+                "zh": "Cloudflare 帶著一批訊息呼叫 queue()。我們對 batch.messages 跑迴圈，略過已完成的 id（冪等），做慢工作，成功就 ack、失敗就 retry。失敗的訊息會被重新投遞，達到 max_retries 後自動進 DLQ。"
+              },
+              "code": { "lang": "js", "body": "// src/consumer.js\nexport default {\n  // CONSUMER: Cloudflare calls this with a batch of messages\n  async queue(batch, env, ctx) {\n    for (const m of batch.messages) {\n      try {\n        const job = m.body;\n\n        // Idempotency: skip if this id was already handled\n        const done = await env.DB\n          .prepare(\"SELECT 1 FROM processed WHERE id = ?\")\n          .bind(job.id)\n          .first();\n        if (done) {\n          m.ack();\n          continue;\n        }\n\n        // Do the slow work: send the email\n        await sendEmail(env, job.email);\n\n        // Record the id so a retry never sends twice\n        await env.DB\n          .prepare(\"INSERT INTO processed (id, ts) VALUES (?, ?)\")\n          .bind(job.id, Date.now())\n          .run();\n\n        m.ack(); // success -> remove from the queue\n      } catch (err) {\n        m.retry(); // failure -> redeliver later, then DLQ\n      }\n    }\n  },\n};" }
+            },
+            {
+              "title": { "en": "3. wrangler.toml — wire producer, consumer & DLQ", "zh": "3. wrangler.toml — 接好生產者、消費者與 DLQ" },
+              "text": {
+                "en": "queues.producers exposes the queue to your code as env.MY_QUEUE. queues.consumers tells Cloudflare to invoke queue() with batches, and sets batch size, retries and the dead_letter_queue where exhausted messages land.",
+                "zh": "queues.producers 把佇列以 env.MY_QUEUE 的名義開放給你的程式碼。queues.consumers 告訴 Cloudflare 用一批批訊息來呼叫 queue()，並設定批次大小、重試次數，以及用盡重試的訊息要落到的 dead_letter_queue。"
+              },
+              "code": { "lang": "toml", "body": "name = \"queue-app\"\nmain = \"src/index.js\"\ncompatibility_date = \"2025-01-01\"\n\n# PRODUCER: send to the \"jobs\" queue as env.MY_QUEUE\n[[queues.producers]]\nqueue = \"jobs\"\nbinding = \"MY_QUEUE\"\n\n# CONSUMER: Cloudflare invokes queue() with batches from \"jobs\"\n[[queues.consumers]]\nqueue = \"jobs\"\nmax_batch_size = 10\nmax_batch_timeout = 5\nmax_retries = 3\ndead_letter_queue = \"jobs-dlq\"\n\n# D1 used for idempotency bookkeeping (env.DB)\n[[d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"queue-app-db\"\ndatabase_id = \"<paste-your-database-id>\"" }
+            },
+            {
+              "title": { "en": "4. D1 table — remember finished ids", "zh": "4. D1 資料表 — 記住已完成的 id" },
+              "text": {
+                "en": "A tiny table keyed by the message id. The consumer inserts a row after finishing, and checks this table first to stay idempotent across retries and duplicate deliveries.",
+                "zh": "一張以訊息 id 為主鍵的小表。消費者做完後插入一列，並在動手前先查這張表，讓它在重試與重複投遞之間保持冪等。"
+              },
+              "code": { "lang": "sql", "body": "-- schema.sql\nCREATE TABLE IF NOT EXISTS processed (\n  id  TEXT PRIMARY KEY,\n  ts  INTEGER NOT NULL\n);" }
+            },
+            {
+              "title": { "en": "5. Create queues + DLQ, then deploy", "zh": "5. 建立佇列 + DLQ，然後部署" },
+              "text": {
+                "en": "Create the main queue and the dead-letter queue (it's just another queue), create the D1 database, load the schema, deploy, and tail the logs to watch messages being consumed live.",
+                "zh": "建立主佇列和死信佇列（它就是另一個普通佇列），建立 D1 資料庫、載入 schema、部署，再用 tail 即時看到訊息被消費的過程。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler queues create jobs\nnpx wrangler queues create jobs-dlq\nnpx wrangler d1 create queue-app-db\nnpx wrangler d1 execute queue-app-db --remote --file=./schema.sql\nnpx wrangler deploy\nnpx wrangler tail" }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "north_east",
+          "title": { "en": "Next: a real image pipeline", "zh": "下一步：真正的圖片管線" },
+          "text": {
+            "en": "Swap 'send email' for 'resize an upload and store it in R2' and you have a media pipeline. The companion blueprint wires exactly that with R2 and Images end to end.",
+            "zh": "把『寄信』換成『把上傳的圖縮圖並存到 R2』，你就有了一條媒體管線。姊妹藍圖用 R2 與 Images 從頭到尾串好的正是這個。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key terms in one place", "zh": "重點術語一次看懂" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "schedule",
+              "title": { "en": "Asynchronous", "zh": "非同步（Async）" },
+              "text": {
+                "en": "Work that happens later, not while the caller waits. The response comes back before the work is finished.",
+                "zh": "稍後才發生、而不是讓呼叫端乾等的工作。回應會在工作完成之前就先回來。"
+              }
+            },
+            {
+              "icon": "link_off",
+              "title": { "en": "Decoupling", "zh": "解耦（Decoupling）" },
+              "text": {
+                "en": "Producer and consumer don't call each other directly; the queue sits between them, so each can fail, scale or deploy on its own.",
+                "zh": "生產者與消費者不直接互相呼叫，佇列坐在中間，所以兩邊可以各自失敗、各自擴展、各自部署。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "Batch", "zh": "批次（Batch）" },
+              "text": {
+                "en": "A group of up to 100 messages delivered together, so bulk operations run far more efficiently than one-by-one.",
+                "zh": "一次最多 100 則訊息一起送來，讓批量操作比一則一則做高效許多。"
+              }
+            },
+            {
+              "icon": "replay",
+              "title": { "en": "Retry", "zh": "重試（Retry）" },
+              "text": {
+                "en": "Automatic redelivery of a failed message, up to max_retries, so transient errors recover without custom code.",
+                "zh": "失敗訊息的自動重新投遞，最多到 max_retries，讓暫時性錯誤不用寫程式就能復原。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "Idempotency", "zh": "冪等性（Idempotency）" },
+              "text": {
+                "en": "Processing the same message twice gives the same result as once. A unique id plus a 'seen' check makes retries safe.",
+                "zh": "同一則訊息處理兩次，結果跟處理一次一樣。一個唯一 id 加上『看過了嗎』的檢查，就讓重試變安全。"
+              }
+            },
+            {
+              "icon": "report",
+              "title": { "en": "Dead Letter Queue", "zh": "死信佇列（DLQ）" },
+              "text": {
+                "en": "A separate queue that catches messages after they exhaust all retries, so nothing is silently lost.",
+                "zh": "一個專門承接『用盡所有重試』訊息的另一個佇列，讓任何東西都不會默默消失。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls, limits & pricing", "zh": "常見陷阱、限制與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": { "en": "Always configure a DLQ", "zh": "一定要設一個 DLQ" },
+          "text": {
+            "en": "Without a dead-letter queue, messages that keep failing are dropped once retries run out. With one, they wait somewhere you can inspect, fix the bug, and replay them. Treat the DLQ as your safety net, not an afterthought.",
+            "zh": "沒有死信佇列，一直失敗的訊息在重試用完後就被丟掉。有了它，這些訊息會待在一個你能檢查、修 bug、再重新處理的地方。把 DLQ 當成你的安全網，而不是事後才想到的東西。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Things beginners trip over", "zh": "初學者常踩的雷" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Forgetting to ack: an un-acked message is treated as failed and redelivered — call m.ack() on success.",
+              "No idempotency: at-least-once delivery means duplicates happen; guard every side effect with a unique id check.",
+              "Doing the slow work in the producer: keep fetch() fast — only send() and return 202; the consumer does the heavy lifting.",
+              "Tiny batches: tune max_batch_size and max_batch_timeout so consumers process efficiently instead of one message at a time.",
+              "Ignoring the DLQ: messages can sit there silently — add an alert or a periodic check so you notice failures."
+            ],
+            "zh": [
+              "忘了 ack：沒被 ack 的訊息會被當成失敗、重新投遞——成功時記得呼叫 m.ack()。",
+              "沒有冪等：至少一次投遞代表會出現重複；每個副作用都要用唯一 id 檢查擋一下。",
+              "把慢工作塞進生產者：讓 fetch() 保持快——只 send() 然後回 202，粗重工作交給消費者。",
+              "批次太小：調整 max_batch_size 與 max_batch_timeout，讓消費者高效處理，而不是一則一則做。",
+              "忽略 DLQ：訊息可能默默躺在那裡——加個告警或定期檢查，才會發現失敗。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "savings",
+          "title": { "en": "Limits worth remembering", "zh": "值得記住的限制" },
+          "text": {
+            "en": "Max message size 128 KB; up to 100 messages (or 256 KB) per batch; up to 5,000 messages/sec per queue; retries up to 100. Queues never charges egress fees and works on Free and Paid plans (Free keeps messages 24 hours). Check the docs for current numbers before launch.",
+            "zh": "最大訊息 128 KB；每批最多 100 則（或合計 256 KB）；每佇列最多 5,000 則/秒；重試最多 100 次。Queues 永不收 egress（流出）費用，免費與付費方案都能用（免費方案訊息保留 24 小時）。上線前請到官方文件確認最新數字。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "blueprint-image-pipeline", "label": { "en": "Image pipeline blueprint", "zh": "圖片管線藍圖" } }
+  ],
+  "docs": "https://developers.cloudflare.com/queues/"
+}

@@ -79,6 +79,14 @@
         "en": "Make every site faster with smart DNS, global caching and automatic optimizations — plus privacy-friendly analytics.",
         "zh": "用聰明的 DNS、全球快取與自動最佳化讓每個網站更快——還附上重視隱私的流量分析。"
       }
+    },
+    {
+      "key": "integrations", "icon": "account_tree",
+      "title": { "en": "Integrations", "zh": "整合實戰" },
+      "blurb": {
+        "en": "Connect the pieces — front-end ↔ Worker back-end ↔ database — with real recipes, full-stack code and lots of architecture diagrams.",
+        "zh": "把各塊串起來——前端 ↔ Worker 後端 ↔ 資料庫——用真實範例、全端程式碼與大量架構圖帶你做。"
+      }
     }
   ],
   "categoryPages": [
@@ -176,6 +184,22 @@
       "intro": {
         "en": "Speed isn't one feature — it's DNS resolving quickly, content cached close to users, and assets optimized on the fly. These products handle all of that, and Web Analytics lets you measure the result without tracking your visitors.",
         "zh": "速度不是單一功能——它是 DNS 快速解析、內容快取在使用者附近、資源即時最佳化的總和。這些產品把這些都處理好，而 Web Analytics 讓你量測成果，又不會追蹤你的訪客。"
+      }
+    },
+    {
+      "slug": "integrations", "key": "integrations", "icon": "account_tree",
+      "title": { "en": "Integrations", "zh": "整合實戰" },
+      "subtitle": { "en": "Wire products together into real apps", "zh": "把產品串成真正的應用" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "Hands-on guides that connect front-end, back-end (Workers) and databases — full CRUD, auth, file uploads, architecture blueprints and request-flow diagrams.",
+          "zh": "把前端、後端（Workers）與資料庫串起來的實作教學——完整 CRUD、認證、檔案上傳、架構藍圖與請求流程圖。"
+        }
+      },
+      "intro": {
+        "en": "Knowing each product is step one; the real magic is connecting them. These guides show how a web page talks to a Worker, how a Worker reads and writes a database, and how to assemble whole systems — each packed with mermaid diagrams.",
+        "zh": "認識每個產品只是第一步，真正的重點是把它們串起來。這些教學示範網頁如何呼叫 Worker、Worker 如何讀寫資料庫，以及怎麼把整套系統組起來——每篇都搭配大量 mermaid 圖解。"
       }
     }
   ],

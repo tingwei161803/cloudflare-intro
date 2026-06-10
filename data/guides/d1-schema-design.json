@@ -1,0 +1,403 @@
+{
+  "slug": "d1-schema-design",
+  "category": "integrations",
+  "group": { "en": "Data & Storage", "zh": "資料庫與儲存" },
+  "icon": "schema",
+  "title": {
+    "en": "Designing a D1 schema (tables & migrations)",
+    "zh": "設計 D1 資料庫綱要（資料表與 migration）"
+  },
+  "subtitle": {
+    "en": "Model users and posts in SQLite, then evolve the schema safely with migrations",
+    "zh": "用 SQLite 設計 users 與 posts 資料表，再用 migration 安全地讓綱要隨時間演進"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "A good schema is the foundation of every app — design it once, change it safely forever.",
+      "zh": "好的資料庫綱要是每個應用的地基——設計一次，之後永遠都能安全地修改它。"
+    }
+  },
+  "stats": [
+    { "value": "2", "label": { "en": "Tables modeled", "zh": "示範資料表" } },
+    { "value": "1:N", "label": { "en": "Relationship", "zh": "關聯型態" } },
+    { "value": "SQLite", "label": { "en": "SQL dialect", "zh": "SQL 方言" } },
+    { "value": "0001+", "label": { "en": "Versioned migrations", "zh": "有版本的 migration" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we designing?", "zh": "我們要設計什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A schema is the blueprint of your database — the list of tables, the columns in each table, and the rules that keep the data clean. In this guide we model a tiny blog: users who write posts. You will learn primary keys, foreign keys, indexes, and the NOT NULL / UNIQUE rules, then manage every future change with migrations.",
+            "zh": "綱要（schema）就是你資料庫的設計藍圖——有哪些資料表、每張表有哪些欄位，以及讓資料保持乾淨的規則。這篇我們會設計一個迷你部落格：使用者（users）撰寫貼文（posts）。你會學到主鍵（primary key）、外鍵（foreign key）、索引（index），以及 NOT NULL／UNIQUE 規則，最後用 migration 管理之後的每一次變更。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "D1 runs on SQLite, so this is plain, standard SQL. The big idea: design the tables thoughtfully up front, then never hand-edit the live database — instead, write a small migration file for each change so your schema has a clear, versioned history.",
+            "zh": "D1 底層是 SQLite，所以這裡用的就是樸實的標準 SQL。核心觀念是：一開始把資料表設計好，之後絕不直接手動改線上資料庫——而是為每次變更寫一個小小的 migration 檔，讓你的綱要擁有清楚、有版本紀錄的歷史。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The schema design journey", "zh": "綱要設計的旅程" },
+          "code": {
+            "en": "flowchart LR\n  A[\"List your data\"] --> B[\"Design tables and columns\"]\n  B --> C[\"Add keys and indexes\"]\n  C --> D[\"Write a migration file\"]\n  D --> E[\"Apply with Wrangler\"]\n  E --> F[\"Versioned D1 schema\"]",
+            "zh": "flowchart LR\n  A[\"列出你的資料\"] --> B[\"設計資料表與欄位\"]\n  B --> C[\"加上鍵與索引\"]\n  C --> D[\"寫一個 migration 檔\"]\n  D --> E[\"用 Wrangler 套用\"]\n  E --> F[\"有版本紀錄的 D1 綱要\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The data model: users and posts", "zh": "資料模型：users 與 posts" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "One user can write many posts, and every post belongs to exactly one user. That is a one-to-many relationship. We link them with a foreign key: posts.user_id points back to users.id.",
+            "zh": "一位使用者可以發表很多篇貼文，而每篇貼文剛好屬於一位使用者，這就是「一對多」（one-to-many）關聯。我們用外鍵把它們連起來：posts.user_id 指回 users.id。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "ER diagram: users ↔ posts", "zh": "ER 圖：users ↔ posts" },
+          "code": {
+            "en": "erDiagram\n  USERS ||--o{ POSTS : \"writes\"\n  USERS {\n    integer id PK \"auto id\"\n    text email UK \"unique login\"\n    text name \"display name\"\n    text created_at \"timestamp\"\n  }\n  POSTS {\n    integer id PK \"auto id\"\n    integer user_id FK \"owner\"\n    text title \"not null\"\n    text body \"content\"\n    text status \"draft or live\"\n    text created_at \"timestamp\"\n  }",
+            "zh": "erDiagram\n  USERS ||--o{ POSTS : \"發表\"\n  USERS {\n    integer id PK \"自動編號\"\n    text email UK \"唯一登入\"\n    text name \"顯示名稱\"\n    text created_at \"建立時間\"\n  }\n  POSTS {\n    integer id PK \"自動編號\"\n    integer user_id FK \"作者\"\n    text title \"不可空白\"\n    text body \"內文\"\n    text status \"草稿或上線\"\n    text created_at \"建立時間\"\n  }"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": { "en": "Primary key (PK)", "zh": "主鍵（PK）" },
+              "text": {
+                "en": "id uniquely identifies each row. INTEGER PRIMARY KEY in SQLite auto-fills a new number for every insert.",
+                "zh": "id 用來唯一辨識每一列。在 SQLite 裡 INTEGER PRIMARY KEY 會在每次新增時自動填入一個新號碼。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "Foreign key (FK)", "zh": "外鍵（FK）" },
+              "text": {
+                "en": "posts.user_id stores the id of the owning user, linking the two tables and keeping data consistent.",
+                "zh": "posts.user_id 存放擁有者使用者的 id，把兩張表連起來，並讓資料保持一致。"
+              }
+            },
+            {
+              "icon": "manage_search",
+              "title": { "en": "Index", "zh": "索引（index）" },
+              "text": {
+                "en": "An index on user_id lets the database jump straight to a user's posts instead of scanning the whole table.",
+                "zh": "在 user_id 上建索引，能讓資料庫直接跳到某位使用者的貼文，而不必把整張表掃過一遍。"
+              }
+            },
+            {
+              "icon": "block",
+              "title": { "en": "NOT NULL", "zh": "NOT NULL（不可空白）" },
+              "text": {
+                "en": "email and name are required — the database rejects any row that leaves them empty.",
+                "zh": "email 與 name 是必填——只要這些欄位留空，資料庫就會拒絕那一列。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "UNIQUE", "zh": "UNIQUE（唯一）" },
+              "text": {
+                "en": "email is UNIQUE, so two users can never register with the same address.",
+                "zh": "email 設為 UNIQUE，所以兩位使用者絕不可能用同一個信箱註冊。"
+              }
+            },
+            {
+              "icon": "account_tree",
+              "title": { "en": "One-to-many", "zh": "一對多" },
+              "text": {
+                "en": "The crow's-foot mark (o{) means one user relates to many posts — the most common app relationship.",
+                "zh": "魚尾符號（o{）代表一位使用者對應很多貼文——這是應用程式裡最常見的關聯。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Schema vocabulary", "zh": "綱要術語小辭典" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "These are the building blocks you will use in almost every table you ever design.",
+            "zh": "以下是你之後設計幾乎每一張資料表都會用到的基本元件。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "schema",
+              "title": { "en": "Schema", "zh": "綱要 schema" },
+              "text": {
+                "en": "The full definition of your tables, columns, types, and rules — your database's blueprint.",
+                "zh": "你所有資料表、欄位、型別與規則的完整定義——也就是資料庫的藍圖。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": "Data types", "zh": "資料型別" },
+              "text": {
+                "en": "SQLite uses TEXT, INTEGER, REAL, BLOB, and NULL. Store timestamps as TEXT (ISO strings) for simplicity.",
+                "zh": "SQLite 用 TEXT、INTEGER、REAL、BLOB、NULL 五種。時間戳記建議用 TEXT（ISO 字串）儲存，最單純。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "Primary key", "zh": "主鍵" },
+              "text": {
+                "en": "The column that uniquely names each row. INTEGER PRIMARY KEY also auto-increments for you.",
+                "zh": "用來唯一命名每一列的欄位。INTEGER PRIMARY KEY 還會幫你自動遞增編號。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "Foreign key", "zh": "外鍵" },
+              "text": {
+                "en": "A column pointing at another table's primary key, expressing relationships between rows.",
+                "zh": "一個指向另一張表主鍵的欄位，用來表達列與列之間的關聯。"
+              }
+            },
+            {
+              "icon": "manage_search",
+              "title": { "en": "Index", "zh": "索引" },
+              "text": {
+                "en": "A lookup shortcut that speeds up filtering and joins on a column — at the cost of slightly slower writes.",
+                "zh": "一種查找捷徑，能加速某欄位的篩選與 join——代價是寫入會稍微慢一點點。"
+              }
+            },
+            {
+              "icon": "rule",
+              "title": { "en": "Constraints", "zh": "約束條件" },
+              "text": {
+                "en": "Rules like NOT NULL, UNIQUE, and DEFAULT that the database enforces so bad data never gets in.",
+                "zh": "像 NOT NULL、UNIQUE、DEFAULT 這類由資料庫強制執行的規則，讓壞資料根本進不來。"
+              }
+            },
+            {
+              "icon": "start",
+              "title": { "en": "DEFAULT", "zh": "DEFAULT 預設值" },
+              "text": {
+                "en": "A value auto-filled when you omit a column, e.g. status defaults to 'draft' and created_at to now.",
+                "zh": "沒給欄位值時自動帶入的值，例如 status 預設為 'draft'、created_at 預設為現在時間。"
+              }
+            },
+            {
+              "icon": "update",
+              "title": { "en": "Migration", "zh": "Migration（綱要遷移）" },
+              "text": {
+                "en": "A numbered SQL file describing one schema change. Run in order, they give your database a version history.",
+                "zh": "一個有編號的 SQL 檔，描述一次綱要變更。依序執行後，就替你的資料庫建立了版本歷史。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "migrations",
+      "icon": "swap_vert",
+      "heading": { "en": "Changing the schema with migrations", "zh": "用 migration 修改綱要" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Apps grow: you will need a new column, a new table, or a new index. A migration is a small, numbered SQL file (0001_..., 0002_...) that records exactly one change. Wrangler keeps track of which files have already run, so applying them is repeatable on every environment.",
+            "zh": "應用程式會長大：你總會需要新增欄位、新表，或新索引。Migration 就是一個小小、有編號的 SQL 檔（0001_...、0002_...），剛好記錄一次變更。Wrangler 會記住哪些檔案已經跑過，所以在每個環境套用都能重現一樣的結果。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The golden rule: once a migration has been applied to a shared or production database, never edit that file. To fix or change something, write a new migration. This keeps the history honest and lets teammates catch up by simply running 'migrations apply'.",
+            "zh": "黃金守則：一旦某個 migration 已經套用到共用或正式資料庫，就絕對不要再去改那個檔案。要修正或變更，就寫一個新的 migration。這能讓歷史保持誠實，隊友只要跑一次 migrations apply 就能跟上進度。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Migration workflow", "zh": "Migration 工作流程" },
+          "code": {
+            "en": "flowchart LR\n  A[\"Decide the change\"] --> B[\"wrangler d1 migrations create\"]\n  B --> C[\"Write CREATE/ALTER SQL\"]\n  C --> D[\"apply --local to test\"]\n  D --> E{\"Works?\"}\n  E -->|\"yes\"| F[\"apply --remote\"]\n  E -->|\"no\"| C\n  F --> G[\"Versioned schema in D1\"]",
+            "zh": "flowchart LR\n  A[\"決定要改什麼\"] --> B[\"wrangler d1 migrations create\"]\n  B --> C[\"寫 CREATE/ALTER SQL\"]\n  C --> D[\"apply --local 測試\"]\n  D --> E{\"成功？\"}\n  E -->|\"是\"| F[\"apply --remote\"]\n  E -->|\"否\"| C\n  F --> G[\"D1 內有版本的綱要\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "history",
+          "title": { "en": "Why versioned files?", "zh": "為什麼要用有版本的檔案？" },
+          "text": {
+            "en": "Because the migrations folder lives in Git alongside your code. Anyone can clone the repo and rebuild the exact same schema by running the migrations in order — no manual SQL, no guesswork.",
+            "zh": "因為 migrations 資料夾會和你的程式碼一起放進 Git。任何人 clone 下來後，只要依序跑這些 migration，就能重建出一模一樣的綱要——不必手動敲 SQL，也不用猜。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it step by step", "zh": "一步步動手做" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Now wire it all together: create the database, bind it to a Worker, define the schema in a migration, apply it, add a second migration to evolve the schema, and finally query across both tables with a JOIN.",
+            "zh": "現在把全部串起來：建立資料庫、綁定到 Worker、在 migration 裡定義綱要、套用它、再加第二個 migration 讓綱要演進，最後用 JOIN 跨兩張表查詢。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the database", "zh": "建立資料庫" },
+              "text": {
+                "en": "Wrangler prints a database_id — copy it for the next step.",
+                "zh": "Wrangler 會印出一組 database_id——複製起來，下一步會用到。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 create blog-db" }
+            },
+            {
+              "title": { "en": "Bind it to your Worker", "zh": "綁定到你的 Worker" },
+              "text": {
+                "en": "Add this to wrangler.jsonc so your Worker reaches the database as env.DB.",
+                "zh": "把這段加進 wrangler.jsonc，讓 Worker 能用 env.DB 存取這個資料庫。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"blog-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Create the first migration", "zh": "建立第一個 migration" },
+              "text": {
+                "en": "This makes a migrations/ folder and an empty 0001_create_users_and_posts.sql file.",
+                "zh": "這會建立一個 migrations/ 資料夾，以及一個空的 0001_create_users_and_posts.sql 檔。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 migrations create blog-db create_users_and_posts" }
+            },
+            {
+              "title": { "en": "Write the schema SQL", "zh": "寫下綱要 SQL" },
+              "text": {
+                "en": "Open the generated file and define both tables with their keys, constraints, and indexes.",
+                "zh": "打開剛產生的檔案，把兩張表連同它們的鍵、約束與索引都定義好。"
+              },
+              "code": { "lang": "sql", "body": "-- migrations/0001_create_users_and_posts.sql\n-- Enforce foreign keys (SQLite leaves this off by default)\nPRAGMA foreign_keys = ON;\n\nCREATE TABLE users (\n  id         INTEGER PRIMARY KEY,\n  email      TEXT NOT NULL UNIQUE,\n  name       TEXT NOT NULL,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);\n\nCREATE TABLE posts (\n  id         INTEGER PRIMARY KEY,\n  user_id    INTEGER NOT NULL,\n  title      TEXT NOT NULL,\n  body       TEXT,\n  status     TEXT NOT NULL DEFAULT 'draft',\n  created_at TEXT NOT NULL DEFAULT (datetime('now')),\n  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n);\n\n-- Index the columns we filter and join on\nCREATE INDEX idx_posts_user_id ON posts (user_id);\nCREATE INDEX idx_posts_status  ON posts (status);" }
+            },
+            {
+              "title": { "en": "Apply locally, then remotely", "zh": "先套用到本機，再套用到遠端" },
+              "text": {
+                "en": "Test against the local copy first; once it works, apply to the real cloud database.",
+                "zh": "先對本機副本測試；確認沒問題後，再套用到雲端上真正的資料庫。"
+              },
+              "code": { "lang": "bash", "body": "# Build the schema on the local test DB\nnpx wrangler d1 migrations apply blog-db --local\n\n# See what is still pending on production\nnpx wrangler d1 migrations list blog-db --remote\n\n# Apply to the real cloud database\nnpx wrangler d1 migrations apply blog-db --remote" }
+            },
+            {
+              "title": { "en": "Evolve the schema later", "zh": "之後讓綱要演進" },
+              "text": {
+                "en": "Need a new column? Create a second migration instead of editing the first — then apply it the same way.",
+                "zh": "需要新欄位？建立第二個 migration，而不是去改第一個——接著用同樣方式套用。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 migrations create blog-db add_published_at_to_posts\n\n# In migrations/0002_add_published_at_to_posts.sql:\n#   ALTER TABLE posts ADD COLUMN published_at TEXT;\n\nnpx wrangler d1 migrations apply blog-db --local\nnpx wrangler d1 migrations apply blog-db --remote" }
+            },
+            {
+              "title": { "en": "Query across tables from a Worker", "zh": "從 Worker 跨表查詢" },
+              "text": {
+                "en": "prepare() builds a safe query, bind() fills the ? placeholder (blocking SQL injection), and the JOIN pulls each post together with its author.",
+                "zh": "prepare() 建立安全查詢，bind() 填入 ? 佔位符（擋掉 SQL 注入），JOIN 則把每篇貼文和它的作者一起拉出來。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const url = new URL(request.url);\n    const userId = url.searchParams.get(\"user_id\") ?? \"1\";\n\n    // Join each post to its author, newest first.\n    const { results } = await env.DB\n      .prepare(\n        `SELECT posts.id, posts.title, posts.status, users.name AS author\n         FROM posts\n         JOIN users ON users.id = posts.user_id\n         WHERE posts.user_id = ?\n         ORDER BY posts.created_at DESC`\n      )\n      .bind(userId)\n      .all();\n\n    return Response.json(results);\n  },\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish the Worker — your schema-backed API is now live.",
+                "zh": "發布這個 Worker——你那個有綱要撐腰的 API 就上線了。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Seed some data to test", "zh": "塞一點資料來測試" }
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Insert sample rows", "zh": "插入範例資料" },
+          "body": "npx wrangler d1 execute blog-db --remote --command \"INSERT INTO users (email, name) VALUES ('mei@example.com', 'Mei');\"\n\nnpx wrangler d1 execute blog-db --remote --command \"INSERT INTO posts (user_id, title, status) VALUES (1, 'Hello D1', 'live');\""
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Pitfalls & tips", "zh": "常見陷阱與小提示" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Never edit an applied migration", "zh": "絕不要改已套用的 migration" },
+          "text": {
+            "en": "Once 0001 has run on a shared database, editing it will not re-run, and teammates' databases will drift out of sync. Always add a new numbered migration for the change.",
+            "zh": "一旦 0001 已經在共用資料庫跑過，再去改它也不會重跑，隊友的資料庫就會慢慢和你的不同步。要改變更，永遠加一個新的有編號 migration。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Turn on foreign keys with PRAGMA foreign_keys = ON; SQLite ignores FK rules otherwise.",
+              "Add an index on every foreign key and any column you frequently filter or sort by.",
+              "SQLite's ALTER TABLE can add columns and rename, but cannot drop a column easily — plan columns thoughtfully.",
+              "Prefer NOT NULL with a DEFAULT so existing rows stay valid when you add a column.",
+              "Test every migration with --local before --remote; the local copy is fast and disposable.",
+              "Keep the migrations/ folder in Git so the whole schema history travels with your code."
+            ],
+            "zh": [
+              "用 PRAGMA foreign_keys = ON; 開啟外鍵約束，否則 SQLite 會忽略 FK 規則。",
+              "為每個外鍵、以及任何常用來篩選或排序的欄位都建立索引。",
+              "SQLite 的 ALTER TABLE 能新增欄位、改名，但不容易刪欄位——欄位請事先想清楚再設計。",
+              "新增欄位時優先用 NOT NULL 搭配 DEFAULT，這樣既有的列才不會變不合法。",
+              "每個 migration 都先用 --local 測過再 --remote；本機副本又快又可隨時丟掉重建。",
+              "把 migrations/ 資料夾放進 Git，整段綱要歷史就會跟著你的程式碼一起走。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "Indexes save rows read", "zh": "索引能省下讀取列數" },
+          "text": {
+            "en": "D1 bills by rows read and written. A good index lets a query touch only the rows it needs instead of scanning the whole table — faster responses and a smaller bill.",
+            "zh": "D1 是依讀取與寫入的列數計費。好的索引能讓查詢只碰到真正需要的列，而不是把整張表掃一遍——回應更快，帳單也更小。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "d1-relationships", "label": { "en": "D1 relationships", "zh": "D1 關聯設計" } },
+    { "slug": "frontend-worker-d1-crud", "label": { "en": "Front-end ↔ Worker ↔ D1 CRUD", "zh": "前端 ↔ Worker ↔ D1 CRUD" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } }
+  ],
+  "docs": "https://developers.cloudflare.com/d1/"
+}

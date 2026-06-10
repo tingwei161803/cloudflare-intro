@@ -1,0 +1,440 @@
+{
+  "slug": "blueprint-image-pipeline",
+  "category": "integrations",
+  "group": { "en": "Architecture Blueprints", "zh": "架構藍圖" },
+  "icon": "image",
+  "title": {
+    "en": "Blueprint: an image upload & processing pipeline",
+    "zh": "架構藍圖：圖片上傳與處理流水線"
+  },
+  "subtitle": {
+    "en": "Accept uploads instantly, then optimize images in the background with R2, Queues, Images and D1",
+    "zh": "先即時收下上傳，再用 R2、Queues、Images 與 D1 在背景把圖片最佳化"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "A reference architecture for user images: upload to R2, enqueue a job, let a consumer Worker resize and convert with Images, write variants back to R2, record metadata in D1 — and serve fast, optimized images.",
+      "zh": "處理使用者圖片的參考架構：上傳到 R2、把工作丟進佇列，讓消費者 Worker 用 Images 縮放轉檔、把變體寫回 R2、在 D1 記錄中繼資料，最後送出又快又最佳化的圖片。"
+    }
+  },
+  "stats": [
+    { "value": "202", "label": { "en": "Instant accept", "zh": "即時收下" } },
+    { "value": "async", "label": { "en": "Decoupled work", "zh": "非同步處理" } },
+    { "value": "5", "label": { "en": "Products wired", "zh": "串接產品" } },
+    { "value": "$0", "label": { "en": "R2 / Queues egress", "zh": "R2 / Queues 流出費" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we building?", "zh": "我們要蓋什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Image processing is slow — resizing and converting a big photo can take seconds. If you do it while the user waits, uploads feel sluggish and a single failure loses the whole job. This blueprint splits the work into two halves: the front of the pipeline accepts the file and replies instantly, while the back of the pipeline does the heavy lifting in the background.",
+            "zh": "圖片處理很慢——把一張大照片縮放、轉檔可能要好幾秒。如果你讓使用者乾等著做完，上傳就會卡卡的，而且一出錯整個工作就沒了。這份藍圖把工作切成兩半：流水線的前半段收下檔案、立刻回應，後半段則在背景默默做粗重的事。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The glue between the two halves is a queue. The Upload Worker stores the original in R2 (object storage) and drops a tiny job message into Cloudflare Queues. A separate Consumer Worker picks that job up later, optimizes the image with Cloudflare Images, writes the variants back to R2, and records the result in D1 (a SQL database). This is the classic producer–consumer pattern.",
+            "zh": "把兩半黏起來的關鍵是「佇列（queue）」。上傳 Worker 把原圖存進 R2（物件儲存），然後把一則很小的工作訊息丟進 Cloudflare Queues。另一個獨立的消費者 Worker 之後再把那則工作取出來，用 Cloudflare Images 把圖片最佳化、把變體寫回 R2，並把結果記在 D1（一個 SQL 資料庫）裡。這就是經典的「生產者—消費者（producer–consumer）」模式。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "dry_cleaning",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A dry cleaner. You hand over your shirt and immediately get a numbered ticket (HTTP 202 + 'pending') — you don't stand there while it's cleaned. The shirts pile up on a rail (the queue); staff process them in batches in the back; and when yours is done, your ticket flips to 'ready' so you can collect the finished item.",
+            "zh": "乾洗店。你把襯衫交出去，馬上拿到一張號碼牌（HTTP 202 +『pending 處理中』）——你不會站在那裡等它洗好。襯衫們掛在吊桿上排隊（佇列），店員在後場成批處理；等你的洗好，號碼牌就翻成『ready 完成』，你就能來取件。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The full pipeline", "zh": "完整流水線" },
+          "code": {
+            "en": "flowchart LR\n  B[\"Browser\"] -->|\"upload\"| W[\"Upload Worker\"]\n  W -->|\"put original\"| RO[(\"R2 original\")]\n  W -->|\"send job\"| Q[\"Queues\"]\n  Q -->|\"deliver batch\"| CW[\"Consumer Worker\"]\n  CW -->|\"transform\"| IMG[\"Images\"]\n  IMG -->|\"variants\"| RV[(\"R2 variants\")]\n  CW -->|\"insert row\"| D1[(\"D1 metadata\")]\n  RV -->|\"serve\"| CDN[\"CDN edge\"]\n  CDN -->|\"optimized\"| B",
+            "zh": "flowchart LR\n  B[\"瀏覽器\"] -->|\"上傳\"| W[\"上傳 Worker\"]\n  W -->|\"存原圖\"| RO[(\"R2 原圖\")]\n  W -->|\"送工作\"| Q[\"Queues 佇列\"]\n  Q -->|\"投遞批次\"| CW[\"消費者 Worker\"]\n  CW -->|\"轉檔\"| IMG[\"Images 影像處理\"]\n  IMG -->|\"變體\"| RV[(\"R2 變體圖\")]\n  CW -->|\"寫入一列\"| D1[(\"D1 中繼資料\")]\n  RV -->|\"送出\"| CDN[\"CDN 邊緣\"]\n  CDN -->|\"最佳化圖片\"| B"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "icon": "account_tree",
+      "heading": { "en": "Who does what?", "zh": "每個角色負責什麼？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Each product in the pipeline has one clear job. Keeping responsibilities separate is what makes the system reliable: any one part can be slow or briefly fail without breaking the others.",
+            "zh": "流水線裡每個產品都只負責一件清楚的事。把職責切開正是系統可靠的關鍵：任何一塊變慢、或短暫出錯，都不會把其他部分一起拖垮。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "devices",
+              "title": { "en": "Browser (client)", "zh": "瀏覽器（用戶端）" },
+              "text": {
+                "en": "Sends the raw file to the Upload Worker and later requests the optimized image at the size it needs.",
+                "zh": "把原始檔案送給上傳 Worker，之後再依需要的尺寸請求最佳化後的圖片。"
+              }
+            },
+            {
+              "icon": "cloud_upload",
+              "title": { "en": "Upload Worker (producer)", "zh": "上傳 Worker（生產者）" },
+              "text": {
+                "en": "Stores the original in R2, inserts a pending row in D1, enqueues a job, and replies 202 instantly.",
+                "zh": "把原圖存進 R2、在 D1 新增一筆 pending 紀錄、把工作排進佇列，然後立刻回應 202。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "R2 (object storage)", "zh": "R2（物件儲存）" },
+              "text": {
+                "en": "Holds the original bytes and every generated variant. No egress fees when the CDN reads from it.",
+                "zh": "存放原始位元組與每一個產生的變體。CDN 讀取時不收流出（egress）費用。"
+              }
+            },
+            {
+              "icon": "queue",
+              "title": { "en": "Queues (the buffer)", "zh": "Queues（緩衝佇列）" },
+              "text": {
+                "en": "Decouples accepting work from doing it. Buffers jobs, delivers them in batches, and retries failures.",
+                "zh": "把『接下工作』和『執行工作』拆開。緩衝工作、成批投遞，並在失敗時自動重試。"
+              }
+            },
+            {
+              "icon": "settings_suggest",
+              "title": { "en": "Consumer Worker", "zh": "消費者 Worker" },
+              "text": {
+                "en": "Wakes up on each batch, reads the original from R2, drives Images, writes variants, updates D1.",
+                "zh": "每來一批就被喚醒，從 R2 讀原圖、操作 Images、寫入變體、更新 D1。"
+              }
+            },
+            {
+              "icon": "auto_fix_high",
+              "title": { "en": "Images (transform)", "zh": "Images（影像處理）" },
+              "text": {
+                "en": "Resizes, crops and converts to modern formats like WebP/AVIF — the actual optimization step.",
+                "zh": "縮放、裁切並轉成 WebP/AVIF 等現代格式——真正做最佳化的那一步。"
+              }
+            },
+            {
+              "icon": "schema",
+              "title": { "en": "D1 (metadata)", "zh": "D1（中繼資料）" },
+              "text": {
+                "en": "The source of truth for status: which images exist, whether they're ready, and how many variants.",
+                "zh": "狀態的真實來源：有哪些圖、是否已完成、各有幾個變體。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "The decoupling boundary", "zh": "解耦的那條界線" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The queue is a one-way valve between the producer and the consumer. The producer never waits for the consumer; if the consumer is busy or fails, jobs simply wait and retry. Neither side needs to know the other is healthy.",
+            "zh": "佇列是生產者與消費者之間的單向閥。生產者永遠不等消費者；消費者忙碌或失敗時，工作就乖乖排隊、稍後重試。兩邊都不需要知道對方是否健在。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Producer–consumer decoupling", "zh": "生產者—消費者解耦" },
+          "code": {
+            "en": "flowchart TD\n  P[\"Upload Worker\"] -->|\"send job\"| Q[\"Queues buffer\"]\n  Q -->|\"deliver batch\"| C[\"Consumer Worker\"]\n  C -->|\"ack success\"| Q\n  C -->|\"retry on fail\"| Q",
+            "zh": "flowchart TD\n  P[\"上傳 Worker\"] -->|\"送工作\"| Q[\"Queues 緩衝\"]\n  Q -->|\"投遞批次\"| C[\"消費者 Worker\"]\n  C -->|\"成功確認\"| Q\n  C -->|\"失敗重試\"| Q"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-model",
+      "icon": "schema",
+      "heading": { "en": "The data model", "zh": "資料模型" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "D1 tracks every image and its variants. The images table is the headline record (id, R2 key, status, dimensions, variant count). A variants table holds one row per generated size, linked back by image_id.",
+            "zh": "D1 追蹤每一張圖與它的變體。images 表是主要紀錄（id、R2 key、status、尺寸、變體數）；variants 表則每個產生的尺寸放一列，用 image_id 連回去。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "images & variants tables", "zh": "images 與 variants 表" },
+          "code": {
+            "en": "erDiagram\n  IMAGES ||--o{ VARIANTS : \"produces\"\n  IMAGES {\n    text id PK\n    text key\n    text status\n    int width\n    int height\n    int variants\n  }\n  VARIANTS {\n    text id PK\n    text image_id FK\n    text label\n    text key\n    int width\n  }",
+            "zh": "erDiagram\n  IMAGES ||--o{ VARIANTS : \"產生\"\n  IMAGES {\n    text id PK\n    text key\n    text status\n    int width\n    int height\n    int variants\n  }\n  VARIANTS {\n    text id PK\n    text image_id FK\n    text label\n    text key\n    int width\n  }"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "status is the heartbeat", "zh": "status 是心跳" },
+          "text": {
+            "en": "Because work happens later, the front-end can't assume an image is ready the moment it uploads. The status column (pending → ready → failed) lets the UI poll or show a spinner until variants exist. This is what 'eventual consistency' looks like in practice.",
+            "zh": "因為工作是稍後才做的，前端不能假設一上傳圖片就好了。status 欄位（pending → ready → failed）讓 UI 可以輪詢、或先顯示轉圈圈，直到變體真的生出來。這就是『最終一致性（eventual consistency）』在實務上的樣子。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "sql",
+          "title": { "en": "schema.sql", "zh": "schema.sql" },
+          "body": "CREATE TABLE images (\n  id        TEXT PRIMARY KEY,\n  key       TEXT NOT NULL,\n  status    TEXT NOT NULL DEFAULT 'pending',\n  width     INTEGER,\n  height    INTEGER,\n  variants  INTEGER NOT NULL DEFAULT 0,\n  created_at TEXT NOT NULL DEFAULT (datetime('now'))\n);\n\nCREATE TABLE variants (\n  id        TEXT PRIMARY KEY,\n  image_id  TEXT NOT NULL REFERENCES images(id),\n  label     TEXT NOT NULL,\n  key       TEXT NOT NULL,\n  width     INTEGER NOT NULL\n);\n\n-- Fast lookups of jobs still waiting to be processed\nCREATE INDEX idx_images_status ON images (status);"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Request flow over time", "zh": "隨時間推進的流程" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Read this top to bottom. The crucial moment is the 202 reply: the upload returns before any processing happens. Everything below the dashed boundary runs asynchronously in the background.",
+            "zh": "由上往下看。關鍵時刻是那個 202 回應：上傳在任何處理發生之前就先返回了。界線以下的所有步驟，都是在背景非同步進行的。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Upload → enqueue → process → ready", "zh": "上傳 → 排隊 → 處理 → 完成" },
+          "code": {
+            "en": "sequenceDiagram\n  participant B as \"Browser\"\n  participant W as \"Upload Worker\"\n  participant R as \"R2\"\n  participant Q as \"Queues\"\n  participant C as \"Consumer Worker\"\n  participant I as \"Images\"\n  participant D as \"D1\"\n  B->>W: POST upload with file\n  W->>R: put original object\n  W->>D: insert row status pending\n  W->>Q: send job message\n  W-->>B: 202 job queued\n  Note over Q,C: background async\n  Q->>C: deliver batch\n  C->>R: get original\n  C->>I: resize and convert\n  C->>R: put variants\n  C->>D: update status ready\n  Note over B: later\n  B->>W: GET image by id\n  W->>D: read status and variants\n  W-->>B: optimized image",
+            "zh": "sequenceDiagram\n  participant B as \"瀏覽器\"\n  participant W as \"上傳 Worker\"\n  participant R as \"R2\"\n  participant Q as \"Queues\"\n  participant C as \"消費者 Worker\"\n  participant I as \"Images\"\n  participant D as \"D1\"\n  B->>W: 上傳檔案\n  W->>R: 存入原始物件\n  W->>D: 新增一列 狀態 pending\n  W->>Q: 送出工作訊息\n  W-->>B: 202 已排入佇列\n  Note over Q,C: 背景非同步\n  Q->>C: 投遞批次\n  C->>R: 取出原圖\n  C->>I: 縮放並轉檔\n  C->>R: 寫入變體\n  C->>D: 更新狀態 ready\n  Note over B: 稍後\n  B->>W: 用 id 取圖\n  W->>D: 讀取狀態與變體\n  W-->>B: 最佳化圖片"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Build it", "zh": "動手蓋出來" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You'll create three resources (an R2 bucket, a queue, a D1 database), wire them as bindings, then write a producer, a consumer, and a tiny front-end. The Images binding needs no resource — it's a runtime capability.",
+            "zh": "你會建立三個資源（一個 R2 bucket、一個佇列、一個 D1 資料庫），把它們設成 binding（綁定），再寫一個生產者、一個消費者和一個小前端。Images binding 不需要建立資源——它是執行期就有的能力。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create the resources", "zh": "建立資源" },
+              "text": {
+                "en": "One R2 bucket holds both originals and variants; one queue carries the jobs; one D1 database stores metadata.",
+                "zh": "一個 R2 bucket 同時放原圖與變體；一個佇列載送工作；一個 D1 資料庫存中繼資料。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler r2 bucket create user-images\nnpx wrangler queues create image-jobs\nnpx wrangler queues create image-jobs-dlq\nnpx wrangler d1 create image-meta" }
+            },
+            {
+              "title": { "en": "Wire the bindings", "zh": "設定綁定" },
+              "text": {
+                "en": "Declare R2, the queue (as both producer and consumer), D1, and the Images binding in wrangler.jsonc. A dead letter queue catches jobs that keep failing.",
+                "zh": "在 wrangler.jsonc 裡宣告 R2、佇列（同時當生產者與消費者）、D1 與 Images binding。死信佇列會接住一直失敗的工作。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"image-pipeline\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-01-01\",\n\n  \"r2_buckets\": [\n    { \"binding\": \"IMAGES_BUCKET\", \"bucket_name\": \"user-images\" }\n  ],\n  \"queues\": {\n    \"producers\": [\n      { \"queue\": \"image-jobs\", \"binding\": \"IMAGE_QUEUE\" }\n    ],\n    \"consumers\": [\n      {\n        \"queue\": \"image-jobs\",\n        \"max_batch_size\": 10,\n        \"max_batch_timeout\": 5,\n        \"dead_letter_queue\": \"image-jobs-dlq\"\n      }\n    ]\n  },\n  \"d1_databases\": [\n    { \"binding\": \"DB\", \"database_name\": \"image-meta\", \"database_id\": \"<your-d1-id>\" }\n  ],\n  \"images\": { \"binding\": \"IMAGES\" }\n}" }
+            },
+            {
+              "title": { "en": "Create the tables", "zh": "建立資料表" },
+              "text": {
+                "en": "Apply the schema to your D1 database.",
+                "zh": "把 schema 套用到你的 D1 資料庫。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 execute image-meta --remote --file=./schema.sql" }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Front-end — upload the file", "zh": "前端 — 上傳檔案" }
+        },
+        {
+          "type": "code",
+          "lang": "html",
+          "title": { "en": "upload.html", "zh": "upload.html" },
+          "body": "<input type=\"file\" id=\"file\" accept=\"image/*\" />\n<button id=\"send\">Upload</button>\n\n<script>\n  document.getElementById(\"send\").onclick = async () => {\n    const file = document.getElementById(\"file\").files[0];\n\n    // Stream the raw bytes straight to the Upload Worker\n    const res = await fetch(\"/upload\", {\n      method: \"POST\",\n      headers: { \"content-type\": file.type },\n      body: file,\n    });\n\n    const job = await res.json(); // { id, status: \"pending\" }\n    console.log(\"Queued job\", job.id, \"->\", job.status);\n  };\n</script>"
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Producer — accept & enqueue", "zh": "生產者 — 收下並排隊" }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/producer.js", "zh": "src/producer.js" },
+          "body": "export default {\n  // PRODUCER: store the upload, then enqueue a background job\n  async fetch(request, env, ctx) {\n    if (request.method !== \"POST\") {\n      return new Response(\"Use POST to upload\", { status: 405 });\n    }\n\n    const id = crypto.randomUUID();\n    const key = `originals/${id}`;\n    const bytes = await request.arrayBuffer();\n    const contentType = request.headers.get(\"content-type\") || \"image/jpeg\";\n\n    // 1) Save the ORIGINAL image to R2\n    await env.IMAGES_BUCKET.put(key, bytes, {\n      httpMetadata: { contentType },\n    });\n\n    // 2) Record metadata in D1 with status = pending\n    await env.DB.prepare(\n      \"INSERT INTO images (id, key, status) VALUES (?, ?, 'pending')\"\n    ).bind(id, key).run();\n\n    // 3) Enqueue a job and reply instantly (do NOT wait for processing)\n    await env.IMAGE_QUEUE.send({ id, key });\n\n    return Response.json({ id, status: \"pending\" }, { status: 202 });\n  },\n};"
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "fast_forward",
+          "title": { "en": "Keep messages tiny", "zh": "訊息要小" },
+          "text": {
+            "en": "Notice the message is just { id, key } — never the image bytes. Queue messages are capped at 128 KB, and the bytes already live in R2. The job only needs to say which object to process.",
+            "zh": "注意訊息只有 { id, key }——絕不放圖片位元組。佇列訊息上限是 128 KB，而位元組已經在 R2 裡了。工作只需要說明『要處理哪個物件』就好。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Consumer — process the batch", "zh": "消費者 — 處理整批" }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/consumer.js", "zh": "src/consumer.js" },
+          "body": "export default {\n  // CONSUMER: Cloudflare invokes this with a batch of queued jobs\n  async queue(batch, env, ctx) {\n    for (const message of batch.messages) {\n      try {\n        const { id, key } = message.body;\n\n        // 1) Read the original back from R2\n        const original = await env.IMAGES_BUCKET.get(key);\n        if (!original) {\n          message.ack(); // nothing to do\n          continue;\n        }\n\n        // 2) Build optimized variants with the Images binding\n        const sizes = [256, 1024];\n        const variantKeys = [];\n        for (const width of sizes) {\n          const result = await env.IMAGES\n            .input(original.body)\n            .transform({ width })\n            .output({ format: \"image/webp\" });\n\n          const variantKey = `variants/${id}/w${width}.webp`;\n          await env.IMAGES_BUCKET.put(variantKey, result.image());\n          variantKeys.push(variantKey);\n        }\n\n        // 3) Mark the row ready and record how many variants exist\n        await env.DB.prepare(\n          \"UPDATE images SET status = 'ready', variants = ? WHERE id = ?\"\n        ).bind(variantKeys.length, id).run();\n\n        message.ack(); // success — never deliver again\n      } catch (err) {\n        message.retry(); // failure — Queues will redeliver later\n      }\n    }\n  },\n};"
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Serve — an Images transform URL", "zh": "送出 — Images 轉換網址" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "You can also resize on the fly straight from a URL with Cloudflare Images' transformation path. The browser asks only for the size it needs, and the CDN caches the result at the edge.",
+            "zh": "你也可以用 Cloudflare Images 的轉換路徑，直接從網址即時縮放。瀏覽器只請求它需要的尺寸，CDN 再把結果快取在邊緣。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "html",
+          "title": { "en": "serve.html", "zh": "serve.html" },
+          "body": "<!-- Resize + convert on the fly with a transformation URL -->\n<!-- /cdn-cgi/image/<options>/<source-path> -->\n\n<img\n  src=\"https://media.example.com/cdn-cgi/image/width=512,quality=80,format=auto/variants/abc123/w1024.webp\"\n  width=\"512\"\n  alt=\"optimized photo\"\n/>"
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "call_split",
+              "title": { "en": "Async decoupling", "zh": "非同步解耦" },
+              "text": {
+                "en": "Accepting work and doing work are separated by the queue, so a slow back end never slows the upload.",
+                "zh": "『接下工作』與『執行工作』被佇列隔開，所以後端再慢也不會拖慢上傳。"
+              }
+            },
+            {
+              "icon": "sync_alt",
+              "title": { "en": "Producer & consumer", "zh": "生產者與消費者" },
+              "text": {
+                "en": "The producer sends jobs with env.IMAGE_QUEUE.send(); the consumer's queue() handler processes batches.",
+                "zh": "生產者用 env.IMAGE_QUEUE.send() 送工作；消費者的 queue() 處理函式成批處理。"
+              }
+            },
+            {
+              "icon": "restart_alt",
+              "title": { "en": "Idempotency", "zh": "冪等性" },
+              "text": {
+                "en": "A job may be delivered more than once, so re-running it must be safe — overwrite the same variant keys.",
+                "zh": "一則工作可能被送來不只一次，所以重跑必須安全——覆寫同樣的變體 key 即可。"
+              }
+            },
+            {
+              "icon": "photo_library",
+              "title": { "en": "Variants", "zh": "變體（variants）" },
+              "text": {
+                "en": "Pre-generated sizes/formats of one image (e.g. 256px WebP, 1024px WebP) stored alongside the original.",
+                "zh": "同一張圖預先產生的多種尺寸/格式（例如 256px WebP、1024px WebP），與原圖放在一起。"
+              }
+            },
+            {
+              "icon": "report",
+              "title": { "en": "Dead letter queue", "zh": "死信佇列（DLQ）" },
+              "text": {
+                "en": "Where a job lands after exhausting retries, so failures are inspectable instead of silently lost.",
+                "zh": "工作用完重試後落腳的另一個佇列，讓失敗可被檢查，而不是無聲消失。"
+              }
+            },
+            {
+              "icon": "hourglass_top",
+              "title": { "en": "Eventual consistency", "zh": "最終一致性" },
+              "text": {
+                "en": "Right after upload an image isn't ready yet; the status column tells clients when variants exist.",
+                "zh": "剛上傳時圖還沒好；status 欄位會告訴用戶端變體何時生出來。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips, pitfalls & pricing", "zh": "小提示、陷阱與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Make the consumer idempotent", "zh": "讓消費者保持冪等" },
+          "text": {
+            "en": "Queues guarantees at-least-once delivery, which means the same job can arrive twice (e.g. after a retry). Always write to deterministic keys like variants/<id>/w256.webp so re-processing simply overwrites — never appends duplicates.",
+            "zh": "Queues 保證『至少一次（at-least-once）』投遞，也就是同一則工作可能來兩次（例如重試之後）。請永遠寫入像 variants/<id>/w256.webp 這種固定的 key，這樣重跑只會覆寫——不會重複堆疊。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Things to remember", "zh": "值得記住的事" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Always configure a Dead Letter Queue so jobs that keep failing land somewhere you can inspect instead of vanishing.",
+              "Store status (pending / ready / failed) so the front-end can poll or show a spinner until variants exist.",
+              "Keep queue messages small — send only the id and R2 key, never the image bytes (128 KB message limit).",
+              "R2 and Queues charge no egress fees; store the variants you generate instead of transforming on every request.",
+              "Tune max_batch_size and max_batch_timeout to trade latency for throughput when traffic spikes."
+            ],
+            "zh": [
+              "一定要設死信佇列（DLQ），讓一直失敗的工作落到你能檢查的地方，而不是憑空消失。",
+              "存好 status（pending / ready / failed），讓前端可以輪詢、或先顯示轉圈圈，直到變體生出來。",
+              "佇列訊息要小——只送 id 與 R2 key，絕不送圖片位元組（128 KB 訊息上限）。",
+              "R2 與 Queues 都不收流出（egress）費用；把產生的變體存起來，而不是每次請求都重新轉檔。",
+              "流量尖峰時，調整 max_batch_size 與 max_batch_timeout，在延遲與吞吐量之間取捨。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "savings",
+          "title": { "en": "Where the costs are", "zh": "成本花在哪" },
+          "text": {
+            "en": "R2 bills storage plus operations (no egress). Queues bills per million operations. Images bills per transformation or per image stored. The big win of this design is caching variants: you pay to transform once, then serve the stored result for free from R2 via the CDN.",
+            "zh": "R2 收儲存空間加上操作次數（不收流出費）。Queues 以每百萬次操作計費。Images 以每次轉換或每張儲存圖片計費。這個設計最大的好處就是『快取變體』：你只付一次轉換的錢，之後就從 R2 經由 CDN 免費送出已存好的結果。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } },
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "file-upload-r2", "label": { "en": "Direct uploads to R2", "zh": "直接上傳到 R2" } }
+  ],
+  "docs": "https://developers.cloudflare.com/queues/"
+}

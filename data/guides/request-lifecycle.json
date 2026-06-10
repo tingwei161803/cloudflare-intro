@@ -1,0 +1,367 @@
+{
+  "slug": "request-lifecycle",
+  "category": "integrations",
+  "group": { "en": "Flows & Lifecycles", "zh": "流程圖解" },
+  "icon": "timeline",
+  "title": {
+    "en": "The life of a request on Cloudflare",
+    "zh": "一個請求在 Cloudflare 上的完整生命週期"
+  },
+  "subtitle": {
+    "en": "Follow one HTTP request from the browser through DNS, the edge, WAF, cache, a Worker, storage, and all the way back",
+    "zh": "跟著一個 HTTP 請求，從瀏覽器出發，走過 DNS、邊緣、WAF、快取、Worker、儲存，再一路回到使用者眼前"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "This is the mental model that ties the whole platform together — once you can draw it, everything else clicks.",
+      "zh": "這就是把整個平台串起來的心智模型——只要你畫得出這張圖，其他產品就全部說得通了。"
+    }
+  },
+  "stats": [
+    { "value": "1", "label": { "en": "Request traced end-to-end", "zh": "完整追蹤一個請求" } },
+    { "value": "330+", "label": { "en": "Edge cities it could land in", "zh": "可能落地的邊緣城市" } },
+    { "value": "6", "label": { "en": "Hops on the journey", "zh": "旅程上的站點" } },
+    { "value": "1 IP", "label": { "en": "Anycast address, many locations", "zh": "一個 Anycast 位址、多個據點" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What journey are we tracing?", "zh": "我們要追蹤的是哪一段旅程？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Every time you open a web page, a single HTTP request leaves your browser and travels through a chain of stops before an answer comes back. On Cloudflare that chain is: DNS finds the address, Anycast routes you to the nearest edge data center, the WAF checks the request is safe, the cache tries to answer instantly, and only if needed does a Worker run your back-end code and read storage. Then the response retraces its steps home.",
+            "zh": "每次你打開一個網頁，瀏覽器都會送出一個 HTTP 請求，這個請求要經過一連串的站點，答案才會回來。在 Cloudflare 上這條路徑是：DNS（網域名稱系統）先找到位址，Anycast 把你導向最近的邊緣資料中心，WAF（網站應用防火牆）檢查請求是否安全，快取（cache）試著立刻回答，只有在需要時，Worker 才會執行你的後端程式並讀取儲存。接著回應會沿著原路一路回家。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the whole path on one diagram. Read it left to right: the browser starts the trip, the edge PoP does the heavy lifting (WAF then cache then Worker), storage sits at the far end, and the response flows back.",
+            "zh": "下面這張圖把整條路徑畫在一起。由左讀到右：瀏覽器開啟旅程，邊緣 PoP（接入點）負責主要工作（先 WAF、再快取、再 Worker），儲存在最末端，回應再流回來。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "The full path, left to right", "zh": "完整路徑（由左到右）" },
+          "code": {
+            "en": "flowchart LR\n  B[\"Browser\"]\n  DNS[\"DNS lookup\"]\n  subgraph EDGE[\"Nearest edge PoP\"]\n    WAF[\"WAF security\"]\n    CACHE[\"Cache\"]\n    W[\"Worker backend\"]\n  end\n  STORE[\"Storage D1 / KV / R2\"]\n  B -->|\"1 DNS query\"| DNS\n  DNS -->|\"2 Anycast to nearest PoP\"| WAF\n  WAF -->|\"3 passes checks\"| CACHE\n  CACHE -->|\"4 MISS goes deeper\"| W\n  W -->|\"5 read or write\"| STORE\n  STORE -->|\"6 data back\"| W\n  W -->|\"7 build response\"| CACHE\n  CACHE -->|\"8 response\"| B",
+            "zh": "flowchart LR\n  B[\"瀏覽器\"]\n  DNS[\"DNS 查詢\"]\n  subgraph EDGE[\"最近的邊緣 PoP\"]\n    WAF[\"WAF 安全檢查\"]\n    CACHE[\"快取 Cache\"]\n    W[\"Worker 後端\"]\n  end\n  STORE[\"儲存 D1 / KV / R2\"]\n  B -->|\"1 DNS 查詢\"| DNS\n  DNS -->|\"2 Anycast 導向最近 PoP\"| WAF\n  WAF -->|\"3 通過檢查\"| CACHE\n  CACHE -->|\"4 MISS 才往後\"| W\n  W -->|\"5 讀寫資料\"| STORE\n  STORE -->|\"6 回傳資料\"| W\n  W -->|\"7 產生回應\"| CACHE\n  CACHE -->|\"8 回應\"| B"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_shipping",
+          "title": { "en": "Think of it like a parcel delivery", "zh": "把它想成一趟包裹配送" },
+          "text": {
+            "en": "DNS is looking up the address. Anycast is the courier choosing the nearest depot. The WAF is security at the gate. The cache is a shelf of ready-to-ship parcels. The Worker is the worker who assembles a custom order, and storage is the warehouse out back. Most of the time you never reach the warehouse — the shelf already had your parcel.",
+            "zh": "DNS 是在查地址。Anycast 是宅配選了離你最近的轉運站。WAF 是門口的保全。快取是一整排「現貨、可立即出貨」的包裹。Worker 是那位幫你客製組裝訂單的員工，儲存則是後方的大倉庫。大多數時候你根本走不到倉庫——貨架上早就有你的包裹了。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hops",
+      "icon": "account_tree",
+      "heading": { "en": "Each hop, one at a time", "zh": "逐站拆解：每一個站點在做什麼" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Six stops make up the journey. Each one has a single job, and each one can short-circuit the trip — for example, the cache can answer before the request ever reaches your code.",
+            "zh": "整趟旅程由六個站點組成。每個站點只負責一件事，而且每一站都可能讓旅程「提前結束」——例如快取可以在請求碰到你的程式碼之前就先回答。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "dns",
+              "title": { "en": "1. DNS", "zh": "1. DNS（網域名稱系統）" },
+              "text": {
+                "en": "Turns a name like shop.com into an IP address. On Cloudflare that IP is an Anycast address shared by every edge data center.",
+                "zh": "把像 shop.com 這樣的名字換成一個 IP 位址。在 Cloudflare 上，這個 IP 是所有邊緣資料中心共用的 Anycast 位址。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "2. Edge PoP", "zh": "2. 邊緣 PoP（接入點）" },
+              "text": {
+                "en": "The nearest Cloudflare data center (Point of Presence). Anycast steers your request here so the round trip stays short.",
+                "zh": "離你最近的 Cloudflare 資料中心（Point of Presence，接入點）。Anycast 把請求導向這裡，讓來回距離保持最短。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "3. WAF", "zh": "3. WAF（網站應用防火牆）" },
+              "text": {
+                "en": "Inspects the request first. Bad traffic (SQL injection, bots, abuse) is blocked or challenged before it can touch anything else.",
+                "zh": "最先檢查請求。惡意流量（SQL 注入、機器人、濫用）會在碰到後面任何東西之前先被封鎖或要求驗證。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "4. Cache", "zh": "4. 快取（Cache）" },
+              "text": {
+                "en": "If a fresh copy of the response is already stored at this PoP, it is sent back instantly — a cache HIT. No Worker, no origin.",
+                "zh": "如果這個 PoP 已經存有一份還新鮮的回應複本，就立刻送回去——這就是快取命中（HIT）。不需要動用 Worker，也不必回源。"
+              }
+            },
+            {
+              "icon": "code",
+              "title": { "en": "5. Worker (back-end)", "zh": "5. Worker（後端）" },
+              "text": {
+                "en": "On a cache MISS, your serverless code runs right here at the edge. It decides what to do: read data, call an API, render HTML.",
+                "zh": "快取未命中（MISS）時，你的無伺服器程式碼就在這個邊緣節點執行。它決定接下來要做什麼：讀資料、呼叫 API、產生 HTML。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "6. Storage", "zh": "6. 儲存（Storage）" },
+              "text": {
+                "en": "The Worker reads or writes data: D1 (SQL), KV (key-value), or R2 (files). This is the far end of the trip before the answer turns around.",
+                "zh": "Worker 在這裡讀寫資料：D1（SQL 資料庫）、KV（鍵值儲存）或 R2（檔案儲存）。這是答案掉頭回家之前、旅程的最遠端。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "swap_vert",
+      "heading": { "en": "Step by step, with cache HIT vs MISS", "zh": "一步一步走，含快取 HIT 與 MISS 分支" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Now the same trip as a time-ordered sequence. Notice the branch: a cache HIT answers in one short hop, while a cache MISS has to wake the Worker and reach storage before it can reply — and then it saves the result so the next visitor gets a HIT.",
+            "zh": "現在把同一趟旅程畫成依時間排序的流程。注意那個分支：快取命中（HIT）只要一個短短的往返就能回答；而快取未命中（MISS）必須叫醒 Worker、走到儲存才能回應——而且回應後會把結果存起來，讓下一位訪客拿到 HIT。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Request sequence (HIT vs MISS)", "zh": "請求時序（HIT 與 MISS）" },
+          "code": {
+            "en": "sequenceDiagram\n  participant U as \"Browser\"\n  participant E as \"Edge PoP\"\n  participant W as \"Worker\"\n  participant S as \"Storage\"\n  U->>E: GET /page after DNS and Anycast\n  Note over E: WAF checks the request\n  alt Cache HIT\n    E-->>U: Cached response is fast\n  else Cache MISS\n    E->>W: Forward the request\n    W->>S: Read or write data\n    S-->>W: Result\n    W-->>E: Fresh response\n    Note over E: Store in cache for next time\n    E-->>U: Response\n  end",
+            "zh": "sequenceDiagram\n  participant U as \"瀏覽器\"\n  participant E as \"邊緣 PoP\"\n  participant W as \"Worker\"\n  participant S as \"儲存\"\n  U->>E: GET /page 經 DNS 與 Anycast\n  Note over E: WAF 檢查這個請求\n  alt 快取命中 HIT\n    E-->>U: 直接回快取很快\n  else 快取未命中 MISS\n    E->>W: 轉發請求\n    W->>S: 讀取或寫入資料\n    S-->>W: 結果\n    W-->>E: 全新回應\n    Note over E: 存進快取給下次用\n    E-->>U: 回應\n  end"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "How to tell HIT from MISS", "zh": "怎麼分辨 HIT 還是 MISS" },
+          "text": {
+            "en": "Cloudflare reports the outcome in the cf-cache-status response header. The first request to a page is often a MISS; load it again and you usually get a HIT served straight from the edge.",
+            "zh": "Cloudflare 會用 cf-cache-status 這個回應標頭告訴你結果。第一次請求某個頁面常常是 MISS；再載入一次，通常就會拿到直接從邊緣送出的 HIT。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "decisions",
+      "icon": "alt_route",
+      "heading": { "en": "The decisions made at the edge", "zh": "邊緣節點當下做的那些決定" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Inside that one edge PoP, a few yes/no questions decide the rest of the request's fate: is it malicious, is it already cached, and does a route send it to a Worker? Following the arrows shows every possible path the request can take.",
+            "zh": "在那一個邊緣 PoP 裡，幾個是／否的問題就決定了這個請求接下來的命運：它是惡意的嗎？它已經被快取了嗎？有沒有路由把它送去某個 Worker？順著箭頭走，就能看到請求所有可能走的路。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Decision points at the edge", "zh": "邊緣節點的決策點" },
+          "code": {
+            "en": "flowchart TD\n  IN[\"Request arrives at edge PoP\"]\n  WAF{\"WAF: malicious or bot?\"}\n  BLOCK[\"Block or challenge\"]\n  CACHEQ{\"Fresh copy in cache?\"}\n  SERVE[\"Serve cached HIT\"]\n  ROUTEQ{\"Route matches a Worker?\"}\n  WORKER[\"Run Worker code\"]\n  ORIGIN[\"Fetch from origin\"]\n  RESP[\"Build response and maybe cache\"]\n  OUT[\"Return to browser\"]\n  IN --> WAF\n  WAF -->|\"yes\"| BLOCK\n  WAF -->|\"no\"| CACHEQ\n  CACHEQ -->|\"yes\"| SERVE\n  CACHEQ -->|\"no\"| ROUTEQ\n  ROUTEQ -->|\"yes\"| WORKER\n  ROUTEQ -->|\"no\"| ORIGIN\n  WORKER --> RESP\n  ORIGIN --> RESP\n  RESP --> OUT\n  SERVE --> OUT",
+            "zh": "flowchart TD\n  IN[\"請求抵達邊緣 PoP\"]\n  WAF{\"WAF：惡意或機器人?\"}\n  BLOCK[\"封鎖或出 Challenge\"]\n  CACHEQ{\"快取裡有新鮮複本?\"}\n  SERVE[\"直接回快取 HIT\"]\n  ROUTEQ{\"路由命中 Worker?\"}\n  WORKER[\"執行 Worker 程式\"]\n  ORIGIN[\"回源伺服器抓取\"]\n  RESP[\"組裝回應並視情況寫入快取\"]\n  OUT[\"回傳給瀏覽器\"]\n  IN --> WAF\n  WAF -->|\"是\"| BLOCK\n  WAF -->|\"否\"| CACHEQ\n  CACHEQ -->|\"是\"| SERVE\n  CACHEQ -->|\"否\"| ROUTEQ\n  ROUTEQ -->|\"是\"| WORKER\n  ROUTEQ -->|\"否\"| ORIGIN\n  WORKER --> RESP\n  ORIGIN --> RESP\n  RESP --> OUT\n  SERVE --> OUT"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "rocket_launch",
+          "title": { "en": "Cheapest path wins", "zh": "越早結束、越省" },
+          "text": {
+            "en": "The earlier the request exits this chart, the faster and cheaper it is. A cache HIT skips the Worker, the origin, and storage entirely — which is why caching is the single biggest performance lever you have.",
+            "zh": "請求越早離開這張圖，就越快也越省。一次快取命中會完全跳過 Worker、來源伺服器與儲存——這就是為什麼「快取」是你手上最有力的效能槓桿。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "Where the Worker sits in the path", "zh": "Worker 在這條路徑上的位置" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A Worker is just a fetch handler that Cloudflare runs at the edge PoP — after the WAF, and only when the cache could not answer. Here is a sketch that mirrors the diagrams above: try the cache first, run back-end logic and read storage on a MISS, then save the response for next time.",
+            "zh": "Worker 其實就是一個 fetch 處理函式，由 Cloudflare 在邊緣 PoP 執行——在 WAF 之後、而且只有在快取無法回答時才會跑。下面這段範例剛好對應上面的圖：先試快取，MISS 時才執行後端邏輯並讀取儲存，最後把回應存起來給下次用。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "place",
+          "title": { "en": "This code runs at step 5", "zh": "這段程式碼跑在「第 5 站」" },
+          "text": {
+            "en": "env.DB is a D1 (SQL) binding and env.ASSETS is a KV binding — both are the 'storage' hop. caches.default is the edge cache from the diagrams. ctx.waitUntil lets the response leave while the cache write finishes in the background.",
+            "zh": "env.DB 是 D1（SQL）的 binding（繫結），env.ASSETS 是 KV 的 binding，兩者都是圖中「儲存」這一站。caches.default 就是圖裡的邊緣快取。ctx.waitUntil 讓回應先送出，快取寫入則在背景慢慢完成。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "worker.js — where the Worker sits", "zh": "worker.js — Worker 的位置" },
+          "body": "export default {\n  // Cloudflare runs this at the edge PoP, AFTER the WAF and a cache MISS\n  async fetch(request, env, ctx) {\n    const url = new URL(request.url);\n\n    // 1) Try the edge cache first\n    const cache = caches.default;\n    let response = await cache.match(request);\n    if (response) {\n      return response; // cache HIT - the fastest path home\n    }\n\n    // 2) Cache MISS - run back-end logic and read storage\n    if (url.pathname === \"/api/profile\") {\n      const user = await env.DB.prepare(\n        \"SELECT name FROM users WHERE id = ?\"\n      ).bind(url.searchParams.get(\"id\")).first();\n      response = Response.json(user);\n    } else {\n      const html = await env.ASSETS.get(\"index.html\");\n      response = new Response(html, {\n        headers: { \"content-type\": \"text/html\" },\n      });\n    }\n\n    // 3) Save to the edge cache for the next visitor, then return\n    response.headers.append(\"Cache-Control\", \"max-age=60\");\n    ctx.waitUntil(cache.put(request, response.clone()));\n    return response;\n  },\n};"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "See which PoP you reached", "zh": "看看你打到了哪個 PoP" },
+              "text": {
+                "en": "The cf-ray header ends with a 3-letter airport code — that is the edge data center that served you.",
+                "zh": "cf-ray 標頭結尾有一組 3 個字母的機場代碼——那就是替你服務的邊緣資料中心。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -sI https://example.com | grep -i cf-ray\n# cf-ray: 8a1f...-LHR   (LHR = London)"
+              }
+            },
+            {
+              "title": { "en": "Watch cache HIT vs MISS", "zh": "觀察快取 HIT 與 MISS" },
+              "text": {
+                "en": "Run it twice. The first call is often MISS; the second is usually HIT, served straight from the edge.",
+                "zh": "連跑兩次。第一次常常是 MISS；第二次通常是 HIT，直接從邊緣送出。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -sI https://example.com/logo.png | grep -i cf-cache-status\n# cf-cache-status: HIT"
+              }
+            },
+            {
+              "title": { "en": "Confirm the Worker ran", "zh": "確認 Worker 有跑到" },
+              "text": {
+                "en": "Add a custom header in your Worker (for example response.headers.set('x-served-by', 'worker')) and look for it in the response to prove your code was the one that answered.",
+                "zh": "在 Worker 裡加一個自訂標頭（例如 response.headers.set('x-served-by', 'worker')），再去回應裡找它，就能證明是你的程式碼回答的。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key terms, explained", "zh": "關鍵名詞，一次說清楚" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "dns",
+              "title": { "en": "DNS", "zh": "DNS（網域名稱系統）" },
+              "text": {
+                "en": "The internet's phone book. It translates a human name (shop.com) into the numeric IP address a computer can actually connect to.",
+                "zh": "網際網路的電話簿。它把人看得懂的名字（shop.com）翻譯成電腦真正能連線的數字 IP 位址。"
+              }
+            },
+            {
+              "icon": "travel_explore",
+              "title": { "en": "Anycast", "zh": "Anycast（任播）" },
+              "text": {
+                "en": "One IP address announced from hundreds of locations at once. The network automatically delivers each request to the closest one, so users always hit a nearby edge.",
+                "zh": "同一個 IP 位址，同時從上百個據點對外宣告。網路會自動把每個請求送到最近的那個，所以使用者永遠打到附近的邊緣節點。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Edge / PoP", "zh": "邊緣 / PoP（接入點）" },
+              "text": {
+                "en": "'Edge' means servers near users instead of one faraway data center. A PoP (Point of Presence) is one such location — Cloudflare has them in 330+ cities.",
+                "zh": "「邊緣（edge）」指的是靠近使用者的伺服器，而不是一座遙遠的資料中心。PoP（Point of Presence，接入點）就是其中一個據點——Cloudflare 在全球 330 多個城市都有。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "WAF", "zh": "WAF（網站應用防火牆）" },
+              "text": {
+                "en": "Web Application Firewall. It inspects each request at the edge and blocks common attacks (SQL injection, XSS) and abusive bots before they reach your app.",
+                "zh": "Web Application Firewall（網站應用防火牆）。它在邊緣檢查每個請求，在常見攻擊（SQL 注入、XSS 跨站腳本）和惡意機器人碰到你的應用之前就先擋下來。"
+              }
+            },
+            {
+              "icon": "compare_arrows",
+              "title": { "en": "Cache HIT / MISS", "zh": "快取 HIT／MISS（命中／未命中）" },
+              "text": {
+                "en": "A HIT means the edge already had a fresh copy and answered instantly. A MISS means it had to go fetch a fresh one (from a Worker or your origin) and then store it.",
+                "zh": "HIT（命中）表示邊緣手上已有新鮮複本，立刻回答。MISS（未命中）表示它得去抓一份新的（向 Worker 或你的來源伺服器），再存起來。"
+              }
+            },
+            {
+              "icon": "home_pin",
+              "title": { "en": "Origin", "zh": "Origin（來源伺服器）" },
+              "text": {
+                "en": "Your own server or service that holds the original content. Cloudflare only goes back to the origin when the edge cannot answer from cache or a Worker — that round trip is 'going to origin'.",
+                "zh": "你自己那台存放原始內容的伺服器或服務。只有當邊緣無法用快取或 Worker 回答時，Cloudflare 才會回到來源伺服器——這趟來回就叫「回源」。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & gotchas", "zh": "小提示與常見陷阱" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "report",
+          "title": { "en": "Never cache per-user pages", "zh": "千萬別快取每位使用者專屬的頁面" },
+          "text": {
+            "en": "If a logged-in dashboard is cached at the edge, one user could be served another user's page. Mark private responses with Cache-Control: private, no-store so they always go through the Worker.",
+            "zh": "如果把已登入的儀表板快取在邊緣，某位使用者可能會看到別人的頁面。請替私人回應加上 Cache-Control: private, no-store，讓它們一定走 Worker。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "The whole chain (DNS, edge, WAF, cache) only kicks in when your DNS record is proxied — the orange cloud in the dashboard.",
+              "Static files (images, CSS, JS) cache beautifully; dynamic, personalized responses usually should not.",
+              "A cache HIT never runs your Worker, so it costs no Worker requests and adds no latency.",
+              "cf-ray identifies the PoP and the exact request; keep it when filing a support ticket.",
+              "Read the chapters on DNS, CDN, WAF, and Workers next — each one is a single hop in this diagram."
+            ],
+            "zh": [
+              "整條鏈（DNS、邊緣、WAF、快取）只有在你的 DNS 紀錄「經過代理」時才會啟動——也就是儀表板上的橘色雲朵。",
+              "靜態檔案（圖片、CSS、JS）非常適合快取；動態、個人化的回應通常不該快取。",
+              "快取命中（HIT）完全不會執行你的 Worker，所以不計 Worker 請求、也不增加延遲。",
+              "cf-ray 能標示是哪個 PoP、哪一個請求；回報問題給客服時請保留它。",
+              "接下來去讀 DNS、CDN、WAF 和 Workers 的章節——每一章都正好是這張圖裡的一個站點。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } },
+    { "slug": "cdn", "label": { "en": "CDN & Cache", "zh": "CDN 與快取" } },
+    { "slug": "waf", "label": { "en": "WAF", "zh": "WAF" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "cache-flow", "label": { "en": "Cache flow", "zh": "快取流程" } }
+  ],
+  "docs": "https://developers.cloudflare.com/"
+}

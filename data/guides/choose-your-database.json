@@ -1,0 +1,370 @@
+{
+  "slug": "choose-your-database",
+  "category": "integrations",
+  "group": { "en": "Data & Storage", "zh": "資料庫與儲存" },
+  "icon": "alt_route",
+  "title": {
+    "en": "Which storage should I use? KV vs D1 vs R2 vs DO vs Hyperdrive",
+    "zh": "我該用哪種儲存？KV / D1 / R2 / Durable Objects / Hyperdrive 選型"
+  },
+  "subtitle": {
+    "en": "A decision guide that matches the shape of your data to the right Cloudflare storage",
+    "zh": "一份選型指南：把你資料的「形狀」對應到最適合的 Cloudflare 儲存"
+  },
+  "hero": {
+    "badge": { "en": "Integration", "zh": "整合實戰" },
+    "tagline": {
+      "en": "Five storage products, one Worker. Ask a few questions and the right one falls out.",
+      "zh": "五種儲存、一個 Worker。問自己幾個問題，答案自然浮現。"
+    }
+  },
+  "stats": [
+    { "value": "5", "label": { "en": "Storage options", "zh": "種儲存選項" } },
+    { "value": "$0", "label": { "en": "R2 egress fees", "zh": "R2 流量費" } },
+    { "value": "~60s", "label": { "en": "KV global sync", "zh": "KV 全球同步" } },
+    { "value": "SQL", "label": { "en": "D1 is relational", "zh": "D1 是關聯式" } }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "icon": "insights",
+      "heading": { "en": "What are we choosing between?", "zh": "我們在選什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare gives you five very different ways to store data, and they all sit behind your Worker. Picking the wrong one makes everything harder; picking the right one makes your code short and fast. This guide turns the choice into a few yes/no questions.",
+            "zh": "Cloudflare 提供五種差很多的資料儲存方式，它們全都掛在你的 Worker 後面。選錯會讓一切變難；選對則讓程式碼又短又快。這份指南把「該用哪個」變成幾個是/否的問題。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Here is the whole cast on one stage: the Worker is the brain, and each store plays one role. KV is the cache, D1 is the SQL table, R2 is the file shelf, Durable Objects is the single source of truth, and Hyperdrive is the fast lane to a database you already own.",
+            "zh": "先把所有角色擺上同一個舞台：Worker 是大腦，每種儲存各演一個角色。KV 是快取、D1 是 SQL 資料表、R2 是檔案櫃、Durable Objects 是「唯一真相來源」、Hyperdrive 是通往你既有資料庫的快速通道。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Five stores behind one Worker", "zh": "一個 Worker 後面的五種儲存" },
+          "code": {
+            "en": "flowchart LR\n  C[\"Browser\"] --> W[\"Worker\"]\n  W -->|\"cache\"| KV[\"Workers KV\"]\n  W -->|\"SQL\"| D1[\"D1\"]\n  W -->|\"files\"| R2[\"R2\"]\n  W -->|\"state\"| DO[\"Durable Objects\"]\n  W -->|\"accelerate\"| HD[\"Hyperdrive\"]\n  HD --> PG[\"Postgres / MySQL\"]",
+            "zh": "flowchart LR\n  C[\"瀏覽器\"] --> W[\"Worker\"]\n  W -->|\"快取\"| KV[\"Workers KV\"]\n  W -->|\"SQL\"| D1[\"D1\"]\n  W -->|\"檔案\"| R2[\"R2\"]\n  W -->|\"狀態\"| DO[\"Durable Objects\"]\n  W -->|\"加速\"| HD[\"Hyperdrive\"]\n  HD --> PG[\"Postgres / MySQL\"]"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "kitchen",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A kitchen. KV is the spice rack (grab-and-go, refilled occasionally), D1 is the recipe binder (structured, searchable), R2 is the walk-in freezer (big, bulky items), Durable Objects is the head chef who keeps one authoritative order list, and Hyperdrive is a delivery shortcut to the supplier you already use.",
+            "zh": "一間廚房。KV 是調味料架（隨手拿、偶爾補貨）、D1 是食譜本（有結構、可查找）、R2 是大型冷凍庫（又大又笨重的東西）、Durable Objects 是主廚（手上握著唯一一份正式點單）、Hyperdrive 則是通往你「現有供應商」的送貨捷徑。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "decision",
+      "icon": "account_tree",
+      "heading": { "en": "The decision tree", "zh": "決策樹" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Start at the top and follow the answers. Each branch lands on exactly one product. You can always combine several later, but for any single piece of data this tree gives you a clear default.",
+            "zh": "從最上面開始，照著答案往下走，每條分支都會落在一個產品上。之後你當然可以混搭多種儲存，但對「單一一筆資料」來說，這棵樹會給你一個明確的預設答案。"
+          }
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Pick a store in four questions", "zh": "四個問題選出儲存" },
+          "code": {
+            "en": "flowchart TD\n  S[\"What are you storing?\"]\n  Q3{\"Large files / blobs?\"}\n  Q1{\"Relational SQL queries?\"}\n  Q2{\"Existing Postgres / MySQL?\"}\n  Q4{\"Strong consistency + coordination?\"}\n  KV[\"Workers KV\"]\n  D1[\"D1\"]\n  R2[\"R2\"]\n  DO[\"Durable Objects\"]\n  HD[\"Hyperdrive\"]\n  S --> Q3\n  Q3 -->|\"Yes\"| R2\n  Q3 -->|\"No\"| Q1\n  Q1 -->|\"Yes\"| Q2\n  Q2 -->|\"Yes\"| HD\n  Q2 -->|\"No\"| D1\n  Q1 -->|\"No\"| Q4\n  Q4 -->|\"Yes\"| DO\n  Q4 -->|\"No\"| KV",
+            "zh": "flowchart TD\n  S[\"你要存什麼資料？\"]\n  Q3{\"大型檔案 / 二進位物件？\"}\n  Q1{\"需要關聯式 SQL 查詢？\"}\n  Q2{\"已有 Postgres / MySQL？\"}\n  Q4{\"強一致性 + 協調？\"}\n  KV[\"Workers KV\"]\n  D1[\"D1\"]\n  R2[\"R2\"]\n  DO[\"Durable Objects\"]\n  HD[\"Hyperdrive\"]\n  S --> Q3\n  Q3 -->|\"是\"| R2\n  Q3 -->|\"否\"| Q1\n  Q1 -->|\"是\"| Q2\n  Q2 -->|\"是\"| HD\n  Q2 -->|\"否\"| D1\n  Q1 -->|\"否\"| Q4\n  Q4 -->|\"是\"| DO\n  Q4 -->|\"否\"| KV"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "Order matters", "zh": "順序有意義" },
+          "text": {
+            "en": "Ask about big files first (R2 is unmistakable), then relational needs (D1 vs Hyperdrive), then strong consistency (Durable Objects). If none of those fit, a small read-heavy value almost always means KV.",
+            "zh": "先問「是不是大檔案」（R2 最好認），再問「需不需要關聯式」（D1 或 Hyperdrive），接著問「要不要強一致性」（Durable Objects）。如果都不是，那通常就是一筆「讀多寫少」的小資料，答案幾乎都是 KV。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "options",
+      "icon": "target",
+      "heading": { "en": "The five options at a glance", "zh": "五個選項一次看懂" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "One card per store, with the one-line rule for when to reach for it.",
+            "zh": "每個儲存一張卡片，附上「什麼時候該用它」的一句話原則。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": { "en": "Workers KV — use when…", "zh": "Workers KV — 何時用…" },
+              "text": {
+                "en": "Tiny values read far more than written, and ~60s global sync is fine: caches, feature flags, config, sessions.",
+                "zh": "小資料、讀遠多於寫，而且約 60 秒的全球同步可以接受：快取、功能開關、設定、登入工作階段。"
+              }
+            },
+            {
+              "icon": "table",
+              "title": { "en": "D1 — use when…", "zh": "D1 — 何時用…" },
+              "text": {
+                "en": "You need relational tables and SQL (JOIN, WHERE, ORDER BY) and want a Cloudflare-native database with no server to run.",
+                "zh": "需要關聯式資料表與 SQL（JOIN、WHERE、ORDER BY），而且想要一個 Cloudflare 原生、不用自己養伺服器的資料庫。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "R2 — use when…", "zh": "R2 — 何時用…" },
+              "text": {
+                "en": "You store large files — images, video, PDFs, backups — and want zero egress (download) fees.",
+                "zh": "要存大型檔案——圖片、影片、PDF、備份——而且想要零「egress（對外下載流量）」費用。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Durable Objects — use when…", "zh": "Durable Objects — 何時用…" },
+              "text": {
+                "en": "One piece of state must be strongly consistent and coordinated: counters, chat rooms, game state, locks, live collaboration.",
+                "zh": "某一份狀態必須強一致且需要協調：計數器、聊天室、遊戲狀態、鎖、即時協作。"
+              }
+            },
+            {
+              "icon": "rocket_launch",
+              "title": { "en": "Hyperdrive — use when…", "zh": "Hyperdrive — 何時用…" },
+              "text": {
+                "en": "You already have a Postgres/MySQL database and just want it fast from Workers — no migration, no rewrite.",
+                "zh": "你已經有 Postgres / MySQL 資料庫，只想讓它從 Workers 連起來變快——不用搬遷、不用改寫。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "icon": "construction",
+      "heading": { "en": "How each binding looks in code", "zh": "每個 binding 在程式碼裡長怎樣" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A binding is a name you declare in wrangler.jsonc that shows up as env.SOMETHING inside your Worker. Here is the smallest real snippet for each store — notice how different the access patterns are.",
+            "zh": "「binding（綁定）」是你在 wrangler.jsonc 宣告的一個名字，它會以 env.某某 的形式出現在 Worker 裡。下面是每種儲存最小的真實片段——注意它們的存取方式差很多。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "KV — get / put a value", "zh": "KV — 讀取 / 寫入一個值" },
+              "text": {
+                "en": "Look up by key; values are strings (or streams). Optional TTL auto-expires the key.",
+                "zh": "用 key 查找；值是字串（或串流）。可選的 TTL 會讓 key 自動過期。"
+              },
+              "code": { "lang": "js", "body": "// wrangler.jsonc -> { \"kv_namespaces\": [{ \"binding\": \"KV\", \"id\": \"...\" }] }\nconst cached = await env.KV.get(\"user:42\");\nawait env.KV.put(\"user:42\", JSON.stringify(user), { expirationTtl: 3600 });" }
+            },
+            {
+              "title": { "en": "D1 — prepared SQL query", "zh": "D1 — 預備式 SQL 查詢" },
+              "text": {
+                "en": "Write SQL with ? placeholders, bind() the values, then .all() for rows.",
+                "zh": "用 ? 佔位符寫 SQL，用 bind() 填值，再用 .all() 取回資料列。"
+              },
+              "code": { "lang": "js", "body": "// wrangler.jsonc -> { \"d1_databases\": [{ \"binding\": \"DB\", \"database_name\": \"app\" }] }\nconst { results } = await env.DB\n  .prepare(\"SELECT * FROM orders WHERE city = ?\")\n  .bind(\"Taipei\")\n  .all();" }
+            },
+            {
+              "title": { "en": "R2 — store / fetch an object", "zh": "R2 — 存入 / 取出一個物件" },
+              "text": {
+                "en": "put() a file by key, get() it back as an object whose .body is a stream.",
+                "zh": "用 put() 以 key 存檔，再用 get() 取回一個物件，它的 .body 是串流。"
+              },
+              "code": { "lang": "js", "body": "// wrangler.jsonc -> { \"r2_buckets\": [{ \"binding\": \"BUCKET\", \"bucket_name\": \"files\" }] }\nawait env.BUCKET.put(\"invoice.pdf\", request.body);\nconst object = await env.BUCKET.get(\"invoice.pdf\");\nreturn new Response(object.body);" }
+            },
+            {
+              "title": { "en": "Durable Objects — call a stub", "zh": "Durable Objects — 呼叫 stub" },
+              "text": {
+                "en": "getByName() returns the ONE instance for that name; call its methods directly over RPC. Every caller hits the same object.",
+                "zh": "getByName() 會回傳「那個名字唯一的一個實例」；直接用 RPC 呼叫它的方法。所有呼叫者都打到同一個物件。"
+              },
+              "code": { "lang": "js", "body": "// wrangler.jsonc -> durable_objects: { \"name\": \"ROOM\", \"class_name\": \"Room\" }\nconst stub = env.ROOM.getByName(\"room-42\");\nconst count = await stub.increment(); // strongly consistent" }
+            },
+            {
+              "title": { "en": "Hyperdrive — connection string", "zh": "Hyperdrive — 連線字串" },
+              "text": {
+                "en": "Read env.HYPERDRIVE.connectionString and connect with a normal pg client; pooling and caching happen for you.",
+                "zh": "讀取 env.HYPERDRIVE.connectionString，用一般的 pg 客戶端連線；連線池與快取都自動幫你處理。"
+              },
+              "code": { "lang": "js", "body": "// wrangler.jsonc -> { \"hyperdrive\": [{ \"binding\": \"HYPERDRIVE\", \"id\": \"...\" }] }\nimport { Client } from \"pg\";\n\nconst client = new Client({ connectionString: env.HYPERDRIVE.connectionString });\nawait client.connect();\nconst { rows } = await client.query(\"SELECT * FROM products LIMIT 10\");" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "The words behind the choice", "zh": "選型背後的關鍵字" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Three ideas decide most of these picks: consistency, relational vs key-value, and object storage. Get these and the tree becomes obvious.",
+            "zh": "大多數的選擇其實是被三個概念決定的：一致性、關聯式 vs 鍵值、以及物件儲存。搞懂它們，那棵決策樹就一目了然。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "schedule",
+              "title": { "en": "Eventual consistency", "zh": "最終一致性" },
+              "text": {
+                "en": "After a write, other regions may take up to ~60s to show the new value — they catch up 'eventually'. KV works this way: great for caches, wrong for bank balances.",
+                "zh": "寫入後，其他地區可能要約 60 秒才看得到新值——它們會「最終」追上。KV 就是這樣：拿來做快取很棒，拿來存銀行餘額就錯了。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "Strong consistency", "zh": "強一致性" },
+              "text": {
+                "en": "Every reader always sees the latest write, immediately. A Durable Object gives this because exactly one instance owns the data and processes requests in order.",
+                "zh": "每個讀取者永遠、立刻看到最新的寫入。Durable Object 能做到，因為「剛好只有一個實例」擁有這份資料、並依序處理請求。"
+              }
+            },
+            {
+              "icon": "table_rows",
+              "title": { "en": "Relational (SQL)", "zh": "關聯式 (SQL)" },
+              "text": {
+                "en": "Data lives in tables with columns and relationships, queried with SQL — JOIN links tables, WHERE filters, ORDER BY sorts. D1 (and your own DB via Hyperdrive) are relational.",
+                "zh": "資料放在有欄位與關聯的「資料表」裡，用 SQL 查詢——JOIN 串接資料表、WHERE 過濾、ORDER BY 排序。D1（以及透過 Hyperdrive 連的自家資料庫）都是關聯式。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": "Key-value", "zh": "鍵值" },
+              "text": {
+                "en": "No tables, no SQL — just a name (key) pointing to a value. Fast and simple, but you can only look things up by the exact key. KV is the pure key-value store.",
+                "zh": "沒有資料表、沒有 SQL——只有一個名字（key）指向一個值。又快又簡單，但你只能用「精確的 key」查找。KV 就是純粹的鍵值儲存。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "Object storage", "zh": "物件儲存" },
+              "text": {
+                "en": "Built for large, opaque files ('objects') like images and video, addressed by a key. R2 is object storage with no egress fee for downloading those files.",
+                "zh": "專為大型、內容不透明的檔案（「物件」）打造，例如圖片與影片，用一個 key 來定址。R2 就是物件儲存，而且下載這些檔案不收 egress 流量費。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Coordination", "zh": "協調" },
+              "text": {
+                "en": "When many users act on the same shared thing — same counter, same chat room — someone must serialize them so updates don't clash. That single owner is exactly what Durable Objects provides.",
+                "zh": "當很多使用者同時動到「同一個共享的東西」——同一個計數器、同一個聊天室——必須有人把它們排隊，更新才不會打架。那個「唯一擁有者」正是 Durable Objects 提供的。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "mermaid",
+          "title": { "en": "Consistency spectrum", "zh": "一致性光譜" },
+          "code": {
+            "en": "flowchart LR\n  W[\"Weaker consistency\"] --> KV[\"Workers KV\"]\n  KV --> D1[\"D1\"]\n  D1 --> DO[\"Durable Objects\"]\n  DO --> S[\"Stronger consistency\"]",
+            "zh": "flowchart LR\n  W[\"較弱一致性\"] --> KV[\"Workers KV\"]\n  KV --> D1[\"D1\"]\n  D1 --> DO[\"Durable Objects\"]\n  DO --> S[\"較強一致性\"]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Cheat-sheet, mixing & gotchas", "zh": "速查表、混搭與陷阱" },
+      "blocks": [
+        {
+          "type": "h3",
+          "text": { "en": "Use X when…", "zh": "什麼時候用哪個…" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Use KV when: tiny values are read far more than written and ~60s global sync is fine (cache, config, sessions).",
+              "Use D1 when: you need relational tables and SQL queries (JOIN/WHERE/ORDER BY) in a Cloudflare-native database.",
+              "Use R2 when: you store big files — images, video, PDFs, backups — and want zero egress fees.",
+              "Use Durable Objects when: one shared piece of state must be strongly consistent and coordinated (counters, rooms, locks).",
+              "Use Hyperdrive when: you already run Postgres/MySQL elsewhere and just want it fast from Workers — no migration."
+            ],
+            "zh": [
+              "用 KV：小資料讀遠多於寫，且約 60 秒的全球同步可接受（快取、設定、工作階段）。",
+              "用 D1：需要關聯式資料表與 SQL 查詢（JOIN／WHERE／ORDER BY），且想要 Cloudflare 原生資料庫。",
+              "用 R2：要存大型檔案——圖片、影片、PDF、備份——而且想要零 egress 流量費。",
+              "用 Durable Objects：某一份共享狀態必須強一致且需要協調（計數器、聊天室、鎖）。",
+              "用 Hyperdrive：你已在別處跑 Postgres／MySQL，只想讓它從 Workers 連起來變快——不用搬遷。"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "extension",
+          "title": { "en": "You can mix them", "zh": "其實可以混搭" },
+          "text": {
+            "en": "Real apps combine several: store the upload in R2, keep its metadata in D1, cache the hot lookups in KV, and let a Durable Object guard the one counter that must never double-count.",
+            "zh": "真實的應用通常會混用：把上傳的檔案放 R2、它的中繼資料放 D1、把熱門查找快取在 KV，再用一個 Durable Object 守住「絕對不能重複計數」的那個計數器。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Common mis-picks", "zh": "常見選錯" },
+          "text": {
+            "en": "Don't store large files in KV (25 MiB cap and it's not built for blobs) and don't use KV for must-be-fresh-everywhere data. Don't reach for Durable Objects just to hold static data a table would handle. Don't pick Hyperdrive if you have no existing database — start with D1.",
+            "zh": "別把大型檔案塞進 KV（單筆上限 25 MiB，本來就不是給二進位物件用的），也別用 KV 存「全球每處都得即時最新」的資料。別只為了放靜態資料就動用 Durable Objects——那種用一張資料表就好。如果你根本沒有既有資料庫，就別選 Hyperdrive，直接從 D1 開始。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "KV: read-heavy, eventually consistent, key-value only, up to 25 MiB per value.",
+              "D1: SQLite-based relational SQL, read replicas, great default for app data.",
+              "R2: S3-compatible object storage, no egress fees, ideal for media and backups.",
+              "Durable Objects: one instance per name, strongly consistent, has its own embedded SQLite.",
+              "Hyperdrive: pooling + caching in front of your existing Postgres/MySQL — not a new database."
+            ],
+            "zh": [
+              "KV：讀多寫少、最終一致、只有鍵值、單筆最多 25 MiB。",
+              "D1：以 SQLite 為基礎的關聯式 SQL、有讀取副本，是應用資料的好預設。",
+              "R2：相容 S3 的物件儲存、無 egress 流量費，最適合媒體與備份。",
+              "Durable Objects：一個名字對應一個實例、強一致、內建自己的 SQLite。",
+              "Hyperdrive：在你既有 Postgres／MySQL 前面加上連線池與快取——它不是一個新資料庫。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "hyperdrive", "label": { "en": "Hyperdrive", "zh": "Hyperdrive" } }
+  ],
+  "docs": "https://developers.cloudflare.com/workers/platform/storage-options/"
+}

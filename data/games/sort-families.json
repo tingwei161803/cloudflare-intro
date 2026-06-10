@@ -1,0 +1,37 @@
+{
+  "slug": "sort-families",
+  "category": "arcade",
+  "layout": "game-sort",
+  "group": { "en": "Sort", "zh": "分類挑戰" },
+  "icon": "category",
+  "title": { "en": "Sort into families", "zh": "產品分家族" },
+  "subtitle": { "en": "Drop each product into its product family", "zh": "把每個產品丟進正確的產品家族" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Five families, one home for each product!", "zh": "五大家族，每個產品都有自己的家！" }
+  },
+  "buckets": [
+    { "key": "compute", "label": { "en": "Compute", "zh": "運算" }, "icon": "bolt" },
+    { "key": "ai", "label": { "en": "AI", "zh": "人工智慧" }, "icon": "smart_toy" },
+    { "key": "storage", "label": { "en": "Storage", "zh": "儲存與資料庫" }, "icon": "database" },
+    { "key": "security", "label": { "en": "Security", "zh": "安全" }, "icon": "shield" },
+    { "key": "performance", "label": { "en": "Performance", "zh": "效能" }, "icon": "speed" }
+  ],
+  "items": [
+    { "label": { "en": "Workers", "zh": "Workers" }, "icon": "bolt", "bucket": "compute" },
+    { "label": { "en": "Durable Objects", "zh": "Durable Objects" }, "icon": "memory", "bucket": "compute" },
+    { "label": { "en": "Queues", "zh": "Queues" }, "icon": "queue", "bucket": "compute" },
+    { "label": { "en": "Workers AI", "zh": "Workers AI" }, "icon": "smart_toy", "bucket": "ai" },
+    { "label": { "en": "Vectorize", "zh": "Vectorize" }, "icon": "scatter_plot", "bucket": "ai" },
+    { "label": { "en": "AI Gateway", "zh": "AI Gateway" }, "icon": "hub", "bucket": "ai" },
+    { "label": { "en": "R2", "zh": "R2" }, "icon": "inventory_2", "bucket": "storage" },
+    { "label": { "en": "D1", "zh": "D1" }, "icon": "database", "bucket": "storage" },
+    { "label": { "en": "KV", "zh": "KV" }, "icon": "key", "bucket": "storage" },
+    { "label": { "en": "WAF", "zh": "WAF" }, "icon": "gpp_good", "bucket": "security" },
+    { "label": { "en": "Turnstile", "zh": "Turnstile" }, "icon": "verified_user", "bucket": "security" },
+    { "label": { "en": "Access", "zh": "Access" }, "icon": "lock", "bucket": "security" },
+    { "label": { "en": "DNS", "zh": "DNS" }, "icon": "dns", "bucket": "performance" },
+    { "label": { "en": "CDN", "zh": "CDN" }, "icon": "public", "bucket": "performance" },
+    { "label": { "en": "Web Analytics", "zh": "Web Analytics" }, "icon": "analytics", "bucket": "performance" }
+  ]
+}

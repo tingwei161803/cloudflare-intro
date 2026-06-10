@@ -1,0 +1,54 @@
+{
+  "slug": "build-blueprints",
+  "category": "arcade",
+  "layout": "game-build",
+  "group": { "en": "Build", "zh": "架構拼圖" },
+  "icon": "construction",
+  "title": { "en": "Build the stack", "zh": "架構拼圖" },
+  "subtitle": { "en": "Pick exactly the products each app needs", "zh": "幫每個應用挑出剛好需要的產品" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Drag in the right pieces — nothing more, nothing less.", "zh": "拼進剛剛好的零件，不多也不少。" }
+  },
+  "rounds": [
+    {
+      "goal": { "en": "Build a simple blog", "zh": "做一個簡單的部落格" },
+      "palette": [
+        { "label": { "en": "Workers", "zh": "Workers" }, "icon": "bolt" },
+        { "label": { "en": "D1", "zh": "D1" }, "icon": "database" },
+        { "label": { "en": "R2", "zh": "R2" }, "icon": "inventory_2" },
+        { "label": { "en": "Images", "zh": "Images" }, "icon": "image" },
+        { "label": { "en": "Vectorize", "zh": "Vectorize" }, "icon": "scatter_plot" },
+        { "label": { "en": "Hyperdrive", "zh": "Hyperdrive" }, "icon": "speed" }
+      ],
+      "answer": [0, 1, 2],
+      "note": { "en": "Workers serve the site, D1 stores the posts, and R2 holds images. Vectorize (vector search) and Hyperdrive (speeding up external databases) aren't needed here.", "zh": "Workers 提供網站服務、D1 存放文章、R2 放圖片。做向量搜尋的 Vectorize 和加速外部資料庫的 Hyperdrive 在這裡都用不到。" }
+    },
+    {
+      "goal": { "en": "Build an AI Q&A bot (RAG)", "zh": "做一個 AI 問答機器人 (RAG)" },
+      "palette": [
+        { "label": { "en": "Workers", "zh": "Workers" }, "icon": "bolt" },
+        { "label": { "en": "Workers AI", "zh": "Workers AI" }, "icon": "smart_toy" },
+        { "label": { "en": "Vectorize", "zh": "Vectorize" }, "icon": "scatter_plot" },
+        { "label": { "en": "D1", "zh": "D1" }, "icon": "database" },
+        { "label": { "en": "Turnstile", "zh": "Turnstile" }, "icon": "verified_user" },
+        { "label": { "en": "Stream", "zh": "Stream" }, "icon": "smart_display" }
+      ],
+      "answer": [0, 1, 2, 3],
+      "note": { "en": "Workers run the logic, Workers AI generates answers, Vectorize finds the relevant context, and D1 stores the data. Turnstile (bot protection) and Stream (video) aren't core to RAG.", "zh": "Workers 跑邏輯、Workers AI 生成答案、Vectorize 找出相關的內容、D1 保存資料。擋機器人的 Turnstile 和處理影音的 Stream 都不是 RAG 的核心。" }
+    },
+    {
+      "goal": { "en": "Build a real-time chat room", "zh": "做一個即時聊天室" },
+      "palette": [
+        { "label": { "en": "Workers", "zh": "Workers" }, "icon": "bolt" },
+        { "label": { "en": "Durable Objects", "zh": "Durable Objects" }, "icon": "hub" },
+        { "label": { "en": "D1", "zh": "D1" }, "icon": "database" },
+        { "label": { "en": "KV", "zh": "KV" }, "icon": "key" },
+        { "label": { "en": "R2", "zh": "R2" }, "icon": "inventory_2" },
+        { "label": { "en": "Queues", "zh": "Queues" }, "icon": "queue" }
+      ],
+      "answer": [0, 1, 2],
+      "note": { "en": "A Durable Object is the room itself — it coordinates everyone's WebSocket connections with strong consistency. D1 stores chat history and Workers serve it. KV, R2 and Queues are optional extras.", "zh": "Durable Objects 就是聊天室本身，用強一致來協調大家的 WebSocket 連線。D1 保存聊天紀錄、Workers 提供服務。KV、R2、Queues 都是可有可無的選配。" }
+    }
+  ]
+}

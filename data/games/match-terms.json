@@ -1,0 +1,47 @@
+{
+  "slug": "match-terms",
+  "category": "arcade",
+  "layout": "game-match",
+  "group": { "en": "Match", "zh": "連連看" },
+  "icon": "menu_book",
+  "title": { "en": "Match the term", "zh": "術語連連看" },
+  "subtitle": { "en": "Connect each term to its meaning", "zh": "把術語連到它的意思" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Eight terms, eight meanings — link them up", "zh": "八個術語、八個意思，把它們連起來" }
+  },
+  "pairs": [
+    {
+      "left": { "en": "Edge", "zh": "邊緣 (Edge)" },
+      "right": { "en": "Servers located close to your users", "zh": "靠近使用者的伺服器" }
+    },
+    {
+      "left": { "en": "CDN", "zh": "CDN" },
+      "right": { "en": "Caches content near users for faster loads", "zh": "把內容快取到使用者附近，載入更快" }
+    },
+    {
+      "left": { "en": "Serverless", "zh": "無伺服器 (Serverless)" },
+      "right": { "en": "Run code without managing servers", "zh": "不用管伺服器就能執行程式碼" }
+    },
+    {
+      "left": { "en": "Cold start", "zh": "冷啟動 (Cold start)" },
+      "right": { "en": "Startup delay when idle code first runs", "zh": "閒置的程式第一次啟動時的延遲" }
+    },
+    {
+      "left": { "en": "Egress", "zh": "流出 (Egress)" },
+      "right": { "en": "Data leaving the cloud, often billed", "zh": "資料流出雲端，通常要收費" }
+    },
+    {
+      "left": { "en": "TTL", "zh": "存活時間 (TTL)" },
+      "right": { "en": "How long cached data stays valid", "zh": "快取資料的有效存活時間" }
+    },
+    {
+      "left": { "en": "Zero Trust", "zh": "零信任 (Zero Trust)" },
+      "right": { "en": "Never trust, always verify every request", "zh": "永不信任，每次請求都要驗證" }
+    },
+    {
+      "left": { "en": "Anycast", "zh": "任播 (Anycast)" },
+      "right": { "en": "One IP routed to the nearest server", "zh": "同一個 IP 導向最近的伺服器" }
+    }
+  ]
+}

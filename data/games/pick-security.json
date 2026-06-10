@@ -1,0 +1,114 @@
+{
+  "slug": "pick-security",
+  "category": "arcade",
+  "layout": "game-pick",
+  "group": { "en": "Quick Pick", "zh": "選型快答" },
+  "icon": "shield",
+  "title": { "en": "Pick the right defense", "zh": "選對防護" },
+  "subtitle": { "en": "Choose the right security product for each threat", "zh": "幫每個威脅選對的安全產品" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Match each threat to the right shield.", "zh": "幫每個威脅配上對的盾牌。" }
+  },
+  "rounds": [
+    {
+      "scenario": { "en": "Your website is getting hit with SQL injection and other malicious requests. What blocks them?", "zh": "你的網站一直被 SQL injection 和各種惡意請求攻擊，要用什麼擋下來？" },
+      "options": [
+        { "en": "WAF", "zh": "WAF" },
+        { "en": "Turnstile", "zh": "Turnstile" },
+        { "en": "SSL/TLS", "zh": "SSL/TLS" },
+        { "en": "Tunnel", "zh": "Tunnel" }
+      ],
+      "answer": 0,
+      "why": { "en": "A Web Application Firewall (WAF) inspects HTTP requests and blocks SQLi, XSS, and other common attacks.", "zh": "WAF（Web 應用防火牆）會檢查 HTTP 請求，擋下 SQLi、XSS 等常見攻擊。" }
+    },
+    {
+      "scenario": { "en": "You want to stop bots from abusing a signup form, but you hate making real users solve annoying puzzles.", "zh": "你想擋掉機器人灌爆註冊表單，又不想讓真人去解惱人的圖形驗證。" },
+      "options": [
+        { "en": "Turnstile", "zh": "Turnstile" },
+        { "en": "WAF", "zh": "WAF" },
+        { "en": "Access", "zh": "Access" },
+        { "en": "Gateway", "zh": "Gateway" }
+      ],
+      "answer": 0,
+      "why": { "en": "Turnstile is a privacy-friendly CAPTCHA replacement that verifies humans, usually with no puzzle at all.", "zh": "Turnstile 是注重隱私的 CAPTCHA 替代方案，通常不用解任何題目就能驗證是真人。" }
+    },
+    {
+      "scenario": { "en": "You just launched a site over plain HTTP and want free HTTPS to encrypt visitor traffic.", "zh": "你剛上線的網站只有 HTTP，想要免費的 HTTPS 來加密訪客流量。" },
+      "options": [
+        { "en": "Tunnel", "zh": "Tunnel" },
+        { "en": "SSL/TLS", "zh": "SSL/TLS" },
+        { "en": "Turnstile", "zh": "Turnstile" },
+        { "en": "Gateway", "zh": "Gateway" }
+      ],
+      "answer": 1,
+      "why": { "en": "Cloudflare's SSL/TLS issues free certificates and encrypts traffic between visitors and your site.", "zh": "Cloudflare 的 SSL/TLS 會發放免費憑證，加密訪客與網站之間的流量。" }
+    },
+    {
+      "scenario": { "en": "Staff need to reach an internal admin dashboard based on their identity — without rolling out a clunky VPN.", "zh": "員工需要依身分存取內部管理後台，又不想架設笨重的 VPN。" },
+      "options": [
+        { "en": "Gateway", "zh": "Gateway" },
+        { "en": "Tunnel", "zh": "Tunnel" },
+        { "en": "Access", "zh": "Access" },
+        { "en": "WAF", "zh": "WAF" }
+      ],
+      "answer": 2,
+      "why": { "en": "Cloudflare Access enforces Zero-Trust, identity-based access to internal apps — no VPN required.", "zh": "Cloudflare Access 提供 Zero Trust、以身分為基礎的內部應用存取，不需要 VPN。" }
+    },
+    {
+      "scenario": { "en": "You want to filter employees' outbound DNS and web traffic, blocking malware and phishing sites.", "zh": "你想過濾員工對外的 DNS 和網頁流量，擋掉惡意軟體和釣魚網站。" },
+      "options": [
+        { "en": "Gateway", "zh": "Gateway" },
+        { "en": "Access", "zh": "Access" },
+        { "en": "SSL/TLS", "zh": "SSL/TLS" },
+        { "en": "Turnstile", "zh": "Turnstile" }
+      ],
+      "answer": 0,
+      "why": { "en": "Cloudflare Gateway is a secure web gateway that filters outbound DNS, HTTP, and network traffic for your team.", "zh": "Cloudflare Gateway 是安全網頁閘道，幫團隊過濾對外的 DNS、HTTP 與網路流量。" }
+    },
+    {
+      "scenario": { "en": "You want to expose a service running on your laptop to the internet without opening any firewall ports.", "zh": "你想把跑在自己筆電上的服務公開到網際網路，又不想開任何防火牆連接埠。" },
+      "options": [
+        { "en": "Tunnel", "zh": "Tunnel" },
+        { "en": "WAF", "zh": "WAF" },
+        { "en": "DDoS protection", "zh": "DDoS 防護" },
+        { "en": "SSL/TLS", "zh": "SSL/TLS" }
+      ],
+      "answer": 0,
+      "why": { "en": "Cloudflare Tunnel creates an outbound-only connection, exposing a local service with no open inbound ports.", "zh": "Cloudflare Tunnel 建立只對外的連線，讓本地服務公開卻不用開任何對內連接埠。" }
+    },
+    {
+      "scenario": { "en": "A flood of traffic from thousands of IPs is trying to knock your website offline.", "zh": "來自上千個 IP 的大量流量正試圖把你的網站打掛。" },
+      "options": [
+        { "en": "SSL/TLS", "zh": "SSL/TLS" },
+        { "en": "DDoS protection", "zh": "DDoS 防護" },
+        { "en": "Turnstile", "zh": "Turnstile" },
+        { "en": "Access", "zh": "Access" }
+      ],
+      "answer": 1,
+      "why": { "en": "Cloudflare's DDoS protection absorbs and mitigates volumetric floods to keep your site online.", "zh": "Cloudflare 的 DDoS 防護會吸收並緩解大流量攻擊，讓網站持續上線。" }
+    },
+    {
+      "scenario": { "en": "Visitors can post comments, and an attacker is injecting <script> tags to run XSS on other users.", "zh": "訪客可以留言，攻擊者卻塞入 <script> 標籤，想對其他使用者發動 XSS。" },
+      "options": [
+        { "en": "Turnstile", "zh": "Turnstile" },
+        { "en": "Tunnel", "zh": "Tunnel" },
+        { "en": "WAF", "zh": "WAF" },
+        { "en": "SSL/TLS", "zh": "SSL/TLS" }
+      ],
+      "answer": 2,
+      "why": { "en": "The WAF's managed rules detect and block cross-site scripting (XSS) payloads in requests.", "zh": "WAF 的代管規則會偵測並擋下請求中的跨站腳本（XSS）攻擊內容。" }
+    },
+    {
+      "scenario": { "en": "Traffic reaches Cloudflare over HTTPS, but the hop from Cloudflare to your origin server is still unencrypted. How do you encrypt it end to end?", "zh": "流量以 HTTPS 連到 Cloudflare，但 Cloudflare 到你來源伺服器這段還沒加密。要怎麼做到端到端加密？" },
+      "options": [
+        { "en": "Access", "zh": "Access" },
+        { "en": "Gateway", "zh": "Gateway" },
+        { "en": "SSL/TLS", "zh": "SSL/TLS" },
+        { "en": "WAF", "zh": "WAF" }
+      ],
+      "answer": 2,
+      "why": { "en": "Setting the SSL/TLS encryption mode to Full (Strict) encrypts and validates the connection all the way to your origin.", "zh": "把 SSL/TLS 加密模式設成 Full（Strict），就能一路加密並驗證到來源伺服器的連線。" }
+    }
+  ]
+}

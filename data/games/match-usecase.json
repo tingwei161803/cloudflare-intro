@@ -1,0 +1,47 @@
+{
+  "slug": "match-usecase",
+  "category": "arcade",
+  "layout": "game-match",
+  "group": { "en": "Match", "zh": "連連看" },
+  "icon": "swap_horiz",
+  "title": { "en": "Match the use case", "zh": "情境連連看" },
+  "subtitle": { "en": "Pick the right product for each job", "zh": "幫每個任務配對正確的產品" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Match each job to its perfect Cloudflare product.", "zh": "把每個任務連到最適合的 Cloudflare 產品。" }
+  },
+  "pairs": [
+    {
+      "left": { "en": "Store big files cheaply", "zh": "便宜存放大型檔案" },
+      "right": { "en": "R2", "zh": "R2" }
+    },
+    {
+      "left": { "en": "Stop bots on a form", "zh": "擋掉表單上的機器人" },
+      "right": { "en": "Turnstile", "zh": "Turnstile" }
+    },
+    {
+      "left": { "en": "Cache API data globally", "zh": "全球快取 API 資料" },
+      "right": { "en": "KV", "zh": "KV" }
+    },
+    {
+      "left": { "en": "Query app data with SQL", "zh": "用 SQL 查詢應用程式資料" },
+      "right": { "en": "D1", "zh": "D1" }
+    },
+    {
+      "left": { "en": "Coordinate live state in one place", "zh": "在單一節點協調即時狀態" },
+      "right": { "en": "Durable Objects", "zh": "Durable Objects" }
+    },
+    {
+      "left": { "en": "Run an AI model on the edge", "zh": "在邊緣執行 AI 模型" },
+      "right": { "en": "Workers AI", "zh": "Workers AI" }
+    },
+    {
+      "left": { "en": "Find similar items by meaning", "zh": "用語意找出相似內容" },
+      "right": { "en": "Vectorize", "zh": "Vectorize" }
+    },
+    {
+      "left": { "en": "Host and play videos", "zh": "託管並播放影片" },
+      "right": { "en": "Stream", "zh": "Stream" }
+    }
+  ]
+}

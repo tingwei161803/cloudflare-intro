@@ -1,0 +1,114 @@
+{
+  "slug": "pick-compute-ai",
+  "category": "arcade",
+  "layout": "game-pick",
+  "group": { "en": "Quick Pick", "zh": "選型快答" },
+  "icon": "bolt",
+  "title": { "en": "Pick the right compute / AI", "zh": "選對運算 / AI" },
+  "subtitle": { "en": "Match each job to the right compute or AI product", "zh": "幫每個任務選對運算或 AI 產品" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Read the job, pick the perfect tool!", "zh": "看懂任務，挑出最對的工具！" }
+  },
+  "rounds": [
+    {
+      "scenario": { "en": "You want to run a small, fast JSON API close to your users, with no servers to manage.", "zh": "你想在靠近使用者的地方跑一個又小又快的 JSON API，而且不想管伺服器。" },
+      "options": [
+        { "en": "Workers", "zh": "Workers" },
+        { "en": "Durable Objects", "zh": "Durable Objects" },
+        { "en": "Queues", "zh": "Queues" },
+        { "en": "Containers", "zh": "Containers" }
+      ],
+      "answer": 0,
+      "why": { "en": "Workers run lightweight serverless code at the edge — perfect for small, fast APIs.", "zh": "Workers 在邊緣執行輕量的無伺服器程式碼，最適合又小又快的 API。" }
+    },
+    {
+      "scenario": { "en": "You need a chat room where everyone sees the same messages in real time, with one source of truth.", "zh": "你要做一個聊天室，讓所有人即時看到一致的訊息，而且要有單一真相來源。" },
+      "options": [
+        { "en": "Queues", "zh": "Queues" },
+        { "en": "Durable Objects", "zh": "Durable Objects" },
+        { "en": "Workers AI", "zh": "Workers AI" },
+        { "en": "Vectorize", "zh": "Vectorize" }
+      ],
+      "answer": 1,
+      "why": { "en": "Durable Objects give a single, strongly consistent instance that coordinates real-time state.", "zh": "Durable Objects 提供單一、強一致的實例，負責協調即時狀態。" }
+    },
+    {
+      "scenario": { "en": "A web request triggers slow work like sending emails or processing images. You want to respond fast and handle it later.", "zh": "一個請求會觸發很慢的工作，例如寄信或處理圖片。你想先快速回應，之後再慢慢處理。" },
+      "options": [
+        { "en": "Workers", "zh": "Workers" },
+        { "en": "Containers", "zh": "Containers" },
+        { "en": "Queues", "zh": "Queues" },
+        { "en": "AI Gateway", "zh": "AI Gateway" }
+      ],
+      "answer": 2,
+      "why": { "en": "Queues decouple producers from consumers so slow work runs asynchronously in the background.", "zh": "Queues 讓生產者與消費者解耦，慢工作就能在背景非同步處理。" }
+    },
+    {
+      "scenario": { "en": "Your app needs a specific Linux binary and libraries that don't fit in a Worker. You want to ship the whole image.", "zh": "你的應用需要特定的 Linux 執行檔和函式庫，塞不進 Worker。你想直接部署整個映像檔。" },
+      "options": [
+        { "en": "Workers", "zh": "Workers" },
+        { "en": "Durable Objects", "zh": "Durable Objects" },
+        { "en": "Browser Rendering", "zh": "Browser Rendering" },
+        { "en": "Containers", "zh": "Containers" }
+      ],
+      "answer": 3,
+      "why": { "en": "Containers run a full container image for workloads that need a complete OS environment.", "zh": "Containers 執行完整的容器映像檔，適合需要完整作業系統環境的工作。" }
+    },
+    {
+      "scenario": { "en": "You want to run an open LLM or image-generation model without renting and managing your own GPUs.", "zh": "你想跑開源 LLM 或圖片生成模型，又不想自己租和管 GPU。" },
+      "options": [
+        { "en": "Workers AI", "zh": "Workers AI" },
+        { "en": "AI Gateway", "zh": "AI Gateway" },
+        { "en": "Vectorize", "zh": "Vectorize" },
+        { "en": "Agents", "zh": "Agents" }
+      ],
+      "answer": 0,
+      "why": { "en": "Workers AI runs LLMs and image models on Cloudflare's GPU network — no infrastructure to manage.", "zh": "Workers AI 在 Cloudflare 的 GPU 網路上執行 LLM 和圖片模型，免自建基礎設施。" }
+    },
+    {
+      "scenario": { "en": "Your app calls OpenAI, and you want to cache responses, see analytics, and rate-limit usage in one place.", "zh": "你的應用會呼叫 OpenAI，你想在同一個地方快取回應、看分析數據，並限制用量。" },
+      "options": [
+        { "en": "Workers AI", "zh": "Workers AI" },
+        { "en": "AI Gateway", "zh": "AI Gateway" },
+        { "en": "Queues", "zh": "Queues" },
+        { "en": "Vectorize", "zh": "Vectorize" }
+      ],
+      "answer": 1,
+      "why": { "en": "AI Gateway sits in front of providers like OpenAI to cache, observe, and rate-limit your calls.", "zh": "AI Gateway 擋在 OpenAI 等供應商前面，負責快取、觀測並限制你的呼叫。" }
+    },
+    {
+      "scenario": { "en": "You stored embeddings of your documents and want to find the ones most semantically similar to a query.", "zh": "你把文件的向量嵌入存起來，想找出和查詢語意最相近的內容。" },
+      "options": [
+        { "en": "Workers AI", "zh": "Workers AI" },
+        { "en": "Durable Objects", "zh": "Durable Objects" },
+        { "en": "Vectorize", "zh": "Vectorize" },
+        { "en": "AI Gateway", "zh": "AI Gateway" }
+      ],
+      "answer": 2,
+      "why": { "en": "Vectorize is a vector database that indexes embeddings and returns the nearest matches for semantic search.", "zh": "Vectorize 是向量資料庫，能索引嵌入並回傳最相近的結果，用於語意搜尋。" }
+    },
+    {
+      "scenario": { "en": "You need to screenshot a web page or scrape its fully rendered HTML using a headless browser.", "zh": "你需要對網頁截圖，或用無頭瀏覽器抓取完整渲染後的 HTML。" },
+      "options": [
+        { "en": "Containers", "zh": "Containers" },
+        { "en": "Workers", "zh": "Workers" },
+        { "en": "Agents", "zh": "Agents" },
+        { "en": "Browser Rendering", "zh": "Browser Rendering" }
+      ],
+      "answer": 3,
+      "why": { "en": "Browser Rendering runs a headless Chromium to screenshot or scrape pages programmatically.", "zh": "Browser Rendering 執行無頭 Chromium，用程式對網頁截圖或抓取內容。" }
+    },
+    {
+      "scenario": { "en": "You want to build an AI agent that reasons step by step, calls tools, and remembers state across a long task.", "zh": "你想打造一個 AI 代理，能逐步推理、呼叫工具，並在長任務中記住狀態。" },
+      "options": [
+        { "en": "Agents", "zh": "Agents" },
+        { "en": "Workers AI", "zh": "Workers AI" },
+        { "en": "AI Gateway", "zh": "AI Gateway" },
+        { "en": "Queues", "zh": "Queues" }
+      ],
+      "answer": 0,
+      "why": { "en": "The Agents SDK runs stateful, multi-step AI workflows (built on Durable Objects) that can call tools.", "zh": "Agents SDK 執行有狀態、多步驟的 AI 工作流程（建構在 Durable Objects 上），還能呼叫工具。" }
+    }
+  ]
+}

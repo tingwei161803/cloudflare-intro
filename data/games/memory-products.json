@@ -1,0 +1,23 @@
+{
+  "slug": "memory-products",
+  "category": "arcade",
+  "layout": "game-memory",
+  "group": { "en": "Memory", "zh": "記憶翻牌" },
+  "icon": "style",
+  "title": { "en": "Product memory", "zh": "產品記憶翻牌" },
+  "subtitle": { "en": "Flip cards to match each product's icon and name", "zh": "翻牌配對每個產品的圖示與名稱" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Flip, match, and memorize the lineup!", "zh": "翻一翻、配一配，記住產品陣容！" }
+  },
+  "tiles": [
+    { "icon": "bolt", "label": { "en": "Workers", "zh": "Workers" } },
+    { "icon": "inventory_2", "label": { "en": "R2", "zh": "R2" } },
+    { "icon": "database", "label": { "en": "D1", "zh": "D1" } },
+    { "icon": "key", "label": { "en": "KV", "zh": "KV" } },
+    { "icon": "neurology", "label": { "en": "Workers AI", "zh": "Workers AI" } },
+    { "icon": "image", "label": { "en": "Images", "zh": "Images" } },
+    { "icon": "dns", "label": { "en": "DNS", "zh": "DNS" } },
+    { "icon": "gpp_good", "label": { "en": "WAF", "zh": "WAF" } }
+  ]
+}

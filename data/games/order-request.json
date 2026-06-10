@@ -1,0 +1,37 @@
+{
+  "slug": "order-request",
+  "category": "arcade",
+  "layout": "game-order",
+  "group": { "en": "Order", "zh": "流程排序" },
+  "icon": "timeline",
+  "title": { "en": "Order the request flow", "zh": "請求流程排排站" },
+  "subtitle": { "en": "Put the steps of a request in the right order", "zh": "把一個請求的步驟排成正確順序" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Drag the steps until the request flows just right", "zh": "把步驟排好，讓請求順順跑起來" }
+  },
+  "puzzles": [
+    {
+      "prompt": { "en": "Order a request's journey through Cloudflare.", "zh": "把一個請求穿過 Cloudflare 的旅程排好。" },
+      "steps": [
+        { "en": "Browser sends the request", "zh": "瀏覽器送出請求" },
+        { "en": "DNS resolves the domain", "zh": "DNS 解析網域" },
+        { "en": "Reaches the nearest Cloudflare edge", "zh": "抵達最近的 Cloudflare 邊緣節點" },
+        { "en": "WAF checks for threats", "zh": "WAF 檢查威脅" },
+        { "en": "Cache checked or Worker runs", "zh": "檢查快取或執行 Worker" },
+        { "en": "Response returns to the browser", "zh": "回應送回瀏覽器" }
+      ]
+    },
+    {
+      "prompt": { "en": "Order a cache-aside read inside a Worker.", "zh": "把 Worker 裡的 cache-aside 讀取流程排好。" },
+      "steps": [
+        { "en": "Request arrives at the Worker", "zh": "請求抵達 Worker" },
+        { "en": "Check the KV cache", "zh": "查看 KV 快取" },
+        { "en": "On a miss, query D1", "zh": "快取沒中，查詢 D1" },
+        { "en": "Store the result in KV with a TTL", "zh": "把結果存進 KV 並設定 TTL" },
+        { "en": "Return the JSON response", "zh": "回傳 JSON 回應" },
+        { "en": "Next time it's served straight from KV", "zh": "下次直接由 KV 提供" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "slug": "order-deploy",
+  "category": "arcade",
+  "layout": "game-order",
+  "group": { "en": "Order", "zh": "流程排序" },
+  "icon": "rocket_launch",
+  "title": { "en": "Order the deploy steps", "zh": "部署步驟排排站" },
+  "subtitle": { "en": "Put the steps of shipping a Worker in order", "zh": "把部署 Worker 的步驟排好" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "From install to live — drag the deploy steps back into the right order.", "zh": "從安裝到上線，把部署步驟拖回正確順序。" }
+  },
+  "puzzles": [
+    {
+      "prompt": { "en": "Order the steps to deploy your first Worker.", "zh": "把部署第一個 Worker 的步驟排好。" },
+      "steps": [
+        { "en": "Install Wrangler: npm install -g wrangler", "zh": "安裝 Wrangler：npm install -g wrangler" },
+        { "en": "Sign in: wrangler login", "zh": "登入：wrangler login" },
+        { "en": "Scaffold a project: npm create cloudflare@latest", "zh": "建立專案：npm create cloudflare@latest" },
+        { "en": "Write your fetch() handler", "zh": "撰寫你的 fetch() 處理函式" },
+        { "en": "Test locally: wrangler dev", "zh": "本機測試：wrangler dev" },
+        { "en": "Ship it: wrangler deploy", "zh": "上線部署：wrangler deploy" }
+      ]
+    },
+    {
+      "prompt": { "en": "Order the steps to add a D1 database to a Worker.", "zh": "把幫 Worker 加上 D1 資料庫的步驟排好。" },
+      "steps": [
+        { "en": "Create the database: wrangler d1 create", "zh": "建立資料庫：wrangler d1 create" },
+        { "en": "Add the [[d1_databases]] binding in wrangler.toml", "zh": "在 wrangler.toml 加上 [[d1_databases]] 繫結" },
+        { "en": "Write CREATE TABLE SQL", "zh": "撰寫 CREATE TABLE SQL" },
+        { "en": "Apply the SQL: wrangler d1 execute", "zh": "套用 SQL：wrangler d1 execute" },
+        { "en": "Query with env.DB.prepare() in the Worker", "zh": "在 Worker 用 env.DB.prepare() 查詢" },
+        { "en": "Ship it: wrangler deploy", "zh": "上線部署：wrangler deploy" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "sort-storage",
+  "category": "arcade",
+  "layout": "game-sort",
+  "group": { "en": "Sort", "zh": "分類挑戰" },
+  "icon": "inventory_2",
+  "title": { "en": "Which storage?", "zh": "資料該存哪？" },
+  "subtitle": { "en": "Send each kind of data to the right store", "zh": "把每種資料送到正確的儲存服務" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "R2, D1, KV or Durable Objects — pick the right home for every piece of data.", "zh": "R2、D1、KV 還是 Durable Objects？幫每筆資料找到對的家。" }
+  },
+  "buckets": [
+    { "key": "r2", "label": { "en": "R2 — Object storage", "zh": "R2 物件儲存" }, "icon": "inventory_2" },
+    { "key": "d1", "label": { "en": "D1 — SQL database", "zh": "D1 SQL 資料庫" }, "icon": "database" },
+    { "key": "kv", "label": { "en": "KV — Key-value cache", "zh": "KV 鍵值快取" }, "icon": "key" },
+    { "key": "do", "label": { "en": "Durable Objects — Strong consistency", "zh": "Durable Objects 強一致狀態" }, "icon": "hub" }
+  ],
+  "items": [
+    { "label": { "en": "Product images", "zh": "商品圖片" }, "icon": "image", "bucket": "r2" },
+    { "label": { "en": "User-uploaded videos", "zh": "使用者上傳的影片" }, "icon": "movie", "bucket": "r2" },
+    { "label": { "en": "Database backups", "zh": "資料庫備份" }, "icon": "backup", "bucket": "r2" },
+    { "label": { "en": "Orders table", "zh": "訂單資料表" }, "icon": "receipt_long", "bucket": "d1" },
+    { "label": { "en": "User accounts with JOINs", "zh": "需要 JOIN 的使用者帳號" }, "icon": "group", "bucket": "d1" },
+    { "label": { "en": "Relational product catalog", "zh": "關聯式商品目錄" }, "icon": "table_rows", "bucket": "d1" },
+    { "label": { "en": "Feature flags", "zh": "功能旗標" }, "icon": "flag", "bucket": "kv" },
+    { "label": { "en": "Cached API responses", "zh": "快取的 API 回應" }, "icon": "bolt", "bucket": "kv" },
+    { "label": { "en": "Login sessions", "zh": "登入工作階段" }, "icon": "login", "bucket": "kv" },
+    { "label": { "en": "Live view counter", "zh": "即時瀏覽計數器" }, "icon": "numbers", "bucket": "do" },
+    { "label": { "en": "Chat room state", "zh": "聊天室狀態" }, "icon": "chat", "bucket": "do" },
+    { "label": { "en": "Rate limiter", "zh": "速率限制器" }, "icon": "speed", "bucket": "do" }
+  ]
+}

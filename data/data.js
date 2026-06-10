@@ -94,6 +94,18 @@ window.SITE_CATEGORIES = [
       "en": "Connect the pieces — front-end ↔ Worker back-end ↔ database — with real recipes, full-stack code and lots of architecture diagrams.",
       "zh": "把各塊串起來——前端 ↔ Worker 後端 ↔ 資料庫——用真實範例、全端程式碼與大量架構圖帶你做。"
     }
+  },
+  {
+    "key": "arcade",
+    "icon": "sports_esports",
+    "title": {
+      "en": "Arcade",
+      "zh": "遊戲場"
+    },
+    "blurb": {
+      "en": "Learn by playing — matching, memory, sorting, quick-pick, sequencing, true-or-false and build-the-stack mini-games.",
+      "zh": "邊玩邊學——連連看、記憶翻牌、分類挑戰、選型快答、流程排序、真假快答與架構拼圖等小遊戲。"
+    }
   }
 ];
 window.SITE_PAGES = [
@@ -893,6 +905,35 @@ window.SITE_PAGES = [
     "intro": {
       "en": "Knowing each product is step one; the real magic is connecting them. These guides show how a web page talks to a Worker, how a Worker reads and writes a database, and how to assemble whole systems — each packed with mermaid diagrams.",
       "zh": "認識每個產品只是第一步，真正的重點是把它們串起來。這些教學示範網頁如何呼叫 Worker、Worker 如何讀寫資料庫，以及怎麼把整套系統組起來——每篇都搭配大量 mermaid 圖解。"
+    },
+    "layout": "category",
+    "nav": true
+  },
+  {
+    "slug": "arcade",
+    "key": "arcade",
+    "icon": "sports_esports",
+    "title": {
+      "en": "Arcade",
+      "zh": "遊戲場"
+    },
+    "subtitle": {
+      "en": "Learn Cloudflare by playing",
+      "zh": "邊玩邊學 Cloudflare"
+    },
+    "hero": {
+      "badge": {
+        "en": "Category",
+        "zh": "分類"
+      },
+      "tagline": {
+        "en": "14 quick mini-games — match, memorize, sort, pick, sequence, true-or-false and build a stack — to drill everything you've learned.",
+        "zh": "14 款快速小遊戲——連連看、記憶翻牌、分類、選型、排序、真假題、架構拼圖——把學到的東西通通練熟。"
+      }
+    },
+    "intro": {
+      "en": "Reading is one thing; recalling under a little time pressure is another. Pick a game and test yourself — every game is bite-sized, scored, and resets when you refresh.",
+      "zh": "看懂是一回事，在一點點時間壓力下答得出來又是另一回事。挑一款遊戲考考自己——每款都很小巧、會計分，重新整理就歸零。"
     },
     "layout": "category",
     "nav": true
@@ -28966,6 +29007,2381 @@ window.SITE_PAGES = [
     ],
     "docs": "https://developers.cloudflare.com/queues/",
     "layout": "lesson",
+    "nav": false
+  },
+  {
+    "slug": "match-products",
+    "category": "arcade",
+    "layout": "game-match",
+    "group": {
+      "en": "Match",
+      "zh": "連連看"
+    },
+    "icon": "link",
+    "title": {
+      "en": "Match the product",
+      "zh": "產品連連看"
+    },
+    "subtitle": {
+      "en": "Connect each product to what it does",
+      "zh": "把每個產品連到它的功能"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Draw the line, learn the lineup!",
+        "zh": "連對一條線，認識一個產品！"
+      }
+    },
+    "pairs": [
+      {
+        "left": {
+          "en": "Workers",
+          "zh": "Workers"
+        },
+        "right": {
+          "en": "Run serverless code at the edge",
+          "zh": "在邊緣執行無伺服器程式碼"
+        }
+      },
+      {
+        "left": {
+          "en": "R2",
+          "zh": "R2"
+        },
+        "right": {
+          "en": "Object storage, zero egress fees",
+          "zh": "物件儲存，流出免費"
+        }
+      },
+      {
+        "left": {
+          "en": "D1",
+          "zh": "D1"
+        },
+        "right": {
+          "en": "Serverless SQL database",
+          "zh": "無伺服器 SQL 資料庫"
+        }
+      },
+      {
+        "left": {
+          "en": "KV",
+          "zh": "KV"
+        },
+        "right": {
+          "en": "Low-latency key-value store",
+          "zh": "低延遲的鍵值儲存"
+        }
+      },
+      {
+        "left": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        },
+        "right": {
+          "en": "Strongly consistent stateful coordination",
+          "zh": "強一致的狀態協調"
+        }
+      },
+      {
+        "left": {
+          "en": "Workers AI",
+          "zh": "Workers AI"
+        },
+        "right": {
+          "en": "Run AI models on the edge",
+          "zh": "在邊緣執行 AI 模型"
+        }
+      },
+      {
+        "left": {
+          "en": "Vectorize",
+          "zh": "Vectorize"
+        },
+        "right": {
+          "en": "Vector database for embeddings",
+          "zh": "存放向量嵌入的資料庫"
+        }
+      },
+      {
+        "left": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        },
+        "right": {
+          "en": "CAPTCHA-free bot protection",
+          "zh": "免 CAPTCHA 的機器人防護"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "match-usecase",
+    "category": "arcade",
+    "layout": "game-match",
+    "group": {
+      "en": "Match",
+      "zh": "連連看"
+    },
+    "icon": "swap_horiz",
+    "title": {
+      "en": "Match the use case",
+      "zh": "情境連連看"
+    },
+    "subtitle": {
+      "en": "Pick the right product for each job",
+      "zh": "幫每個任務配對正確的產品"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Match each job to its perfect Cloudflare product.",
+        "zh": "把每個任務連到最適合的 Cloudflare 產品。"
+      }
+    },
+    "pairs": [
+      {
+        "left": {
+          "en": "Store big files cheaply",
+          "zh": "便宜存放大型檔案"
+        },
+        "right": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "left": {
+          "en": "Stop bots on a form",
+          "zh": "擋掉表單上的機器人"
+        },
+        "right": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        }
+      },
+      {
+        "left": {
+          "en": "Cache API data globally",
+          "zh": "全球快取 API 資料"
+        },
+        "right": {
+          "en": "KV",
+          "zh": "KV"
+        }
+      },
+      {
+        "left": {
+          "en": "Query app data with SQL",
+          "zh": "用 SQL 查詢應用程式資料"
+        },
+        "right": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "left": {
+          "en": "Coordinate live state in one place",
+          "zh": "在單一節點協調即時狀態"
+        },
+        "right": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        }
+      },
+      {
+        "left": {
+          "en": "Run an AI model on the edge",
+          "zh": "在邊緣執行 AI 模型"
+        },
+        "right": {
+          "en": "Workers AI",
+          "zh": "Workers AI"
+        }
+      },
+      {
+        "left": {
+          "en": "Find similar items by meaning",
+          "zh": "用語意找出相似內容"
+        },
+        "right": {
+          "en": "Vectorize",
+          "zh": "Vectorize"
+        }
+      },
+      {
+        "left": {
+          "en": "Host and play videos",
+          "zh": "託管並播放影片"
+        },
+        "right": {
+          "en": "Stream",
+          "zh": "Stream"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "match-terms",
+    "category": "arcade",
+    "layout": "game-match",
+    "group": {
+      "en": "Match",
+      "zh": "連連看"
+    },
+    "icon": "menu_book",
+    "title": {
+      "en": "Match the term",
+      "zh": "術語連連看"
+    },
+    "subtitle": {
+      "en": "Connect each term to its meaning",
+      "zh": "把術語連到它的意思"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Eight terms, eight meanings — link them up",
+        "zh": "八個術語、八個意思，把它們連起來"
+      }
+    },
+    "pairs": [
+      {
+        "left": {
+          "en": "Edge",
+          "zh": "邊緣 (Edge)"
+        },
+        "right": {
+          "en": "Servers located close to your users",
+          "zh": "靠近使用者的伺服器"
+        }
+      },
+      {
+        "left": {
+          "en": "CDN",
+          "zh": "CDN"
+        },
+        "right": {
+          "en": "Caches content near users for faster loads",
+          "zh": "把內容快取到使用者附近，載入更快"
+        }
+      },
+      {
+        "left": {
+          "en": "Serverless",
+          "zh": "無伺服器 (Serverless)"
+        },
+        "right": {
+          "en": "Run code without managing servers",
+          "zh": "不用管伺服器就能執行程式碼"
+        }
+      },
+      {
+        "left": {
+          "en": "Cold start",
+          "zh": "冷啟動 (Cold start)"
+        },
+        "right": {
+          "en": "Startup delay when idle code first runs",
+          "zh": "閒置的程式第一次啟動時的延遲"
+        }
+      },
+      {
+        "left": {
+          "en": "Egress",
+          "zh": "流出 (Egress)"
+        },
+        "right": {
+          "en": "Data leaving the cloud, often billed",
+          "zh": "資料流出雲端，通常要收費"
+        }
+      },
+      {
+        "left": {
+          "en": "TTL",
+          "zh": "存活時間 (TTL)"
+        },
+        "right": {
+          "en": "How long cached data stays valid",
+          "zh": "快取資料的有效存活時間"
+        }
+      },
+      {
+        "left": {
+          "en": "Zero Trust",
+          "zh": "零信任 (Zero Trust)"
+        },
+        "right": {
+          "en": "Never trust, always verify every request",
+          "zh": "永不信任，每次請求都要驗證"
+        }
+      },
+      {
+        "left": {
+          "en": "Anycast",
+          "zh": "任播 (Anycast)"
+        },
+        "right": {
+          "en": "One IP routed to the nearest server",
+          "zh": "同一個 IP 導向最近的伺服器"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "memory-products",
+    "category": "arcade",
+    "layout": "game-memory",
+    "group": {
+      "en": "Memory",
+      "zh": "記憶翻牌"
+    },
+    "icon": "style",
+    "title": {
+      "en": "Product memory",
+      "zh": "產品記憶翻牌"
+    },
+    "subtitle": {
+      "en": "Flip cards to match each product's icon and name",
+      "zh": "翻牌配對每個產品的圖示與名稱"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Flip, match, and memorize the lineup!",
+        "zh": "翻一翻、配一配，記住產品陣容！"
+      }
+    },
+    "tiles": [
+      {
+        "icon": "bolt",
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        }
+      },
+      {
+        "icon": "inventory_2",
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        }
+      },
+      {
+        "icon": "database",
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        }
+      },
+      {
+        "icon": "key",
+        "label": {
+          "en": "KV",
+          "zh": "KV"
+        }
+      },
+      {
+        "icon": "neurology",
+        "label": {
+          "en": "Workers AI",
+          "zh": "Workers AI"
+        }
+      },
+      {
+        "icon": "image",
+        "label": {
+          "en": "Images",
+          "zh": "Images"
+        }
+      },
+      {
+        "icon": "dns",
+        "label": {
+          "en": "DNS",
+          "zh": "DNS"
+        }
+      },
+      {
+        "icon": "gpp_good",
+        "label": {
+          "en": "WAF",
+          "zh": "WAF"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "sort-families",
+    "category": "arcade",
+    "layout": "game-sort",
+    "group": {
+      "en": "Sort",
+      "zh": "分類挑戰"
+    },
+    "icon": "category",
+    "title": {
+      "en": "Sort into families",
+      "zh": "產品分家族"
+    },
+    "subtitle": {
+      "en": "Drop each product into its product family",
+      "zh": "把每個產品丟進正確的產品家族"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Five families, one home for each product!",
+        "zh": "五大家族，每個產品都有自己的家！"
+      }
+    },
+    "buckets": [
+      {
+        "key": "compute",
+        "label": {
+          "en": "Compute",
+          "zh": "運算"
+        },
+        "icon": "bolt"
+      },
+      {
+        "key": "ai",
+        "label": {
+          "en": "AI",
+          "zh": "人工智慧"
+        },
+        "icon": "smart_toy"
+      },
+      {
+        "key": "storage",
+        "label": {
+          "en": "Storage",
+          "zh": "儲存與資料庫"
+        },
+        "icon": "database"
+      },
+      {
+        "key": "security",
+        "label": {
+          "en": "Security",
+          "zh": "安全"
+        },
+        "icon": "shield"
+      },
+      {
+        "key": "performance",
+        "label": {
+          "en": "Performance",
+          "zh": "效能"
+        },
+        "icon": "speed"
+      }
+    ],
+    "items": [
+      {
+        "label": {
+          "en": "Workers",
+          "zh": "Workers"
+        },
+        "icon": "bolt",
+        "bucket": "compute"
+      },
+      {
+        "label": {
+          "en": "Durable Objects",
+          "zh": "Durable Objects"
+        },
+        "icon": "memory",
+        "bucket": "compute"
+      },
+      {
+        "label": {
+          "en": "Queues",
+          "zh": "Queues"
+        },
+        "icon": "queue",
+        "bucket": "compute"
+      },
+      {
+        "label": {
+          "en": "Workers AI",
+          "zh": "Workers AI"
+        },
+        "icon": "smart_toy",
+        "bucket": "ai"
+      },
+      {
+        "label": {
+          "en": "Vectorize",
+          "zh": "Vectorize"
+        },
+        "icon": "scatter_plot",
+        "bucket": "ai"
+      },
+      {
+        "label": {
+          "en": "AI Gateway",
+          "zh": "AI Gateway"
+        },
+        "icon": "hub",
+        "bucket": "ai"
+      },
+      {
+        "label": {
+          "en": "R2",
+          "zh": "R2"
+        },
+        "icon": "inventory_2",
+        "bucket": "storage"
+      },
+      {
+        "label": {
+          "en": "D1",
+          "zh": "D1"
+        },
+        "icon": "database",
+        "bucket": "storage"
+      },
+      {
+        "label": {
+          "en": "KV",
+          "zh": "KV"
+        },
+        "icon": "key",
+        "bucket": "storage"
+      },
+      {
+        "label": {
+          "en": "WAF",
+          "zh": "WAF"
+        },
+        "icon": "gpp_good",
+        "bucket": "security"
+      },
+      {
+        "label": {
+          "en": "Turnstile",
+          "zh": "Turnstile"
+        },
+        "icon": "verified_user",
+        "bucket": "security"
+      },
+      {
+        "label": {
+          "en": "Access",
+          "zh": "Access"
+        },
+        "icon": "lock",
+        "bucket": "security"
+      },
+      {
+        "label": {
+          "en": "DNS",
+          "zh": "DNS"
+        },
+        "icon": "dns",
+        "bucket": "performance"
+      },
+      {
+        "label": {
+          "en": "CDN",
+          "zh": "CDN"
+        },
+        "icon": "public",
+        "bucket": "performance"
+      },
+      {
+        "label": {
+          "en": "Web Analytics",
+          "zh": "Web Analytics"
+        },
+        "icon": "analytics",
+        "bucket": "performance"
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "sort-storage",
+    "category": "arcade",
+    "layout": "game-sort",
+    "group": {
+      "en": "Sort",
+      "zh": "分類挑戰"
+    },
+    "icon": "inventory_2",
+    "title": {
+      "en": "Which storage?",
+      "zh": "資料該存哪？"
+    },
+    "subtitle": {
+      "en": "Send each kind of data to the right store",
+      "zh": "把每種資料送到正確的儲存服務"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "R2, D1, KV or Durable Objects — pick the right home for every piece of data.",
+        "zh": "R2、D1、KV 還是 Durable Objects？幫每筆資料找到對的家。"
+      }
+    },
+    "buckets": [
+      {
+        "key": "r2",
+        "label": {
+          "en": "R2 — Object storage",
+          "zh": "R2 物件儲存"
+        },
+        "icon": "inventory_2"
+      },
+      {
+        "key": "d1",
+        "label": {
+          "en": "D1 — SQL database",
+          "zh": "D1 SQL 資料庫"
+        },
+        "icon": "database"
+      },
+      {
+        "key": "kv",
+        "label": {
+          "en": "KV — Key-value cache",
+          "zh": "KV 鍵值快取"
+        },
+        "icon": "key"
+      },
+      {
+        "key": "do",
+        "label": {
+          "en": "Durable Objects — Strong consistency",
+          "zh": "Durable Objects 強一致狀態"
+        },
+        "icon": "hub"
+      }
+    ],
+    "items": [
+      {
+        "label": {
+          "en": "Product images",
+          "zh": "商品圖片"
+        },
+        "icon": "image",
+        "bucket": "r2"
+      },
+      {
+        "label": {
+          "en": "User-uploaded videos",
+          "zh": "使用者上傳的影片"
+        },
+        "icon": "movie",
+        "bucket": "r2"
+      },
+      {
+        "label": {
+          "en": "Database backups",
+          "zh": "資料庫備份"
+        },
+        "icon": "backup",
+        "bucket": "r2"
+      },
+      {
+        "label": {
+          "en": "Orders table",
+          "zh": "訂單資料表"
+        },
+        "icon": "receipt_long",
+        "bucket": "d1"
+      },
+      {
+        "label": {
+          "en": "User accounts with JOINs",
+          "zh": "需要 JOIN 的使用者帳號"
+        },
+        "icon": "group",
+        "bucket": "d1"
+      },
+      {
+        "label": {
+          "en": "Relational product catalog",
+          "zh": "關聯式商品目錄"
+        },
+        "icon": "table_rows",
+        "bucket": "d1"
+      },
+      {
+        "label": {
+          "en": "Feature flags",
+          "zh": "功能旗標"
+        },
+        "icon": "flag",
+        "bucket": "kv"
+      },
+      {
+        "label": {
+          "en": "Cached API responses",
+          "zh": "快取的 API 回應"
+        },
+        "icon": "bolt",
+        "bucket": "kv"
+      },
+      {
+        "label": {
+          "en": "Login sessions",
+          "zh": "登入工作階段"
+        },
+        "icon": "login",
+        "bucket": "kv"
+      },
+      {
+        "label": {
+          "en": "Live view counter",
+          "zh": "即時瀏覽計數器"
+        },
+        "icon": "numbers",
+        "bucket": "do"
+      },
+      {
+        "label": {
+          "en": "Chat room state",
+          "zh": "聊天室狀態"
+        },
+        "icon": "chat",
+        "bucket": "do"
+      },
+      {
+        "label": {
+          "en": "Rate limiter",
+          "zh": "速率限制器"
+        },
+        "icon": "speed",
+        "bucket": "do"
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "pick-storage",
+    "category": "arcade",
+    "layout": "game-pick",
+    "group": {
+      "en": "Quick Pick",
+      "zh": "選型快答"
+    },
+    "icon": "alt_route",
+    "title": {
+      "en": "Pick the right storage",
+      "zh": "選對儲存"
+    },
+    "subtitle": {
+      "en": "Beat the clock: choose the best store for each job",
+      "zh": "跟時間賽跑：幫每個任務選最適合的儲存"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Six storage products, one best answer — pick fast!",
+        "zh": "六種儲存產品，只有一個最佳解，手腳要快！"
+      }
+    },
+    "rounds": [
+      {
+        "scenario": {
+          "en": "Your app lets users upload large video files. You want cheap storage with no surprise bandwidth bills when they're downloaded.",
+          "zh": "你的應用讓使用者上傳大型影片檔。你想要便宜的儲存，也不想在下載時被流量帳單嚇到。"
+        },
+        "options": [
+          {
+            "en": "R2",
+            "zh": "R2"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "R2 is object storage built for big files, with zero egress fees.",
+          "zh": "R2 是為大檔案打造的物件儲存，流出（egress）完全免費。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You need to store users, orders and products, and run SQL JOINs to build reports.",
+          "zh": "你需要儲存使用者、訂單和商品，並用 SQL JOIN 跑報表。"
+        },
+        "options": [
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "R2",
+            "zh": "R2"
+          },
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "D1 is a SQL (SQLite) database — ideal for relational data and JOINs.",
+          "zh": "D1 是 SQL（SQLite）資料庫，最適合關聯式資料和 JOIN。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You want to read small config values with the lowest possible latency from anywhere in the world, and they rarely change.",
+          "zh": "你想從全球各地用最低延遲讀取小型設定值，而且這些值很少變動。"
+        },
+        "options": [
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "Hyperdrive",
+            "zh": "Hyperdrive"
+          },
+          {
+            "en": "R2",
+            "zh": "R2"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "KV is a globally cached key-value store optimized for fast, read-heavy lookups.",
+          "zh": "KV 是全球快取的鍵值儲存，專為快速、讀取密集的查詢最佳化。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You're building a live chat room where everyone must see the same messages in the same order, coordinated in one place.",
+          "zh": "你要做一個即時聊天室，所有人必須看到相同順序的相同訊息，並由單一地方協調。"
+        },
+        "options": [
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "R2",
+            "zh": "R2"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "A Durable Object gives one coordination point with strongly consistent state.",
+          "zh": "Durable Object 提供單一協調點，並具備強一致性的狀態。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You already run a Postgres database elsewhere and want your Workers to query it fast with connection pooling and caching.",
+          "zh": "你已經在別處運行一個 Postgres 資料庫，想讓 Workers 透過連線池和快取快速查詢它。"
+        },
+        "options": [
+          {
+            "en": "Hyperdrive",
+            "zh": "Hyperdrive"
+          },
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Hyperdrive pools connections and caches queries to speed up your existing Postgres.",
+          "zh": "Hyperdrive 透過連線池與查詢快取，加速你既有的 Postgres。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "After a purchase you must send a confirmation email, but you don't want the user's request to wait for it.",
+          "zh": "購買完成後你要寄出確認信，但不想讓使用者的請求卡在等寄信。"
+        },
+        "options": [
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "R2",
+            "zh": "R2"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Queues decouple slow background work so the request can return immediately.",
+          "zh": "Queues 把緩慢的背景工作解耦，讓請求可以立刻回應。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You host a popular podcast archive. Episodes are downloaded millions of times and you want to avoid huge egress bills.",
+          "zh": "你經營一個熱門的 Podcast 典藏庫，集數被下載數百萬次，你想避免龐大的流出費用。"
+        },
+        "options": [
+          {
+            "en": "R2",
+            "zh": "R2"
+          },
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "Hyperdrive",
+            "zh": "Hyperdrive"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "R2 serves large files with zero egress fees, even at huge download volumes.",
+          "zh": "R2 提供大檔案下載且流出完全免費，即使下載量極大也一樣。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "A flash sale has exactly 100 items. You need one source of truth so you never oversell, even under heavy concurrent traffic.",
+          "zh": "限時搶購剛好只有 100 件商品。你需要單一真實來源，即使在高並發流量下也絕不超賣。"
+        },
+        "options": [
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "D1",
+            "zh": "D1"
+          },
+          {
+            "en": "R2",
+            "zh": "R2"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "A single Durable Object serializes updates with strong consistency, so it can't oversell.",
+          "zh": "單一 Durable Object 以強一致性序列化更新，因此不會超賣。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "Your image-processing job gets sudden traffic spikes. You want to buffer the load and process items steadily with automatic retries.",
+          "zh": "你的影像處理工作會突然湧入流量。你想緩衝負載、穩定地逐批處理，並自動重試。"
+        },
+        "options": [
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          },
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "KV",
+            "zh": "KV"
+          },
+          {
+            "en": "R2",
+            "zh": "R2"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Queues buffer bursts and retry failed jobs, smoothing out spiky workloads.",
+          "zh": "Queues 緩衝突發流量並重試失敗的工作，撫平尖峰負載。"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "pick-security",
+    "category": "arcade",
+    "layout": "game-pick",
+    "group": {
+      "en": "Quick Pick",
+      "zh": "選型快答"
+    },
+    "icon": "shield",
+    "title": {
+      "en": "Pick the right defense",
+      "zh": "選對防護"
+    },
+    "subtitle": {
+      "en": "Choose the right security product for each threat",
+      "zh": "幫每個威脅選對的安全產品"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Match each threat to the right shield.",
+        "zh": "幫每個威脅配上對的盾牌。"
+      }
+    },
+    "rounds": [
+      {
+        "scenario": {
+          "en": "Your website is getting hit with SQL injection and other malicious requests. What blocks them?",
+          "zh": "你的網站一直被 SQL injection 和各種惡意請求攻擊，要用什麼擋下來？"
+        },
+        "options": [
+          {
+            "en": "WAF",
+            "zh": "WAF"
+          },
+          {
+            "en": "Turnstile",
+            "zh": "Turnstile"
+          },
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          },
+          {
+            "en": "Tunnel",
+            "zh": "Tunnel"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "A Web Application Firewall (WAF) inspects HTTP requests and blocks SQLi, XSS, and other common attacks.",
+          "zh": "WAF（Web 應用防火牆）會檢查 HTTP 請求，擋下 SQLi、XSS 等常見攻擊。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You want to stop bots from abusing a signup form, but you hate making real users solve annoying puzzles.",
+          "zh": "你想擋掉機器人灌爆註冊表單，又不想讓真人去解惱人的圖形驗證。"
+        },
+        "options": [
+          {
+            "en": "Turnstile",
+            "zh": "Turnstile"
+          },
+          {
+            "en": "WAF",
+            "zh": "WAF"
+          },
+          {
+            "en": "Access",
+            "zh": "Access"
+          },
+          {
+            "en": "Gateway",
+            "zh": "Gateway"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Turnstile is a privacy-friendly CAPTCHA replacement that verifies humans, usually with no puzzle at all.",
+          "zh": "Turnstile 是注重隱私的 CAPTCHA 替代方案，通常不用解任何題目就能驗證是真人。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You just launched a site over plain HTTP and want free HTTPS to encrypt visitor traffic.",
+          "zh": "你剛上線的網站只有 HTTP，想要免費的 HTTPS 來加密訪客流量。"
+        },
+        "options": [
+          {
+            "en": "Tunnel",
+            "zh": "Tunnel"
+          },
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          },
+          {
+            "en": "Turnstile",
+            "zh": "Turnstile"
+          },
+          {
+            "en": "Gateway",
+            "zh": "Gateway"
+          }
+        ],
+        "answer": 1,
+        "why": {
+          "en": "Cloudflare's SSL/TLS issues free certificates and encrypts traffic between visitors and your site.",
+          "zh": "Cloudflare 的 SSL/TLS 會發放免費憑證，加密訪客與網站之間的流量。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "Staff need to reach an internal admin dashboard based on their identity — without rolling out a clunky VPN.",
+          "zh": "員工需要依身分存取內部管理後台，又不想架設笨重的 VPN。"
+        },
+        "options": [
+          {
+            "en": "Gateway",
+            "zh": "Gateway"
+          },
+          {
+            "en": "Tunnel",
+            "zh": "Tunnel"
+          },
+          {
+            "en": "Access",
+            "zh": "Access"
+          },
+          {
+            "en": "WAF",
+            "zh": "WAF"
+          }
+        ],
+        "answer": 2,
+        "why": {
+          "en": "Cloudflare Access enforces Zero-Trust, identity-based access to internal apps — no VPN required.",
+          "zh": "Cloudflare Access 提供 Zero Trust、以身分為基礎的內部應用存取，不需要 VPN。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You want to filter employees' outbound DNS and web traffic, blocking malware and phishing sites.",
+          "zh": "你想過濾員工對外的 DNS 和網頁流量，擋掉惡意軟體和釣魚網站。"
+        },
+        "options": [
+          {
+            "en": "Gateway",
+            "zh": "Gateway"
+          },
+          {
+            "en": "Access",
+            "zh": "Access"
+          },
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          },
+          {
+            "en": "Turnstile",
+            "zh": "Turnstile"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Cloudflare Gateway is a secure web gateway that filters outbound DNS, HTTP, and network traffic for your team.",
+          "zh": "Cloudflare Gateway 是安全網頁閘道，幫團隊過濾對外的 DNS、HTTP 與網路流量。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You want to expose a service running on your laptop to the internet without opening any firewall ports.",
+          "zh": "你想把跑在自己筆電上的服務公開到網際網路，又不想開任何防火牆連接埠。"
+        },
+        "options": [
+          {
+            "en": "Tunnel",
+            "zh": "Tunnel"
+          },
+          {
+            "en": "WAF",
+            "zh": "WAF"
+          },
+          {
+            "en": "DDoS protection",
+            "zh": "DDoS 防護"
+          },
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Cloudflare Tunnel creates an outbound-only connection, exposing a local service with no open inbound ports.",
+          "zh": "Cloudflare Tunnel 建立只對外的連線，讓本地服務公開卻不用開任何對內連接埠。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "A flood of traffic from thousands of IPs is trying to knock your website offline.",
+          "zh": "來自上千個 IP 的大量流量正試圖把你的網站打掛。"
+        },
+        "options": [
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          },
+          {
+            "en": "DDoS protection",
+            "zh": "DDoS 防護"
+          },
+          {
+            "en": "Turnstile",
+            "zh": "Turnstile"
+          },
+          {
+            "en": "Access",
+            "zh": "Access"
+          }
+        ],
+        "answer": 1,
+        "why": {
+          "en": "Cloudflare's DDoS protection absorbs and mitigates volumetric floods to keep your site online.",
+          "zh": "Cloudflare 的 DDoS 防護會吸收並緩解大流量攻擊，讓網站持續上線。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "Visitors can post comments, and an attacker is injecting <script> tags to run XSS on other users.",
+          "zh": "訪客可以留言，攻擊者卻塞入 <script> 標籤，想對其他使用者發動 XSS。"
+        },
+        "options": [
+          {
+            "en": "Turnstile",
+            "zh": "Turnstile"
+          },
+          {
+            "en": "Tunnel",
+            "zh": "Tunnel"
+          },
+          {
+            "en": "WAF",
+            "zh": "WAF"
+          },
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          }
+        ],
+        "answer": 2,
+        "why": {
+          "en": "The WAF's managed rules detect and block cross-site scripting (XSS) payloads in requests.",
+          "zh": "WAF 的代管規則會偵測並擋下請求中的跨站腳本（XSS）攻擊內容。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "Traffic reaches Cloudflare over HTTPS, but the hop from Cloudflare to your origin server is still unencrypted. How do you encrypt it end to end?",
+          "zh": "流量以 HTTPS 連到 Cloudflare，但 Cloudflare 到你來源伺服器這段還沒加密。要怎麼做到端到端加密？"
+        },
+        "options": [
+          {
+            "en": "Access",
+            "zh": "Access"
+          },
+          {
+            "en": "Gateway",
+            "zh": "Gateway"
+          },
+          {
+            "en": "SSL/TLS",
+            "zh": "SSL/TLS"
+          },
+          {
+            "en": "WAF",
+            "zh": "WAF"
+          }
+        ],
+        "answer": 2,
+        "why": {
+          "en": "Setting the SSL/TLS encryption mode to Full (Strict) encrypts and validates the connection all the way to your origin.",
+          "zh": "把 SSL/TLS 加密模式設成 Full（Strict），就能一路加密並驗證到來源伺服器的連線。"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "pick-compute-ai",
+    "category": "arcade",
+    "layout": "game-pick",
+    "group": {
+      "en": "Quick Pick",
+      "zh": "選型快答"
+    },
+    "icon": "bolt",
+    "title": {
+      "en": "Pick the right compute / AI",
+      "zh": "選對運算 / AI"
+    },
+    "subtitle": {
+      "en": "Match each job to the right compute or AI product",
+      "zh": "幫每個任務選對運算或 AI 產品"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Read the job, pick the perfect tool!",
+        "zh": "看懂任務，挑出最對的工具！"
+      }
+    },
+    "rounds": [
+      {
+        "scenario": {
+          "en": "You want to run a small, fast JSON API close to your users, with no servers to manage.",
+          "zh": "你想在靠近使用者的地方跑一個又小又快的 JSON API，而且不想管伺服器。"
+        },
+        "options": [
+          {
+            "en": "Workers",
+            "zh": "Workers"
+          },
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          },
+          {
+            "en": "Containers",
+            "zh": "Containers"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Workers run lightweight serverless code at the edge — perfect for small, fast APIs.",
+          "zh": "Workers 在邊緣執行輕量的無伺服器程式碼，最適合又小又快的 API。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You need a chat room where everyone sees the same messages in real time, with one source of truth.",
+          "zh": "你要做一個聊天室，讓所有人即時看到一致的訊息，而且要有單一真相來源。"
+        },
+        "options": [
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          },
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "Workers AI",
+            "zh": "Workers AI"
+          },
+          {
+            "en": "Vectorize",
+            "zh": "Vectorize"
+          }
+        ],
+        "answer": 1,
+        "why": {
+          "en": "Durable Objects give a single, strongly consistent instance that coordinates real-time state.",
+          "zh": "Durable Objects 提供單一、強一致的實例，負責協調即時狀態。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "A web request triggers slow work like sending emails or processing images. You want to respond fast and handle it later.",
+          "zh": "一個請求會觸發很慢的工作，例如寄信或處理圖片。你想先快速回應，之後再慢慢處理。"
+        },
+        "options": [
+          {
+            "en": "Workers",
+            "zh": "Workers"
+          },
+          {
+            "en": "Containers",
+            "zh": "Containers"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          },
+          {
+            "en": "AI Gateway",
+            "zh": "AI Gateway"
+          }
+        ],
+        "answer": 2,
+        "why": {
+          "en": "Queues decouple producers from consumers so slow work runs asynchronously in the background.",
+          "zh": "Queues 讓生產者與消費者解耦，慢工作就能在背景非同步處理。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "Your app needs a specific Linux binary and libraries that don't fit in a Worker. You want to ship the whole image.",
+          "zh": "你的應用需要特定的 Linux 執行檔和函式庫，塞不進 Worker。你想直接部署整個映像檔。"
+        },
+        "options": [
+          {
+            "en": "Workers",
+            "zh": "Workers"
+          },
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "Browser Rendering",
+            "zh": "Browser Rendering"
+          },
+          {
+            "en": "Containers",
+            "zh": "Containers"
+          }
+        ],
+        "answer": 3,
+        "why": {
+          "en": "Containers run a full container image for workloads that need a complete OS environment.",
+          "zh": "Containers 執行完整的容器映像檔，適合需要完整作業系統環境的工作。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You want to run an open LLM or image-generation model without renting and managing your own GPUs.",
+          "zh": "你想跑開源 LLM 或圖片生成模型，又不想自己租和管 GPU。"
+        },
+        "options": [
+          {
+            "en": "Workers AI",
+            "zh": "Workers AI"
+          },
+          {
+            "en": "AI Gateway",
+            "zh": "AI Gateway"
+          },
+          {
+            "en": "Vectorize",
+            "zh": "Vectorize"
+          },
+          {
+            "en": "Agents",
+            "zh": "Agents"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "Workers AI runs LLMs and image models on Cloudflare's GPU network — no infrastructure to manage.",
+          "zh": "Workers AI 在 Cloudflare 的 GPU 網路上執行 LLM 和圖片模型，免自建基礎設施。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "Your app calls OpenAI, and you want to cache responses, see analytics, and rate-limit usage in one place.",
+          "zh": "你的應用會呼叫 OpenAI，你想在同一個地方快取回應、看分析數據，並限制用量。"
+        },
+        "options": [
+          {
+            "en": "Workers AI",
+            "zh": "Workers AI"
+          },
+          {
+            "en": "AI Gateway",
+            "zh": "AI Gateway"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          },
+          {
+            "en": "Vectorize",
+            "zh": "Vectorize"
+          }
+        ],
+        "answer": 1,
+        "why": {
+          "en": "AI Gateway sits in front of providers like OpenAI to cache, observe, and rate-limit your calls.",
+          "zh": "AI Gateway 擋在 OpenAI 等供應商前面，負責快取、觀測並限制你的呼叫。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You stored embeddings of your documents and want to find the ones most semantically similar to a query.",
+          "zh": "你把文件的向量嵌入存起來，想找出和查詢語意最相近的內容。"
+        },
+        "options": [
+          {
+            "en": "Workers AI",
+            "zh": "Workers AI"
+          },
+          {
+            "en": "Durable Objects",
+            "zh": "Durable Objects"
+          },
+          {
+            "en": "Vectorize",
+            "zh": "Vectorize"
+          },
+          {
+            "en": "AI Gateway",
+            "zh": "AI Gateway"
+          }
+        ],
+        "answer": 2,
+        "why": {
+          "en": "Vectorize is a vector database that indexes embeddings and returns the nearest matches for semantic search.",
+          "zh": "Vectorize 是向量資料庫，能索引嵌入並回傳最相近的結果，用於語意搜尋。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You need to screenshot a web page or scrape its fully rendered HTML using a headless browser.",
+          "zh": "你需要對網頁截圖，或用無頭瀏覽器抓取完整渲染後的 HTML。"
+        },
+        "options": [
+          {
+            "en": "Containers",
+            "zh": "Containers"
+          },
+          {
+            "en": "Workers",
+            "zh": "Workers"
+          },
+          {
+            "en": "Agents",
+            "zh": "Agents"
+          },
+          {
+            "en": "Browser Rendering",
+            "zh": "Browser Rendering"
+          }
+        ],
+        "answer": 3,
+        "why": {
+          "en": "Browser Rendering runs a headless Chromium to screenshot or scrape pages programmatically.",
+          "zh": "Browser Rendering 執行無頭 Chromium，用程式對網頁截圖或抓取內容。"
+        }
+      },
+      {
+        "scenario": {
+          "en": "You want to build an AI agent that reasons step by step, calls tools, and remembers state across a long task.",
+          "zh": "你想打造一個 AI 代理，能逐步推理、呼叫工具，並在長任務中記住狀態。"
+        },
+        "options": [
+          {
+            "en": "Agents",
+            "zh": "Agents"
+          },
+          {
+            "en": "Workers AI",
+            "zh": "Workers AI"
+          },
+          {
+            "en": "AI Gateway",
+            "zh": "AI Gateway"
+          },
+          {
+            "en": "Queues",
+            "zh": "Queues"
+          }
+        ],
+        "answer": 0,
+        "why": {
+          "en": "The Agents SDK runs stateful, multi-step AI workflows (built on Durable Objects) that can call tools.",
+          "zh": "Agents SDK 執行有狀態、多步驟的 AI 工作流程（建構在 Durable Objects 上），還能呼叫工具。"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "order-request",
+    "category": "arcade",
+    "layout": "game-order",
+    "group": {
+      "en": "Order",
+      "zh": "流程排序"
+    },
+    "icon": "timeline",
+    "title": {
+      "en": "Order the request flow",
+      "zh": "請求流程排排站"
+    },
+    "subtitle": {
+      "en": "Put the steps of a request in the right order",
+      "zh": "把一個請求的步驟排成正確順序"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Drag the steps until the request flows just right",
+        "zh": "把步驟排好，讓請求順順跑起來"
+      }
+    },
+    "puzzles": [
+      {
+        "prompt": {
+          "en": "Order a request's journey through Cloudflare.",
+          "zh": "把一個請求穿過 Cloudflare 的旅程排好。"
+        },
+        "steps": [
+          {
+            "en": "Browser sends the request",
+            "zh": "瀏覽器送出請求"
+          },
+          {
+            "en": "DNS resolves the domain",
+            "zh": "DNS 解析網域"
+          },
+          {
+            "en": "Reaches the nearest Cloudflare edge",
+            "zh": "抵達最近的 Cloudflare 邊緣節點"
+          },
+          {
+            "en": "WAF checks for threats",
+            "zh": "WAF 檢查威脅"
+          },
+          {
+            "en": "Cache checked or Worker runs",
+            "zh": "檢查快取或執行 Worker"
+          },
+          {
+            "en": "Response returns to the browser",
+            "zh": "回應送回瀏覽器"
+          }
+        ]
+      },
+      {
+        "prompt": {
+          "en": "Order a cache-aside read inside a Worker.",
+          "zh": "把 Worker 裡的 cache-aside 讀取流程排好。"
+        },
+        "steps": [
+          {
+            "en": "Request arrives at the Worker",
+            "zh": "請求抵達 Worker"
+          },
+          {
+            "en": "Check the KV cache",
+            "zh": "查看 KV 快取"
+          },
+          {
+            "en": "On a miss, query D1",
+            "zh": "快取沒中，查詢 D1"
+          },
+          {
+            "en": "Store the result in KV with a TTL",
+            "zh": "把結果存進 KV 並設定 TTL"
+          },
+          {
+            "en": "Return the JSON response",
+            "zh": "回傳 JSON 回應"
+          },
+          {
+            "en": "Next time it's served straight from KV",
+            "zh": "下次直接由 KV 提供"
+          }
+        ]
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "order-deploy",
+    "category": "arcade",
+    "layout": "game-order",
+    "group": {
+      "en": "Order",
+      "zh": "流程排序"
+    },
+    "icon": "rocket_launch",
+    "title": {
+      "en": "Order the deploy steps",
+      "zh": "部署步驟排排站"
+    },
+    "subtitle": {
+      "en": "Put the steps of shipping a Worker in order",
+      "zh": "把部署 Worker 的步驟排好"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "From install to live — drag the deploy steps back into the right order.",
+        "zh": "從安裝到上線，把部署步驟拖回正確順序。"
+      }
+    },
+    "puzzles": [
+      {
+        "prompt": {
+          "en": "Order the steps to deploy your first Worker.",
+          "zh": "把部署第一個 Worker 的步驟排好。"
+        },
+        "steps": [
+          {
+            "en": "Install Wrangler: npm install -g wrangler",
+            "zh": "安裝 Wrangler：npm install -g wrangler"
+          },
+          {
+            "en": "Sign in: wrangler login",
+            "zh": "登入：wrangler login"
+          },
+          {
+            "en": "Scaffold a project: npm create cloudflare@latest",
+            "zh": "建立專案：npm create cloudflare@latest"
+          },
+          {
+            "en": "Write your fetch() handler",
+            "zh": "撰寫你的 fetch() 處理函式"
+          },
+          {
+            "en": "Test locally: wrangler dev",
+            "zh": "本機測試：wrangler dev"
+          },
+          {
+            "en": "Ship it: wrangler deploy",
+            "zh": "上線部署：wrangler deploy"
+          }
+        ]
+      },
+      {
+        "prompt": {
+          "en": "Order the steps to add a D1 database to a Worker.",
+          "zh": "把幫 Worker 加上 D1 資料庫的步驟排好。"
+        },
+        "steps": [
+          {
+            "en": "Create the database: wrangler d1 create",
+            "zh": "建立資料庫：wrangler d1 create"
+          },
+          {
+            "en": "Add the [[d1_databases]] binding in wrangler.toml",
+            "zh": "在 wrangler.toml 加上 [[d1_databases]] 繫結"
+          },
+          {
+            "en": "Write CREATE TABLE SQL",
+            "zh": "撰寫 CREATE TABLE SQL"
+          },
+          {
+            "en": "Apply the SQL: wrangler d1 execute",
+            "zh": "套用 SQL：wrangler d1 execute"
+          },
+          {
+            "en": "Query with env.DB.prepare() in the Worker",
+            "zh": "在 Worker 用 env.DB.prepare() 查詢"
+          },
+          {
+            "en": "Ship it: wrangler deploy",
+            "zh": "上線部署：wrangler deploy"
+          }
+        ]
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "truefalse-basics",
+    "category": "arcade",
+    "layout": "game-truefalse",
+    "group": {
+      "en": "True or False",
+      "zh": "真假快答"
+    },
+    "icon": "fact_check",
+    "title": {
+      "en": "True or false: the basics",
+      "zh": "真假快答：基礎篇"
+    },
+    "subtitle": {
+      "en": "Tap true or false before the timer runs out",
+      "zh": "在時間用完前點真或假"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Twelve Cloudflare claims — spot the true ones before the clock beats you.",
+        "zh": "十二句關於 Cloudflare 的說法，在時間到之前抓出真的那些。"
+      }
+    },
+    "statements": [
+      {
+        "text": {
+          "en": "Cloudflare Workers run at the edge, close to your users.",
+          "zh": "Cloudflare Workers 在邊緣執行，靠近你的使用者。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "Workers run in Cloudflare's global edge network, so code executes near each visitor.",
+          "zh": "Workers 在 Cloudflare 的全球邊緣網路執行，程式碼會在離訪客最近的地方跑。"
+        }
+      },
+      {
+        "text": {
+          "en": "R2 charges egress fees every time you download a file.",
+          "zh": "R2 每次下載檔案都要收流出費。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "R2 has zero egress fees — that's its headline advantage over other object stores.",
+          "zh": "R2 流出免費，這正是它勝過其他物件儲存的招牌特色。"
+        }
+      },
+      {
+        "text": {
+          "en": "Workers KV is strongly consistent, so a write appears everywhere instantly.",
+          "zh": "Workers KV 是強一致的，所以寫入會立刻在各地出現。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "KV is eventually consistent; updates can take a short time to reach every edge location.",
+          "zh": "KV 是最終一致，更新可能要過一小段時間才會傳到每個邊緣節點。"
+        }
+      },
+      {
+        "text": {
+          "en": "D1 is Cloudflare's serverless SQL database.",
+          "zh": "D1 是 Cloudflare 的無伺服器 SQL 資料庫。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "D1 is a SQLite-based SQL database you query with familiar SQL statements.",
+          "zh": "D1 以 SQLite 為基礎，你可以用熟悉的 SQL 語法查詢它。"
+        }
+      },
+      {
+        "text": {
+          "en": "Durable Objects provide strong consistency for coordinating state.",
+          "zh": "Durable Objects 為協調狀態提供強一致性。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "Each Durable Object is a single authoritative instance, giving strong consistency for its state.",
+          "zh": "每個 Durable Object 都是唯一的權威實例，因此它的狀態具有強一致性。"
+        }
+      },
+      {
+        "text": {
+          "en": "To run Workers you must rent and manage your own servers.",
+          "zh": "要執行 Workers，你必須自己租用並管理伺服器。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Workers are serverless — Cloudflare runs and scales them for you, no servers to manage.",
+          "zh": "Workers 是無伺服器的，Cloudflare 幫你執行與擴展，不用自己管伺服器。"
+        }
+      },
+      {
+        "text": {
+          "en": "Wrangler is the command-line tool for building and deploying Workers.",
+          "zh": "Wrangler 是用來建置與部署 Workers 的命令列工具。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "Wrangler is the official CLI for creating, developing, and deploying Workers projects.",
+          "zh": "Wrangler 是官方 CLI，用來建立、開發與部署 Workers 專案。"
+        }
+      },
+      {
+        "text": {
+          "en": "KV is the best place to store large video files.",
+          "zh": "KV 是存放大型影片檔的最佳選擇。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "KV is for small key-value data; large files belong in R2 object storage instead.",
+          "zh": "KV 適合小型的鍵值資料；大型檔案應該放在 R2 物件儲存。"
+        }
+      },
+      {
+        "text": {
+          "en": "Cloudflare's CDN caches content close to users to speed up load times.",
+          "zh": "Cloudflare 的 CDN 把內容快取到使用者附近，加快載入速度。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "The CDN stores copies at edge locations worldwide so content loads from nearby.",
+          "zh": "CDN 在全球邊緣節點存放副本，讓內容能就近載入。"
+        }
+      },
+      {
+        "text": {
+          "en": "Cloudflare Pages is a relational database service.",
+          "zh": "Cloudflare Pages 是一種關聯式資料庫服務。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Pages deploys websites and frontends; for a SQL database you'd use D1.",
+          "zh": "Pages 是用來部署網站與前端的；要 SQL 資料庫應該用 D1。"
+        }
+      },
+      {
+        "text": {
+          "en": "Cloudflare offers unlimited DDoS protection on every plan, including Free.",
+          "zh": "Cloudflare 在每種方案都提供無限 DDoS 防護，包含免費方案。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "Unmetered DDoS mitigation is included for all customers, even on the Free plan.",
+          "zh": "不限量的 DDoS 防護對所有客戶都包含在內，連免費方案也有。"
+        }
+      },
+      {
+        "text": {
+          "en": "Workers can only be written in Python; JavaScript is not supported.",
+          "zh": "Workers 只能用 Python 寫，不支援 JavaScript。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Workers fully support JavaScript and TypeScript, with Python and Rust available too.",
+          "zh": "Workers 完整支援 JavaScript 與 TypeScript，也可以用 Python 與 Rust。"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "truefalse-myths",
+    "category": "arcade",
+    "layout": "game-truefalse",
+    "group": {
+      "en": "True or False",
+      "zh": "真假快答"
+    },
+    "icon": "psychology_alt",
+    "title": {
+      "en": "Myth busters",
+      "zh": "迷思破解"
+    },
+    "subtitle": {
+      "en": "Spot the common misconception",
+      "zh": "找出常見的誤解"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Half of what beginners 'know' about Cloudflare is a myth — can you tell which?",
+        "zh": "初學者對 Cloudflare 的「常識」一半是迷思，你分得出來嗎？"
+      }
+    },
+    "statements": [
+      {
+        "text": {
+          "en": "Cloudflare Workers are just like AWS Lambda containers.",
+          "zh": "Cloudflare Workers 跟 AWS Lambda 的容器一樣。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Workers run on V8 isolates, not containers, so cold starts are near zero.",
+          "zh": "Workers 跑在 V8 isolate 上而非容器，所以幾乎沒有冷啟動。"
+        }
+      },
+      {
+        "text": {
+          "en": "You must own and run a server to use D1.",
+          "zh": "要用 D1 就一定得自己擁有並維運伺服器。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "D1 is a fully managed serverless SQL database — there's no server to run.",
+          "zh": "D1 是全託管的無伺服器 SQL 資料庫，不用自己維運伺服器。"
+        }
+      },
+      {
+        "text": {
+          "en": "Cloudflare Pages can only host static sites.",
+          "zh": "Cloudflare Pages 只能放靜態網站。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Pages Functions add serverless backend logic, so it's not static-only.",
+          "zh": "Pages Functions 可加上無伺服器後端邏輯，不只是靜態。"
+        }
+      },
+      {
+        "text": {
+          "en": "KV is a great choice as your main transactional database.",
+          "zh": "KV 很適合當主要的交易型資料庫。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "KV is eventually consistent and built for reads, not transactions — use D1 instead.",
+          "zh": "KV 是最終一致、為讀取而生，不適合交易，該用 D1。"
+        }
+      },
+      {
+        "text": {
+          "en": "Turnstile shows users puzzle challenges like reCAPTCHA.",
+          "zh": "Turnstile 會像 reCAPTCHA 那樣丟拼圖驗證給使用者。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Turnstile is usually invisible and rarely shows a puzzle to real users.",
+          "zh": "Turnstile 通常是隱形的，幾乎不會對真人顯示拼圖。"
+        }
+      },
+      {
+        "text": {
+          "en": "R2 is S3-compatible, so many S3 tools and SDKs work with it.",
+          "zh": "R2 相容 S3，所以許多 S3 工具與 SDK 都能直接用。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "R2 offers an S3-compatible API, making migration from S3 straightforward.",
+          "zh": "R2 提供 S3 相容 API，從 S3 搬遷很順手。"
+        }
+      },
+      {
+        "text": {
+          "en": "Vectorize stores relational SQL tables.",
+          "zh": "Vectorize 是用來存關聯式 SQL 資料表的。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Vectorize is a vector database for embeddings and similarity search, not SQL tables.",
+          "zh": "Vectorize 是存向量嵌入、做相似度搜尋的向量資料庫，不是 SQL 表。"
+        }
+      },
+      {
+        "text": {
+          "en": "R2 charges you egress fees every time files are downloaded.",
+          "zh": "R2 每次下載檔案都要收流出費。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "R2 has zero egress fees — that's its headline advantage over S3.",
+          "zh": "R2 流出免費，這正是它勝過 S3 的招牌。"
+        }
+      },
+      {
+        "text": {
+          "en": "Workers run your code close to users at the network edge.",
+          "zh": "Workers 會在靠近使用者的網路邊緣執行你的程式碼。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "Workers deploy to Cloudflare's global edge network, running near each user.",
+          "zh": "Workers 部署到 Cloudflare 全球邊緣網路，就近於每位使用者執行。"
+        }
+      },
+      {
+        "text": {
+          "en": "A free Cloudflare account is required before you can buy SSL certificates separately.",
+          "zh": "用 Cloudflare 前要先另外付費購買 SSL 憑證。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Cloudflare provides free, automatic SSL/TLS certificates — no separate purchase needed.",
+          "zh": "Cloudflare 提供免費且自動的 SSL/TLS 憑證，不必另外購買。"
+        }
+      },
+      {
+        "text": {
+          "en": "Durable Objects give you strong consistency for coordinated state.",
+          "zh": "Durable Objects 能為需要協調的狀態提供強一致性。"
+        },
+        "answer": true,
+        "explain": {
+          "en": "Each Durable Object is a single authoritative instance, giving strong consistency.",
+          "zh": "每個 Durable Object 都是唯一的權威實例，因此具備強一致性。"
+        }
+      },
+      {
+        "text": {
+          "en": "Cloudflare is only a CDN and can't run application code.",
+          "zh": "Cloudflare 只是 CDN，不能執行應用程式的程式碼。"
+        },
+        "answer": false,
+        "explain": {
+          "en": "Beyond the CDN, Cloudflare runs full apps with Workers, Pages, D1, R2 and more.",
+          "zh": "除了 CDN，Cloudflare 還能用 Workers、Pages、D1、R2 等跑完整應用。"
+        }
+      }
+    ],
+    "nav": false
+  },
+  {
+    "slug": "build-blueprints",
+    "category": "arcade",
+    "layout": "game-build",
+    "group": {
+      "en": "Build",
+      "zh": "架構拼圖"
+    },
+    "icon": "construction",
+    "title": {
+      "en": "Build the stack",
+      "zh": "架構拼圖"
+    },
+    "subtitle": {
+      "en": "Pick exactly the products each app needs",
+      "zh": "幫每個應用挑出剛好需要的產品"
+    },
+    "hero": {
+      "badge": {
+        "en": "Game",
+        "zh": "小遊戲"
+      },
+      "tagline": {
+        "en": "Drag in the right pieces — nothing more, nothing less.",
+        "zh": "拼進剛剛好的零件，不多也不少。"
+      }
+    },
+    "rounds": [
+      {
+        "goal": {
+          "en": "Build a simple blog",
+          "zh": "做一個簡單的部落格"
+        },
+        "palette": [
+          {
+            "label": {
+              "en": "Workers",
+              "zh": "Workers"
+            },
+            "icon": "bolt"
+          },
+          {
+            "label": {
+              "en": "D1",
+              "zh": "D1"
+            },
+            "icon": "database"
+          },
+          {
+            "label": {
+              "en": "R2",
+              "zh": "R2"
+            },
+            "icon": "inventory_2"
+          },
+          {
+            "label": {
+              "en": "Images",
+              "zh": "Images"
+            },
+            "icon": "image"
+          },
+          {
+            "label": {
+              "en": "Vectorize",
+              "zh": "Vectorize"
+            },
+            "icon": "scatter_plot"
+          },
+          {
+            "label": {
+              "en": "Hyperdrive",
+              "zh": "Hyperdrive"
+            },
+            "icon": "speed"
+          }
+        ],
+        "answer": [
+          0,
+          1,
+          2
+        ],
+        "note": {
+          "en": "Workers serve the site, D1 stores the posts, and R2 holds images. Vectorize (vector search) and Hyperdrive (speeding up external databases) aren't needed here.",
+          "zh": "Workers 提供網站服務、D1 存放文章、R2 放圖片。做向量搜尋的 Vectorize 和加速外部資料庫的 Hyperdrive 在這裡都用不到。"
+        }
+      },
+      {
+        "goal": {
+          "en": "Build an AI Q&A bot (RAG)",
+          "zh": "做一個 AI 問答機器人 (RAG)"
+        },
+        "palette": [
+          {
+            "label": {
+              "en": "Workers",
+              "zh": "Workers"
+            },
+            "icon": "bolt"
+          },
+          {
+            "label": {
+              "en": "Workers AI",
+              "zh": "Workers AI"
+            },
+            "icon": "smart_toy"
+          },
+          {
+            "label": {
+              "en": "Vectorize",
+              "zh": "Vectorize"
+            },
+            "icon": "scatter_plot"
+          },
+          {
+            "label": {
+              "en": "D1",
+              "zh": "D1"
+            },
+            "icon": "database"
+          },
+          {
+            "label": {
+              "en": "Turnstile",
+              "zh": "Turnstile"
+            },
+            "icon": "verified_user"
+          },
+          {
+            "label": {
+              "en": "Stream",
+              "zh": "Stream"
+            },
+            "icon": "smart_display"
+          }
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "note": {
+          "en": "Workers run the logic, Workers AI generates answers, Vectorize finds the relevant context, and D1 stores the data. Turnstile (bot protection) and Stream (video) aren't core to RAG.",
+          "zh": "Workers 跑邏輯、Workers AI 生成答案、Vectorize 找出相關的內容、D1 保存資料。擋機器人的 Turnstile 和處理影音的 Stream 都不是 RAG 的核心。"
+        }
+      },
+      {
+        "goal": {
+          "en": "Build a real-time chat room",
+          "zh": "做一個即時聊天室"
+        },
+        "palette": [
+          {
+            "label": {
+              "en": "Workers",
+              "zh": "Workers"
+            },
+            "icon": "bolt"
+          },
+          {
+            "label": {
+              "en": "Durable Objects",
+              "zh": "Durable Objects"
+            },
+            "icon": "hub"
+          },
+          {
+            "label": {
+              "en": "D1",
+              "zh": "D1"
+            },
+            "icon": "database"
+          },
+          {
+            "label": {
+              "en": "KV",
+              "zh": "KV"
+            },
+            "icon": "key"
+          },
+          {
+            "label": {
+              "en": "R2",
+              "zh": "R2"
+            },
+            "icon": "inventory_2"
+          },
+          {
+            "label": {
+              "en": "Queues",
+              "zh": "Queues"
+            },
+            "icon": "queue"
+          }
+        ],
+        "answer": [
+          0,
+          1,
+          2
+        ],
+        "note": {
+          "en": "A Durable Object is the room itself — it coordinates everyone's WebSocket connections with strong consistency. D1 stores chat history and Workers serve it. KV, R2 and Queues are optional extras.",
+          "zh": "Durable Objects 就是聊天室本身，用強一致來協調大家的 WebSocket 連線。D1 保存聊天紀錄、Workers 提供服務。KV、R2、Queues 都是可有可無的選配。"
+        }
+      }
+    ],
     "nav": false
   }
 ];

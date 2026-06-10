@@ -87,6 +87,14 @@
         "en": "Connect the pieces — front-end ↔ Worker back-end ↔ database — with real recipes, full-stack code and lots of architecture diagrams.",
         "zh": "把各塊串起來——前端 ↔ Worker 後端 ↔ 資料庫——用真實範例、全端程式碼與大量架構圖帶你做。"
       }
+    },
+    {
+      "key": "arcade", "icon": "sports_esports",
+      "title": { "en": "Arcade", "zh": "遊戲場" },
+      "blurb": {
+        "en": "Learn by playing — matching, memory, sorting, quick-pick, sequencing, true-or-false and build-the-stack mini-games.",
+        "zh": "邊玩邊學——連連看、記憶翻牌、分類挑戰、選型快答、流程排序、真假快答與架構拼圖等小遊戲。"
+      }
     }
   ],
   "categoryPages": [
@@ -200,6 +208,22 @@
       "intro": {
         "en": "Knowing each product is step one; the real magic is connecting them. These guides show how a web page talks to a Worker, how a Worker reads and writes a database, and how to assemble whole systems — each packed with mermaid diagrams.",
         "zh": "認識每個產品只是第一步，真正的重點是把它們串起來。這些教學示範網頁如何呼叫 Worker、Worker 如何讀寫資料庫，以及怎麼把整套系統組起來——每篇都搭配大量 mermaid 圖解。"
+      }
+    },
+    {
+      "slug": "arcade", "key": "arcade", "icon": "sports_esports",
+      "title": { "en": "Arcade", "zh": "遊戲場" },
+      "subtitle": { "en": "Learn Cloudflare by playing", "zh": "邊玩邊學 Cloudflare" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "14 quick mini-games — match, memorize, sort, pick, sequence, true-or-false and build a stack — to drill everything you've learned.",
+          "zh": "14 款快速小遊戲——連連看、記憶翻牌、分類、選型、排序、真假題、架構拼圖——把學到的東西通通練熟。"
+        }
+      },
+      "intro": {
+        "en": "Reading is one thing; recalling under a little time pressure is another. Pick a game and test yourself — every game is bite-sized, scored, and resets when you refresh.",
+        "zh": "看懂是一回事，在一點點時間壓力下答得出來又是另一回事。挑一款遊戲考考自己——每款都很小巧、會計分，重新整理就歸零。"
       }
     }
   ],

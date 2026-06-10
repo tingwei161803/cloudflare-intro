@@ -1,0 +1,75 @@
+{
+  "slug": "truefalse-myths",
+  "category": "arcade",
+  "layout": "game-truefalse",
+  "group": { "en": "True or False", "zh": "真假快答" },
+  "icon": "psychology_alt",
+  "title": { "en": "Myth busters", "zh": "迷思破解" },
+  "subtitle": { "en": "Spot the common misconception", "zh": "找出常見的誤解" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Half of what beginners 'know' about Cloudflare is a myth — can you tell which?", "zh": "初學者對 Cloudflare 的「常識」一半是迷思，你分得出來嗎？" }
+  },
+  "statements": [
+    {
+      "text": { "en": "Cloudflare Workers are just like AWS Lambda containers.", "zh": "Cloudflare Workers 跟 AWS Lambda 的容器一樣。" },
+      "answer": false,
+      "explain": { "en": "Workers run on V8 isolates, not containers, so cold starts are near zero.", "zh": "Workers 跑在 V8 isolate 上而非容器，所以幾乎沒有冷啟動。" }
+    },
+    {
+      "text": { "en": "You must own and run a server to use D1.", "zh": "要用 D1 就一定得自己擁有並維運伺服器。" },
+      "answer": false,
+      "explain": { "en": "D1 is a fully managed serverless SQL database — there's no server to run.", "zh": "D1 是全託管的無伺服器 SQL 資料庫，不用自己維運伺服器。" }
+    },
+    {
+      "text": { "en": "Cloudflare Pages can only host static sites.", "zh": "Cloudflare Pages 只能放靜態網站。" },
+      "answer": false,
+      "explain": { "en": "Pages Functions add serverless backend logic, so it's not static-only.", "zh": "Pages Functions 可加上無伺服器後端邏輯，不只是靜態。" }
+    },
+    {
+      "text": { "en": "KV is a great choice as your main transactional database.", "zh": "KV 很適合當主要的交易型資料庫。" },
+      "answer": false,
+      "explain": { "en": "KV is eventually consistent and built for reads, not transactions — use D1 instead.", "zh": "KV 是最終一致、為讀取而生，不適合交易，該用 D1。" }
+    },
+    {
+      "text": { "en": "Turnstile shows users puzzle challenges like reCAPTCHA.", "zh": "Turnstile 會像 reCAPTCHA 那樣丟拼圖驗證給使用者。" },
+      "answer": false,
+      "explain": { "en": "Turnstile is usually invisible and rarely shows a puzzle to real users.", "zh": "Turnstile 通常是隱形的，幾乎不會對真人顯示拼圖。" }
+    },
+    {
+      "text": { "en": "R2 is S3-compatible, so many S3 tools and SDKs work with it.", "zh": "R2 相容 S3，所以許多 S3 工具與 SDK 都能直接用。" },
+      "answer": true,
+      "explain": { "en": "R2 offers an S3-compatible API, making migration from S3 straightforward.", "zh": "R2 提供 S3 相容 API，從 S3 搬遷很順手。" }
+    },
+    {
+      "text": { "en": "Vectorize stores relational SQL tables.", "zh": "Vectorize 是用來存關聯式 SQL 資料表的。" },
+      "answer": false,
+      "explain": { "en": "Vectorize is a vector database for embeddings and similarity search, not SQL tables.", "zh": "Vectorize 是存向量嵌入、做相似度搜尋的向量資料庫，不是 SQL 表。" }
+    },
+    {
+      "text": { "en": "R2 charges you egress fees every time files are downloaded.", "zh": "R2 每次下載檔案都要收流出費。" },
+      "answer": false,
+      "explain": { "en": "R2 has zero egress fees — that's its headline advantage over S3.", "zh": "R2 流出免費，這正是它勝過 S3 的招牌。" }
+    },
+    {
+      "text": { "en": "Workers run your code close to users at the network edge.", "zh": "Workers 會在靠近使用者的網路邊緣執行你的程式碼。" },
+      "answer": true,
+      "explain": { "en": "Workers deploy to Cloudflare's global edge network, running near each user.", "zh": "Workers 部署到 Cloudflare 全球邊緣網路，就近於每位使用者執行。" }
+    },
+    {
+      "text": { "en": "A free Cloudflare account is required before you can buy SSL certificates separately.", "zh": "用 Cloudflare 前要先另外付費購買 SSL 憑證。" },
+      "answer": false,
+      "explain": { "en": "Cloudflare provides free, automatic SSL/TLS certificates — no separate purchase needed.", "zh": "Cloudflare 提供免費且自動的 SSL/TLS 憑證，不必另外購買。" }
+    },
+    {
+      "text": { "en": "Durable Objects give you strong consistency for coordinated state.", "zh": "Durable Objects 能為需要協調的狀態提供強一致性。" },
+      "answer": true,
+      "explain": { "en": "Each Durable Object is a single authoritative instance, giving strong consistency.", "zh": "每個 Durable Object 都是唯一的權威實例，因此具備強一致性。" }
+    },
+    {
+      "text": { "en": "Cloudflare is only a CDN and can't run application code.", "zh": "Cloudflare 只是 CDN，不能執行應用程式的程式碼。" },
+      "answer": false,
+      "explain": { "en": "Beyond the CDN, Cloudflare runs full apps with Workers, Pages, D1, R2 and more.", "zh": "除了 CDN，Cloudflare 還能用 Workers、Pages、D1、R2 等跑完整應用。" }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "match-products",
+  "category": "arcade",
+  "layout": "game-match",
+  "group": { "en": "Match", "zh": "連連看" },
+  "icon": "link",
+  "title": { "en": "Match the product", "zh": "產品連連看" },
+  "subtitle": { "en": "Connect each product to what it does", "zh": "把每個產品連到它的功能" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Draw the line, learn the lineup!", "zh": "連對一條線，認識一個產品！" }
+  },
+  "pairs": [
+    {
+      "left": { "en": "Workers", "zh": "Workers" },
+      "right": { "en": "Run serverless code at the edge", "zh": "在邊緣執行無伺服器程式碼" }
+    },
+    {
+      "left": { "en": "R2", "zh": "R2" },
+      "right": { "en": "Object storage, zero egress fees", "zh": "物件儲存，流出免費" }
+    },
+    {
+      "left": { "en": "D1", "zh": "D1" },
+      "right": { "en": "Serverless SQL database", "zh": "無伺服器 SQL 資料庫" }
+    },
+    {
+      "left": { "en": "KV", "zh": "KV" },
+      "right": { "en": "Low-latency key-value store", "zh": "低延遲的鍵值儲存" }
+    },
+    {
+      "left": { "en": "Durable Objects", "zh": "Durable Objects" },
+      "right": { "en": "Strongly consistent stateful coordination", "zh": "強一致的狀態協調" }
+    },
+    {
+      "left": { "en": "Workers AI", "zh": "Workers AI" },
+      "right": { "en": "Run AI models on the edge", "zh": "在邊緣執行 AI 模型" }
+    },
+    {
+      "left": { "en": "Vectorize", "zh": "Vectorize" },
+      "right": { "en": "Vector database for embeddings", "zh": "存放向量嵌入的資料庫" }
+    },
+    {
+      "left": { "en": "Turnstile", "zh": "Turnstile" },
+      "right": { "en": "CAPTCHA-free bot protection", "zh": "免 CAPTCHA 的機器人防護" }
+    }
+  ]
+}

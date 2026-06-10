@@ -1,0 +1,75 @@
+{
+  "slug": "truefalse-basics",
+  "category": "arcade",
+  "layout": "game-truefalse",
+  "group": { "en": "True or False", "zh": "真假快答" },
+  "icon": "fact_check",
+  "title": { "en": "True or false: the basics", "zh": "真假快答：基礎篇" },
+  "subtitle": { "en": "Tap true or false before the timer runs out", "zh": "在時間用完前點真或假" },
+  "hero": {
+    "badge": { "en": "Game", "zh": "小遊戲" },
+    "tagline": { "en": "Twelve Cloudflare claims — spot the true ones before the clock beats you.", "zh": "十二句關於 Cloudflare 的說法，在時間到之前抓出真的那些。" }
+  },
+  "statements": [
+    {
+      "text": { "en": "Cloudflare Workers run at the edge, close to your users.", "zh": "Cloudflare Workers 在邊緣執行，靠近你的使用者。" },
+      "answer": true,
+      "explain": { "en": "Workers run in Cloudflare's global edge network, so code executes near each visitor.", "zh": "Workers 在 Cloudflare 的全球邊緣網路執行，程式碼會在離訪客最近的地方跑。" }
+    },
+    {
+      "text": { "en": "R2 charges egress fees every time you download a file.", "zh": "R2 每次下載檔案都要收流出費。" },
+      "answer": false,
+      "explain": { "en": "R2 has zero egress fees — that's its headline advantage over other object stores.", "zh": "R2 流出免費，這正是它勝過其他物件儲存的招牌特色。" }
+    },
+    {
+      "text": { "en": "Workers KV is strongly consistent, so a write appears everywhere instantly.", "zh": "Workers KV 是強一致的，所以寫入會立刻在各地出現。" },
+      "answer": false,
+      "explain": { "en": "KV is eventually consistent; updates can take a short time to reach every edge location.", "zh": "KV 是最終一致，更新可能要過一小段時間才會傳到每個邊緣節點。" }
+    },
+    {
+      "text": { "en": "D1 is Cloudflare's serverless SQL database.", "zh": "D1 是 Cloudflare 的無伺服器 SQL 資料庫。" },
+      "answer": true,
+      "explain": { "en": "D1 is a SQLite-based SQL database you query with familiar SQL statements.", "zh": "D1 以 SQLite 為基礎，你可以用熟悉的 SQL 語法查詢它。" }
+    },
+    {
+      "text": { "en": "Durable Objects provide strong consistency for coordinating state.", "zh": "Durable Objects 為協調狀態提供強一致性。" },
+      "answer": true,
+      "explain": { "en": "Each Durable Object is a single authoritative instance, giving strong consistency for its state.", "zh": "每個 Durable Object 都是唯一的權威實例，因此它的狀態具有強一致性。" }
+    },
+    {
+      "text": { "en": "To run Workers you must rent and manage your own servers.", "zh": "要執行 Workers，你必須自己租用並管理伺服器。" },
+      "answer": false,
+      "explain": { "en": "Workers are serverless — Cloudflare runs and scales them for you, no servers to manage.", "zh": "Workers 是無伺服器的，Cloudflare 幫你執行與擴展，不用自己管伺服器。" }
+    },
+    {
+      "text": { "en": "Wrangler is the command-line tool for building and deploying Workers.", "zh": "Wrangler 是用來建置與部署 Workers 的命令列工具。" },
+      "answer": true,
+      "explain": { "en": "Wrangler is the official CLI for creating, developing, and deploying Workers projects.", "zh": "Wrangler 是官方 CLI，用來建立、開發與部署 Workers 專案。" }
+    },
+    {
+      "text": { "en": "KV is the best place to store large video files.", "zh": "KV 是存放大型影片檔的最佳選擇。" },
+      "answer": false,
+      "explain": { "en": "KV is for small key-value data; large files belong in R2 object storage instead.", "zh": "KV 適合小型的鍵值資料；大型檔案應該放在 R2 物件儲存。" }
+    },
+    {
+      "text": { "en": "Cloudflare's CDN caches content close to users to speed up load times.", "zh": "Cloudflare 的 CDN 把內容快取到使用者附近，加快載入速度。" },
+      "answer": true,
+      "explain": { "en": "The CDN stores copies at edge locations worldwide so content loads from nearby.", "zh": "CDN 在全球邊緣節點存放副本，讓內容能就近載入。" }
+    },
+    {
+      "text": { "en": "Cloudflare Pages is a relational database service.", "zh": "Cloudflare Pages 是一種關聯式資料庫服務。" },
+      "answer": false,
+      "explain": { "en": "Pages deploys websites and frontends; for a SQL database you'd use D1.", "zh": "Pages 是用來部署網站與前端的；要 SQL 資料庫應該用 D1。" }
+    },
+    {
+      "text": { "en": "Cloudflare offers unlimited DDoS protection on every plan, including Free.", "zh": "Cloudflare 在每種方案都提供無限 DDoS 防護，包含免費方案。" },
+      "answer": true,
+      "explain": { "en": "Unmetered DDoS mitigation is included for all customers, even on the Free plan.", "zh": "不限量的 DDoS 防護對所有客戶都包含在內，連免費方案也有。" }
+    },
+    {
+      "text": { "en": "Workers can only be written in Python; JavaScript is not supported.", "zh": "Workers 只能用 Python 寫，不支援 JavaScript。" },
+      "answer": false,
+      "explain": { "en": "Workers fully support JavaScript and TypeScript, with Python and Rust available too.", "zh": "Workers 完整支援 JavaScript 與 TypeScript，也可以用 Python 與 Rust。" }
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "slug": "waf",
+  "category": "security",
+  "icon": "gpp_good",
+  "title": { "en": "WAF", "zh": "WAF 網站應用程式防火牆" },
+  "subtitle": {
+    "en": "A smart firewall that blocks malicious web requests before they reach your site",
+    "zh": "在惡意請求抵達你的網站前就把它擋下來的智慧防火牆"
+  },
+  "hero": {
+    "badge": { "en": "Security", "zh": "安全" },
+    "tagline": {
+      "en": "Your website's bouncer — it checks every visitor at the door and turns away the bad ones.",
+      "zh": "你網站門口的保全 —— 每位訪客進門前都先檢查一遍，把壞人擋在外面。"
+    }
+  },
+  "stats": [
+    { "value": "OWASP Top 10", "label": { "en": "Common attacks covered", "zh": "涵蓋最常見攻擊" } },
+    { "value": "Free", "label": { "en": "Basic ruleset on all plans", "zh": "所有方案都有基本規則" } },
+    { "value": "Auto-updated", "label": { "en": "Managed rules", "zh": "託管規則自動更新" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is WAF?", "zh": "WAF 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "WAF stands for Web Application Firewall. It sits in front of your website and inspects every incoming request, blocking the ones that look like attacks while letting normal visitors through.",
+            "zh": "WAF 全名是 Web Application Firewall（網站應用程式防火牆）。它擋在你網站的最前面，檢查每一筆進來的請求（request，瀏覽器向網站發出的要求），把看起來像攻擊的擋掉，正常訪客則放行。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "A traditional firewall blocks based on IP addresses and ports. A WAF is smarter — it understands web traffic, so it can spot tricks hidden inside a request, like someone trying to steal your database contents through a login form.",
+            "zh": "傳統防火牆是用 IP 位址和連接埠（port）來擋；WAF 更聰明，它看得懂網頁流量，能揪出藏在請求裡的把戲 —— 例如有人想透過登入表單偷走你的資料庫內容。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "security",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A nightclub bouncer with a watchlist. Regular guests walk in fine, but anyone matching a known troublemaker pattern gets stopped at the door — no matter how they're dressed up.",
+            "zh": "一位拿著黑名單的夜店保全。一般客人正常進場，但只要符合已知麻煩人物的特徵，就會被攔在門口 —— 不管他怎麼喬裝打扮。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Websites are constantly probed by automated attacks. The WAF gives you protection against the most common and dangerous ones without you needing to be a security expert.",
+            "zh": "網站隨時都被自動化攻擊掃描測試。WAF 讓你不必是資安專家，也能擋下最常見、最危險的那幾類攻擊。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "code_off",
+              "title": { "en": "SQL injection", "zh": "SQL 注入攻擊" },
+              "text": {
+                "en": "Attackers sneak database commands into a form to read or delete your data. WAF spots and blocks these.",
+                "zh": "攻擊者把資料庫指令偷渡進表單，藉此讀取或刪除你的資料。WAF 會辨識並擋下這類攻擊（SQL 注入）。"
+              }
+            },
+            {
+              "icon": "script",
+              "title": { "en": "Cross-site scripting (XSS)", "zh": "跨站腳本攻擊（XSS）" },
+              "text": {
+                "en": "Malicious scripts injected into your pages to hijack visitors' sessions. WAF filters them out.",
+                "zh": "把惡意腳本塞進你的頁面，藉此劫持訪客的登入狀態。WAF 會把它過濾掉。"
+              }
+            },
+            {
+              "icon": "bug_report",
+              "title": { "en": "Zero-day exploits", "zh": "零時差漏洞" },
+              "text": {
+                "en": "Brand-new vulnerabilities. Cloudflare's managed rules update fast to cover them.",
+                "zh": "剛被發現、還沒修補的全新漏洞（零時差）。Cloudflare 的託管規則會快速更新來防堵。"
+              }
+            },
+            {
+              "icon": "key_off",
+              "title": { "en": "Stolen credentials", "zh": "外洩帳密" },
+              "text": {
+                "en": "Blocks login attempts that use known leaked username/password pairs.",
+                "zh": "擋下用已知外洩帳號密碼來嘗試登入的行為。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shopping_cart",
+              "title": { "en": "Online stores", "zh": "線上商店" },
+              "text": {
+                "en": "Anywhere you handle payments or customer data, you want an extra layer of defense.",
+                "zh": "只要會處理付款或顧客資料，就該多一層防護。"
+              }
+            },
+            {
+              "icon": "login",
+              "title": { "en": "Sites with logins", "zh": "有登入功能的網站" },
+              "text": {
+                "en": "Login pages are prime targets for credential-stuffing and injection attacks.",
+                "zh": "登入頁是帳密填充與注入攻擊的首要目標。"
+              }
+            },
+            {
+              "icon": "api",
+              "title": { "en": "Public APIs", "zh": "對外開放的 API" },
+              "text": {
+                "en": "APIs accept data from anywhere — exactly where WAF rules help most.",
+                "zh": "API 會從各處接收資料，正是 WAF 規則最派得上用場的地方。"
+              }
+            },
+            {
+              "icon": "trending_up",
+              "title": { "en": "Growing traffic", "zh": "流量成長中" },
+              "text": {
+                "en": "The more popular you get, the more bots and attackers find you.",
+                "zh": "你越紅，越多機器人和攻擊者會找上門。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to get started", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Once your domain is on Cloudflare, the WAF lives under Security in the dashboard. Here's how to turn on protection and write your first custom rule.",
+            "zh": "只要你的網域已經接上 Cloudflare，WAF 就在儀表板的「Security（安全）」底下。以下教你開啟防護並寫出第一條自訂規則。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Add your site to Cloudflare", "zh": "把網站加進 Cloudflare" },
+              "text": {
+                "en": "Sign up, add your domain, and point your nameservers to Cloudflare so traffic flows through it.",
+                "zh": "註冊、加入你的網域，把名稱伺服器（nameserver）改指向 Cloudflare，流量就會經過它。"
+              }
+            },
+            {
+              "title": { "en": "Enable Managed Rules", "zh": "開啟託管規則" },
+              "text": {
+                "en": "Go to Security → WAF → Managed rules. Deploy the Cloudflare Managed Ruleset (and the free ruleset on the Free plan) to instantly cover OWASP Top 10 attacks.",
+                "zh": "進入 Security → WAF → Managed rules（託管規則）。部署 Cloudflare Managed Ruleset（免費方案則是 Free 託管規則組），立刻涵蓋 OWASP Top 10 攻擊。"
+              }
+            },
+            {
+              "title": { "en": "Create a custom rule", "zh": "建立自訂規則" },
+              "text": {
+                "en": "Go to Security → WAF → Custom rules → Create rule. Build a condition (e.g. block visitors from a country, or requests to /admin) and pick an action like Block or Managed Challenge.",
+                "zh": "進入 Security → WAF → Custom rules（自訂規則）→ Create rule。設定條件（例如擋掉某國家的訪客，或對 /admin 的請求），再選一個動作，像是 Block（封鎖）或 Managed Challenge（智慧驗證）。"
+              },
+              "code": {
+                "lang": "text",
+                "body": "When incoming requests match:\n  (http.request.uri.path contains \"/admin\")\n  and (ip.src.country ne \"TW\")\nThen:\n  Action: Block"
+              }
+            },
+            {
+              "title": { "en": "Add a rate limit", "zh": "加上速率限制" },
+              "text": {
+                "en": "Go to Security → WAF → Rate limiting rules to cap how many requests one visitor can send — great against brute-force login attempts. The Free plan includes one rate-limiting rule.",
+                "zh": "進入 Security → WAF → Rate limiting rules（速率限制），限制單一訪客在一段時間內能送出的請求數 —— 對付暴力破解登入超有效。免費方案內含一條速率限制規則。"
+              }
+            },
+            {
+              "title": { "en": "Watch Security Events", "zh": "查看安全事件" },
+              "text": {
+                "en": "Open Security → Events to see what got blocked and why, then fine-tune your rules so real visitors aren't caught by mistake.",
+                "zh": "打開 Security → Events（安全事件），看看擋下了什麼、為什麼擋，再微調規則，避免誤傷真正的訪客。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shield",
+              "title": { "en": "Managed Rules", "zh": "託管規則" },
+              "text": {
+                "en": "Pre-built, auto-updated rule packs maintained by Cloudflare's security team — protection with zero setup.",
+                "zh": "由 Cloudflare 資安團隊維護、會自動更新的現成規則組 —— 不用自己設定就有防護。"
+              }
+            },
+            {
+              "icon": "list_alt",
+              "title": { "en": "OWASP Core Ruleset", "zh": "OWASP 核心規則組" },
+              "text": {
+                "en": "Industry-standard rules using anomaly scoring: each suspicious signal adds points, and the request is blocked once the score crosses a threshold.",
+                "zh": "業界標準規則，採「異常分數」機制：每個可疑訊號加一點分，分數超過門檻就封鎖該請求。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "Custom Rules", "zh": "自訂規則" },
+              "text": {
+                "en": "Your own if-this-then-that rules written in Cloudflare's filter expression language.",
+                "zh": "你自己寫的「如果…就…」規則，用 Cloudflare 的篩選運算式語法撰寫。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Rate Limiting", "zh": "速率限制" },
+              "text": {
+                "en": "Caps requests per visitor over time to stop floods and brute-force attempts.",
+                "zh": "限制每位訪客在一段時間內的請求量，阻止洪水攻擊與暴力破解。"
+              }
+            },
+            {
+              "icon": "psychology",
+              "title": { "en": "Managed Challenge", "zh": "智慧驗證" },
+              "text": {
+                "en": "Instead of blocking outright, it asks the visitor to prove they're human — bots usually fail.",
+                "zh": "不直接封鎖，而是請訪客證明自己是真人 —— 機器人通常過不了關。"
+              }
+            },
+            {
+              "icon": "stacked_line_chart",
+              "title": { "en": "Attack Score", "zh": "攻擊分數" },
+              "text": {
+                "en": "A machine-learning score (Pro+ plans) rating how likely a request is an attack, even brand-new ones.",
+                "zh": "機器學習給出的分數（Pro 以上方案），評估一筆請求有多像攻擊，連全新手法也抓得到。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "lightbulb",
+          "title": { "en": "Start in Log mode", "zh": "先用 Log 模式試水溫" },
+          "text": {
+            "en": "Set new rules to Log (instead of Block) for a few days first. Watch the events, confirm you're not catching real users, then switch to Block.",
+            "zh": "新規則先設成 Log（只記錄、不封鎖）跑幾天，觀察事件確認沒誤傷真正使用者，再切換成 Block。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "The Free plan includes a managed ruleset for high-impact vulnerabilities, basic custom rules, and one rate-limiting rule.",
+              "Advanced managed rulesets, attack scoring, and more rate-limiting rules come with Pro, Business, and Enterprise plans.",
+              "WAF runs after Cloudflare's DDoS protection, so volumetric floods are already filtered before your rules even see them.",
+              "Sensitive Data Detection (flags leaked data like credit card numbers in responses) is an Enterprise feature."
+            ],
+            "zh": [
+              "免費方案就含一組針對高風險漏洞的託管規則、基本自訂規則，以及一條速率限制規則。",
+              "進階託管規則組、攻擊分數、更多速率限制規則，要 Pro、Business、Enterprise 方案。",
+              "WAF 跑在 Cloudflare 的 DDoS 防護之後，所以大量洪水攻擊（DDoS，分散式阻斷服務攻擊）在你的規則看到之前就先被濾掉了。",
+              "敏感資料偵測（在回應中標記出外洩的信用卡號等資料）是 Enterprise 方案功能。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "turnstile", "label": { "en": "Turnstile", "zh": "Turnstile" } },
+    { "slug": "ssl-tls", "label": { "en": "SSL/TLS", "zh": "SSL/TLS" } },
+    { "slug": "cdn", "label": { "en": "CDN", "zh": "CDN" } },
+    { "slug": "smart-shield", "label": { "en": "Smart Shield", "zh": "Smart Shield" } }
+  ],
+  "docs": "https://developers.cloudflare.com/waf/"
+}

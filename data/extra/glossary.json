@@ -1,0 +1,254 @@
+{
+  "terms": [
+    {
+      "term": { "en": "Edge", "zh": "邊緣 (Edge)" },
+      "def": { "en": "Servers placed physically close to users all over the world, so data travels a short distance and responses feel fast. Like having a convenience store on every street corner instead of one big warehouse far away.", "zh": "分散在全球、實體上離使用者很近的伺服器；資料傳輸距離短，所以回應感覺很快。就像每個街角都有一家便利商店，而不是只有一間在遠方的大倉庫。" },
+      "cat": { "en": "Core", "zh": "核心概念" }
+    },
+    {
+      "term": { "en": "CDN", "zh": "內容傳遞網路 (CDN)" },
+      "def": { "en": "A worldwide network of servers that keeps copies of a website's files near users, so pages load faster. CDN stands for Content Delivery Network.", "zh": "一個遍布全球的伺服器網路，會在離使用者近的地方存放網站檔案的副本，讓網頁載入更快。CDN 是「內容傳遞網路」的縮寫。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Serverless", "zh": "無伺服器 (Serverless)" },
+      "def": { "en": "A way to run code without renting or managing your own servers; the platform automatically runs it and you only pay when it actually runs. You still use servers, you just don't have to think about them.", "zh": "一種不必自己租用或管理伺服器就能執行程式碼的方式；平台會自動幫你跑，而且只有真的執行時才收費。其實還是有用到伺服器，只是你不用去管它。" },
+      "cat": { "en": "Core", "zh": "核心概念" }
+    },
+    {
+      "term": { "en": "Worker", "zh": "Worker (邊緣函式)" },
+      "def": { "en": "A small piece of code that runs on Cloudflare's edge servers close to users, handling each web request in milliseconds. Think of it as a tiny helper that greets every visitor at the nearest door.", "zh": "一小段在 Cloudflare 邊緣伺服器上、靠近使用者執行的程式碼，能在幾毫秒內處理每個網路請求。可以把它想成一個小幫手，在最近的門口迎接每位訪客。" },
+      "cat": { "en": "Compute", "zh": "運算" }
+    },
+    {
+      "term": { "en": "Cold start", "zh": "冷啟動 (Cold start)" },
+      "def": { "en": "The short delay when code has to wake up and get ready before handling its first request. Cloudflare Workers are designed to have essentially zero cold start, so there is almost no wait.", "zh": "程式碼在處理第一個請求前，需要先「醒來」並準備就緒所造成的短暫延遲。Cloudflare Workers 設計成幾乎零冷啟動，所以幾乎不用等。" },
+      "cat": { "en": "Compute", "zh": "運算" }
+    },
+    {
+      "term": { "en": "Wrangler", "zh": "Wrangler (命令列工具)" },
+      "def": { "en": "Cloudflare's command-line tool for building, testing, and deploying Workers from your computer. It's the main remote control developers use to ship code to the edge.", "zh": "Cloudflare 用來在你電腦上建置、測試與部署 Workers 的命令列工具。它是開發者把程式碼送上邊緣時最常用的遙控器。" },
+      "cat": { "en": "Tools", "zh": "工具" }
+    },
+    {
+      "term": { "en": "Workers KV", "zh": "Workers KV (鍵值儲存)" },
+      "def": { "en": "A simple storage service that saves data as key-value pairs (a name and its value) and copies it across the globe for fast reads everywhere. Great for settings, small data, and things read far more often than they're changed.", "zh": "一種簡單的儲存服務，用鍵值對（一個名稱配一個值）存放資料，並複製到全球各地讓任何地方都能快速讀取。很適合存設定、小型資料，以及讀取遠多於修改的內容。" },
+      "cat": { "en": "Storage", "zh": "儲存" }
+    },
+    {
+      "term": { "en": "R2", "zh": "R2 (物件儲存)" },
+      "def": { "en": "Cloudflare's storage for large files like images, videos, and backups, with no fee for downloading your data out. Like a giant online hard drive that doesn't charge you to take files back out.", "zh": "Cloudflare 用來存放圖片、影片、備份等大型檔案的儲存服務，而且把資料下載出去不收流出費。就像一個超大的線上硬碟，把檔案拿回來時不會跟你收錢。" },
+      "cat": { "en": "Storage", "zh": "儲存" }
+    },
+    {
+      "term": { "en": "D1", "zh": "D1 (SQL 資料庫)" },
+      "def": { "en": "Cloudflare's serverless SQL database, built on SQLite, for storing structured data in tables with rows and columns. Good when you need real queries, like a tidy spreadsheet you can ask questions about.", "zh": "Cloudflare 以 SQLite 為基礎打造的無伺服器 SQL 資料庫，用表格（含列與欄）存放結構化資料。當你需要真正的查詢時很好用，就像一張可以對它提問的整齊試算表。" },
+      "cat": { "en": "Storage", "zh": "儲存" }
+    },
+    {
+      "term": { "en": "Durable Object", "zh": "Durable Object (持久物件)" },
+      "def": { "en": "A special Worker that remembers its own data and guarantees only one copy exists for a given name, so it's perfect for coordinating things like chat rooms or live counters. Think of it as one trusted clerk who always handles the same desk.", "zh": "一種會記住自己資料的特殊 Worker，並保證同一個名稱只存在唯一一份，所以很適合協調聊天室、即時計數器這類東西。可以把它想成一位固定負責同一個櫃台、值得信賴的櫃員。" },
+      "cat": { "en": "Compute", "zh": "運算" }
+    },
+    {
+      "term": { "en": "Queue", "zh": "佇列 (Queue)" },
+      "def": { "en": "A waiting line for tasks: your app drops jobs in, and they get processed one by one in the background so nothing is lost during busy spikes. Like a deli ticket line that keeps orders in order.", "zh": "給任務排隊用的等候線：你的應用把工作丟進去，系統就在背景一個一個處理，這樣在尖峰忙碌時也不會漏掉任何一件。就像熟食店的抽號碼牌，把點單按順序處理好。" },
+      "cat": { "en": "Compute", "zh": "運算" }
+    },
+    {
+      "term": { "en": "Vectorize", "zh": "Vectorize (向量資料庫)" },
+      "def": { "en": "A database that stores 'embeddings' (lists of numbers representing meaning) and quickly finds items with similar meaning. It powers search by idea rather than by exact words.", "zh": "一種儲存「嵌入向量」（用一串數字代表語意）的資料庫，能快速找出語意相近的項目。它讓搜尋可以依「意思」來找，而不是只比對一模一樣的字。" },
+      "cat": { "en": "AI", "zh": "人工智慧" }
+    },
+    {
+      "term": { "en": "Embedding", "zh": "嵌入向量 (Embedding)" },
+      "def": { "en": "A list of numbers that captures the meaning of a piece of text, image, or audio, so a computer can compare how similar two things are. Words with similar meaning end up with similar numbers.", "zh": "一串能捕捉文字、圖片或聲音「語意」的數字，讓電腦可以比較兩個東西有多相似。意思相近的詞，算出來的數字也會相近。" },
+      "cat": { "en": "AI", "zh": "人工智慧" }
+    },
+    {
+      "term": { "en": "RAG", "zh": "檢索增強生成 (RAG)" },
+      "def": { "en": "A technique where an AI first looks up relevant facts from your own documents, then uses them to answer, giving more accurate and up-to-date replies. RAG stands for Retrieval-Augmented Generation.", "zh": "一種讓 AI 先從你自己的文件裡查出相關資訊、再據此回答的技巧，能讓答案更準確也更即時。RAG 是「檢索增強生成」的縮寫。" },
+      "cat": { "en": "AI", "zh": "人工智慧" }
+    },
+    {
+      "term": { "en": "Inference", "zh": "推論 (Inference)" },
+      "def": { "en": "The act of actually using a trained AI model to get an answer, such as generating text or classifying an image. Training is teaching the model; inference is asking it to do the work.", "zh": "實際使用一個訓練好的 AI 模型來得到結果的動作，例如生成文字或辨識圖片。訓練是在「教」模型，推論則是「請」它做事。" },
+      "cat": { "en": "AI", "zh": "人工智慧" }
+    },
+    {
+      "term": { "en": "AI Gateway", "zh": "AI Gateway (AI 閘道)" },
+      "def": { "en": "A control point that sits between your app and AI models to add caching, rate limits, logging, and cost tracking. Like a smart receptionist that manages and records every request to your AI.", "zh": "一個位於你的應用與 AI 模型之間的控制點，可加上快取、流量限制、紀錄與成本追蹤。就像一位聰明的櫃台人員，管理並記錄每一筆送往 AI 的請求。" },
+      "cat": { "en": "AI", "zh": "人工智慧" }
+    },
+    {
+      "term": { "en": "GPU", "zh": "圖形處理器 (GPU)" },
+      "def": { "en": "A specialized chip that does many calculations at once, which makes it ideal for running AI models. Cloudflare runs your AI on GPUs at the edge so you don't have to buy your own.", "zh": "一種能同時進行大量運算的特殊晶片，因此特別適合用來執行 AI 模型。Cloudflare 會在邊緣用 GPU 幫你跑 AI，你就不必自己購買。" },
+      "cat": { "en": "AI", "zh": "人工智慧" }
+    },
+    {
+      "term": { "en": "WAF", "zh": "網站應用防火牆 (WAF)" },
+      "def": { "en": "A filter that inspects incoming web traffic and blocks malicious requests like hacking attempts before they reach your site. WAF stands for Web Application Firewall; think of it as a bouncer at the door.", "zh": "一種會檢查進入的網路流量、在惡意請求（例如駭客攻擊）抵達你網站前就擋下的過濾器。WAF 是「網站應用防火牆」的縮寫，可以想成門口的保全。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "DDoS", "zh": "分散式阻斷服務攻擊 (DDoS)" },
+      "def": { "en": "An attack that floods a website with huge amounts of fake traffic to overwhelm it and knock it offline. Like a crowd jamming a shop's doorway so real customers can't get in.", "zh": "一種用海量假流量灌爆網站、讓它癱瘓並下線的攻擊。就像一群人把店門口擠爆，讓真正的顧客進不去。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "TLS / SSL", "zh": "傳輸層安全協定 (TLS / SSL)" },
+      "def": { "en": "The technology that encrypts the connection between a browser and a website so others can't read or tamper with the data. SSL is the older name; TLS is the modern version, and both put the padlock in your browser.", "zh": "一種把瀏覽器與網站之間的連線加密的技術，讓別人無法偷看或竄改資料。SSL 是較舊的名稱，TLS 是現代版本，兩者都會讓瀏覽器顯示那把鎖頭圖示。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Certificate", "zh": "憑證 (Certificate)" },
+      "def": { "en": "A digital ID card that proves a website really is who it claims to be and enables the encrypted padlock connection. A trusted authority issues it, like a government issuing a passport.", "zh": "一張數位身分證，用來證明某網站確實是它所宣稱的身分，並啟用加密的鎖頭連線。它由受信任的機構簽發，就像政府核發護照一樣。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "DNS", "zh": "網域名稱系統 (DNS)" },
+      "def": { "en": "The internet's phone book that turns a human-friendly name like example.com into the numeric address computers use to connect. DNS stands for Domain Name System.", "zh": "網際網路的電話簿，會把像 example.com 這種人類好記的名稱，轉換成電腦連線時用的數字位址。DNS 是「網域名稱系統」的縮寫。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "DNS resolver", "zh": "DNS 解析器 (DNS resolver)" },
+      "def": { "en": "The service your device asks to look up a website's address in the DNS phone book. Cloudflare's free resolver, 1.1.1.1, is known for being fast and private.", "zh": "你的裝置用來向 DNS 電話簿查詢網站位址的服務。Cloudflare 提供的免費解析器 1.1.1.1 以快速又重視隱私聞名。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "CNAME", "zh": "別名紀錄 (CNAME)" },
+      "def": { "en": "A DNS record that points one domain name to another, like a forwarding address. For example, www.example.com can be a CNAME that points to example.com.", "zh": "一種 DNS 紀錄，用來把一個網域名稱指向另一個，就像郵件的轉寄地址。例如 www.example.com 可以設成指向 example.com 的 CNAME。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Cache", "zh": "快取 (Cache)" },
+      "def": { "en": "A temporary copy of data kept close to users so it can be served instantly without fetching it again from far away. Like keeping snacks in your desk drawer instead of walking to the store each time.", "zh": "把資料的暫存副本放在靠近使用者的地方，這樣就能立刻提供、不必再大老遠重新取一次。就像把零食放在辦公桌抽屜，而不是每次都走去商店買。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "TTL", "zh": "存活時間 (TTL)" },
+      "def": { "en": "How long a cached copy or DNS record is allowed to be kept before it must be refreshed. TTL stands for Time To Live; a short TTL means data updates more often.", "zh": "一份快取副本或 DNS 紀錄在必須更新之前，可以被保留多久。TTL 是「存活時間」的縮寫；TTL 越短，代表資料更新得越頻繁。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Egress fee", "zh": "資料流出費 (Egress fee)" },
+      "def": { "en": "A charge some cloud providers add when you download or move your data out of their storage. Cloudflare R2 famously has zero egress fees, so taking your files out is free.", "zh": "某些雲端供應商在你把資料下載或搬出其儲存空間時加收的費用。Cloudflare R2 以零資料流出費聞名，所以把檔案拿出來不用付錢。" },
+      "cat": { "en": "Storage", "zh": "儲存" }
+    },
+    {
+      "term": { "en": "Object storage", "zh": "物件儲存 (Object storage)" },
+      "def": { "en": "A way of storing files as standalone 'objects' (the file plus its info) that scales to huge amounts of data. Ideal for photos, videos, and backups; R2 is Cloudflare's object storage.", "zh": "一種把檔案當作獨立「物件」（檔案本身加上它的資訊）來存放的方式，可以擴充到非常龐大的資料量。很適合放照片、影片與備份；R2 就是 Cloudflare 的物件儲存。" },
+      "cat": { "en": "Storage", "zh": "儲存" }
+    },
+    {
+      "term": { "en": "Key-value", "zh": "鍵值 (Key-value)" },
+      "def": { "en": "A simple way to store data as pairs: a unique 'key' (the label) and its 'value' (the content), like a word and its definition in a dictionary. Fast to look up when you know the key.", "zh": "一種把資料存成「對」的簡單方式：一個獨一無二的「鍵」（標籤）配上它的「值」（內容），就像字典裡的詞與它的解釋。只要知道鍵，就能很快查到。" },
+      "cat": { "en": "Storage", "zh": "儲存" }
+    },
+    {
+      "term": { "en": "Zero Trust", "zh": "零信任 (Zero Trust)" },
+      "def": { "en": "A security approach that never assumes anyone is safe just because they're inside the network; every user and request must prove itself every time. The motto is 'never trust, always verify.'", "zh": "一種資安做法，不會因為某人已在內部網路就假設他是安全的；每個使用者與每次請求都必須每次都證明自己。其精神就是「永不信任，每次驗證」。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Tunnel (cloudflared)", "zh": "通道 / cloudflared (Tunnel)" },
+      "def": { "en": "A secure, encrypted connection that lets Cloudflare reach a server or app without opening it directly to the public internet. The small program that creates it is called cloudflared.", "zh": "一條安全、加密的連線，讓 Cloudflare 能連到某台伺服器或應用，而不必把它直接暴露在公開網際網路上。負責建立這條通道的小程式叫做 cloudflared。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Access", "zh": "Access (存取控管)" },
+      "def": { "en": "A Cloudflare service that puts a login check in front of your internal apps, so only approved people can reach them, no VPN needed. Like a guest list at the door of a private app.", "zh": "一項 Cloudflare 服務，在你的內部應用前面加上一道登入檢查，只有經核准的人才能進入，不需要 VPN。就像在私人應用門口擺一份賓客名單。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Gateway", "zh": "Gateway (安全閘道)" },
+      "def": { "en": "Cloudflare's secure web gateway that filters an organization's internet traffic to block malware and unwanted sites. Think of it as a safety checkpoint for everything your team browses.", "zh": "Cloudflare 的安全網路閘道，會過濾組織的網路流量，攔截惡意程式與不該造訪的網站。可以把它想成你的團隊上網時的一道安全檢查哨。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Turnstile", "zh": "Turnstile (人機驗證)" },
+      "def": { "en": "Cloudflare's friendly alternative to puzzle CAPTCHAs that quietly checks whether a visitor is a real person, usually without making them click anything. Less annoying, still keeps bots out.", "zh": "Cloudflare 推出、用來取代拼圖式 CAPTCHA 的友善方案，會在背後悄悄確認訪客是不是真人，通常不必讓你點任何東西。沒那麼惱人，又一樣能擋掉機器人。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "CAPTCHA", "zh": "驗證碼 (CAPTCHA)" },
+      "def": { "en": "Those 'prove you're human' challenges, like picking out traffic lights, used to tell people apart from bots. They can be annoying, which is why tools like Turnstile aim to replace them.", "zh": "那種「證明你是人類」的小測驗，例如挑出有紅綠燈的圖片，用來分辨真人與機器人。它們有時很惱人，所以才會出現像 Turnstile 這類想取代它的工具。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Rate limiting", "zh": "流量限制 (Rate limiting)" },
+      "def": { "en": "A rule that caps how many requests someone can make in a period of time, protecting a site from abuse and overload. Like a 'one free sample per customer' policy.", "zh": "一條規則，限制某個來源在一段時間內可以送出多少請求，藉此保護網站不被濫用或灌爆。就像「每位顧客限拿一份試吃」的規定。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Bot", "zh": "機器人 (Bot)" },
+      "def": { "en": "An automated program that visits websites instead of a human, sometimes helpful (like search engines) and sometimes harmful (like scrapers or attackers). Cloudflare helps tell the good ones from the bad.", "zh": "一種會自動造訪網站、而非真人的程式，有時有益（例如搜尋引擎），有時有害（例如爬資料的或攻擊者）。Cloudflare 能幫忙分辨好的與壞的機器人。" },
+      "cat": { "en": "Security", "zh": "安全" }
+    },
+    {
+      "term": { "en": "Bindings", "zh": "綁定 (Bindings)" },
+      "def": { "en": "Connections you declare so a Worker can use other resources like a database, storage bucket, or AI model, just by referring to a name in your code. They wire your code to the services it needs.", "zh": "你宣告的一種連結，讓 Worker 只要在程式碼中用一個名稱，就能使用資料庫、儲存桶或 AI 模型等其他資源。它把你的程式碼接到所需的服務上。" },
+      "cat": { "en": "Compute", "zh": "運算" }
+    },
+    {
+      "term": { "en": "wrangler.toml", "zh": "wrangler.toml (設定檔)" },
+      "def": { "en": "The configuration file for a Worker project, where you set its name, entry point, and bindings. It's like the project's settings sheet that Wrangler reads when deploying.", "zh": "一個 Worker 專案的設定檔，你在裡面填寫專案名稱、進入點與綁定。它就像專案的設定表，Wrangler 在部署時會讀取它。" },
+      "cat": { "en": "Tools", "zh": "工具" }
+    },
+    {
+      "term": { "en": "Region / Region: Earth", "zh": "區域 / Region: Earth" },
+      "def": { "en": "Traditional clouds make you pick a 'region' (a data center location) for your app. Cloudflare's 'Region: Earth' idea means your code just runs everywhere automatically, so you don't have to choose.", "zh": "傳統雲端會要你替應用挑一個「區域」（某個資料中心的地點）。Cloudflare 提出的「Region: Earth」概念則是讓你的程式碼自動到處都跑，你不必選。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Anycast", "zh": "任播 (Anycast)" },
+      "def": { "en": "A networking trick where one address is shared by many servers worldwide, and your request is automatically routed to the nearest one. It's how Cloudflare sends you to a close server without you noticing.", "zh": "一種網路技巧，讓全球許多伺服器共用同一個位址，你的請求會自動被導向最近的那一台。Cloudflare 就是用它在你毫無察覺下把你帶到附近的伺服器。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Latency", "zh": "延遲 (Latency)" },
+      "def": { "en": "The time it takes for data to travel from one point to another and back, usually measured in milliseconds. Lower latency feels snappier; it's why being close to users matters.", "zh": "資料從一端傳到另一端再回來所花的時間，通常以毫秒計算。延遲越低，感覺越靈敏；這也是為什麼「離使用者近」這麼重要。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Bandwidth", "zh": "頻寬 (Bandwidth)" },
+      "def": { "en": "How much data can flow through a connection in a given time, like the width of a pipe. More bandwidth means more data can move at once.", "zh": "在一段時間內，一條連線能傳輸多少資料，就像水管的粗細。頻寬越大，代表一次能流過越多資料。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "HTTP", "zh": "超文本傳輸協定 (HTTP)" },
+      "def": { "en": "The basic set of rules browsers and servers use to request and send web pages. HTTP stands for HyperText Transfer Protocol; it's the language of the web.", "zh": "瀏覽器與伺服器用來請求和傳送網頁的基本規則。HTTP 是「超文本傳輸協定」的縮寫，可說是網路的共通語言。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "HTTPS", "zh": "加密超文本傳輸協定 (HTTPS)" },
+      "def": { "en": "HTTP with encryption added by TLS, so the data between you and a website is private and tamper-proof. The 's' stands for secure, and it's shown by the padlock in your browser.", "zh": "在 HTTP 上加了 TLS 加密的版本，讓你與網站之間的資料保持私密、不被竄改。字尾的 s 代表 secure（安全），瀏覽器會用鎖頭圖示來表示。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "IP address", "zh": "IP 位址 (IP address)" },
+      "def": { "en": "A numeric address that identifies a device or server on the internet, like a postal address for data. DNS exists to turn names into these numbers.", "zh": "用來在網際網路上識別某台裝置或伺服器的數字位址，就像資料的郵遞地址。DNS 的存在，就是為了把名稱轉成這些數字。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Origin server", "zh": "源站伺服器 (Origin server)" },
+      "def": { "en": "The original server where a website's real content lives, before Cloudflare caches and serves copies of it. Cloudflare shields the origin and only bothers it when needed.", "zh": "網站真正內容所在的原始伺服器，Cloudflare 會先快取它並提供副本給使用者。Cloudflare 會保護源站，只有在必要時才去打擾它。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "Reverse proxy", "zh": "反向代理 (Reverse proxy)" },
+      "def": { "en": "A server that sits in front of your website, receiving visitors first and then passing requests to your origin. This lets Cloudflare add caching, security, and speed before traffic ever reaches you.", "zh": "一台擺在你網站前面的伺服器，先接住訪客，再把請求轉給你的源站。這讓 Cloudflare 能在流量抵達你之前，先加上快取、安全防護與加速。" },
+      "cat": { "en": "Network", "zh": "網路" }
+    },
+    {
+      "term": { "en": "API", "zh": "應用程式介面 (API)" },
+      "def": { "en": "A defined way for two programs to talk to each other and exchange data, like a waiter taking your order to the kitchen and bringing food back. API stands for Application Programming Interface.", "zh": "兩個程式之間溝通與交換資料的一套既定方式，就像服務生幫你把點單送進廚房、再把餐點端回來。API 是「應用程式介面」的縮寫。" },
+      "cat": { "en": "Core", "zh": "核心概念" }
+    },
+    {
+      "term": { "en": "Cloudflare Pages", "zh": "Cloudflare Pages (網站託管)" },
+      "def": { "en": "A service for hosting websites and front-end apps that builds and deploys them straight from your code repository. Connect your Git project and Cloudflare puts the site online globally.", "zh": "一項用來託管網站與前端應用的服務，會直接從你的程式碼倉庫建置並部署。把你的 Git 專案接上去，Cloudflare 就會把網站上線到全球。" },
+      "cat": { "en": "Compute", "zh": "運算" }
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "cards": [
+    {
+      "front": { "en": "Workers", "zh": "Workers" },
+      "back": {
+        "en": "Run serverless code at the edge — your function runs in 330+ cities close to users, with near-zero cold starts and no servers to manage.",
+        "zh": "在邊緣執行無伺服器（serverless）程式碼——你的函式會在離使用者最近的 330+ 個城市執行，幾乎沒有冷啟動，也不用管理伺服器。"
+      }
+    },
+    {
+      "front": { "en": "Containers", "zh": "Containers" },
+      "back": {
+        "en": "Run full Docker containers on Cloudflare's network when Workers isn't enough — for custom runtimes, large dependencies or longer jobs. Each container is orchestrated by a Durable Object.",
+        "zh": "當 Workers 不夠用時，在 Cloudflare 網路上跑完整的 Docker 容器——適合自訂執行環境、龐大相依套件或較長時間的工作。每個容器由 Durable Object 協調管理。"
+      }
+    },
+    {
+      "front": { "en": "Durable Objects", "zh": "Durable Objects" },
+      "back": {
+        "en": "Stateful serverless objects — each one is a single, addressable instance with its own storage. Perfect for coordination and strong consistency (chat rooms, multiplayer, real-time collaboration).",
+        "zh": "有狀態的無伺服器物件——每一個都是單一、可定址的實例，擁有自己的儲存空間。最適合做協調與強一致性的場景（聊天室、多人遊戲、即時協作）。"
+      }
+    },
+    {
+      "front": { "en": "Queues", "zh": "Queues" },
+      "back": {
+        "en": "A message queue for Workers. Producers drop messages in; consumers process them later with automatic retries and batching — so slow work doesn't block your app.",
+        "zh": "給 Workers 用的訊息佇列（queue）。生產者把訊息丟進去，消費者稍後再處理，並自動重試與批次處理——讓耗時的工作不會卡住你的應用程式。"
+      }
+    },
+    {
+      "front": { "en": "Workers AI", "zh": "Workers AI" },
+      "back": {
+        "en": "Run AI models (LLMs, image generation, speech-to-text) on Cloudflare's GPU network with a simple API. Pay only for what you use, no GPUs to manage.",
+        "zh": "用簡單的 API 在 Cloudflare 的 GPU 網路上執行 AI 模型（大型語言模型、圖片生成、語音轉文字）。用多少付多少，不用自己管理 GPU。"
+      }
+    },
+    {
+      "front": { "en": "AI Gateway", "zh": "AI Gateway" },
+      "back": {
+        "en": "A control layer in front of any AI provider (OpenAI, Anthropic, Workers AI…). Adds caching, rate limiting, retries, logging and cost analytics to your AI calls.",
+        "zh": "架在任何 AI 供應商（OpenAI、Anthropic、Workers AI…）前面的控管層。為你的 AI 請求加上快取、流量限制、重試、紀錄與花費分析。"
+      }
+    },
+    {
+      "front": { "en": "Agents", "zh": "Agents" },
+      "back": {
+        "en": "A framework for building AI agents on Workers — stateful, persistent, able to call tools and run on a schedule. Built on Durable Objects so each agent remembers its state.",
+        "zh": "在 Workers 上打造 AI 代理（agent）的框架——有狀態、可持久保存、能呼叫工具並排程執行。建構於 Durable Objects 之上，讓每個代理都能記住自己的狀態。"
+      }
+    },
+    {
+      "front": { "en": "Vectorize", "zh": "Vectorize" },
+      "back": {
+        "en": "A vector database for storing embeddings and doing similarity search. It's the memory behind semantic search and RAG (retrieval-augmented generation).",
+        "zh": "用來存放嵌入向量（embeddings）並做相似度搜尋的向量資料庫。它是語意搜尋與 RAG（檢索增強生成）背後的「記憶體」。"
+      }
+    },
+    {
+      "front": { "en": "Browser Rendering", "zh": "Browser Rendering" },
+      "back": {
+        "en": "Control a headless Chrome browser from a Worker (via Puppeteer/Playwright). Take screenshots, generate PDFs, scrape pages, or render JavaScript-heavy sites.",
+        "zh": "從 Worker 操控一個無頭（headless）Chrome 瀏覽器（透過 Puppeteer／Playwright）。可以截圖、產生 PDF、爬取網頁，或渲染大量使用 JavaScript 的網站。"
+      }
+    },
+    {
+      "front": { "en": "R2", "zh": "R2" },
+      "back": {
+        "en": "Object storage for big files (images, videos, backups), S3-compatible — with zero egress fees, so you don't pay to read your data back out.",
+        "zh": "存放大型檔案（圖片、影片、備份）的物件儲存，相容 S3 API——而且免流出（egress）費用，把資料讀出來不用另外付錢。"
+      }
+    },
+    {
+      "front": { "en": "D1", "zh": "D1" },
+      "back": {
+        "en": "Cloudflare's serverless SQL database, built on SQLite. Use real relational SQL queries (tables, joins, indexes) right from your Workers.",
+        "zh": "Cloudflare 的無伺服器 SQL 資料庫，建構於 SQLite 之上。可以直接在 Workers 裡用真正的關聯式 SQL 查詢（資料表、JOIN、索引）。"
+      }
+    },
+    {
+      "front": { "en": "Workers KV", "zh": "Workers KV" },
+      "back": {
+        "en": "A globally distributed key-value store. Eventually consistent and optimized for very fast reads of small values (config, sessions, feature flags).",
+        "zh": "全球分散式的鍵值（key-value）儲存。採最終一致性，專為小資料的超快讀取最佳化（設定、工作階段、功能旗標）。"
+      }
+    },
+    {
+      "front": { "en": "Hyperdrive", "zh": "Hyperdrive" },
+      "back": {
+        "en": "Makes your existing regional Postgres/MySQL database feel fast and global from Workers, by pooling connections and caching queries at the edge.",
+        "zh": "透過連線池（connection pool）與在邊緣快取查詢，讓你「現有的」區域型 Postgres／MySQL 資料庫從 Workers 連過去又快又像全球部署。"
+      }
+    },
+    {
+      "front": { "en": "Pipelines", "zh": "Pipelines" },
+      "back": {
+        "en": "Ingest large streams of events/data and load them reliably into R2 — a managed pipeline for high-volume data ingestion without running your own infrastructure.",
+        "zh": "大量接收串流事件／資料，並可靠地寫入 R2——一個託管式的資料匯入管線（pipeline），不用自己架設基礎設施就能處理高流量資料。"
+      }
+    },
+    {
+      "front": { "en": "Images", "zh": "Images" },
+      "back": {
+        "en": "Store, resize, optimize and deliver images from one product. Upload once, then serve many variants (sizes/formats) without running your own image server.",
+        "zh": "一個產品就能儲存、縮放、最佳化並傳遞圖片。上傳一次，就能提供多種變體（尺寸／格式），不必自己架圖片伺服器。"
+      }
+    },
+    {
+      "front": { "en": "Stream", "zh": "Stream" },
+      "back": {
+        "en": "Upload, store, encode and deliver video — both on-demand and live — with a built-in player and adaptive bitrate. Like a self-hosted YouTube backend.",
+        "zh": "上傳、儲存、編碼並傳遞影片——支援隨選（on-demand）與直播——內建播放器與自動調整畫質。就像自己的 YouTube 後端。"
+      }
+    },
+    {
+      "front": { "en": "Realtime", "zh": "Realtime" },
+      "back": {
+        "en": "Build real-time audio, video and data apps (WebRTC) — Cloudflare runs the SFU that relays media between participants. Formerly Cloudflare Calls.",
+        "zh": "打造即時音訊、視訊與資料應用（WebRTC）——由 Cloudflare 提供 SFU 伺服器，在參與者之間轉送媒體串流。前身為 Cloudflare Calls。"
+      }
+    },
+    {
+      "front": { "en": "WAF", "zh": "WAF" },
+      "back": {
+        "en": "Web Application Firewall — rules that inspect incoming traffic and block attacks (SQL injection, XSS, malicious bots) before they reach your site.",
+        "zh": "Web 應用程式防火牆——用規則檢查進來的流量，在攻擊（SQL 注入、XSS、惡意機器人）抵達你的網站「之前」就擋下來。"
+      }
+    },
+    {
+      "front": { "en": "SSL/TLS", "zh": "SSL/TLS" },
+      "back": {
+        "en": "Free SSL/TLS certificates and HTTPS encryption for your domain, so traffic between visitors and your site is encrypted — that's the padlock in the browser.",
+        "zh": "為你的網域提供免費的 SSL／TLS 憑證與 HTTPS 加密，讓訪客與你網站之間的流量都加密——也就是瀏覽器網址列上的那個鎖頭。"
+      }
+    },
+    {
+      "front": { "en": "Turnstile", "zh": "Turnstile" },
+      "back": {
+        "en": "A privacy-friendly CAPTCHA replacement that proves a visitor is human — usually with no puzzle to solve. Stops bots from abusing your forms and signups.",
+        "zh": "注重隱私的 CAPTCHA 替代方案，用來證明訪客是真人——通常不用解任何拼圖。能擋掉機器人濫用你的表單與註冊。"
+      }
+    },
+    {
+      "front": { "en": "Cloudflare Tunnel", "zh": "Cloudflare Tunnel" },
+      "back": {
+        "en": "Connect a server or app to Cloudflare through an outbound-only tunnel (cloudflared) — no public IP and no open inbound ports, so your origin stays hidden.",
+        "zh": "透過只對外連線的通道（cloudflared）把伺服器或應用程式接到 Cloudflare——不需要公開 IP，也不用開放對內連接埠，來源伺服器因此被隱藏起來。"
+      }
+    },
+    {
+      "front": { "en": "Access", "zh": "Access" },
+      "back": {
+        "en": "Zero Trust access control — put an identity login in front of your internal apps instead of a VPN. Only verified users get in.",
+        "zh": "Zero Trust（零信任）存取控制——在內部應用程式前面擺一道身分登入，取代傳統 VPN。只有通過驗證的使用者才進得來。"
+      }
+    },
+    {
+      "front": { "en": "Gateway", "zh": "Gateway" },
+      "back": {
+        "en": "A Secure Web Gateway that filters your users' outbound DNS and web traffic — blocking malware, phishing and unwanted sites before devices ever connect.",
+        "zh": "安全 Web 閘道，過濾你使用者「對外」的 DNS 與網頁流量——在裝置連上去之前，就擋掉惡意程式、釣魚與不該造訪的網站。"
+      }
+    },
+    {
+      "front": { "en": "DNS", "zh": "DNS" },
+      "back": {
+        "en": "Fast, authoritative DNS that translates domain names (example.com) into IP addresses. Cloudflare runs one of the world's largest, with DNSSEC support.",
+        "zh": "又快又可靠的權威 DNS，把網域名稱（example.com）轉換成 IP 位址。Cloudflare 營運全球最大的 DNS 之一，並支援 DNSSEC。"
+      }
+    },
+    {
+      "front": { "en": "CDN", "zh": "CDN" },
+      "back": {
+        "en": "Content Delivery Network — caches copies of your site in 330+ cities, so each visitor is served from a nearby location and pages load faster.",
+        "zh": "內容傳遞網路（CDN）——在 330+ 個城市快取你網站的副本，讓每位訪客都從就近的據點取得內容，網頁載入更快。"
+      }
+    },
+    {
+      "front": { "en": "Speed", "zh": "Speed" },
+      "back": {
+        "en": "Cloudflare's performance toolkit — measure your site with Observatory, then speed it up with optimizations like Argo Smart Routing, caching tweaks and image tuning.",
+        "zh": "Cloudflare 的效能工具組——用 Observatory 量測你的網站，再透過 Argo 智慧路由、快取調整與圖片最佳化等手段加速。"
+      }
+    },
+    {
+      "front": { "en": "Smart Shield", "zh": "Smart Shield" },
+      "back": {
+        "en": "Cloudflare's always-on, automatic protections that need no setup — smart DDoS mitigation, bot defenses and routing that keep your site secure and fast out of the box.",
+        "zh": "Cloudflare 免設定、隨時運作的自動防護——智慧 DDoS 緩解、機器人防禦與路由最佳化，開箱即用地讓你的網站又安全又快速。"
+      }
+    },
+    {
+      "front": { "en": "Web Analytics", "zh": "Web Analytics" },
+      "back": {
+        "en": "Privacy-first website analytics — no cookies, no cross-site tracking, and it won't slow your page. See visits and Core Web Vitals for free.",
+        "zh": "注重隱私的網站分析——不用 cookie、不跨站追蹤，也不會拖慢你的網頁。免費查看流量與 Core Web Vitals（核心網頁指標）。"
+      }
+    },
+    {
+      "front": { "en": "R2 vs KV vs D1?", "zh": "R2、KV、D1 差在哪？" },
+      "back": {
+        "en": "R2 = big files (object storage, no egress fees). KV = small, fast key-value reads. D1 = relational SQL queries with tables and joins.",
+        "zh": "R2＝大檔案（物件儲存、免流出費）。KV＝又快又小的鍵值讀取。D1＝有資料表與 JOIN 的關聯式 SQL 查詢。"
+      }
+    },
+    {
+      "front": { "en": "WAF vs Turnstile?", "zh": "WAF 和 Turnstile 怎麼選？" },
+      "back": {
+        "en": "WAF filters malicious traffic at the network level (attacks, bad bots) for your whole site. Turnstile is a human check you place on a specific form or login.",
+        "zh": "WAF 在網路層為整個網站過濾惡意流量（攻擊、壞機器人）。Turnstile 則是你放在特定表單或登入頁的「真人驗證」。"
+      }
+    },
+    {
+      "front": { "en": "Tunnel vs Access?", "zh": "Tunnel 和 Access 差在哪？" },
+      "back": {
+        "en": "Tunnel is the secure pipe that connects your private server to Cloudflare (no open ports). Access is the login/policy that decides who's allowed through. They're often used together.",
+        "zh": "Tunnel 是把你私有伺服器接到 Cloudflare 的安全通道（不用開連接埠）。Access 則是決定「誰能通過」的登入與政策。兩者常常搭配使用。"
+      }
+    },
+    {
+      "front": { "en": "Workers vs Containers?", "zh": "Workers 和 Containers 怎麼選？" },
+      "back": {
+        "en": "Workers = lightweight functions, instant scale, near-zero cold starts — great for most web logic. Containers = full Docker images for custom runtimes, big dependencies or longer-running jobs.",
+        "zh": "Workers＝輕量函式、瞬間擴展、幾乎零冷啟動——適合大多數網站邏輯。Containers＝完整的 Docker 映像檔，適合自訂執行環境、龐大相依套件或較長時間的工作。"
+      }
+    }
+  ]
+}

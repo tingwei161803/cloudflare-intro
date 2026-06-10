@@ -1,0 +1,316 @@
+{
+  "slug": "cdn",
+  "category": "performance",
+  "icon": "public",
+  "title": { "en": "CDN & Cache", "zh": "CDN 與快取" },
+  "subtitle": {
+    "en": "A global content delivery network that caches your site close to every visitor",
+    "zh": "全球內容傳遞網路，把你的網站快取在每位訪客身邊"
+  },
+  "hero": {
+    "badge": { "en": "Performance", "zh": "效能" },
+    "tagline": {
+      "en": "Serve images, videos, and pages from a city near your user — not from a faraway server.",
+      "zh": "從離使用者最近的城市送出圖片、影片與網頁，而不是從遙遠的伺服器。"
+    }
+  },
+  "stats": [
+    { "value": "330+", "label": { "en": "Cities in the network", "zh": "網路涵蓋城市" } },
+    { "value": "~50ms", "label": { "en": "From 95% of internet users", "zh": "離 95% 網路使用者的距離" } },
+    { "value": "348 Tbps", "label": { "en": "Network capacity", "zh": "網路總頻寬" } },
+    { "value": "0", "label": { "en": "Extra hardware to buy", "zh": "需要自購的硬體" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is a CDN?", "zh": "CDN 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A CDN (Content Delivery Network) is a worldwide network of servers that keep copies of your website's content close to your visitors. Instead of every request travelling all the way to your one origin server, Cloudflare serves a cached copy from a nearby city — so pages load faster and your server does far less work.",
+            "zh": "CDN（Content Delivery Network，內容傳遞網路）是一個遍布全球的伺服器網路，把你網站內容的複本放在離訪客很近的地方。這樣一來，每個請求就不必千里迢迢回到你唯一的來源伺服器（origin server），Cloudflare 直接從附近的城市送出快取（cache）複本，網頁因此載入更快，你的伺服器也輕鬆許多。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "store",
+          "title": { "en": "Think of it like local convenience stores", "zh": "把它想成街角的便利商店" },
+          "text": {
+            "en": "Imagine one giant warehouse far away (your origin server). A CDN is like opening a convenience store on every street corner (edge nodes) stocked with the most popular items. You grab what you need from the corner store in seconds instead of driving to the warehouse.",
+            "zh": "想像一座遠在天邊的大型倉庫（你的來源伺服器）。CDN 就像在每個街角都開一家便利商店（邊緣節點 edge node），架上擺著最熱賣的商品。你只要到街角店幾秒鐘就拿到東西，不必開車跑去倉庫。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The nearby servers are called edge nodes or edge locations. Cloudflare runs them in 330+ cities, putting content within about 50 milliseconds of 95% of the world's internet-connected population.",
+            "zh": "這些附近的伺服器叫做邊緣節點（edge node）或邊緣據點。Cloudflare 在全球 330 多個城市經營這些節點，讓內容距離全世界 95% 連網人口大約只有 50 毫秒。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use Cloudflare's CDN?", "zh": "為什麼要用 Cloudflare 的 CDN？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Without a CDN, every visitor — no matter where they are — waits for content to travel to and from your single server. That is slow for distant users and risky when traffic spikes.",
+            "zh": "沒有 CDN 時，每位訪客不管在哪，都得等內容在他和你唯一的伺服器之間來回跑。對遠方使用者來說很慢，流量暴增時也很危險。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "rocket_launch",
+              "title": { "en": "Faster everywhere", "zh": "處處都更快" },
+              "text": {
+                "en": "Cached content is served from the city nearest each visitor, cutting the round-trip distance dramatically.",
+                "zh": "快取內容由離每位訪客最近的城市送出，大幅縮短來回距離。"
+              }
+            },
+            {
+              "icon": "savings",
+              "title": { "en": "Cheaper bandwidth", "zh": "頻寬更省錢" },
+              "text": {
+                "en": "Every cache HIT is a request your origin server never sees, so you pay for less origin bandwidth and compute.",
+                "zh": "每一次快取命中（HIT）都是來源伺服器看不到的請求，所以你付的來源頻寬與運算費用更少。"
+              }
+            },
+            {
+              "icon": "trending_up",
+              "title": { "en": "Survives traffic spikes", "zh": "扛得住流量暴衝" },
+              "text": {
+                "en": "When you go viral, Cloudflare absorbs the surge from cache instead of overwhelming your server.",
+                "zh": "當你爆紅時，Cloudflare 用快取吸收暴增的流量，而不是讓你的伺服器被壓垮。"
+              }
+            },
+            {
+              "icon": "toggle_on",
+              "title": { "en": "On by default", "zh": "預設就開啟" },
+              "text": {
+                "en": "Once your site is proxied (orange cloud), common static files are cached automatically — no code changes needed.",
+                "zh": "只要網站經過代理（橘色雲朵），常見的靜態檔案就會自動被快取，完全不用改程式碼。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "How caching works", "zh": "快取是怎麼運作的" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "When a request reaches an edge node, Cloudflare checks whether it already has a fresh copy. Cloudflare tells you the result in a response header called cf-cache-status.",
+            "zh": "當請求抵達邊緣節點，Cloudflare 會檢查自己手上有沒有還新鮮的複本，並透過一個叫 cf-cache-status 的回應標頭（response header）告訴你結果。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "check_circle",
+              "title": { "en": "HIT", "zh": "HIT（命中）" },
+              "text": {
+                "en": "The edge had a fresh cached copy and served it instantly — the fastest, cheapest outcome.",
+                "zh": "邊緣節點手上有新鮮的快取複本，立刻送出，是最快也最省錢的結果。"
+              }
+            },
+            {
+              "icon": "cancel",
+              "title": { "en": "MISS", "zh": "MISS（未命中）" },
+              "text": {
+                "en": "No copy was cached, so Cloudflare fetched it from your origin and (if cacheable) stored it for next time.",
+                "zh": "沒有快取到複本，所以 Cloudflare 去你的來源伺服器抓，並（若可快取）存起來給下次用。"
+              }
+            },
+            {
+              "icon": "history",
+              "title": { "en": "EXPIRED", "zh": "EXPIRED（過期）" },
+              "text": {
+                "en": "A copy existed but its time was up, so Cloudflare revalidated or re-fetched a fresh version from origin.",
+                "zh": "原本有複本，但時間到了，所以 Cloudflare 重新驗證或回來源抓一份新的。"
+              }
+            },
+            {
+              "icon": "block",
+              "title": { "en": "BYPASS / DYNAMIC", "zh": "BYPASS／DYNAMIC（略過／動態）" },
+              "text": {
+                "en": "The content was skipped on purpose (BYPASS) or is considered dynamic and not eligible for caching by default.",
+                "zh": "內容被刻意略過（BYPASS），或被視為動態（DYNAMIC）而預設不快取。"
+              }
+            },
+            {
+              "icon": "timer",
+              "title": { "en": "Edge TTL vs Browser TTL", "zh": "邊緣 TTL vs 瀏覽器 TTL" },
+              "text": {
+                "en": "Edge TTL is how long Cloudflare's servers keep a copy; Browser TTL is how long the visitor's browser keeps its own copy before re-asking.",
+                "zh": "邊緣 TTL（Edge TTL）是 Cloudflare 伺服器保留複本多久；瀏覽器 TTL（Browser TTL）是訪客瀏覽器自己保留複本多久才再次詢問。"
+              }
+            },
+            {
+              "icon": "layers",
+              "title": { "en": "Tiered Cache", "zh": "分層快取（Tiered Cache）" },
+              "text": {
+                "en": "Edge nodes ask a nearby 'upper-tier' cache before bothering your origin, raising cache hit ratio and cutting origin traffic.",
+                "zh": "邊緣節點會先向附近的「上層」快取詢問，再決定要不要打擾你的來源伺服器，藉此提高快取命中率、減少回源流量。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to control caching", "zh": "怎麼控制快取" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You guide caching in two ways: with Cache-Control headers sent by your origin server, and with Cache Rules in the Cloudflare dashboard. Cache-Control is a standard HTTP header that tells caches who may store a response and for how long.",
+            "zh": "你可以用兩種方式引導快取：來源伺服器送出的 Cache-Control 標頭，以及 Cloudflare 儀表板裡的快取規則（Cache Rules）。Cache-Control 是標準的 HTTP 標頭，用來告訴各層快取「誰可以儲存這個回應、可以存多久」。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "http",
+          "title": { "en": "Cache-Control header examples", "zh": "Cache-Control 標頭範例" },
+          "body": "# Cache a static asset publicly for 1 day (86400 seconds)\nCache-Control: public, max-age=86400\n\n# Keep it 1 hour in browsers, but 1 day on Cloudflare's edge (s-maxage)\nCache-Control: public, max-age=3600, s-maxage=86400\n\n# Never cache a private, per-user page\nCache-Control: private, no-store"
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Proxy your site", "zh": "讓網站經過代理" },
+              "text": {
+                "en": "In DNS, make sure the record for your site shows an orange cloud. Caching only happens when traffic is proxied through Cloudflare.",
+                "zh": "在 DNS 裡確認你網站的紀錄顯示橘色雲朵。流量有經過 Cloudflare 代理時，快取才會運作。"
+              }
+            },
+            {
+              "title": { "en": "Create a Cache Rule", "zh": "建立一條快取規則" },
+              "text": {
+                "en": "Go to Caching > Cache Rules > Create rule. Match the files you want (e.g. URI path ends with .jpg, .css, .js) and set 'Eligible for cache' plus an Edge TTL.",
+                "zh": "進入 Caching > Cache Rules > Create rule。比對你想快取的檔案（例如 URI 路徑以 .jpg、.css、.js 結尾），設定「Eligible for cache（可快取）」並指定邊緣 TTL。"
+              }
+            },
+            {
+              "title": { "en": "Verify with the response header", "zh": "用回應標頭驗證" },
+              "text": {
+                "en": "Load your page twice and check the cf-cache-status header. The first load may be MISS; the second should be HIT.",
+                "zh": "把網頁載入兩次，檢查 cf-cache-status 標頭。第一次可能是 MISS，第二次應該就變成 HIT。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -sI https://example.com/logo.png | grep -i cf-cache-status\n# cf-cache-status: HIT"
+              }
+            },
+            {
+              "title": { "en": "Purge when you update", "zh": "更新時清除快取" },
+              "text": {
+                "en": "After changing a cached file, go to Caching > Configuration > Purge Cache to force Cloudflare to fetch the fresh version.",
+                "zh": "改了已快取的檔案後，到 Caching > Configuration > Purge Cache，強制 Cloudflare 抓取最新版本。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When does caching help most?", "zh": "什麼情況快取最有幫助？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "image",
+              "title": { "en": "Static assets", "zh": "靜態資源" },
+              "text": {
+                "en": "Images, CSS, JavaScript, fonts, and downloads rarely change and are perfect to cache aggressively.",
+                "zh": "圖片、CSS、JavaScript、字型與下載檔很少變動，最適合大量快取。"
+              }
+            },
+            {
+              "icon": "newspaper",
+              "title": { "en": "Content sites", "zh": "內容型網站" },
+              "text": {
+                "en": "Blogs, news, docs, and marketing pages are read far more often than they change.",
+                "zh": "部落格、新聞、文件與行銷頁面被閱讀的次數遠多於被修改的次數。"
+              }
+            },
+            {
+              "icon": "groups",
+              "title": { "en": "Global audiences", "zh": "全球受眾" },
+              "text": {
+                "en": "If visitors come from many countries, edge caching removes the long-distance penalty for everyone.",
+                "zh": "如果訪客來自許多國家，邊緣快取能消除每個人的長距離延遲。"
+              }
+            },
+            {
+              "icon": "campaign",
+              "title": { "en": "Launches & sales", "zh": "上線與促銷活動" },
+              "text": {
+                "en": "Big traffic events are safer when cache absorbs the load instead of your origin server.",
+                "zh": "大型流量活動時，讓快取吸收負載而不是來源伺服器，會安全得多。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "lock_clock",
+          "title": { "en": "Cache static, bypass private", "zh": "快取靜態、略過私人內容" },
+          "text": {
+            "en": "Cache images, CSS, and JS hard, but never cache logged-in or per-user pages — use Cache-Control: private, no-store for those so one user never sees another user's data.",
+            "zh": "圖片、CSS、JS 盡量快取，但絕不要快取已登入或每位使用者專屬的頁面，這些請用 Cache-Control: private, no-store，避免某位使用者看到別人的資料。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Basic CDN and caching are included free on every Cloudflare plan.",
+              "Add a version string to filenames (style.v2.css) so updates bust the cache cleanly.",
+              "Turn on Tiered Cache to raise your hit ratio and protect a slow origin.",
+              "Cache Reserve (paid add-on) keeps content cached far longer using persistent storage."
+            ],
+            "zh": [
+              "基本的 CDN 與快取在每個 Cloudflare 方案都免費。",
+              "在檔名加上版本字串（例如 style.v2.css），更新時就能乾淨地讓舊快取失效。",
+              "開啟分層快取（Tiered Cache）提高命中率，並保護較慢的來源伺服器。",
+              "Cache Reserve（付費附加功能）用持久儲存讓內容快取保留得更久。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "speed", "label": { "en": "Speed", "zh": "速度優化" } },
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } },
+    { "slug": "smart-shield", "label": { "en": "Smart Shield", "zh": "Smart Shield" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } }
+  ],
+  "docs": "https://developers.cloudflare.com/cache/"
+}

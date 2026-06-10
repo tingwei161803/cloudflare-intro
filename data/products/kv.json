@@ -1,0 +1,295 @@
+{
+  "slug": "kv",
+  "category": "storage",
+  "icon": "key",
+  "title": { "en": "Workers KV", "zh": "Workers KV" },
+  "subtitle": {
+    "en": "Global, low-latency key-value store",
+    "zh": "全球低延遲的鍵值資料庫"
+  },
+  "hero": {
+    "badge": { "en": "Storage & Databases", "zh": "儲存與資料庫" },
+    "tagline": {
+      "en": "Save a value under a name and read it back fast from anywhere on Earth.",
+      "zh": "用一個名稱存下一筆資料，然後在地球上任何地方都能飛快讀回。"
+    }
+  },
+  "stats": [
+    { "value": "100K", "label": { "en": "Free reads / day", "zh": "每日免費讀取次數" } },
+    { "value": "1K", "label": { "en": "Free writes / day", "zh": "每日免費寫入次數" } },
+    { "value": "25 MiB", "label": { "en": "Max value size", "zh": "單筆值上限" } },
+    { "value": "~60s", "label": { "en": "Global propagation", "zh": "全球同步時間" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Workers KV?", "zh": "Workers KV 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Workers KV is a key-value store (key-value = you save data as a name → value pair, and look it up by the name). It is built for reads: once data is cached near a user, getting it back is extremely fast.",
+            "zh": "Workers KV 是一個「鍵值（key-value）」資料庫（鍵值指的是把資料存成「名稱 → 值」的配對，再用名稱來查回它）。它是為「讀取」而生的：一旦資料被快取到使用者附近，再讀取就快得驚人。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "There are no tables or SQL. You just put('user:42', '...') to save and get('user:42') to read. Values are copied across Cloudflare's global network so reads stay close to your users.",
+            "zh": "這裡沒有資料表、也沒有 SQL。你只要用 put('user:42', '...') 來存、用 get('user:42') 來讀。值會被複製到 Cloudflare 的全球網路上，讓讀取永遠靠近你的使用者。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_library",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A worldwide network of coat-check counters. You hand in a coat and get a ticket (the key). Show that ticket at any branch and they fetch your coat instantly — because every branch keeps a copy.",
+            "zh": "一個遍布全球的寄物櫃連鎖店。你寄放一件外套、拿到一張號碼牌（就是 key）。到任何一家分店出示號碼牌，馬上就能拿回外套——因為每家分店都留了一份副本。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use KV?", "zh": "為什麼要用 KV？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "When you read the same small piece of data over and over — a config flag, a cached API response, a session — a full SQL database is overkill. KV makes those reads nearly instant and globally available.",
+            "zh": "當你要一遍又一遍讀取同一小塊資料——一個設定開關、一份快取的 API 回應、一段登入工作階段——用完整的 SQL 資料庫太大材小用了。KV 讓這些讀取幾乎瞬間完成，而且全球都能取得。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "bolt",
+              "title": { "en": "Fast reads everywhere", "zh": "全球快速讀取" },
+              "text": {
+                "en": "Cached values are served from the location nearest each user.",
+                "zh": "快取過的值會從離每位使用者最近的據點提供。"
+              }
+            },
+            {
+              "icon": "trending_up",
+              "title": { "en": "Handles huge read volume", "zh": "扛得住超高讀取量" },
+              "text": {
+                "en": "Designed for read-heavy workloads where the same keys are fetched often.",
+                "zh": "專為「讀多寫少」、同樣的 key 被頻繁讀取的情境而設計。"
+              }
+            },
+            {
+              "icon": "extension",
+              "title": { "en": "Dead-simple API", "zh": "極簡的介面" },
+              "text": {
+                "en": "Just put, get, list, and delete — nothing else to learn.",
+                "zh": "只有 put、get、list、delete——沒別的要學了。"
+              }
+            },
+            {
+              "icon": "savings",
+              "title": { "en": "Cheap to run", "zh": "便宜好養" },
+              "text": {
+                "en": "A big free tier and low per-operation cost make caching nearly free.",
+                "zh": "大方的免費額度加上極低的單次操作費，讓做快取幾乎不花錢。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用 KV？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "cached",
+              "title": { "en": "Caching API responses", "zh": "快取 API 回應" },
+              "text": {
+                "en": "Store a slow upstream response and serve it fast for the next minute.",
+                "zh": "把上游較慢的回應存起來，接下來一分鐘內都能快速回應。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "Feature flags & config", "zh": "功能開關與設定" },
+              "text": {
+                "en": "Toggle features or store settings read on almost every request.",
+                "zh": "切換功能開關，或存放幾乎每個請求都要讀的設定。"
+              }
+            },
+            {
+              "icon": "badge",
+              "title": { "en": "Sessions & tokens", "zh": "工作階段與權杖" },
+              "text": {
+                "en": "Keep login sessions or auth tokens that are read far more than written.",
+                "zh": "保存讀取遠多於寫入的登入工作階段或驗證權杖。"
+              }
+            },
+            {
+              "icon": "routing",
+              "title": { "en": "Redirects & lookups", "zh": "轉址與對照表" },
+              "text": {
+                "en": "Short-link maps or country routing tables looked up by key.",
+                "zh": "短網址對照、依國家轉址等用 key 查找的對照表。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Create a namespace (a namespace = one isolated bucket of key-value pairs), bind it to a Worker, then write and read values.",
+            "zh": "建立一個「命名空間（namespace，指一桶獨立的鍵值配對）」，把它綁到 Worker，接著就能寫入和讀取值。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a namespace", "zh": "建立命名空間" },
+              "text": {
+                "en": "Wrangler prints an id — copy it for the binding.",
+                "zh": "Wrangler 會印出一組 id——複製起來給綁定用。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler kv namespace create MY_KV" }
+            },
+            {
+              "title": { "en": "Bind it to your Worker", "zh": "綁定到 Worker" },
+              "text": {
+                "en": "Add this to wrangler.jsonc so the store is available as env.MY_KV.",
+                "zh": "把這段加進 wrangler.jsonc，讓這個資料庫能用 env.MY_KV 取用。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"kv_namespaces\": [\n    {\n      \"binding\": \"MY_KV\",\n      \"id\": \"<paste-your-id-here>\"\n    }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Write & read in code", "zh": "在程式碼裡寫入與讀取" },
+              "text": {
+                "en": "put saves a value; get reads it back. The expirationTtl option auto-deletes the key after the given seconds.",
+                "zh": "put 存入一個值；get 把它讀回來。expirationTtl 選項會在指定秒數後自動刪掉這個 key。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    await env.MY_KV.put(\"greeting\", \"Hello!\", {\n      expirationTtl: 3600,\n    });\n\n    const value = await env.MY_KV.get(\"greeting\");\n    return new Response(value ?? \"not found\");\n  },\n};" }
+            },
+            {
+              "title": { "en": "Seed a value from the CLI", "zh": "用 CLI 先塞一筆值" },
+              "text": {
+                "en": "You can also write keys straight from the terminal.",
+                "zh": "你也可以直接從終端機寫入 key。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler kv key put --binding MY_KV \"greeting\" \"Hello!\" --remote" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish the Worker to go live globally.",
+                "zh": "發布 Worker，全球同步上線。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "key",
+              "title": { "en": "Key & value", "zh": "鍵與值" },
+              "text": {
+                "en": "The key is the name (up to 512 bytes); the value is the data (up to 25 MiB).",
+                "zh": "鍵（key）是名稱（最多 512 位元組）；值（value）是資料（最多 25 MiB）。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": { "en": "Eventual consistency", "zh": "最終一致性" },
+              "text": {
+                "en": "After a write, other regions may take up to ~60 seconds to show the new value. They get there eventually — hence 'eventual'.",
+                "zh": "寫入後，其他地區可能要約 60 秒才看得到新值。它們最終會同步——所以叫「最終一致性」。"
+              }
+            },
+            {
+              "icon": "timer",
+              "title": { "en": "Expiration (TTL)", "zh": "過期時間 (TTL)" },
+              "text": {
+                "en": "Set expirationTtl so a key auto-deletes itself after N seconds — perfect for caches.",
+                "zh": "設定 expirationTtl，key 就會在 N 秒後自動刪除——很適合做快取。"
+              }
+            },
+            {
+              "icon": "compare_arrows",
+              "title": { "en": "Read-heavy, not write-heavy", "zh": "適合讀多、不適合寫多" },
+              "text": {
+                "en": "KV shines when you read far more than you write; the same key takes ~1 write/second max.",
+                "zh": "KV 在「讀遠多於寫」時最強；同一個 key 每秒最多只能寫入約 1 次。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & limits", "zh": "小提示與限制" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Not for instant-fresh data", "zh": "別拿來存要即時最新的資料" },
+          "text": {
+            "en": "Because writes take up to ~60 seconds to spread worldwide, avoid KV for things that must be perfectly up-to-date everywhere instantly, like bank balances. Use D1 or Durable Objects for that.",
+            "zh": "由於寫入要約 60 秒才會散布全球，像銀行餘額這種「全球每處都得即時最新」的資料就別用 KV。那種需求請改用 D1 或 Durable Objects。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Free tier: 100,000 reads, 1,000 writes, 1,000 deletes, and 1,000 list operations per day, plus 1 GB storage.",
+              "A key can be up to 512 bytes; a value up to 25 MiB; up to 1,000 namespaces per account.",
+              "Use clear key prefixes like session: or cache: to keep keys organized.",
+              "Reads are cheaper than writes — lean on caching and let TTLs expire stale data."
+            ],
+            "zh": [
+              "免費額度：每天 10 萬次讀取、1,000 次寫入、1,000 次刪除、1,000 次列出操作，外加 1 GB 儲存。",
+              "key 最多 512 位元組；value 最多 25 MiB；每個帳號最多 1,000 個命名空間。",
+              "用 session: 或 cache: 這類清楚的 key 前綴，把 key 分類整理好。",
+              "讀取比寫入便宜——多靠快取，並讓 TTL 自動清掉過期資料。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } }
+  ],
+  "docs": "https://developers.cloudflare.com/kv/"
+}

@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "title": { "en": "Cloudflare for Beginners", "zh": "Cloudflare 開發者入門指南" },
+    "subtitle": {
+      "en": "A friendly, illustrated guide to the whole Cloudflare developer platform.",
+      "zh": "用大量圖示、白話說明，帶你認識整個 Cloudflare 開發者平台。"
+    }
+  },
+  "home": {
+    "slug": "home", "layout": "home", "icon": "home", "nav": true,
+    "title": { "en": "Cloudflare for Beginners", "zh": "Cloudflare 開發者入門指南" },
+    "subtitle": {
+      "en": "Understand every product — what it is, when to use it, and how to start.",
+      "zh": "把每個產品都搞懂——這是什麼、什麼時候用、怎麼開始。"
+    },
+    "hero": {
+      "badge": { "en": "Start here", "zh": "從這裡開始" },
+      "tagline": {
+        "en": "Cloudflare has dozens of products. This guide groups all 28 of them into 6 simple families, explains each one in plain language with lots of pictures, and shows you exactly how to use it — no prior experience needed.",
+        "zh": "Cloudflare 有幾十個產品。這份指南把其中 28 個整理成 6 個簡單的家族，每個都用白話 + 大量圖示說明，還手把手教你怎麼用——完全不需要任何基礎。"
+      }
+    },
+    "stats": [
+      { "value": "28", "label": { "en": "Products explained", "zh": "個產品詳解" } },
+      { "value": "6", "label": { "en": "Easy categories", "zh": "大分類" } },
+      { "value": "330+", "label": { "en": "Cities worldwide", "zh": "個城市覆蓋" } },
+      { "value": "$0", "label": { "en": "Free to start", "zh": "免費開始用" } }
+    ],
+    "intro": {
+      "en": "New to Cloudflare? You're in the right place. Cloudflare started as a way to make websites faster and safer, and today it's a full platform where you can build, store, and run almost anything on the internet. Pick a category below, or jump straight into Getting Started.",
+      "zh": "第一次接觸 Cloudflare？你來對地方了。Cloudflare 起家於「讓網站更快、更安全」，如今已經是一個完整的平台——你可以在上面開發、儲存、執行幾乎任何網路上的東西。從下面挑一個分類，或直接從「新手上路」開始。"
+    }
+  },
+  "categories": [
+    {
+      "key": "compute", "icon": "bolt",
+      "title": { "en": "Compute", "zh": "運算 Compute" },
+      "blurb": {
+        "en": "Run your code on Cloudflare's global network — no servers to manage. The place where your application logic lives.",
+        "zh": "把你的程式碼直接跑在 Cloudflare 的全球網路上，完全不用管理伺服器。這裡是放「應用程式邏輯」的地方。"
+      }
+    },
+    {
+      "key": "ai", "icon": "smart_toy",
+      "title": { "en": "AI", "zh": "人工智慧 AI" },
+      "blurb": {
+        "en": "Run AI models, build agents, store embeddings and control any AI provider — all at the edge, close to your users.",
+        "zh": "執行 AI 模型、打造 AI 代理人、儲存向量、管理任何 AI 供應商——全部都在離使用者很近的邊緣完成。"
+      }
+    },
+    {
+      "key": "storage", "icon": "database",
+      "title": { "en": "Storage & Databases", "zh": "儲存與資料庫 Storage & Databases" },
+      "blurb": {
+        "en": "Keep your data somewhere — files, tables, key-value pairs or vectors. Pick the right tool for the right shape of data.",
+        "zh": "把資料存起來——檔案、資料表、鍵值對或向量。依資料的形狀，挑對的工具來存。"
+      }
+    },
+    {
+      "key": "media", "icon": "perm_media",
+      "title": { "en": "Media", "zh": "媒體 Media" },
+      "blurb": {
+        "en": "Store, optimize and deliver images, video and real-time audio/video — fast everywhere, without your own media servers.",
+        "zh": "儲存、最佳化並傳遞圖片、影片與即時音訊／視訊——全球都很快，不必自己架媒體伺服器。"
+      }
+    },
+    {
+      "key": "security", "icon": "shield",
+      "title": { "en": "Security", "zh": "安全 Security" },
+      "blurb": {
+        "en": "Block bad traffic, encrypt connections, stop bots and control who can reach your apps — security that scales automatically.",
+        "zh": "擋掉惡意流量、加密連線、阻擋機器人、控管誰能存取你的應用——會自動隨規模成長的安全防護。"
+      }
+    },
+    {
+      "key": "performance", "icon": "speed",
+      "title": { "en": "Performance", "zh": "效能 Performance" },
+      "blurb": {
+        "en": "Make every site faster with smart DNS, global caching and automatic optimizations — plus privacy-friendly analytics.",
+        "zh": "用聰明的 DNS、全球快取與自動最佳化讓每個網站更快——還附上重視隱私的流量分析。"
+      }
+    }
+  ],
+  "categoryPages": [
+    {
+      "slug": "compute", "key": "compute", "icon": "bolt",
+      "title": { "en": "Compute", "zh": "運算 Compute" },
+      "subtitle": { "en": "Where your code runs", "zh": "讓你的程式碼執行的地方" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "Serverless functions, containers, stateful objects and message queues — everything you need to run application logic on Cloudflare's edge.",
+          "zh": "無伺服器函式、容器、有狀態物件與訊息佇列——在 Cloudflare 邊緣執行應用邏輯所需的一切。"
+        }
+      },
+      "intro": {
+        "en": "Compute is about running your code. Instead of renting and patching servers, you hand your function to Cloudflare and it runs in 330+ cities automatically. Start with Workers — it's the foundation everything else builds on.",
+        "zh": "「運算」就是執行你的程式碼。你不必租伺服器、不必更新維護，只要把函式交給 Cloudflare，它就會自動跑在 330+ 個城市。先從 Workers 開始——它是其他一切的基礎。"
+      }
+    },
+    {
+      "slug": "ai", "key": "ai", "icon": "smart_toy",
+      "title": { "en": "AI", "zh": "人工智慧 AI" },
+      "subtitle": { "en": "Build intelligent apps at the edge", "zh": "在邊緣打造有智慧的應用" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "Run open models on GPUs, build AI agents, store embeddings for search, control any AI provider, and automate a real browser — the full AI toolkit.",
+          "zh": "在 GPU 上跑開源模型、打造 AI 代理人、儲存向量做搜尋、管理任何 AI 供應商、自動操作真實瀏覽器——完整的 AI 工具箱。"
+        }
+      },
+      "intro": {
+        "en": "Cloudflare's AI products let you add intelligence without owning GPUs or wiring up complex infrastructure. New to AI? Start with Workers AI to run a model in a few lines, then explore Vectorize for search and Agents for autonomous workflows.",
+        "zh": "Cloudflare 的 AI 產品讓你不必自己買 GPU、也不必搭建複雜架構，就能加入智慧功能。第一次碰 AI？先用 Workers AI 幾行就跑起一個模型，再看 Vectorize 做搜尋、用 Agents 打造自動化流程。"
+      }
+    },
+    {
+      "slug": "storage", "key": "storage", "icon": "database",
+      "title": { "en": "Storage & Databases", "zh": "儲存與資料庫 Storage & Databases" },
+      "subtitle": { "en": "A home for every kind of data", "zh": "各種資料都有合適的家" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "Object storage with no egress fees, a serverless SQL database, a global key-value store, a vector-aware accelerator for existing databases, and streaming pipelines.",
+          "zh": "免流出費的物件儲存、無伺服器 SQL 資料庫、全球鍵值儲存、替既有資料庫加速的工具，以及串流資料管線。"
+        }
+      },
+      "intro": {
+        "en": "The trick with storage is matching the tool to the shape of your data. Big files? R2. Relational tables and SQL? D1. Tiny fast lookups? KV. This category walks through each one so you always pick the right home for your data.",
+        "zh": "儲存的關鍵，是讓「工具」對上「資料的形狀」。大檔案？用 R2。關聯式資料表和 SQL？用 D1。又小又快的查詢？用 KV。這個分類會逐一帶你認識，讓你每次都幫資料挑對家。"
+      }
+    },
+    {
+      "slug": "media", "key": "media", "icon": "perm_media",
+      "title": { "en": "Media", "zh": "媒體 Media" },
+      "subtitle": { "en": "Images, video and real-time, done for you", "zh": "圖片、影片、即時通訊都幫你處理好" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "Upload, optimize, store and deliver images and video — and run real-time audio/video — without building your own media pipeline.",
+          "zh": "上傳、最佳化、儲存與傳遞圖片和影片，還能做即時音訊／視訊——不用自己搭建一套媒體處理流程。"
+        }
+      },
+      "intro": {
+        "en": "Handling media yourself means transcoding, storage, players and a global CDN — a lot of work. Cloudflare's media products bundle all of that behind a simple API so you can ship photos, video and live calls fast.",
+        "zh": "自己處理媒體要顧轉碼、儲存、播放器和全球 CDN——非常費工。Cloudflare 的媒體產品把這些都包在一個簡單的 API 後面，讓你快速上線照片、影片和即時通話。"
+      }
+    },
+    {
+      "slug": "security", "key": "security", "icon": "shield",
+      "title": { "en": "Security", "zh": "安全 Security" },
+      "subtitle": { "en": "Protect your site, apps and people", "zh": "保護你的網站、應用與人員" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "A web firewall, free TLS, a friendly CAPTCHA, secure tunnels, and Zero Trust access — layered protection that turns on with a few clicks.",
+          "zh": "網站防火牆、免費 TLS、友善的人機驗證、安全通道，以及零信任存取——點幾下就能開啟的多層防護。"
+        }
+      },
+      "intro": {
+        "en": "Security at Cloudflare comes in layers: protect public websites (WAF, SSL/TLS, Turnstile) and protect your internal networks and teams (Tunnel, Access, Gateway). You don't need to be a security expert — sensible defaults do most of the work.",
+        "zh": "Cloudflare 的安全防護是分層的：保護對外網站（WAF、SSL/TLS、Turnstile），以及保護內部網路與團隊（Tunnel、Access、Gateway）。你不必是資安專家——合理的預設值就幫你做掉大部分工作。"
+      }
+    },
+    {
+      "slug": "performance", "key": "performance", "icon": "speed",
+      "title": { "en": "Performance", "zh": "效能 Performance" },
+      "subtitle": { "en": "Make everything faster, everywhere", "zh": "讓一切在各地都更快" },
+      "hero": {
+        "badge": { "en": "Category", "zh": "分類" },
+        "tagline": {
+          "en": "The world's fastest DNS, global caching/CDN, automatic speed optimizations, always-on protections, and cookie-free analytics.",
+          "zh": "全球最快的 DNS、全球快取／CDN、自動的速度最佳化、永遠開著的防護，以及無 cookie 的流量分析。"
+        }
+      },
+      "intro": {
+        "en": "Speed isn't one feature — it's DNS resolving quickly, content cached close to users, and assets optimized on the fly. These products handle all of that, and Web Analytics lets you measure the result without tracking your visitors.",
+        "zh": "速度不是單一功能——它是 DNS 快速解析、內容快取在使用者附近、資源即時最佳化的總和。這些產品把這些都處理好，而 Web Analytics 讓你量測成果，又不會追蹤你的訪客。"
+      }
+    }
+  ],
+  "toolPages": {
+    "glossary": {
+      "icon": "menu_book",
+      "title": { "en": "Glossary", "zh": "詞彙表" },
+      "subtitle": { "en": "Every term, explained simply", "zh": "每個術語都用白話解釋" },
+      "hero": {
+        "badge": { "en": "Reference", "zh": "速查" },
+        "tagline": {
+          "en": "Lost in the jargon? Search any Cloudflare or web term and get a one-line, beginner-friendly explanation.",
+          "zh": "被術語搞糊塗了嗎？搜尋任何 Cloudflare 或網路名詞，就能看到一句話、初學者也懂的解釋。"
+        }
+      }
+    },
+    "quiz": {
+      "icon": "quiz",
+      "title": { "en": "Quick Quiz", "zh": "隨堂測驗" },
+      "subtitle": { "en": "Check what you've learned", "zh": "檢查一下學會了沒" },
+      "hero": {
+        "badge": { "en": "Practice", "zh": "練習" },
+        "tagline": {
+          "en": "15 beginner questions with instant feedback. See your score and learn why each answer is right.",
+          "zh": "15 道初學者題目，作答後立刻給回饋。看你的得分，也搞懂每題為什麼是這個答案。"
+        }
+      }
+    },
+    "flashcards": {
+      "icon": "style",
+      "title": { "en": "Flashcards", "zh": "字卡" },
+      "subtitle": { "en": "Memorize the products fast", "zh": "快速記住每個產品" },
+      "hero": {
+        "badge": { "en": "Practice", "zh": "練習" },
+        "tagline": {
+          "en": "Tap a card to flip it: product or term on the front, a plain-language reminder on the back.",
+          "zh": "點一下卡片翻面：正面是產品或術語，背面是一句白話的重點提醒。"
+        }
+      }
+    }
+  }
+}

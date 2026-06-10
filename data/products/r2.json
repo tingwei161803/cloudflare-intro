@@ -1,0 +1,295 @@
+{
+  "slug": "r2",
+  "category": "storage",
+  "icon": "inventory_2",
+  "title": { "en": "R2", "zh": "R2" },
+  "subtitle": {
+    "en": "S3-compatible object storage with zero egress fees",
+    "zh": "相容 S3 的物件儲存，下載完全不收流量費"
+  },
+  "hero": {
+    "badge": { "en": "Storage & Databases", "zh": "儲存與資料庫" },
+    "tagline": {
+      "en": "Store any file in the cloud and pay nothing to read it back out.",
+      "zh": "把任何檔案丟上雲端，要拿回來看時不用再付一毛流量費。"
+    }
+  },
+  "stats": [
+    { "value": "$0", "label": { "en": "Egress fees", "zh": "流出（下載）費用" } },
+    { "value": "$0.015", "label": { "en": "Per GB-month stored", "zh": "每 GB 每月儲存費" } },
+    { "value": "10 GB", "label": { "en": "Free storage / month", "zh": "每月免費儲存空間" } },
+    { "value": "S3", "label": { "en": "API compatible", "zh": "相容 S3 介面" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is R2?", "zh": "R2 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "R2 is object storage (object storage = a service for keeping large files like images, videos, backups, and datasets). You upload files, get them back by name, and never worry about running a disk yourself.",
+            "zh": "R2 是一種「物件儲存」（object storage，指專門用來存放大型檔案的服務，例如圖片、影片、備份、資料集）。你把檔案上傳上去，之後用名稱就能取回，完全不用自己管理硬碟。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Each file you store is called an object, and objects live inside a bucket (a bucket = a named folder-like container that holds your objects). R2 also speaks the same API as Amazon S3, the most popular object storage in the world, so existing S3 tools and code work with very few changes.",
+            "zh": "你存進去的每個檔案叫做「物件（object）」，物件放在「儲存桶（bucket，可以想成一個有名字、像資料夾的容器）」裡。R2 還使用和 Amazon S3（全世界最熱門的物件儲存）一模一樣的介面（API），所以原本給 S3 用的工具和程式碼幾乎不用改就能直接套用。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "warehouse",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A giant self-storage warehouse. You rent space by how much you store, but unlike other warehouses, taking your boxes out to look at them is completely free — that is the famous 'zero egress' part.",
+            "zh": "一間超大型的倉儲中心。你依照存放的量付租金，但和別家倉庫不同的是——把箱子搬出來看完全免費，這就是大家最常稱讚的「零流出費（zero egress）」。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use R2?", "zh": "為什麼要用 R2？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Traditional cloud storage charges an 'egress fee' (egress = the cost of moving data OUT of the cloud to your users). For a popular site or app, that surprise bill can be larger than the storage itself. R2 removes it entirely.",
+            "zh": "傳統雲端儲存會收一筆「流出費（egress fee，也就是把資料從雲端「搬出去」給使用者所產生的費用）」。對於熱門的網站或 App，這筆突如其來的帳單甚至可能比儲存費還貴。R2 直接把它砍到零。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "money_off",
+              "title": { "en": "No egress fees", "zh": "不收流出費" },
+              "text": {
+                "en": "Reading your files out to the internet costs $0, no matter how much traffic you serve.",
+                "zh": "把檔案傳給網路上的使用者一律 0 元，無論流量多大都一樣。"
+              }
+            },
+            {
+              "icon": "cable",
+              "title": { "en": "Works with S3 tools", "zh": "相容 S3 工具" },
+              "text": {
+                "en": "Point existing S3 SDKs, CLIs, and apps at R2 with almost no code changes.",
+                "zh": "原本的 S3 SDK、命令列工具、應用程式幾乎不用改程式碼就能改指向 R2。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Global by default", "zh": "天生全球化" },
+              "text": {
+                "en": "Files are served from Cloudflare's worldwide network, close to your users.",
+                "zh": "檔案透過 Cloudflare 遍布全球的網路提供，離使用者更近、更快。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Pairs with Workers", "zh": "搭配 Workers" },
+              "text": {
+                "en": "Read and write objects directly from Workers code via a simple binding.",
+                "zh": "可在 Workers 程式碼裡用簡單的「綁定」直接讀寫物件。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用 R2？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "image",
+              "title": { "en": "User uploads & media", "zh": "使用者上傳與媒體" },
+              "text": {
+                "en": "Profile photos, product images, PDFs, and video files for a website or app.",
+                "zh": "網站或 App 的大頭貼、商品圖、PDF、影片檔案。"
+              }
+            },
+            {
+              "icon": "backup",
+              "title": { "en": "Backups & archives", "zh": "備份與封存" },
+              "text": {
+                "en": "Database dumps and logs you rarely change but want to keep safely and cheaply.",
+                "zh": "很少更動、但想安全又便宜保存的資料庫備份與日誌。"
+              }
+            },
+            {
+              "icon": "movie",
+              "title": { "en": "High-traffic downloads", "zh": "高流量下載" },
+              "text": {
+                "en": "Software releases, datasets, or podcast episodes downloaded by many people — where egress fees would normally hurt.",
+                "zh": "軟體更新檔、資料集、Podcast 集數等被大量下載的內容——這正是流出費平常最傷荷包的場景。"
+              }
+            },
+            {
+              "icon": "analytics",
+              "title": { "en": "Data lakes", "zh": "資料湖" },
+              "text": {
+                "en": "Store raw analytics and big-data files for later processing (this is where Pipelines feeds data in).",
+                "zh": "存放原始分析資料與大數據檔案以供日後處理（Pipelines 就是把資料灌進這裡）。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Wrangler is Cloudflare's command-line tool (a CLI = a program you type commands into in your terminal). The steps below create a bucket, connect it to a Worker, and read/write an object.",
+            "zh": "Wrangler 是 Cloudflare 的命令列工具（CLI，就是你在終端機裡輸入指令操作的程式）。下面的步驟會建立一個儲存桶、把它接到 Worker，並讀寫一個物件。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Install Wrangler & log in", "zh": "安裝 Wrangler 並登入" },
+              "text": {
+                "en": "Install the tool, then log in to your Cloudflare account in the browser window it opens.",
+                "zh": "安裝工具，接著在它跳出的瀏覽器視窗登入你的 Cloudflare 帳號。"
+              },
+              "code": { "lang": "bash", "body": "npm install -g wrangler\nwrangler login" }
+            },
+            {
+              "title": { "en": "Create a bucket", "zh": "建立儲存桶" },
+              "text": {
+                "en": "Bucket names use lowercase letters, numbers, and hyphens, 3-63 characters long.",
+                "zh": "儲存桶名稱只能用小寫字母、數字和連字號（-），長度 3 到 63 個字元。"
+              },
+              "code": { "lang": "bash", "body": "wrangler r2 bucket create my-app-files\nwrangler r2 bucket list" }
+            },
+            {
+              "title": { "en": "Bind the bucket to your Worker", "zh": "把儲存桶綁定到 Worker" },
+              "text": {
+                "en": "A binding gives your code a variable (here MY_BUCKET) to reach the bucket. Add this to wrangler.jsonc.",
+                "zh": "「綁定（binding）」會讓你的程式碼多一個變數（這裡叫 MY_BUCKET）來操作儲存桶。把這段加進 wrangler.jsonc。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"r2_buckets\": [\n    {\n      \"binding\": \"MY_BUCKET\",\n      \"bucket_name\": \"my-app-files\"\n    }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Read & write objects from code", "zh": "在程式碼裡讀寫物件" },
+              "text": {
+                "en": "A PUT request stores the body as an object; any other request reads it back by name.",
+                "zh": "PUT 請求會把內容存成物件；其他請求則用名稱把它讀回來。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const key = new URL(request.url).pathname.slice(1);\n\n    if (request.method === \"PUT\") {\n      await env.MY_BUCKET.put(key, request.body);\n      return new Response(`Uploaded ${key}!`);\n    }\n\n    const object = await env.MY_BUCKET.get(key);\n    if (object === null) {\n      return new Response(\"Object Not Found\", { status: 404 });\n    }\n    return new Response(object.body);\n  },\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish your Worker to Cloudflare's global network.",
+                "zh": "把你的 Worker 發布到 Cloudflare 的全球網路。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "description",
+              "title": { "en": "Object", "zh": "物件 (Object)" },
+              "text": {
+                "en": "A single stored file plus its metadata, found by a unique key (its name/path).",
+                "zh": "一個存進去的檔案加上它的中繼資料，用唯一的 key（名稱／路徑）來尋找。"
+              }
+            },
+            {
+              "icon": "folder",
+              "title": { "en": "Bucket", "zh": "儲存桶 (Bucket)" },
+              "text": {
+                "en": "A named container that holds many objects, like a top-level folder.",
+                "zh": "裝著很多物件、有名字的容器，可以想成最上層的資料夾。"
+              }
+            },
+            {
+              "icon": "swap_vert",
+              "title": { "en": "Class A vs Class B", "zh": "A 類與 B 類操作" },
+              "text": {
+                "en": "Class A = writes/lists ($4.50/million); Class B = reads ($0.36/million). Egress is still free.",
+                "zh": "A 類＝寫入／列出（每百萬次 $4.50）；B 類＝讀取（每百萬次 $0.36）。下載流量依然免費。"
+              }
+            },
+            {
+              "icon": "vpn_key",
+              "title": { "en": "S3 compatibility", "zh": "S3 相容性" },
+              "text": {
+                "en": "R2 accepts the same requests as Amazon S3, so S3 SDKs and migration tools just work.",
+                "zh": "R2 接受和 Amazon S3 一樣的請求，所以 S3 的 SDK 與搬遷工具都能直接使用。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "The free tier is generous", "zh": "免費額度很佛心" },
+          "text": {
+            "en": "Every month you get 10 GB of storage, 1 million Class A operations, and 10 million Class B operations free — plenty for learning and small projects.",
+            "zh": "每個月免費送 10 GB 儲存空間、100 萬次 A 類操作、1,000 萬次 B 類操作——拿來學習或做小專案綽綽有餘。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Storage is billed at $0.015 per GB-month; you only pay for what you store.",
+              "Egress (serving files to the internet) is always $0 — this is R2's headline feature.",
+              "Use clear key prefixes like uploads/2026/photo.jpg to organize objects like folders.",
+              "Connect a custom domain to a bucket to serve files publicly with no Worker required."
+            ],
+            "zh": [
+              "儲存費為每 GB 每月 $0.015，存多少付多少。",
+              "流出費（把檔案傳給網路使用者）永遠是 $0——這是 R2 最大的賣點。",
+              "用像 uploads/2026/photo.jpg 這樣清楚的 key 前綴，就能像資料夾一樣整理物件。",
+              "幫儲存桶綁一個自訂網域，不用寫 Worker 也能公開提供檔案。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "pipelines", "label": { "en": "Pipelines", "zh": "Pipelines" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } }
+  ],
+  "docs": "https://developers.cloudflare.com/r2/"
+}

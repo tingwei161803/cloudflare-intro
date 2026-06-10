@@ -1,0 +1,305 @@
+{
+  "slug": "dns",
+  "category": "performance",
+  "icon": "dns",
+  "title": { "en": "DNS", "zh": "DNS" },
+  "subtitle": {
+    "en": "Fast, resilient authoritative DNS plus the world's fastest public resolver",
+    "zh": "快速又穩定的權威 DNS，搭配全世界最快的公開解析器"
+  },
+  "hero": {
+    "badge": { "en": "Performance", "zh": "效能" },
+    "tagline": {
+      "en": "The internet's phone book, answered in milliseconds from 330+ cities.",
+      "zh": "網路世界的電話簿，從全球 330 多個城市用毫秒級速度回答你的網站住在哪。"
+    }
+  },
+  "stats": [
+    { "value": "1.1.1.1", "label": { "en": "Public resolver", "zh": "公開解析器" } },
+    { "value": "#1", "label": { "en": "Fastest resolver (DNSPerf)", "zh": "最快解析器（DNSPerf 排名）" } },
+    { "value": "330+", "label": { "en": "Cities answering queries", "zh": "回應查詢的城市" } },
+    { "value": "100%", "label": { "en": "Uptime since launch", "zh": "上線以來正常運作時間" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is DNS?", "zh": "DNS 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "DNS (Domain Name System) is the system that turns a human-friendly name like example.com into the numeric address (IP address) that computers actually use to find each other. Cloudflare DNS does two jobs: it acts as your domain's authoritative DNS (the official record of where your site lives), and it runs 1.1.1.1, a public resolver anyone can use to look up names.",
+            "zh": "DNS（Domain Name System，網域名稱系統）負責把人類好記的名字（例如 example.com）翻譯成電腦真正用來互相找到對方的數字地址（IP 位址）。Cloudflare DNS 同時做兩件事：當你網域的「權威 DNS」（authoritative DNS，也就是記錄你網站住在哪的官方名冊），以及經營 1.1.1.1 這個任何人都能用來查詢名字的公開解析器（resolver）。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "menu_book",
+          "title": { "en": "Think of it like a phone book", "zh": "把它想成一本電話簿" },
+          "text": {
+            "en": "You remember a friend's name, not their phone number. DNS is the phone book that looks up the number for you. The authoritative DNS is the official directory that says 'example.com lives at this number'. The resolver is the helpful operator who reads that directory and tells you the answer fast.",
+            "zh": "你記得朋友的名字，而不是電話號碼。DNS 就是那本幫你查號碼的電話簿。權威 DNS（authoritative DNS）是寫著「example.com 的號碼是這個」的官方名冊；解析器（resolver）則是幫你翻名冊、很快把答案告訴你的接線生。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Every time someone visits your website, sends you email, or clicks a link, a DNS lookup happens first. If that lookup is slow or fails, everything that follows is slow or fails too. That is why fast, reliable DNS matters so much.",
+            "zh": "每次有人造訪你的網站、寄信給你或點一個連結，背後都會先做一次 DNS 查詢。如果這次查詢很慢或失敗，後面所有事情也跟著變慢或失敗。這就是為什麼又快又穩的 DNS 這麼重要。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use Cloudflare DNS?", "zh": "為什麼要用 Cloudflare DNS？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Slow or unreliable DNS quietly hurts every visitor. Cloudflare answers DNS queries from a huge global network, so the answer almost always comes from a city near the user.",
+            "zh": "慢又不穩的 DNS 會默默拖累每一位訪客。Cloudflare 從龐大的全球網路回應 DNS 查詢，所以答案幾乎都來自離使用者很近的城市。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "bolt",
+              "title": { "en": "Extremely fast", "zh": "速度極快" },
+              "text": {
+                "en": "Answers come from 330+ cities worldwide. The 1.1.1.1 resolver is consistently ranked the fastest public resolver by independent benchmarks like DNSPerf.",
+                "zh": "答案來自全球 330 多個城市。1.1.1.1 解析器在 DNSPerf 等獨立評測中長期被評為最快的公開解析器。"
+              }
+            },
+            {
+              "icon": "verified_user",
+              "title": { "en": "Hard to tamper with", "zh": "難以被竄改" },
+              "text": {
+                "en": "DNSSEC adds cryptographic signatures to your records so attackers cannot secretly redirect your visitors to a fake site.",
+                "zh": "DNSSEC（DNS 安全擴充）為你的紀錄加上密碼學簽章，讓攻擊者無法偷偷把訪客導到假冒網站。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "Always online", "zh": "永遠在線" },
+              "text": {
+                "en": "Cloudflare's authoritative DNS has maintained 100% uptime since launch, with built-in protection against DNS-based DDoS attacks.",
+                "zh": "Cloudflare 的權威 DNS 自上線以來維持 100% 正常運作，並內建抵擋 DNS 型 DDoS 攻擊的保護。"
+              }
+            },
+            {
+              "icon": "edit_note",
+              "title": { "en": "Easy to manage", "zh": "好管理" },
+              "text": {
+                "en": "A clean dashboard lets you add, edit, or delete records in seconds. Changes propagate from Cloudflare almost instantly.",
+                "zh": "簡潔的儀表板讓你幾秒鐘就能新增、編輯或刪除紀錄，變更幾乎是即時從 Cloudflare 生效。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts & record types", "zh": "重點概念與紀錄類型" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A DNS zone is the collection of records for one domain. Each record has a type that says what kind of answer it gives. Here are the ones you will meet most often.",
+            "zh": "一個 DNS 區域（zone）就是一個網域的所有紀錄集合。每筆紀錄都有一個「類型」，說明它回答的是哪種資訊。以下是你最常遇到的幾種。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "tag",
+              "title": { "en": "A / AAAA record", "zh": "A／AAAA 紀錄" },
+              "text": {
+                "en": "Points a name to an IP address. 'A' is for IPv4 (like 192.0.2.1), 'AAAA' is for IPv6. This is how a browser finds your web server.",
+                "zh": "把一個名字指向一個 IP 位址。A 用於 IPv4（例如 192.0.2.1），AAAA 用於 IPv6。瀏覽器就是靠它找到你的網頁伺服器。"
+              }
+            },
+            {
+              "icon": "alt_route",
+              "title": { "en": "CNAME record", "zh": "CNAME 紀錄" },
+              "text": {
+                "en": "An alias that points one name to another name (e.g. www.example.com to example.com). Cloudflare's CNAME flattening even lets you use one at the root of your domain.",
+                "zh": "一個別名，把某個名字指向另一個名字（例如 www.example.com 指到 example.com）。Cloudflare 的 CNAME 扁平化（CNAME flattening）甚至讓你能在網域根目錄使用 CNAME。"
+              }
+            },
+            {
+              "icon": "mail",
+              "title": { "en": "MX record", "zh": "MX 紀錄" },
+              "text": {
+                "en": "Mail eXchange: tells the internet which server should receive email for your domain. Without it, email won't arrive.",
+                "zh": "MX（Mail eXchange，郵件交換）告訴網路該由哪台伺服器接收你網域的電子郵件。少了它，信就寄不到。"
+              }
+            },
+            {
+              "icon": "text_snippet",
+              "title": { "en": "TXT record", "zh": "TXT 紀錄" },
+              "text": {
+                "en": "Stores free-form text, often used to prove you own a domain or to set up email anti-spam rules like SPF, DKIM, and DMARC.",
+                "zh": "存放自由格式的文字，常用來證明你擁有某個網域，或設定 SPF、DKIM、DMARC 等電子郵件防垃圾規則。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": { "en": "TTL", "zh": "TTL（存活時間）" },
+              "text": {
+                "en": "Time To Live: how long resolvers may cache (remember) a record before re-checking. Short TTL = faster updates; long TTL = less lookup traffic. 'Auto' lets Cloudflare pick a sensible value.",
+                "zh": "TTL（Time To Live，存活時間）指解析器能把一筆紀錄快取（記住）多久才需要重新查詢。TTL 短＝更新快；TTL 長＝查詢流量少。選「Auto（自動）」就交給 Cloudflare 挑一個合理值。"
+              }
+            },
+            {
+              "icon": "cloud",
+              "title": { "en": "Proxied vs DNS-only", "zh": "代理 vs 僅 DNS" },
+              "text": {
+                "en": "An orange cloud means traffic is proxied through Cloudflare (you get caching, security, hidden origin IP). A grey cloud means DNS-only: Cloudflare just answers the lookup and traffic goes straight to your server.",
+                "zh": "橘色雲朵代表流量會經過 Cloudflare 代理（proxied，可享快取、安全防護、隱藏來源 IP）。灰色雲朵代表「僅 DNS（DNS-only）」：Cloudflare 只回答查詢，流量直接連到你的伺服器。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "public",
+              "title": { "en": "You own a domain", "zh": "你擁有一個網域" },
+              "text": {
+                "en": "Anyone running a website, blog, app, or email on their own domain needs authoritative DNS. Cloudflare's free plan covers this.",
+                "zh": "任何在自己網域上經營網站、部落格、應用程式或電子郵件的人都需要權威 DNS。Cloudflare 的免費方案就涵蓋這項服務。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "You want faster page loads", "zh": "你想讓網頁更快開啟" },
+              "text": {
+                "en": "Because DNS is the very first step of every visit, fast DNS shaves real milliseconds off how quickly your site starts loading.",
+                "zh": "因為 DNS 是每次造訪的第一步，快的 DNS 能實際省下你網站開始載入前的毫秒數。"
+              }
+            },
+            {
+              "icon": "security",
+              "title": { "en": "You care about safety", "zh": "你在意安全" },
+              "text": {
+                "en": "Turn on DNSSEC and proxying to protect visitors from hijacking and to hide your server's real IP address from attackers.",
+                "zh": "開啟 DNSSEC 與代理功能，保護訪客不被劫持，並把伺服器真實 IP 位址藏起來，不讓攻擊者看到。"
+              }
+            },
+            {
+              "icon": "lock",
+              "title": { "en": "You browse the web", "zh": "你只是想上網" },
+              "text": {
+                "en": "Even without a website, you can set your device or router to use the 1.1.1.1 resolver for faster, more private lookups.",
+                "zh": "就算沒有網站，你也能把裝置或路由器設定成使用 1.1.1.1 解析器，獲得更快、更隱私的查詢。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to get started", "zh": "怎麼開始用" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Add your site to Cloudflare", "zh": "把網站加入 Cloudflare" },
+              "text": {
+                "en": "Sign up for a free account, choose 'Add a site', and enter your domain. Cloudflare scans your existing DNS records and imports them automatically.",
+                "zh": "註冊一個免費帳號，選「Add a site（新增網站）」，輸入你的網域。Cloudflare 會掃描你現有的 DNS 紀錄並自動匯入。"
+              }
+            },
+            {
+              "title": { "en": "Update your nameservers", "zh": "更新你的名稱伺服器" },
+              "text": {
+                "en": "At your domain registrar, replace the existing nameservers with the two Cloudflare nameservers shown in your dashboard. This hands authoritative DNS to Cloudflare.",
+                "zh": "到你的網域註冊商，把原本的名稱伺服器（nameservers）換成儀表板上顯示的兩台 Cloudflare 名稱伺服器，這樣就把權威 DNS 交給 Cloudflare 了。"
+              }
+            },
+            {
+              "title": { "en": "Add or edit a DNS record", "zh": "新增或編輯一筆 DNS 紀錄" },
+              "text": {
+                "en": "Go to DNS > Records > Add record. Pick a Type (e.g. A), enter the Name (e.g. www) and the IPv4 address, leave TTL on Auto, choose Proxied or DNS-only, then Save.",
+                "zh": "進入 DNS > Records > Add record。選 Type（例如 A），輸入 Name（例如 www）和 IPv4 位址，TTL 保持 Auto，選擇 Proxied（代理）或 DNS-only（僅 DNS），再按 Save 儲存。"
+              }
+            },
+            {
+              "title": { "en": "Turn on DNSSEC", "zh": "開啟 DNSSEC" },
+              "text": {
+                "en": "Under DNS > Settings, enable DNSSEC and copy the DS record Cloudflare gives you into your registrar to finish protecting the domain.",
+                "zh": "在 DNS > Settings 裡開啟 DNSSEC，把 Cloudflare 給你的 DS 紀錄複製到註冊商，就完成網域的保護設定。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Test resolution with dig", "zh": "用 dig 測試解析" },
+          "body": "# Ask Cloudflare's 1.1.1.1 resolver for the A record of example.com\ndig @1.1.1.1 example.com A +short\n\n# See the full answer including TTL\ndig @1.1.1.1 example.com A"
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "payments",
+          "title": { "en": "Authoritative DNS is free", "zh": "權威 DNS 是免費的" },
+          "text": {
+            "en": "Cloudflare's authoritative DNS and the 1.1.1.1 resolver are free on every plan, including the Free plan. There is no per-query DNS fee for standard zones.",
+            "zh": "Cloudflare 的權威 DNS 與 1.1.1.1 解析器在每個方案（含免費方案）都免費。一般網域沒有按查詢次數計費的 DNS 費用。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Use a short TTL (like 5 minutes) before a planned migration, then raise it again afterwards to cut lookups.",
+              "Keep email records (MX, SPF, DKIM, DMARC) grey-cloud / DNS-only — email shouldn't be proxied.",
+              "Enable DNSSEC for any domain handling logins, payments, or email.",
+              "Set your home router to 1.1.1.1 to speed up DNS for every device on your network."
+            ],
+            "zh": [
+              "規劃搬移網站前先把 TTL 調短（例如 5 分鐘），搬完後再調長以減少查詢。",
+              "電子郵件相關紀錄（MX、SPF、DKIM、DMARC）保持灰色雲朵／僅 DNS，郵件不該被代理。",
+              "任何處理登入、付款或電子郵件的網域都建議開啟 DNSSEC。",
+              "把家裡路由器設成 1.1.1.1，讓網路上每台裝置的 DNS 都變快。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "ssl-tls", "label": { "en": "SSL/TLS", "zh": "SSL/TLS" } },
+    { "slug": "cdn", "label": { "en": "CDN & Cache", "zh": "CDN 與快取" } },
+    { "slug": "smart-shield", "label": { "en": "Smart Shield", "zh": "Smart Shield" } },
+    { "slug": "web-analytics", "label": { "en": "Web Analytics", "zh": "網站分析" } }
+  ],
+  "docs": "https://developers.cloudflare.com/dns/"
+}

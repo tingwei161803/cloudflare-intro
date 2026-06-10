@@ -1,0 +1,373 @@
+{
+  "slug": "workers",
+  "category": "compute",
+  "icon": "bolt",
+  "title": { "en": "Workers", "zh": "Workers" },
+  "subtitle": {
+    "en": "Run your code on Cloudflare's global network, close to your users",
+    "zh": "把你的程式碼跑在 Cloudflare 的全球網路上，就在使用者身邊"
+  },
+  "hero": {
+    "badge": { "en": "Compute", "zh": "運算" },
+    "tagline": {
+      "en": "Write a function, deploy with one command, and it instantly runs in 330+ cities worldwide — no servers to manage.",
+      "zh": "寫一個函式、用一行指令部署，它就會立刻在全球 330 多個城市執行——完全不用自己管理伺服器。"
+    }
+  },
+  "stats": [
+    { "value": "330+", "label": { "en": "Cities worldwide", "zh": "全球城市" } },
+    { "value": "0ms", "label": { "en": "Cold starts", "zh": "冷啟動時間" } },
+    { "value": "100K", "label": { "en": "Free requests / day", "zh": "免費請求 / 每天" } },
+    { "value": "128MB", "label": { "en": "Memory per Worker", "zh": "每個 Worker 記憶體" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Workers?", "zh": "Workers 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Workers lets you run small pieces of code (called \"functions\") on Cloudflare's network without ever renting or maintaining a server. You just write the code; Cloudflare runs it for you, automatically, everywhere.",
+            "zh": "Cloudflare Workers 讓你把一小段程式碼（稱為「函式」function）跑在 Cloudflare 的網路上，完全不用租用或維護伺服器。你只要寫程式碼，Cloudflare 就會自動幫你在世界各地執行。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "\"Serverless\" doesn't mean there are no servers — it means you don't have to think about them. There's no machine to set up, no operating system to patch, and no scaling to plan. Your code wakes up only when a request comes in, runs, and goes back to sleep.",
+            "zh": "「Serverless（無伺服器）」不是真的沒有伺服器，而是指你不用去操心它。沒有機器要架設、沒有作業系統要更新、也不用煩惱怎麼擴充。你的程式碼只在有請求進來時才被叫醒、執行完就休息。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_cafe",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "Renting a normal server is like buying a whole coffee machine, plugging it in 24/7, and paying for electricity even when nobody wants coffee. Workers is like a barista who appears the instant someone orders, makes exactly one cup, and disappears — you only pay per cup.",
+            "zh": "租一台傳統伺服器，就像買一整台咖啡機、24 小時插著電，就算沒人喝咖啡也要付電費。Workers 則像是有人點餐的那一瞬間才出現的咖啡師，沖好一杯就消失——你只為「沖的那幾杯」付費。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Because the code runs in the Cloudflare data center physically closest to each visitor (\"the edge\"), responses come back extremely fast. You can write Workers in JavaScript, TypeScript, Python, or Rust.",
+            "zh": "因為程式碼是在離每位訪客「實體位置最近」的 Cloudflare 資料中心執行（這就是所謂的「邊緣」edge），回應速度非常快。你可以用 JavaScript、TypeScript、Python 或 Rust 來寫 Workers。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Traditional servers come with a long list of chores: provisioning machines, keeping them online, handling traffic spikes, and paying even when they sit idle. Workers removes that entire category of work.",
+            "zh": "傳統伺服器有一堆雜事：要開機器、要讓它一直線上、流量暴增時要手忙腳亂，而且就算閒置也要付錢。Workers 把這一整類麻煩事直接拿掉。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "rocket_launch",
+              "title": { "en": "No servers to manage", "zh": "不用管伺服器" },
+              "text": {
+                "en": "No machines to provision, patch, or restart at 3am. Cloudflare handles all the infrastructure.",
+                "zh": "不用開機器、不用更新系統、半夜也不用爬起來重開機。所有基礎設施都由 Cloudflare 處理。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Zero cold starts", "zh": "零冷啟動" },
+              "text": {
+                "en": "Workers use lightweight V8 isolates instead of containers, so there's no slow \"warming up\" delay before your first request.",
+                "zh": "Workers 用的是輕量的 V8 isolate（隔離環境），不是傳統容器，所以第一個請求進來時不用慢慢「暖機」。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Global by default", "zh": "天生就是全球" },
+              "text": {
+                "en": "One deploy puts your code in 330+ cities. Visitors are served from the location nearest them automatically.",
+                "zh": "部署一次，程式碼就在 330 多個城市上線。每位訪客都會自動由離他最近的據點服務。"
+              }
+            },
+            {
+              "icon": "trending_up",
+              "title": { "en": "Scales itself", "zh": "自動擴充" },
+              "text": {
+                "en": "One request or one million — Workers scales up and down on its own. You never configure auto-scaling.",
+                "zh": "不管是一個請求還是一百萬個，Workers 會自己擴大或縮小，你完全不用設定自動擴充。"
+              }
+            },
+            {
+              "icon": "payments",
+              "title": { "en": "Pay per request", "zh": "按請求計費" },
+              "text": {
+                "en": "You're billed for what runs, not for idle time. There's a generous free tier of 100,000 requests a day.",
+                "zh": "只為「實際執行」付費，不為閒置時間付錢。免費方案每天有 10 萬次請求的額度，相當大方。"
+              }
+            },
+            {
+              "icon": "extension",
+              "title": { "en": "Connects to everything", "zh": "什麼都能串" },
+              "text": {
+                "en": "Bind Workers to storage (KV, R2, D1), queues, AI models, and more with a few lines of config.",
+                "zh": "用幾行設定就能把 Workers 接上儲存（KV、R2、D1）、佇列、AI 模型等等服務。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Workers shines whenever you want code to run fast, globally, and on demand. Here are common real-world uses.",
+            "zh": "只要你希望程式碼跑得快、全球都能跑、而且隨需執行，Workers 就很適合。以下是常見的實際用途。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "api",
+              "title": { "en": "APIs & backends", "zh": "API 與後端" },
+              "text": {
+                "en": "Build the backend for a mobile or web app — handle requests, talk to a database, return JSON.",
+                "zh": "幫手機或網頁 App 打造後端——處理請求、跟資料庫溝通、回傳 JSON 資料。"
+              }
+            },
+            {
+              "icon": "web",
+              "title": { "en": "Full websites", "zh": "完整網站" },
+              "text": {
+                "en": "Serve entire sites and frameworks like Next.js, Astro, or React directly from the edge.",
+                "zh": "直接在邊緣端供應整個網站，支援 Next.js、Astro、React 等框架。"
+              }
+            },
+            {
+              "icon": "alt_route",
+              "title": { "en": "Routing & redirects", "zh": "導流與轉址" },
+              "text": {
+                "en": "Inspect incoming requests and redirect, rewrite, or A/B test them before they hit your origin.",
+                "zh": "在請求送到你的主機之前，先檢查它，做轉址、改寫或 A/B 測試。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": { "en": "Scheduled jobs", "zh": "排程工作" },
+              "text": {
+                "en": "Run code on a timer with Cron Triggers — send daily emails, clean up data, fetch feeds.",
+                "zh": "用 Cron Triggers（定時觸發）讓程式碼定時跑——寄每日信件、清理資料、抓取資料來源。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "Auth & middleware", "zh": "驗證與中介層" },
+              "text": {
+                "en": "Check tokens, add security headers, or rate-limit requests in front of any application.",
+                "zh": "在任何應用前面檢查權杖（token）、加上安全標頭、或限制請求頻率。"
+              }
+            },
+            {
+              "icon": "smart_toy",
+              "title": { "en": "AI at the edge", "zh": "邊緣 AI" },
+              "text": {
+                "en": "Call AI models and stream responses to users with very low latency using Workers AI.",
+                "zh": "用 Workers AI 呼叫 AI 模型，並以極低延遲把回應串流給使用者。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you get started?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You build and deploy Workers with a free command-line tool called Wrangler. The steps below create a \"Hello World\" Worker, run it on your own computer, then publish it live to the internet.",
+            "zh": "你會用一個免費的命令列工具 Wrangler 來開發和部署 Workers。下面的步驟會建立一個「Hello World」Worker、先在你自己的電腦上跑，再把它正式發佈到網路上。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a new Worker project", "zh": "建立一個新的 Worker 專案" },
+              "text": {
+                "en": "This command scaffolds a ready-to-run project. Choose the \"Hello World\" template, \"Worker only\", and JavaScript when prompted.",
+                "zh": "這行指令會幫你產生一個可以直接跑的專案。出現選項時，選「Hello World」範本、「Worker only（只要 Worker）」、語言選 JavaScript。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest -- my-first-worker\ncd my-first-worker" }
+            },
+            {
+              "title": { "en": "Run it locally", "zh": "在本機執行" },
+              "text": {
+                "en": "Start a local development server. Open http://localhost:8787 in your browser to see your Worker respond.",
+                "zh": "啟動本機的開發伺服器。在瀏覽器打開 http://localhost:8787 就能看到你的 Worker 回應。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler dev" }
+            },
+            {
+              "title": { "en": "Deploy it live", "zh": "正式部署上線" },
+              "text": {
+                "en": "Publish your Worker to Cloudflare's global network. You'll get a public URL like my-first-worker.<your-subdomain>.workers.dev.",
+                "zh": "把你的 Worker 發佈到 Cloudflare 的全球網路。你會拿到一個公開網址，類似 my-first-worker.<你的子網域>.workers.dev。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/index.js — a minimal Worker", "zh": "src/index.js — 最小的 Worker" },
+          "body": "export default {\n  // This fetch() handler runs on every incoming HTTP request\n  async fetch(request, env, ctx) {\n    return new Response(\"Hello World!\");\n  },\n};"
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "settings",
+          "title": { "en": "What is wrangler.toml?", "zh": "wrangler.toml 是什麼？" },
+          "text": {
+            "en": "Every project has a wrangler.toml (or wrangler.jsonc) config file. It holds your Worker's name and any \"bindings\" — connections to other Cloudflare services like databases or storage. Wrangler reads it when you deploy.",
+            "zh": "每個專案都有一個 wrangler.toml（或 wrangler.jsonc）設定檔，裡面放著 Worker 的名稱，以及各種「bindings（綁定）」——也就是連到其他 Cloudflare 服務（例如資料庫或儲存）的連線。部署時 Wrangler 會讀取它。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "function",
+              "title": { "en": "Handler", "zh": "Handler（處理函式）" },
+              "text": {
+                "en": "The function Cloudflare calls when something happens — fetch() for HTTP requests, scheduled() for cron jobs.",
+                "zh": "當某件事發生時 Cloudflare 會呼叫的函式——HTTP 請求用 fetch()，定時排程用 scheduled()。"
+              }
+            },
+            {
+              "icon": "layers",
+              "title": { "en": "Isolate", "zh": "Isolate（隔離環境）" },
+              "text": {
+                "en": "A super-lightweight sandbox that runs your code. Thousands share one process, which is why there are no cold starts.",
+                "zh": "執行你程式碼的超輕量沙盒。成千上萬個共用一個程序，這就是為什麼沒有冷啟動。"
+              }
+            },
+            {
+              "icon": "cable",
+              "title": { "en": "Binding", "zh": "Binding（綁定）" },
+              "text": {
+                "en": "A secure connection from your Worker to another service (a database, storage bucket, queue). You access it via env.",
+                "zh": "從你的 Worker 安全地連到其他服務（資料庫、儲存空間、佇列）的橋樑。你透過 env 物件存取它。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "The edge", "zh": "邊緣（edge）" },
+              "text": {
+                "en": "Cloudflare's data centers spread across 330+ cities. Your code runs at the one nearest each visitor.",
+                "zh": "Cloudflare 遍佈 330 多個城市的資料中心。你的程式碼會在離每位訪客最近的那一個執行。"
+              }
+            },
+            {
+              "icon": "timer",
+              "title": { "en": "CPU time", "zh": "CPU 時間" },
+              "text": {
+                "en": "How long your code actively computes. Free plan allows 10ms per request; paid defaults to 30s (up to 5 min).",
+                "zh": "你的程式碼實際運算的時間。免費方案每次請求 10 毫秒；付費方案預設 30 秒（最多可到 5 分鐘）。"
+              }
+            },
+            {
+              "icon": "terminal",
+              "title": { "en": "Wrangler", "zh": "Wrangler" },
+              "text": {
+                "en": "Cloudflare's command-line tool for creating, testing, and deploying Workers. It's free and runs via npx.",
+                "zh": "Cloudflare 用來建立、測試、部署 Workers 的命令列工具。免費，用 npx 就能執行。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "Start free", "zh": "免費開始" },
+          "text": {
+            "en": "The free plan gives you 100,000 requests per day — plenty to build, learn, and launch a small project before you ever pay a cent.",
+            "zh": "免費方案每天給你 10 萬次請求——足夠你開發、學習、甚至上線一個小專案，完全不用先付費。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Good limits to remember", "zh": "值得記住的限制" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Free plan: 100,000 requests/day; Paid plan: unlimited requests",
+              "CPU time: 10ms per request on Free, 30s default (up to 5 min) on Paid",
+              "Memory: 128 MB per Worker on both plans",
+              "Worker size: 3 MB compressed on Free, 10 MB on Paid",
+              "Subrequests: 50 per request on Free, 1,000+ on Paid"
+            ],
+            "zh": [
+              "免費方案：每天 10 萬次請求；付費方案：請求數無上限",
+              "CPU 時間：免費方案每次請求 10 毫秒，付費方案預設 30 秒（最多 5 分鐘）",
+              "記憶體：兩種方案每個 Worker 都是 128 MB",
+              "Worker 大小：免費方案壓縮後 3 MB，付費方案 10 MB",
+              "子請求（subrequest）：免費方案每次請求 50 個，付費方案 1,000 個以上"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Watch your CPU time", "zh": "注意 CPU 時間" },
+          "text": {
+            "en": "CPU time counts only active computation, not time spent waiting for a network response. Heavy loops or large data processing can hit the limit — split big jobs into smaller pieces or use Queues.",
+            "zh": "CPU 時間只算「實際運算」的時間，不算等待網路回應的時間。很重的迴圈或處理大量資料可能會超過上限——把大工作拆小，或改用 Queues（佇列）來處理。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } }
+  ],
+  "docs": "https://developers.cloudflare.com/workers/"
+}

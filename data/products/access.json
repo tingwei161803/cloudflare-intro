@@ -1,0 +1,268 @@
+{
+  "slug": "access",
+  "category": "security",
+  "icon": "badge",
+  "title": { "en": "Access", "zh": "Access" },
+  "subtitle": {
+    "en": "Identity-based Zero Trust access to your apps — a modern replacement for the VPN",
+    "zh": "以身分為基礎的零信任應用程式存取 —— 取代傳統 VPN 的現代做法"
+  },
+  "hero": {
+    "badge": { "en": "Security", "zh": "安全" },
+    "tagline": {
+      "en": "Checks who you are before letting you into an app — no VPN, no trusted network required.",
+      "zh": "在放你進入應用程式前先確認你是誰 —— 不用 VPN、也不用可信任的內網。"
+    }
+  },
+  "stats": [
+    { "value": "50 users", "label": { "en": "Free Zero Trust seats", "zh": "免費 Zero Trust 名額" } },
+    { "value": "Zero Trust", "label": { "en": "Never trust, always verify", "zh": "永不信任,逐次驗證" } },
+    { "value": "No VPN", "label": { "en": "Identity at the door", "zh": "在入口驗身分" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Access?", "zh": "Access 是什麼?" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Access puts an identity check in front of your applications. Before anyone can open an app, they must log in and prove they're allowed — based on who they are, not which network they're on.",
+            "zh": "Cloudflare Access 在你的應用程式前面加上一道身分檢查。任何人要打開應用程式前,都必須先登入並證明自己有權限 —— 看的是「他是誰」,而不是「他連在哪個網路上」。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "This is the Zero Trust idea: never automatically trust someone just because they're inside the office network. Every request is verified. Access checks identity using providers you already use, like Google or GitHub, or a one-time PIN sent to an email.",
+            "zh": "這就是「零信任(Zero Trust)」的精神:不會因為某人在辦公室網路裡就自動信任他。每一次請求都要驗證。Access 透過你本來就在用的身分提供者(Google、GitHub 等)或寄到 email 的一次性密碼(PIN)來核對身分。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "meeting_room",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A receptionist who checks your ID at every single door, instead of an old building where badging in once at the lobby lets you wander anywhere.",
+            "zh": "一位在「每一扇門」都查你證件的櫃檯人員 —— 對比老式大樓:只要在大廳刷一次卡,之後就能在裡面到處亂逛。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it instead of a VPN?", "zh": "為什麼用它取代 VPN?" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "A VPN (Virtual Private Network) drops you onto the whole internal network and trusts you broadly once you're connected. That's risky and clunky. Access grants entry to one specific app at a time, per person.",
+            "zh": "VPN(虛擬私人網路)會把你整個丟進內部網路,連上之後就大範圍地信任你。這既有風險又笨重。Access 則是一次只針對「一個特定應用程式、一個人」放行。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "person_check",
+              "title": { "en": "Per-app control", "zh": "逐一應用程式控管" },
+              "text": {
+                "en": "Grant access to exactly one app, not the entire network behind it.",
+                "zh": "只授權某一個應用程式,而不是它背後整個網路。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Nothing to install", "zh": "免裝用戶端" },
+              "text": {
+                "en": "For web apps, users just visit a URL and log in — no VPN client needed.",
+                "zh": "對網頁應用程式來說,使用者只要打開網址登入 —— 不用裝 VPN 用戶端。"
+              }
+            },
+            {
+              "icon": "groups",
+              "title": { "en": "Use existing logins", "zh": "沿用現有帳號" },
+              "text": {
+                "en": "Plug in Google Workspace, GitHub, Microsoft Entra ID, and more as identity sources.",
+                "zh": "接上 Google Workspace、GitHub、Microsoft Entra ID 等作為身分來源。"
+              }
+            },
+            {
+              "icon": "history",
+              "title": { "en": "Full audit log", "zh": "完整稽核紀錄" },
+              "text": {
+                "en": "See exactly who accessed what and when — great for security reviews.",
+                "zh": "清楚看到誰、在何時、存取了什麼 —— 資安稽核超好用。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to protect an app", "zh": "怎麼保護一個應用程式?" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Everything happens in the Cloudflare Zero Trust dashboard. Here's how to put a login wall in front of an app and decide who gets in.",
+            "zh": "所有設定都在 Cloudflare Zero Trust 儀表板進行。以下教你在應用程式前加一道登入牆,並決定誰能進來。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Connect a login provider", "zh": "接上登入提供者" },
+              "text": {
+                "en": "In Zero Trust → Settings → Authentication, add an identity provider. The simplest is the built-in One-time PIN, which emails users a code; or connect Google/GitHub.",
+                "zh": "在 Zero Trust → Settings → Authentication 加入身分提供者。最簡單的是內建的 One-time PIN(一次性密碼),會把驗證碼寄到使用者 email;或接上 Google／GitHub。"
+              }
+            },
+            {
+              "title": { "en": "Add your application", "zh": "新增你的應用程式" },
+              "text": {
+                "en": "Go to Access → Applications → Add an application → Self-hosted. Enter the app's domain, e.g. dashboard.example.com (often a Cloudflare Tunnel hostname).",
+                "zh": "進入 Access → Applications → Add an application → Self-hosted(自架)。輸入應用程式的網域,例如 dashboard.example.com(通常就是一個 Cloudflare Tunnel 的網址)。"
+              }
+            },
+            {
+              "title": { "en": "Create an Allow policy", "zh": "建立一條 Allow 政策" },
+              "text": {
+                "en": "Add a policy with action Allow and an Include rule that matches who should get in — for example, emails ending in @yourcompany.com.",
+                "zh": "新增一條政策,動作設為 Allow(允許),並加一條 Include(包含)規則來指定誰能進 —— 例如結尾是 @yourcompany.com 的 email。"
+              },
+              "code": {
+                "lang": "text",
+                "body": "Policy name: Company staff\nAction: Allow\nInclude:  Emails ending in  @yourcompany.com\nRequire:  (optional) Identity provider = Google"
+              }
+            },
+            {
+              "title": { "en": "Save and test", "zh": "儲存並測試" },
+              "text": {
+                "en": "Save the application. Now visiting the app shows a Cloudflare login screen first; only people matching your policy get through to the app.",
+                "zh": "儲存應用程式。現在打開這個應用程式會先出現 Cloudflare 登入畫面;只有符合政策的人才能進到應用程式。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "rule",
+          "title": { "en": "Include / Require / Exclude", "zh": "Include／Require／Exclude" },
+          "text": {
+            "en": "Include is OR logic (match any), Require is AND logic (must also match), Exclude is NOT (block these). Combine them to express rules like 'company emails, but require MFA, except contractors'.",
+            "zh": "Include 是「或」(符合其一即可)、Require 是「且」(還必須符合)、Exclude 是「非」(把這些擋掉)。組合起來就能表達像「公司 email,但必須通過多因素驗證,排除約聘人員」這種規則。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "verified_user",
+              "title": { "en": "Zero Trust", "zh": "零信任" },
+              "text": {
+                "en": "A model that verifies every request and trusts no one by default, inside or outside.",
+                "zh": "一種對每個請求都驗證、預設誰都不信任(無論內外)的安全模型。"
+              }
+            },
+            {
+              "icon": "apps",
+              "title": { "en": "Application", "zh": "應用程式(Application)" },
+              "text": {
+                "en": "The thing you're protecting — a self-hosted site, an SSH server, or a SaaS app.",
+                "zh": "你要保護的對象 —— 自架網站、SSH 伺服器,或 SaaS 應用程式。"
+              }
+            },
+            {
+              "icon": "gavel",
+              "title": { "en": "Policy", "zh": "政策(Policy)" },
+              "text": {
+                "en": "A rule deciding Allow, Block, or Bypass for a set of people.",
+                "zh": "決定一群人是 Allow(允許)、Block(封鎖)還是 Bypass(略過)的規則。"
+              }
+            },
+            {
+              "icon": "account_circle",
+              "title": { "en": "Identity provider", "zh": "身分提供者(IdP)" },
+              "text": {
+                "en": "Where logins come from: Google, GitHub, Microsoft Entra ID, or email PIN.",
+                "zh": "登入身分的來源:Google、GitHub、Microsoft Entra ID,或 email 一次性密碼。"
+              }
+            },
+            {
+              "icon": "pin",
+              "title": { "en": "One-time PIN", "zh": "一次性密碼" },
+              "text": {
+                "en": "The simplest login: Cloudflare emails the user a temporary code. No IdP setup needed.",
+                "zh": "最簡單的登入方式:Cloudflare 把臨時驗證碼寄到使用者 email。不用設定 IdP。"
+              }
+            },
+            {
+              "icon": "phonelink_lock",
+              "title": { "en": "Device posture", "zh": "裝置狀態檢查" },
+              "text": {
+                "en": "Optional checks that the user's device is healthy (e.g. disk encrypted) before allowing in.",
+                "zh": "可選的檢查,確認使用者裝置狀態良好(例如硬碟已加密)才放行。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "vpn_lock",
+          "title": { "en": "Pairs perfectly with Tunnel", "zh": "和 Tunnel 是絕配" },
+          "text": {
+            "en": "Use Cloudflare Tunnel to connect a private app without opening ports, then put Access in front of it for the login wall. Together they replace a VPN for most internal tools.",
+            "zh": "用 Cloudflare Tunnel 把私有應用程式連出來(不用開連接埠),再用 Access 在前面擋一道登入牆。兩者合起來,就能取代多數內部工具的 VPN。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Cloudflare's Zero Trust free plan covers up to 50 users at no cost.",
+              "Access works for self-hosted web apps, SSH/RDP, and many SaaS apps.",
+              "Start with One-time PIN to test quickly, then connect a real identity provider later.",
+              "Every login attempt is logged, giving you a clear audit trail."
+            ],
+            "zh": [
+              "Cloudflare 的 Zero Trust 免費方案可涵蓋最多 50 位使用者,完全免費。",
+              "Access 適用於自架網頁應用程式、SSH／遠端桌面,以及許多 SaaS 應用程式。",
+              "先用 One-time PIN 快速測試,之後再接上正式的身分提供者。",
+              "每次登入嘗試都會被記錄,給你清楚的稽核軌跡。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "tunnel", "label": { "en": "Cloudflare Tunnel", "zh": "Cloudflare Tunnel" } },
+    { "slug": "gateway", "label": { "en": "Gateway", "zh": "Gateway" } },
+    { "slug": "turnstile", "label": { "en": "Turnstile", "zh": "Turnstile" } },
+    { "slug": "waf", "label": { "en": "WAF", "zh": "WAF" } }
+  ],
+  "docs": "https://developers.cloudflare.com/cloudflare-one/policies/access/"
+}

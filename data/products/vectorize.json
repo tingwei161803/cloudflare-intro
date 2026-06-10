@@ -1,0 +1,287 @@
+{
+  "slug": "vectorize",
+  "category": "ai",
+  "icon": "scatter_plot",
+  "title": { "en": "Vectorize", "zh": "Vectorize" },
+  "subtitle": {
+    "en": "A database that searches by meaning, not exact words",
+    "zh": "靠語意搜尋、而不是靠關鍵字比對的資料庫"
+  },
+  "hero": {
+    "badge": { "en": "AI", "zh": "人工智慧" },
+    "tagline": {
+      "en": "Store the 'meaning' of your text as vectors, then find the closest matches — the memory layer behind RAG and semantic search.",
+      "zh": "把文字的『語意』存成向量，再找出最相近的結果——這就是 RAG 和語意搜尋背後的記憶層。"
+    }
+  },
+  "stats": [
+    { "value": "1,536", "label": { "en": "Max dimensions", "zh": "最大維度" } },
+    { "value": "10M", "label": { "en": "Vectors per index", "zh": "每索引向量數" } },
+    { "value": "3", "label": { "en": "Distance metrics", "zh": "距離度量方式" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Vectorize?", "zh": "Vectorize 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Vectorize is a vector database: it stores embeddings (向量, lists of numbers that capture the meaning of text, images or audio) and quickly finds the ones most similar to a query. That's how computers search by meaning instead of exact keywords.",
+            "zh": "Vectorize 是一種向量資料庫：它儲存 embedding（向量，一串能代表文字、圖片或聲音語意的數字），並快速找出和你查詢最相似的那些。電腦就是這樣靠語意、而不是靠完全相同的關鍵字來搜尋。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "An AI model first turns each piece of text into a vector. Similar meanings end up as nearby vectors. Vectorize stores millions of them and, given a new vector, returns the closest matches in milliseconds.",
+            "zh": "AI 模型會先把每段文字變成一個向量。語意相近的文字，向量也會靠得很近。Vectorize 把上百萬個向量存起來，給它一個新向量，就能在幾毫秒內回傳最接近的結果。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "map",
+          "title": { "en": "Think of it like a map of meaning", "zh": "把它想成一張語意地圖" },
+          "text": {
+            "en": "Picture every sentence as a pin on a giant map, where related ideas sit close together. To answer a question, you drop a new pin and look at its nearest neighbors. Vectorize is that map, and it finds the nearest pins instantly.",
+            "zh": "想像每個句子都是一張大地圖上的圖釘，意思相關的就釘在一起。要回答問題時，你放下一支新圖釘，看看它旁邊有哪些。Vectorize 就是那張地圖，而且能瞬間找出最近的圖釘。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Keyword search misses anything phrased differently. Vectorize understands meaning, which unlocks smarter search and lets you give an AI model real, up-to-date knowledge.",
+            "zh": "關鍵字搜尋只要換個說法就找不到。Vectorize 懂語意，因此能做出更聰明的搜尋，也能餵給 AI 模型真實、最新的知識。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "psychology",
+              "title": { "en": "Search by meaning", "zh": "靠語意搜尋" },
+              "text": {
+                "en": "Find 'how to reset my password' even when the document says 'recover account access'.",
+                "zh": "就算文件寫的是『恢復帳號存取』，也能找到『怎麼重設密碼』。"
+              }
+            },
+            {
+              "icon": "auto_stories",
+              "title": { "en": "Powers RAG", "zh": "驅動 RAG" },
+              "text": {
+                "en": "RAG (Retrieval-Augmented Generation, 檢索增強生成) feeds an AI the most relevant facts so answers are accurate, not made up.",
+                "zh": "RAG（Retrieval-Augmented Generation，檢索增強生成）把最相關的事實餵給 AI，讓答案有根據、不會亂掰。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Globally fast", "zh": "全球都快" },
+              "text": {
+                "en": "Runs on Cloudflare's network and pairs natively with Workers, so queries return quickly worldwide.",
+                "zh": "跑在 Cloudflare 網路上，並原生搭配 Workers，全球查詢都很快。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "No servers to run", "zh": "不用顧伺服器" },
+              "text": {
+                "en": "Create an index with one command — no clusters to size, patch or babysit.",
+                "zh": "一個指令就建好索引——不用規劃、修補或顧著叢集。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "smart_toy",
+              "title": { "en": "Chat over your docs", "zh": "用你的文件聊天" },
+              "text": {
+                "en": "Build a bot that answers from your own manuals, wiki or support articles using RAG.",
+                "zh": "用 RAG 做一個能根據你自己的手冊、wiki 或客服文章回答的機器人。"
+              }
+            },
+            {
+              "icon": "search",
+              "title": { "en": "Smart site search", "zh": "聰明的站內搜尋" },
+              "text": {
+                "en": "Let users search by what they mean, returning relevant results even with different wording.",
+                "zh": "讓使用者依『意思』搜尋，就算用字不同也能找到相關結果。"
+              }
+            },
+            {
+              "icon": "recommend",
+              "title": { "en": "Recommendations", "zh": "推薦系統" },
+              "text": {
+                "en": "Suggest similar products, articles or songs by finding nearby vectors.",
+                "zh": "靠找出相近的向量，推薦相似的商品、文章或歌曲。"
+              }
+            },
+            {
+              "icon": "filter_alt",
+              "title": { "en": "Classify & dedupe", "zh": "分類與去重" },
+              "text": {
+                "en": "Group similar items, flag duplicates, or spot anomalies that stand far apart.",
+                "zh": "把相似的項目分組、標出重複內容，或揪出距離很遠的異常值。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create an index", "zh": "建立一個索引" },
+              "text": {
+                "en": "An index holds vectors of one fixed size. Match the dimensions to your embedding model (here, 768) and pick a distance metric like cosine.",
+                "zh": "一個索引存放固定大小的向量。維度要對應你的 embedding 模型（這裡是 768），並挑一種距離度量，例如 cosine（餘弦）。"
+              },
+              "code": { "lang": "bash", "body": "wrangler vectorize create my-index --dimensions=768 --metric=cosine" }
+            },
+            {
+              "title": { "en": "Add the binding", "zh": "加上繫結" },
+              "text": {
+                "en": "Wire the index into your Worker via wrangler.jsonc so env.VECTORIZE is available in code.",
+                "zh": "在 wrangler.jsonc 把索引接進 Worker，程式裡就能用 env.VECTORIZE。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"my-search-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  \"vectorize\": [\n    { \"binding\": \"VECTORIZE\", \"index_name\": \"my-index\" }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Insert & query vectors", "zh": "寫入並查詢向量" },
+              "text": {
+                "en": "Store vectors with insert(), then query() with a new vector to get the closest matches. Real apps usually generate the numbers with Workers AI embeddings.",
+                "zh": "用 insert() 存入向量，再用 query() 傳入新向量取得最相近的結果。實務上這些數字通常由 Workers AI 的 embedding 模型產生。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    // 1) Store a few vectors with metadata\n    await env.VECTORIZE.insert([\n      { id: \"1\", values: [0.1, 0.2, 0.3], metadata: { text: \"hello\" } },\n      { id: \"2\", values: [0.9, 0.8, 0.7], metadata: { text: \"world\" } }\n    ]);\n\n    // 2) Find the 3 closest matches to a query vector\n    const matches = await env.VECTORIZE.query(\n      [0.1, 0.2, 0.25],\n      { topK: 3, returnMetadata: true }\n    );\n    return Response.json(matches);\n  }\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish your Worker and start querying from anywhere.",
+                "zh": "把 Worker 發佈出去，就能從任何地方查詢。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "data_array",
+              "title": { "en": "Embedding 向量", "zh": "向量（Embedding）" },
+              "text": {
+                "en": "A list of numbers an AI model produces to represent the meaning of some text, image or audio.",
+                "zh": "AI 模型產生的一串數字，用來代表某段文字、圖片或聲音的語意。"
+              }
+            },
+            {
+              "icon": "straighten",
+              "title": { "en": "Dimensions 維度", "zh": "維度（Dimensions）" },
+              "text": {
+                "en": "How long each vector is. It must match your model — Vectorize supports up to 1,536.",
+                "zh": "每個向量有多長。必須和你的模型一致——Vectorize 最多支援 1,536 維。"
+              }
+            },
+            {
+              "icon": "social_distance",
+              "title": { "en": "Distance metric 距離度量", "zh": "距離度量（Metric）" },
+              "text": {
+                "en": "The rule for measuring 'closeness': cosine, euclidean or dot-product. Pick the one your model recommends.",
+                "zh": "衡量『接近程度』的規則：cosine（餘弦）、euclidean（歐氏）或 dot-product（內積）。挑你的模型建議的那種。"
+              }
+            },
+            {
+              "icon": "filter_list",
+              "title": { "en": "Metadata filtering", "zh": "中介資料篩選" },
+              "text": {
+                "en": "Attach tags (like category or date) to each vector and filter results by them during a query.",
+                "zh": "為每個向量附上標籤（例如分類或日期），查詢時可依這些標籤篩選結果。"
+              }
+            },
+            {
+              "icon": "auto_stories",
+              "title": { "en": "RAG 檢索增強生成", "zh": "RAG（檢索增強生成）" },
+              "text": {
+                "en": "Retrieve the most relevant chunks from Vectorize, then hand them to an AI model to write a grounded answer.",
+                "zh": "先從 Vectorize 取出最相關的片段，再交給 AI 模型寫出有依據的答案。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & limits", "zh": "小提示與限制" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "link",
+          "title": { "en": "Pair it with Workers AI", "zh": "搭配 Workers AI 一起用" },
+          "text": {
+            "en": "Use a Workers AI embedding model to turn text into vectors, store them in Vectorize, and have an LLM answer from the matches. That trio is a complete RAG pipeline.",
+            "zh": "用 Workers AI 的 embedding 模型把文字變成向量，存進 Vectorize，再讓 LLM 根據比對結果回答。這三者就組成一條完整的 RAG 流程。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Each index holds up to 10,000,000 vectors, with up to 1,536 dimensions each.",
+              "A query returns up to 100 results (or up to 50 when also returning values/metadata).",
+              "Each vector can carry up to 10 KiB of metadata.",
+              "Free plan allows up to 100 indexes; the Workers Paid plan allows far more."
+            ],
+            "zh": [
+              "每個索引最多存 10,000,000 個向量，每個向量最多 1,536 維。",
+              "一次查詢最多回傳 100 筆結果（同時回傳數值/中介資料時最多 50 筆）。",
+              "每個向量最多可附帶 10 KiB 的中介資料。",
+              "免費方案最多 100 個索引；Workers 付費方案則多得多。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers-ai", "label": { "en": "Workers AI", "zh": "Workers AI" } },
+    { "slug": "ai-gateway", "label": { "en": "AI Gateway", "zh": "AI Gateway" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } }
+  ],
+  "docs": "https://developers.cloudflare.com/vectorize/"
+}

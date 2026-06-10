@@ -1,0 +1,368 @@
+{
+  "slug": "containers",
+  "category": "compute",
+  "icon": "deployed_code",
+  "title": { "en": "Containers", "zh": "Containers" },
+  "subtitle": {
+    "en": "Run full containers right next to your Workers",
+    "zh": "把完整的容器跑在 Workers 旁邊"
+  },
+  "hero": {
+    "badge": { "en": "Compute", "zh": "運算" },
+    "tagline": {
+      "en": "When a Worker isn't enough, spin up a real container — your own Docker image, a full filesystem, any language — controlled from Worker code.",
+      "zh": "當 Worker 不夠用時，啟動一個真正的容器——你自己的 Docker 映像檔、完整的檔案系統、任何語言——而且全程由 Worker 程式碼控制。"
+    }
+  },
+  "stats": [
+    { "value": "6", "label": { "en": "Instance sizes", "zh": "執行個體規格" } },
+    { "value": "12 GiB", "label": { "en": "Max memory", "zh": "最大記憶體" } },
+    { "value": "4", "label": { "en": "Max vCPUs", "zh": "最多 vCPU" } },
+    { "value": "Earth", "label": { "en": "Deploy region", "zh": "部署區域" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What are Containers?", "zh": "Containers 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Containers let you run a full container image — packaged with its own operating system, libraries, and files — on Cloudflare's network, started and managed directly from your Worker code.",
+            "zh": "Cloudflare Containers 讓你在 Cloudflare 的網路上執行一個完整的容器映像檔（container image，把作業系統、函式庫和檔案全部打包在一起），而且由你的 Worker 程式碼直接啟動和管理。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "A \"container\" is a self-contained box that holds an application plus everything it needs to run. The most common way to build one is with Docker. Containers are perfect when a lightweight Worker can't do the job — for example, when you need a specific programming language, lots of memory, multiple CPU cores, or a real disk.",
+            "zh": "「容器（container）」是一個自給自足的盒子，裡面裝著一個應用程式，以及它執行所需要的一切。最常見的打包方式是用 Docker。當輕量的 Worker 做不到某些事時，容器就派上用場——例如你需要某個特定的程式語言、大量記憶體、多核心 CPU、或是一顆真正的硬碟。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "luggage",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A Worker is like a quick errand you can do empty-handed. A container is like a fully packed suitcase — it carries everything your app needs (the OS, tools, files) so it runs the same way anywhere you set it down.",
+            "zh": "Worker 像是兩手空空就能跑的快速差事；容器則像一個打包好的行李箱——它把你的 App 需要的一切（作業系統、工具、檔案）都裝在裡面，所以不管放到哪裡，跑起來都一模一樣。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Workers are fast and cheap, but they run in a sandbox with limited memory and only support a few languages. Some jobs simply need more. Containers fill that gap — without you having to learn Kubernetes or run your own servers.",
+            "zh": "Workers 又快又便宜，但它跑在一個記憶體有限、只支援少數語言的沙盒裡。有些工作就是需要更多資源。Containers 正好補上這個缺口——而且你不用學 Kubernetes，也不用自己架伺服器。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "memory",
+              "title": { "en": "More power", "zh": "更多算力" },
+              "text": {
+                "en": "Get up to 4 vCPUs and 12 GiB of memory — far beyond a Worker's 128 MB limit.",
+                "zh": "最多可用 4 個 vCPU 和 12 GiB 記憶體——遠超 Worker 的 128 MB 上限。"
+              }
+            },
+            {
+              "icon": "translate",
+              "title": { "en": "Any language", "zh": "任何語言" },
+              "text": {
+                "en": "Run Python, Go, Java, FFmpeg, or any binary that runs on Linux — not just JavaScript.",
+                "zh": "可以跑 Python、Go、Java、FFmpeg，或任何能在 Linux 上執行的程式——不限於 JavaScript。"
+              }
+            },
+            {
+              "icon": "folder_open",
+              "title": { "en": "A real filesystem", "zh": "真正的檔案系統" },
+              "text": {
+                "en": "Read and write files on a full disk (up to 20 GB), great for processing or temporary storage.",
+                "zh": "在一顆完整的硬碟上讀寫檔案（最多 20 GB），很適合資料處理或暫存。"
+              }
+            },
+            {
+              "icon": "inventory_2",
+              "title": { "en": "Bring your image", "zh": "帶上現有映像檔" },
+              "text": {
+                "en": "Already have a Docker image? Deploy it as-is — no rewrite needed.",
+                "zh": "已經有 Docker 映像檔了嗎？原封不動就能部署——不用改寫。"
+              }
+            },
+            {
+              "icon": "auto_awesome",
+              "title": { "en": "No ops burden", "zh": "免維運" },
+              "text": {
+                "en": "Cloudflare provisions, scales, and routes for you. No clusters, no orchestration to manage.",
+                "zh": "Cloudflare 幫你佈署、擴充、導流。沒有叢集（cluster）、也沒有編排（orchestration）要管。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "Worker-native", "zh": "與 Worker 緊密整合" },
+              "text": {
+                "en": "Containers are controlled from Worker code, so they plug straight into the rest of your stack.",
+                "zh": "容器由 Worker 程式碼控制，所以能直接接上你其他的服務。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Reach for Containers whenever a task is too heavy, too specialized, or too \"Linux-y\" for a plain Worker.",
+            "zh": "只要一項工作對單純的 Worker 來說太重、太特殊、或太「Linux」，就該考慮 Containers。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "movie",
+              "title": { "en": "Media processing", "zh": "媒體處理" },
+              "text": {
+                "en": "Transcode video or images with tools like FFmpeg that need CPU and a filesystem.",
+                "zh": "用 FFmpeg 之類需要 CPU 和檔案系統的工具，轉換影片或圖片格式。"
+              }
+            },
+            {
+              "icon": "psychology",
+              "title": { "en": "Heavy compute", "zh": "重量級運算" },
+              "text": {
+                "en": "Run data crunching, simulations, or model inference that exceeds Worker memory.",
+                "zh": "執行超出 Worker 記憶體的資料運算、模擬，或模型推論。"
+              }
+            },
+            {
+              "icon": "code",
+              "title": { "en": "Existing apps", "zh": "現有應用" },
+              "text": {
+                "en": "Lift an existing Python/Go/Java service into the Cloudflare network with its Docker image.",
+                "zh": "把現有的 Python / Go / Java 服務，連同 Docker 映像檔搬上 Cloudflare 網路。"
+              }
+            },
+            {
+              "icon": "terminal",
+              "title": { "en": "CLI tools & binaries", "zh": "命令列工具與執行檔" },
+              "text": {
+                "en": "Wrap a command-line tool that only ships as a Linux binary and call it from a Worker.",
+                "zh": "把只提供 Linux 執行檔的命令列工具包起來，再由 Worker 呼叫它。"
+              }
+            },
+            {
+              "icon": "sandbox",
+              "title": { "en": "Untrusted code", "zh": "不可信的程式碼" },
+              "text": {
+                "en": "Run user-supplied or AI-generated code in an isolated container sandbox.",
+                "zh": "在隔離的容器沙盒裡，執行使用者上傳或 AI 產生的程式碼。"
+              }
+            },
+            {
+              "icon": "build",
+              "title": { "en": "Custom runtimes", "zh": "自訂執行環境" },
+              "text": {
+                "en": "Need a specific OS version, system library, or odd dependency? Bake it into the image.",
+                "zh": "需要特定的作業系統版本、系統函式庫或奇怪的相依套件？通通烤進映像檔裡。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you get started?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You define a container with a Dockerfile, point your Worker at it in wrangler.jsonc, and deploy with Wrangler. Cloudflare builds the image and runs instances on demand. (Containers require the Workers Paid plan.)",
+            "zh": "你用一個 Dockerfile 定義容器，在 wrangler.jsonc 裡讓 Worker 指向它，再用 Wrangler 部署。Cloudflare 會建置映像檔，並依需求啟動執行個體。（Containers 需要 Workers 付費方案。）"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Scaffold from the template", "zh": "用範本建立專案" },
+              "text": {
+                "en": "Start from Cloudflare's official containers template, which includes a Dockerfile and Worker wired together.",
+                "zh": "從 Cloudflare 官方的 containers 範本開始，裡面已經把 Dockerfile 和 Worker 接好了。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest -- --template=cloudflare/templates/containers-template" }
+            },
+            {
+              "title": { "en": "Configure the container", "zh": "設定容器" },
+              "text": {
+                "en": "In wrangler.jsonc, name your container class, point to your Dockerfile, and cap how many instances can run at once.",
+                "zh": "在 wrangler.jsonc 裡幫容器類別命名、指向你的 Dockerfile，並限制最多能同時跑幾個執行個體。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"my-container-app\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-05-23\",\n  \"containers\": [\n    {\n      \"class_name\": \"MyContainer\",\n      \"image\": \"./Dockerfile\",\n      \"max_instances\": 10\n    }\n  ],\n  \"durable_objects\": {\n    \"bindings\": [\n      { \"name\": \"MY_CONTAINER\", \"class_name\": \"MyContainer\" }\n    ]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"MyContainer\"] }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署" },
+              "text": {
+                "en": "Wrangler builds your image, pushes it, and goes live. Instances start on demand and sleep when idle.",
+                "zh": "Wrangler 會建置你的映像檔、推送上去並上線。執行個體會依需求啟動，閒置時自動休眠。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/index.js — route a request to a container", "zh": "src/index.js — 把請求導向容器" },
+          "body": "import { Container, getContainer } from \"@cloudflare/containers\";\n\nexport class MyContainer extends Container {\n  // The port your container app listens on\n  defaultPort = 8080;\n  // Put the container to sleep after 10 minutes idle\n  sleepAfter = \"10m\";\n}\n\nexport default {\n  async fetch(request, env) {\n    // Get (or start) a container instance and forward the request to it\n    const container = getContainer(env.MY_CONTAINER);\n    return container.fetch(request);\n  },\n};"
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "dataset",
+          "title": { "en": "Containers are built on Durable Objects", "zh": "容器是建立在 Durable Objects 上的" },
+          "text": {
+            "en": "Under the hood, each container is managed by a Durable Object — that's why the config has a durable_objects binding and a migration. You don't need to understand Durable Objects to use Containers, but it's why they integrate so smoothly.",
+            "zh": "在底層，每個容器都是由一個 Durable Object 管理的——這就是為什麼設定檔裡有 durable_objects 綁定和 migration。你不用懂 Durable Objects 也能用 Containers，但這正是它們整合得這麼順的原因。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "inventory_2",
+              "title": { "en": "Image", "zh": "映像檔（image）" },
+              "text": {
+                "en": "The packaged blueprint of your app and its environment, usually built from a Dockerfile.",
+                "zh": "你 App 與其執行環境打包好的藍圖，通常由 Dockerfile 建置而來。"
+              }
+            },
+            {
+              "icon": "memory",
+              "title": { "en": "Instance type", "zh": "執行個體規格" },
+              "text": {
+                "en": "The size of the machine — from lite (256 MiB) up to standard-4 (4 vCPU, 12 GiB, 20 GB disk).",
+                "zh": "機器的大小——從 lite（256 MiB）一路到 standard-4（4 vCPU、12 GiB、20 GB 硬碟）。"
+              }
+            },
+            {
+              "icon": "settings_power",
+              "title": { "en": "On-demand instances", "zh": "隨需執行個體" },
+              "text": {
+                "en": "Containers start when needed and sleep when idle, so you only pay while they're awake.",
+                "zh": "容器在需要時啟動、閒置時休眠，所以你只在它醒著時付費。"
+              }
+            },
+            {
+              "icon": "bedtime",
+              "title": { "en": "sleepAfter", "zh": "sleepAfter（休眠時間）" },
+              "text": {
+                "en": "How long an idle container stays awake before sleeping to save resources, e.g. \"10m\".",
+                "zh": "閒置的容器在休眠省資源前，要先醒著多久，例如 \"10m\"（10 分鐘）。"
+              }
+            },
+            {
+              "icon": "tag",
+              "title": { "en": "Container class", "zh": "容器類別" },
+              "text": {
+                "en": "A JavaScript class extending Container that defines your container's port and behavior.",
+                "zh": "一個繼承自 Container 的 JavaScript 類別，用來定義容器的連接埠和行為。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "max_instances", "zh": "max_instances（上限）" },
+              "text": {
+                "en": "A cap on how many copies of your container can run simultaneously — useful for cost control.",
+                "zh": "限制同一時間最多能跑幾個容器副本——對控制成本很有用。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "bedtime",
+          "title": { "en": "Let them sleep", "zh": "讓它好好睡" },
+          "text": {
+            "en": "You're billed for memory and disk while a container is awake, and for vCPU only while it's actively computing. Set a sensible sleepAfter so idle containers don't keep running up the bill.",
+            "zh": "容器醒著時，你要為記憶體和硬碟付費；vCPU 則只在「實際運算」時計費。設定一個合理的 sleepAfter，閒置的容器才不會一直累積費用。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Instance types", "zh": "執行個體規格" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "lite — 1/16 vCPU, 256 MiB memory, 2 GB disk",
+              "basic — 1/4 vCPU, 1 GiB memory, 4 GB disk",
+              "standard-1 — 1/2 vCPU, 4 GiB memory, 8 GB disk",
+              "standard-2 — 1 vCPU, 6 GiB memory, 12 GB disk",
+              "standard-3 — 2 vCPU, 8 GiB memory, 16 GB disk",
+              "standard-4 — 4 vCPU, 12 GiB memory, 20 GB disk"
+            ],
+            "zh": [
+              "lite — 1/16 vCPU、256 MiB 記憶體、2 GB 硬碟",
+              "basic — 1/4 vCPU、1 GiB 記憶體、4 GB 硬碟",
+              "standard-1 — 1/2 vCPU、4 GiB 記憶體、8 GB 硬碟",
+              "standard-2 — 1 vCPU、6 GiB 記憶體、12 GB 硬碟",
+              "standard-3 — 2 vCPU、8 GiB 記憶體、16 GB 硬碟",
+              "standard-4 — 4 vCPU、12 GiB 記憶體、20 GB 硬碟"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "credit_card",
+          "title": { "en": "Paid plan required", "zh": "需要付費方案" },
+          "text": {
+            "en": "Containers run on the $5/month Workers Paid plan, which includes monthly allowances (25 GiB-hours of memory, 375 vCPU-minutes, 200 GB-hours of disk) before usage-based charges kick in.",
+            "zh": "Containers 需要每月 5 美元的 Workers 付費方案，方案內含每月免費額度（25 GiB-小時記憶體、375 vCPU-分鐘、200 GB-小時硬碟），超過才會開始按用量計費。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } }
+  ],
+  "docs": "https://developers.cloudflare.com/containers/"
+}

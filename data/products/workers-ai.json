@@ -1,0 +1,328 @@
+{
+  "slug": "workers-ai",
+  "category": "ai",
+  "icon": "neurology",
+  "title": { "en": "Workers AI", "zh": "Workers AI" },
+  "subtitle": {
+    "en": "Run open-source AI models on serverless GPUs",
+    "zh": "用無伺服器 GPU 跑開源 AI 模型"
+  },
+  "hero": {
+    "badge": { "en": "AI", "zh": "人工智慧" },
+    "tagline": {
+      "en": "Call powerful AI models with a single line of code — no GPU to buy, no server to manage.",
+      "zh": "一行程式碼就能呼叫強大的 AI 模型——不用買 GPU，也不用管伺服器。"
+    }
+  },
+  "stats": [
+    { "value": "50+", "label": { "en": "Ready-made models", "zh": "現成模型" } },
+    { "value": "10,000", "label": { "en": "Free Neurons / day", "zh": "每日免費神經元" } },
+    { "value": "$0.011", "label": { "en": "Per 1,000 Neurons", "zh": "每 1,000 神經元" } },
+    { "value": "1", "label": { "en": "Line to call AI", "zh": "一行呼叫 AI" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Workers AI?", "zh": "Workers AI 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Workers AI lets you run ready-made, open-source AI models (chatbots, translation, image generation, speech-to-text and more) directly on Cloudflare's global network of GPUs, just by calling an API.",
+            "zh": "Workers AI 讓你直接呼叫 API，就能在 Cloudflare 全球的 GPU 上跑現成的開源 AI 模型（聊天機器人、翻譯、生成圖片、語音轉文字等等）。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Normally, running an AI model means renting an expensive GPU server, installing complex software, and keeping it online 24/7. Workers AI removes all of that: Cloudflare owns the GPUs, you just send a request and get the answer back.",
+            "zh": "一般要跑 AI 模型，你得租很貴的 GPU 伺服器、安裝一堆軟體、還要 24 小時開機。Workers AI 把這些麻煩全拿掉：GPU 是 Cloudflare 的，你只要送出請求、拿回答案就好。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "restaurant",
+          "title": { "en": "Think of it like a restaurant", "zh": "把它想成一家餐廳" },
+          "text": {
+            "en": "You don't build a kitchen or hire chefs to eat a great meal — you just order from the menu. Workers AI is the kitchen of GPUs; the model catalog is the menu; you simply place your order (a request) and the dish (the answer) arrives.",
+            "zh": "想吃一頓好料，你不必自己蓋廚房、請廚師——直接點菜就好。Workers AI 就是那間裝滿 GPU 的廚房，模型清單就是菜單，你只要點菜（送出請求），菜（答案）就會端上桌。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Workers AI removes the three biggest pains of doing AI yourself: cost, complexity, and distance from your users.",
+            "zh": "自己搞 AI 有三大痛點：花錢、麻煩、離使用者太遠。Workers AI 把這三個都解決了。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "payments",
+              "title": { "en": "No GPU to buy", "zh": "不用買 GPU" },
+              "text": {
+                "en": "GPUs cost thousands of dollars. Here you pay only for what you use, and get a free daily allowance to experiment.",
+                "zh": "一張 GPU 動輒上萬。這裡只按用量付費，而且每天還有免費額度可以試玩。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Runs near users", "zh": "靠近使用者執行" },
+              "text": {
+                "en": "Models run on Cloudflare's worldwide network, so answers come back fast wherever your users are.",
+                "zh": "模型在 Cloudflare 全球網路上執行，不管使用者在哪，回應都很快。"
+              }
+            },
+            {
+              "icon": "lock_open",
+              "title": { "en": "Open-source models", "zh": "開源模型" },
+              "text": {
+                "en": "Use popular open models like Llama, Mistral and Whisper without signing separate contracts with each provider.",
+                "zh": "可以直接用 Llama、Mistral、Whisper 等熱門開源模型，不必跟每家廠商個別簽約。"
+              }
+            },
+            {
+              "icon": "code",
+              "title": { "en": "One simple API", "zh": "一個簡單 API" },
+              "text": {
+                "en": "Every model is called the same way — swap one model name for another to switch tasks.",
+                "zh": "每個模型的呼叫方式都一樣——換一個模型名稱，就能切換不同任務。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "chat",
+              "title": { "en": "Chatbots & assistants", "zh": "聊天機器人與助理" },
+              "text": {
+                "en": "Build a Q&A bot or writing helper using a large language model (LLM, 大型語言模型).",
+                "zh": "用大型語言模型（LLM）做問答機器人或寫作小幫手。"
+              }
+            },
+            {
+              "icon": "translate",
+              "title": { "en": "Translate & summarize", "zh": "翻譯與摘要" },
+              "text": {
+                "en": "Turn text into other languages or shrink long articles into short summaries.",
+                "zh": "把文字翻成別的語言，或把長文章濃縮成短摘要。"
+              }
+            },
+            {
+              "icon": "image",
+              "title": { "en": "Generate images", "zh": "生成圖片" },
+              "text": {
+                "en": "Create pictures from a text description using text-to-image models.",
+                "zh": "用文字生成圖片的模型，從一句描述變出一張圖。"
+              }
+            },
+            {
+              "icon": "mic",
+              "title": { "en": "Speech to text", "zh": "語音轉文字" },
+              "text": {
+                "en": "Transcribe audio into text with speech models like Whisper.",
+                "zh": "用 Whisper 之類的語音模型，把錄音轉成文字。"
+              }
+            },
+            {
+              "icon": "scatter_plot",
+              "title": { "en": "Embeddings for search", "zh": "做語意搜尋的向量" },
+              "text": {
+                "en": "Turn text into embeddings (向量, number lists that capture meaning) to power semantic search and RAG.",
+                "zh": "把文字轉成 embedding（向量，一串能代表語意的數字），用來做語意搜尋和 RAG。"
+              }
+            },
+            {
+              "icon": "label",
+              "title": { "en": "Classify content", "zh": "內容分類" },
+              "text": {
+                "en": "Detect sentiment, tag images, or sort messages into categories automatically.",
+                "zh": "自動判斷情緒、為圖片貼標籤，或把訊息分門別類。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You'll use Wrangler, Cloudflare's command-line tool for Workers. The steps below create a Worker, connect it to AI, and deploy it.",
+            "zh": "你會用到 Wrangler，也就是 Cloudflare Workers 的命令列工具。下面的步驟會建立一個 Worker、把它接上 AI，然後部署。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Install Wrangler & log in", "zh": "安裝 Wrangler 並登入" },
+              "text": {
+                "en": "Install the CLI globally, then log in to your Cloudflare account in the browser.",
+                "zh": "全域安裝這個命令列工具，然後在瀏覽器登入你的 Cloudflare 帳號。"
+              },
+              "code": { "lang": "bash", "body": "npm install -g wrangler\nwrangler login" }
+            },
+            {
+              "title": { "en": "Add the AI binding", "zh": "加上 AI 繫結" },
+              "text": {
+                "en": "A binding (繫結) is a setting that wires your Worker to a Cloudflare service. Add this to wrangler.jsonc so env.AI becomes available in your code.",
+                "zh": "binding（繫結）是一段設定，把你的 Worker「接線」到某個 Cloudflare 服務。把下面這段加進 wrangler.jsonc，程式裡就能用 env.AI。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"my-ai-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  \"ai\": {\n    \"binding\": \"AI\"\n  }\n}" }
+            },
+            {
+              "title": { "en": "Call a model", "zh": "呼叫一個模型" },
+              "text": {
+                "en": "Use env.AI.run() with a model name and an input. Here we ask Llama 3.1 a question.",
+                "zh": "用 env.AI.run()，傳入模型名稱和輸入。這裡我們向 Llama 3.1 問一個問題。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const result = await env.AI.run(\n      \"@cf/meta/llama-3.1-8b-instruct\",\n      { prompt: \"What is Cloudflare in one sentence?\" }\n    );\n    return Response.json(result);\n  }\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish your Worker to the world with one command.",
+                "zh": "一個指令就能把你的 Worker 發佈到全世界。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Prefer no Worker? Use the REST API", "zh": "不想寫 Worker？直接用 REST API" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "You can also call any model straight from the command line (or any backend) with a single HTTP request and an API token.",
+            "zh": "你也可以用一個 HTTP 請求加上 API 權杖（token），直接從命令列（或任何後端）呼叫任何模型。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Call via REST API", "zh": "用 REST API 呼叫" },
+          "body": "curl https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/@cf/meta/llama-3.1-8b-instruct \\\n  -H \"Authorization: Bearer {api_token}\" \\\n  -d '{ \"prompt\": \"Tell me a joke\" }'"
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "psychology",
+              "title": { "en": "Inference 推論", "zh": "推論（Inference）" },
+              "text": {
+                "en": "Inference is the moment a trained model 'thinks' and produces an answer for your input. Each call you make is one inference.",
+                "zh": "推論就是訓練好的模型「思考並產生答案」的那一刻。你每呼叫一次，就是一次推論。"
+              }
+            },
+            {
+              "icon": "menu_book",
+              "title": { "en": "Model catalog", "zh": "模型清單" },
+              "text": {
+                "en": "A menu of 50+ models, each with an ID like @cf/meta/llama-3.1-8b-instruct. Pick one for your task.",
+                "zh": "一份超過 50 個模型的菜單，每個都有像 @cf/meta/llama-3.1-8b-instruct 的代號。依任務挑一個用。"
+              }
+            },
+            {
+              "icon": "cable",
+              "title": { "en": "Binding 繫結", "zh": "繫結（Binding）" },
+              "text": {
+                "en": "The wiring that exposes AI inside your Worker as env.AI — no API keys to paste into your code.",
+                "zh": "把 AI 接進 Worker、變成 env.AI 的那條線——不必把金鑰貼進程式碼裡。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Neuron 神經元", "zh": "神經元（Neuron）" },
+              "text": {
+                "en": "Cloudflare's unit for measuring AI usage (the GPU work a request needs). You get 10,000 free every day.",
+                "zh": "Cloudflare 衡量 AI 用量的單位（一次請求需要的 GPU 運算量）。每天送你 10,000 個免費額度。"
+              }
+            },
+            {
+              "icon": "scatter_plot",
+              "title": { "en": "Embedding 向量", "zh": "向量（Embedding）" },
+              "text": {
+                "en": "A list of numbers that captures the meaning of text. Store them in Vectorize to build search and RAG.",
+                "zh": "一串能代表文字語意的數字。把它存進 Vectorize，就能做搜尋和 RAG。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "Start free", "zh": "免費起步" },
+          "text": {
+            "en": "You get 10,000 Neurons free every day (resets at 00:00 UTC). Beyond that, the paid plan is $0.011 per 1,000 Neurons — only pay for what you actually use.",
+            "zh": "每天免費送你 10,000 個神經元（每天 UTC 00:00 重置）。超過後付費方案是每 1,000 個神經元 0.011 美元——只為實際用量付費。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Different models cost different amounts of Neurons — bigger models cost more per request.",
+              "Put AI Gateway in front of Workers AI to cache repeated answers and cut cost.",
+              "Test locally with 'wrangler dev' before deploying.",
+              "Browse all models and their IDs in the Cloudflare dashboard or docs."
+            ],
+            "zh": [
+              "不同模型耗用的神經元不同——模型越大，每次請求越貴。",
+              "在 Workers AI 前面加上 AI Gateway，可以快取重複的答案、省下費用。",
+              "部署前先用『wrangler dev』在本機測試。",
+              "可在 Cloudflare 控制台或文件裡瀏覽所有模型和它們的代號。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "ai-gateway", "label": { "en": "AI Gateway", "zh": "AI Gateway" } },
+    { "slug": "vectorize", "label": { "en": "Vectorize", "zh": "Vectorize" } },
+    { "slug": "agents", "label": { "en": "Agents", "zh": "Agents" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } }
+  ],
+  "docs": "https://developers.cloudflare.com/workers-ai/"
+}

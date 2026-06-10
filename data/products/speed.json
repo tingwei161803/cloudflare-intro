@@ -1,0 +1,290 @@
+{
+  "slug": "speed",
+  "category": "performance",
+  "icon": "speed",
+  "title": { "en": "Speed", "zh": "速度優化" },
+  "subtitle": {
+    "en": "Measure your site's real-world performance and one-click the optimizations that fix it",
+    "zh": "量測網站在真實世界的效能，再一鍵開啟能改善它的各種優化"
+  },
+  "hero": {
+    "badge": { "en": "Performance", "zh": "效能" },
+    "tagline": {
+      "en": "From smart routing to image, JS, and CSS optimization — make every page faster.",
+      "zh": "從智慧路由到圖片、JS、CSS 優化，讓每一頁都更快。"
+    }
+  },
+  "stats": [
+    { "value": "~30%", "label": { "en": "Faster with Argo Smart Routing", "zh": "用 Argo 智慧路由平均加快" } },
+    { "value": "3", "label": { "en": "Core Web Vitals tracked", "zh": "追蹤的核心網頁指標" } },
+    { "value": "1-click", "label": { "en": "To apply many fixes", "zh": "套用許多優化只要一鍵" } },
+    { "value": "330+", "label": { "en": "Edge cities optimizing", "zh": "進行優化的邊緣城市" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Cloudflare Speed?", "zh": "Cloudflare Speed 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Speed is Cloudflare's hub for measuring how fast your website really is and turning on optimizations to make it faster. It includes Observatory (performance testing with real and synthetic data), smart routing across Cloudflare's private network, and a set of content optimizations for images, JavaScript, and CSS.",
+            "zh": "Speed 是 Cloudflare 用來量測你網站到底有多快、並開啟各種優化讓它更快的中心。它包含 Observatory（用真實與合成資料做效能測試）、在 Cloudflare 私有網路上的智慧路由，以及一整套針對圖片、JavaScript、CSS 的內容優化。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "directions_car",
+          "title": { "en": "Think of it like GPS plus a tune-up", "zh": "把它想成導航加上一次保養" },
+          "text": {
+            "en": "Argo Smart Routing is like live-traffic GPS that always picks the least congested road across Cloudflare's backbone. The content optimizations are like a car tune-up — shrinking images and code so your pages carry less weight and arrive sooner.",
+            "zh": "Argo 智慧路由就像會看即時路況的導航，總是挑 Cloudflare 骨幹網路上最不塞的路。內容優化則像幫車子做保養，把圖片與程式碼縮小，讓你的網頁負重更輕、更快抵達。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Many speed features are one click in the dashboard, and several are on automatically once your site is proxied through Cloudflare.",
+            "zh": "許多速度功能在儀表板上只要一鍵，有幾項在網站經過 Cloudflare 代理後就自動啟用。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Core Web Vitals explained", "zh": "認識核心網頁指標（Core Web Vitals）" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Core Web Vitals are three measurements Google uses to score real user experience. Cloudflare reports them so you know exactly what to improve.",
+            "zh": "核心網頁指標（Core Web Vitals）是 Google 用來評估真實使用者體驗的三個量測值。Cloudflare 會回報這些數字，讓你清楚知道該改進什麼。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "hourglass_top",
+              "title": { "en": "LCP — loading", "zh": "LCP — 載入速度" },
+              "text": {
+                "en": "Largest Contentful Paint: how long until the biggest thing on screen (often the hero image or headline) appears. Aim for under 2.5 seconds.",
+                "zh": "LCP（Largest Contentful Paint，最大內容繪製）：畫面上最大的元素（通常是主視覺圖或大標題）出現要多久。目標是 2.5 秒以內。"
+              }
+            },
+            {
+              "icon": "touch_app",
+              "title": { "en": "INP — responsiveness", "zh": "INP — 互動回應" },
+              "text": {
+                "en": "Interaction to Next Paint: how quickly the page reacts when a user taps or clicks. Aim for under 200 milliseconds.",
+                "zh": "INP（Interaction to Next Paint，互動到下次繪製）：使用者點擊或輕觸後，頁面多快有反應。目標是 200 毫秒以內。"
+              }
+            },
+            {
+              "icon": "crop_free",
+              "title": { "en": "CLS — visual stability", "zh": "CLS — 視覺穩定度" },
+              "text": {
+                "en": "Cumulative Layout Shift: how much the page jumps around as it loads. Lower is better; aim for under 0.1.",
+                "zh": "CLS（Cumulative Layout Shift，累積版面位移）：頁面載入時內容跳動的程度。越低越好，目標是 0.1 以下。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "What optimizations are available?", "zh": "有哪些優化可以用？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "alt_route",
+              "title": { "en": "Argo Smart Routing", "zh": "Argo 智慧路由" },
+              "text": {
+                "en": "Detects congestion in real time and routes traffic over the fastest path across Cloudflare's private backbone — averaging around 30% faster than the public internet.",
+                "zh": "即時偵測壅塞，把流量導向 Cloudflare 私有骨幹網路上最快的路徑，平均比公開網路快約 30%。"
+              }
+            },
+            {
+              "icon": "layers",
+              "title": { "en": "Tiered Cache", "zh": "分層快取" },
+              "text": {
+                "en": "Adds an upper layer of cache so fewer requests reach your origin, raising your cache hit ratio.",
+                "zh": "增加一層上層快取，讓更少請求回到來源伺服器，提高快取命中率。"
+              }
+            },
+            {
+              "icon": "compress",
+              "title": { "en": "Image optimization", "zh": "圖片優化" },
+              "text": {
+                "en": "Polish compresses images and can convert them to modern formats like WebP; image resizing serves the right size for each device.",
+                "zh": "Polish 會壓縮圖片，並能轉成 WebP 等現代格式；圖片縮放（resizing）則為每種裝置送出剛好的尺寸。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": "JS & CSS optimization", "zh": "JS 與 CSS 優化" },
+              "text": {
+                "en": "Minify and streamline JavaScript and CSS so browsers download and run less code.",
+                "zh": "壓縮並精簡 JavaScript 與 CSS（minify），讓瀏覽器下載與執行更少的程式碼。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Early Hints & Speed Brain", "zh": "Early Hints 與 Speed Brain" },
+              "text": {
+                "en": "Early Hints lets browsers start fetching key resources sooner; Speed Brain pre-loads the next page a visitor is likely to click.",
+                "zh": "Early Hints 讓瀏覽器更早開始抓重要資源；Speed Brain 則預先載入訪客可能會點的下一頁。"
+              }
+            },
+            {
+              "icon": "lan",
+              "title": { "en": "Modern protocols", "zh": "現代通訊協定" },
+              "text": {
+                "en": "HTTP/3, 0-RTT, and Brotli compression are supported at the edge to cut handshake time and transfer size.",
+                "zh": "邊緣支援 HTTP/3、0-RTT 與 Brotli 壓縮，縮短連線交握時間與傳輸大小。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shopping_cart",
+              "title": { "en": "E-commerce", "zh": "電商" },
+              "text": {
+                "en": "Faster pages directly raise conversions — every 100ms saved can lift sales.",
+                "zh": "更快的頁面能直接提升轉換率，每省下 100 毫秒都可能增加銷售。"
+              }
+            },
+            {
+              "icon": "travel_explore",
+              "title": { "en": "Global users", "zh": "全球使用者" },
+              "text": {
+                "en": "Argo Smart Routing helps most when visitors are far from your origin server.",
+                "zh": "當訪客離你的來源伺服器很遠時，Argo 智慧路由的幫助最大。"
+              }
+            },
+            {
+              "icon": "search",
+              "title": { "en": "SEO matters to you", "zh": "你在意 SEO" },
+              "text": {
+                "en": "Google ranks faster sites higher, and Core Web Vitals are part of the score.",
+                "zh": "Google 給更快的網站較高排名，而核心網頁指標正是評分的一部分。"
+              }
+            },
+            {
+              "icon": "photo_library",
+              "title": { "en": "Image-heavy sites", "zh": "圖片很多的網站" },
+              "text": {
+                "en": "Galleries, portfolios, and shops benefit hugely from Polish and image resizing.",
+                "zh": "相簿、作品集與商店能從 Polish 與圖片縮放獲得巨大改善。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to get started", "zh": "怎麼開始用" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Run a test in Observatory", "zh": "用 Observatory 跑一次測試" },
+              "text": {
+                "en": "In the dashboard go to Speed > Observatory and run a test. You'll get a performance score, Core Web Vitals, and a list of recommended fixes.",
+                "zh": "在儀表板進入 Speed > Observatory 跑一次測試。你會拿到效能分數、核心網頁指標，以及一份建議改進清單。"
+              }
+            },
+            {
+              "title": { "en": "Apply the recommendations", "zh": "套用建議" },
+              "text": {
+                "en": "Each recommendation links to a setting you can toggle — for example enabling Brotli, Early Hints, or image Polish — usually with a single switch.",
+                "zh": "每條建議都連到一個可切換的設定，例如開啟 Brotli、Early Hints 或圖片 Polish，通常只要一個開關。"
+              }
+            },
+            {
+              "title": { "en": "Enable Argo Smart Routing", "zh": "啟用 Argo 智慧路由" },
+              "text": {
+                "en": "Go to Traffic > Argo Smart Routing and switch it on. It's a paid add-on, but it routes all your proxied traffic over the fastest paths immediately.",
+                "zh": "進入 Traffic > Argo Smart Routing 並開啟。它是付費附加功能，但能立刻把你所有被代理的流量導向最快路徑。"
+              }
+            },
+            {
+              "title": { "en": "Measure real users with Web Analytics", "zh": "用 Web Analytics 量測真實使用者" },
+              "text": {
+                "en": "Add Cloudflare Web Analytics so you can watch Core Web Vitals from real visitors over time and confirm your changes helped.",
+                "zh": "加入 Cloudflare Web Analytics，就能持續觀察真實訪客的核心網頁指標，確認你的改動真的有效。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Check that HTTP/3 and Brotli are active", "zh": "確認 HTTP/3 與 Brotli 已啟用" },
+          "body": "# Verify Brotli compression is being served\ncurl -sI -H 'Accept-Encoding: br' https://example.com | grep -i content-encoding\n# content-encoding: br\n\n# Verify HTTP/3 is advertised\ncurl -sI https://example.com | grep -i alt-svc\n# alt-svc: h3=\":443\"; ma=86400"
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "insights",
+          "title": { "en": "Measure before and after", "zh": "改動前後都要量測" },
+          "text": {
+            "en": "Always record an Observatory score before you change settings, then re-run it after. Real numbers tell you which toggles actually helped your pages.",
+            "zh": "改設定前先記下一次 Observatory 分數，改完再跑一次。真實的數字才會告訴你哪個開關真的讓你的網頁變快。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Many optimizations (Brotli, HTTP/3, Early Hints, minification) are free on the Free plan.",
+              "Argo Smart Routing and some image features are paid add-ons billed by usage.",
+              "Fix the biggest Core Web Vital first — usually LCP, driven by your hero image and caching.",
+              "Combine Speed with the CDN: caching and routing together give the biggest wins."
+            ],
+            "zh": [
+              "許多優化（Brotli、HTTP/3、Early Hints、壓縮）在免費方案就能用。",
+              "Argo 智慧路由與部分圖片功能是依用量計費的付費附加功能。",
+              "先修最糟的核心網頁指標，通常是 LCP，主要受主視覺圖與快取影響。",
+              "把 Speed 和 CDN 一起用：快取加上智慧路由，效果最顯著。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "cdn", "label": { "en": "CDN & Cache", "zh": "CDN 與快取" } },
+    { "slug": "web-analytics", "label": { "en": "Web Analytics", "zh": "網站分析" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } },
+    { "slug": "smart-shield", "label": { "en": "Smart Shield", "zh": "Smart Shield" } }
+  ],
+  "docs": "https://developers.cloudflare.com/speed/"
+}

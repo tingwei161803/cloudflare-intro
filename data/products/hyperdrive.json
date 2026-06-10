@@ -1,0 +1,295 @@
+{
+  "slug": "hyperdrive",
+  "category": "storage",
+  "icon": "rocket_launch",
+  "title": { "en": "Hyperdrive", "zh": "Hyperdrive" },
+  "subtitle": {
+    "en": "Makes your existing Postgres or MySQL fast from Workers",
+    "zh": "讓你現有的 Postgres / MySQL 從 Workers 連線變超快"
+  },
+  "hero": {
+    "badge": { "en": "Storage & Databases", "zh": "儲存與資料庫" },
+    "tagline": {
+      "en": "Keep your current database — Hyperdrive makes it feel global and instant.",
+      "zh": "資料庫不用搬家——Hyperdrive 讓它連起來又快又像在全球各地。"
+    }
+  },
+  "stats": [
+    { "value": "2", "label": { "en": "Engines: Postgres & MySQL", "zh": "支援 Postgres 與 MySQL" } },
+    { "value": "Pooling", "label": { "en": "Connection reuse", "zh": "連線重複利用" } },
+    { "value": "Caching", "label": { "en": "On by default", "zh": "查詢快取預設開啟" } },
+    { "value": "Free", "label": { "en": "Available on Free plan", "zh": "免費方案即可用" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Hyperdrive?", "zh": "Hyperdrive 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Hyperdrive is an accelerator that sits in front of a database you already have (like PostgreSQL or MySQL) and makes querying it from Cloudflare Workers fast — no matter where in the world the request comes from.",
+            "zh": "Hyperdrive 是一個「加速器」，它擋在你既有資料庫（例如 PostgreSQL 或 MySQL）的前面，讓你從 Cloudflare Workers 查詢它時變得很快——無論請求來自世界哪個角落。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Normally a regional database (one that lives in a single data center) is slow to reach from far away, and opening a fresh connection for every request adds delay. Hyperdrive fixes both with connection pooling and query caching.",
+            "zh": "一般來說，「區域型資料庫（regional database，指只住在單一機房的資料庫）」從遠方連過去很慢，而且每個請求都重開一條新連線又會多出延遲。Hyperdrive 用「連線池」和「查詢快取」同時解決這兩個問題。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "fast_forward",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A VIP fast lane to your database. Instead of dialing the database from scratch every time (slow handshakes), Hyperdrive keeps warm lines open and remembers recent answers — so most requests skip the wait.",
+            "zh": "一條通往資料庫的 VIP 快速通道。與其每次都從頭撥號連線（慢吞吞的握手），Hyperdrive 會保留幾條已經接通的熱線、還記住最近的答案——所以大多數請求都能直接跳過等待。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use Hyperdrive?", "zh": "為什麼要用 Hyperdrive？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Workers run all over the globe, but your database lives in one place. Without help, every query pays a long round-trip and a connection setup cost. Hyperdrive removes that pain so your existing SQL database performs like it was built for the edge.",
+            "zh": "Workers 跑遍全球，但你的資料庫只待在一個地方。沒有幫手的話，每次查詢都要付一趟長距離來回加上建立連線的成本。Hyperdrive 把這個痛點拿掉，讓你既有的 SQL 資料庫表現得像專為邊緣（edge）打造一樣。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "hub",
+              "title": { "en": "Connection pooling", "zh": "連線池" },
+              "text": {
+                "en": "Reuses a pool of warm database connections instead of opening one per request.",
+                "zh": "重複利用一池已經建好的熱連線，而不是每個請求都重開一條。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Query caching", "zh": "查詢快取" },
+              "text": {
+                "en": "Caches results of popular read queries so repeats return almost instantly.",
+                "zh": "把熱門讀取查詢的結果快取起來，重複查詢幾乎瞬間回傳。"
+              }
+            },
+            {
+              "icon": "move_up",
+              "title": { "en": "No migration", "zh": "不用搬遷" },
+              "text": {
+                "en": "Keep your current Postgres/MySQL provider; just point Workers through Hyperdrive.",
+                "zh": "保留你現有的 Postgres / MySQL 供應商，只要讓 Workers 透過 Hyperdrive 連過去就好。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Feels global", "zh": "宛如全球部署" },
+              "text": {
+                "en": "Far-away Workers query a single regional database without the usual lag.",
+                "zh": "遠方的 Workers 查詢單一區域資料庫時，不再有平常那種拖延。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用 Hyperdrive？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "storage",
+              "title": { "en": "You already have a SQL DB", "zh": "你已經有 SQL 資料庫" },
+              "text": {
+                "en": "An existing Postgres or MySQL on AWS, Neon, PlanetScale, etc. that you want to keep.",
+                "zh": "在 AWS、Neon、PlanetScale 等地方既有、又想保留的 Postgres 或 MySQL。"
+              }
+            },
+            {
+              "icon": "travel_explore",
+              "title": { "en": "Global users, one DB", "zh": "全球使用者、單一資料庫" },
+              "text": {
+                "en": "Visitors worldwide but a single regional database that feels slow far away.",
+                "zh": "使用者遍布全球，但只有一個區域資料庫，遠方連起來很慢。"
+              }
+            },
+            {
+              "icon": "sync_problem",
+              "title": { "en": "Connection limits hit", "zh": "連線數爆掉" },
+              "text": {
+                "en": "Serverless functions exhaust your database's connection limit — pooling fixes that.",
+                "zh": "無伺服器函式把資料庫的連線數用光——用連線池就能解決。"
+              }
+            },
+            {
+              "icon": "menu_book",
+              "title": { "en": "Read-heavy queries", "zh": "讀取為主的查詢" },
+              "text": {
+                "en": "The same SELECTs repeat often, so caching delivers a big speed-up.",
+                "zh": "同樣的 SELECT 一直重複出現，快取就能帶來大幅加速。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Give Hyperdrive your database connection string (a connection string = the single URL with host, user, password, and database name). Then bind it and connect using a normal Postgres driver from your Worker.",
+            "zh": "把你資料庫的「連線字串（connection string，就是包含主機、帳號、密碼、資料庫名稱的那一串 URL）」交給 Hyperdrive。接著把它綁定，然後在 Worker 裡用一般的 Postgres 驅動程式連線即可。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a Hyperdrive config", "zh": "建立 Hyperdrive 設定" },
+              "text": {
+                "en": "Point it at your existing database with its connection string. Wrangler prints an id.",
+                "zh": "用連線字串讓它指向你既有的資料庫。Wrangler 會印出一組 id。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler hyperdrive create my-db-config \\\n  --connection-string=\"postgres://user:password@db-host.example.com:5432/mydb\"" }
+            },
+            {
+              "title": { "en": "Bind it to your Worker", "zh": "綁定到 Worker" },
+              "text": {
+                "en": "Add the id to wrangler.jsonc under the HYPERDRIVE binding.",
+                "zh": "把這個 id 加進 wrangler.jsonc 的 HYPERDRIVE 綁定。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"hyperdrive\": [\n    {\n      \"binding\": \"HYPERDRIVE\",\n      \"id\": \"<paste-your-id-here>\"\n    }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Install a Postgres driver", "zh": "安裝 Postgres 驅動程式" },
+              "text": {
+                "en": "Use the popular pg package (add its TypeScript types too).",
+                "zh": "使用熱門的 pg 套件（順便裝它的 TypeScript 型別）。"
+              },
+              "code": { "lang": "bash", "body": "npm i pg\nnpm i -D @types/pg" }
+            },
+            {
+              "title": { "en": "Query through Hyperdrive", "zh": "透過 Hyperdrive 查詢" },
+              "text": {
+                "en": "Read env.HYPERDRIVE.connectionString and connect as usual — Hyperdrive handles pooling and caching for you.",
+                "zh": "讀取 env.HYPERDRIVE.connectionString，照平常方式連線——連線池和快取都交給 Hyperdrive 處理。"
+              },
+              "code": { "lang": "js", "body": "import { Client } from \"pg\";\n\nexport default {\n  async fetch(request, env, ctx) {\n    const client = new Client({\n      connectionString: env.HYPERDRIVE.connectionString,\n    });\n    await client.connect();\n\n    const { rows } = await client.query(\"SELECT * FROM products LIMIT 10\");\n    ctx.waitUntil(client.end());\n    return Response.json(rows);\n  },\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish your Worker and queries now flow through the fast lane.",
+                "zh": "發布 Worker，查詢就會走上快速通道了。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "link",
+              "title": { "en": "Connection string", "zh": "連線字串" },
+              "text": {
+                "en": "The single URL with host, port, user, password, and database name that locates your DB.",
+                "zh": "包含主機、連接埠、帳號、密碼和資料庫名稱、用來找到你資料庫的那串 URL。"
+              }
+            },
+            {
+              "icon": "pool",
+              "title": { "en": "Connection pool", "zh": "連線池" },
+              "text": {
+                "en": "A set of ready-made connections kept warm and shared across requests to avoid setup cost.",
+                "zh": "一組事先建好、保持熱線並在請求間共用的連線，藉此省下建立連線的成本。"
+              }
+            },
+            {
+              "icon": "cached",
+              "title": { "en": "Query cache", "zh": "查詢快取" },
+              "text": {
+                "en": "Recent read-query results are remembered so identical repeats skip the database.",
+                "zh": "最近讀取查詢的結果會被記住，一模一樣的重複查詢就能跳過資料庫。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "Your DB stays the source", "zh": "資料庫仍是唯一來源" },
+              "text": {
+                "en": "Hyperdrive only accelerates access; your real data still lives in your own database.",
+                "zh": "Hyperdrive 只負責加速存取；你真正的資料仍然存放在你自己的資料庫裡。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & notes", "zh": "小提示與注意事項" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "tune",
+          "title": { "en": "Tune caching for fresh data", "zh": "依資料新鮮度調整快取" },
+          "text": {
+            "en": "Query caching is on by default and is great for data that does not change every second. If a query must always return the very latest value, you can disable caching for it.",
+            "zh": "查詢快取預設開啟，很適合那些不會每秒都變動的資料。如果某個查詢一定要回傳最新的值，可以針對它關閉快取。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Hyperdrive is available on both Free and Paid plans, so you can try it at no cost.",
+              "It supports PostgreSQL (and compatibles like Neon, CockroachDB, Timescale) and MySQL.",
+              "Use ctx.waitUntil(client.end()) so closing the connection does not delay your response.",
+              "Need a Cloudflare-native SQL database instead? Look at D1."
+            ],
+            "zh": [
+              "Hyperdrive 在免費與付費方案都能用，可以免費先試。",
+              "支援 PostgreSQL（以及 Neon、CockroachDB、Timescale 等相容資料庫）和 MySQL。",
+              "用 ctx.waitUntil(client.end()) 關閉連線，才不會拖慢你的回應。",
+              "想要 Cloudflare 原生的 SQL 資料庫？可以看看 D1。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } }
+  ],
+  "docs": "https://developers.cloudflare.com/hyperdrive/"
+}

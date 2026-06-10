@@ -1,0 +1,258 @@
+{
+  "slug": "turnstile",
+  "category": "security",
+  "icon": "verified_user",
+  "title": { "en": "Turnstile", "zh": "Turnstile" },
+  "subtitle": {
+    "en": "A privacy-friendly CAPTCHA alternative with no annoying puzzles",
+    "zh": "保護隱私、沒有惱人拼圖的 CAPTCHA 替代方案"
+  },
+  "hero": {
+    "badge": { "en": "Security", "zh": "安全" },
+    "tagline": {
+      "en": "Proves your visitors are human — usually without making them click a single thing.",
+      "zh": "證明訪客是真人 —— 而且通常不用他們點任何東西。"
+    }
+  },
+  "stats": [
+    { "value": "Free", "label": { "en": "Unlimited requests", "zh": "無限次請求" } },
+    { "value": "No puzzles", "label": { "en": "Invisible challenges", "zh": "隱形驗證" } },
+    { "value": "300s", "label": { "en": "Token validity", "zh": "權杖有效時間" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Turnstile?", "zh": "Turnstile 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Turnstile is Cloudflare's free replacement for CAPTCHA — those 'select all the traffic lights' tests. It checks visitors are real humans, usually without making them solve anything.",
+            "zh": "Turnstile 是 Cloudflare 免費的 CAPTCHA 替代品。CAPTCHA 就是那種「選出所有紅綠燈」的測驗。Turnstile 用來確認訪客是真人，而且通常不用他們解任何題目。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Instead of puzzles, it runs tiny invisible JavaScript checks in the background to gather signals about the browser. From those signals it decides whether the visitor is trustworthy, only showing a simple checkbox when something looks risky.",
+            "zh": "它不用拼圖，而是在背景跑一些小小的隱形 JavaScript 檢查，收集瀏覽器的訊號。靠這些訊號判斷訪客可不可信，只有在情況可疑時才會跳出一個簡單的勾選框。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "sensor_occupied",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "An automatic door that quietly senses a real person approaching and opens — versus the old turnstile where everyone had to stop and fumble with a token.",
+            "zh": "一扇會默默感應到真人走近就自動開啟的門 —— 對比舊式閘門，每個人都得停下來、笨拙地塞代幣才能過。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "sentiment_satisfied",
+              "title": { "en": "Better UX", "zh": "更好的體驗" },
+              "text": {
+                "en": "No frustrating image grids. Most users sail through without doing anything.",
+                "zh": "沒有令人抓狂的圖片九宮格。多數使用者什麼都不用做就過關了。"
+              }
+            },
+            {
+              "icon": "lock_person",
+              "title": { "en": "Privacy-first", "zh": "隱私優先" },
+              "text": {
+                "en": "Doesn't track users across the web or harvest data to sell, unlike some ad-funded CAPTCHAs.",
+                "zh": "不像某些靠廣告賺錢的 CAPTCHA，它不會跨網站追蹤使用者，也不會蒐集資料拿去賣。"
+              }
+            },
+            {
+              "icon": "smart_toy",
+              "title": { "en": "Stops bots", "zh": "擋住機器人" },
+              "text": {
+                "en": "Blocks spam sign-ups, fake comments, and automated form abuse.",
+                "zh": "擋下灌爆的假註冊、垃圾留言，以及自動化的表單濫用。"
+              }
+            },
+            {
+              "icon": "accessibility_new",
+              "title": { "en": "Accessible", "zh": "無障礙" },
+              "text": {
+                "en": "WCAG 2.2 AA compliant, so it works for users with disabilities.",
+                "zh": "符合 WCAG 2.2 AA 無障礙標準，身障使用者也能順利使用。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to add it", "zh": "怎麼加上去？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Turnstile works in two parts: a widget on your page (client side) and a verification check on your server (server side). You always need both — never trust the client alone.",
+            "zh": "Turnstile 分兩部分：頁面上的小工具（前端 client side）和伺服器上的驗證檢查（後端 server side）。兩邊都一定要做 —— 絕對不能只信前端。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a widget", "zh": "建立一個 widget" },
+              "text": {
+                "en": "In the Cloudflare dashboard go to Turnstile → Add widget. Enter your domain and pick a widget type. You'll get two keys: a Sitekey (public, for the page) and a Secret key (private, for your server).",
+                "zh": "在 Cloudflare 儀表板進入 Turnstile → Add widget。輸入你的網域並挑一種 widget 類型。你會拿到兩把金鑰：Sitekey（公開，放在頁面上）和 Secret key（私密，放在你的伺服器）。"
+              }
+            },
+            {
+              "title": { "en": "Embed the widget in your page", "zh": "把 widget 嵌進頁面" },
+              "text": {
+                "en": "Add the Turnstile script in the <head>, then drop a div with class cf-turnstile and your sitekey inside your form. It auto-creates a hidden field named cf-turnstile-response when solved.",
+                "zh": "在 <head> 加入 Turnstile 的 script，再把一個 class 為 cf-turnstile、帶上你 sitekey 的 div 放進表單裡。通過驗證後，它會自動產生一個名叫 cf-turnstile-response 的隱藏欄位。"
+              },
+              "code": {
+                "lang": "html",
+                "body": "<head>\n  <script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\" async defer></script>\n</head>\n<body>\n  <form action=\"/submit\" method=\"POST\">\n    <input type=\"email\" name=\"email\" placeholder=\"Email\" required />\n    <!-- Replace YOUR_SITEKEY with your real sitekey -->\n    <div class=\"cf-turnstile\" data-sitekey=\"YOUR_SITEKEY\" data-theme=\"auto\"></div>\n    <button type=\"submit\">Sign up</button>\n  </form>\n</body>"
+              }
+            },
+            {
+              "title": { "en": "Verify the token on your server", "zh": "在伺服器端驗證權杖" },
+              "text": {
+                "en": "When the form is submitted, send the cf-turnstile-response token plus your Secret key to Cloudflare's Siteverify API. Only accept the form if the response says success: true.",
+                "zh": "表單送出後，把 cf-turnstile-response 這個權杖（token）連同你的 Secret key 一起送到 Cloudflare 的 Siteverify API。只有當回應的 success 為 true 時才接受這筆表單。"
+              },
+              "code": {
+                "lang": "js",
+                "body": "// Node.js / server-side\nconst token = formData.get('cf-turnstile-response');\n\nconst res = await fetch(\n  'https://challenges.cloudflare.com/turnstile/v0/siteverify',\n  {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n    body: new URLSearchParams({\n      secret: process.env.TURNSTILE_SECRET_KEY, // never hardcode!\n      response: token,\n    }),\n  }\n);\n\nconst data = await res.json();\nif (!data.success) {\n  return new Response('Failed the human check', { status: 403 });\n}\n// data.success === true -> continue processing the form"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "science",
+          "title": { "en": "Test keys for local development", "zh": "本機開發用的測試金鑰" },
+          "text": {
+            "en": "Use sitekey 1x00000000000000000000AA (always passes) with secret 1x0000000000000000000000000000000AA while developing, so you don't trigger real challenges. Swap in your real keys before going live.",
+            "zh": "開發時用 sitekey 1x00000000000000000000AA（永遠通過）搭配 secret 1x0000000000000000000000000000000AA，就不會觸發真正的驗證。上線前記得換回你真正的金鑰。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "vpn_key",
+              "title": { "en": "Sitekey", "zh": "Sitekey（網站金鑰）" },
+              "text": {
+                "en": "Public key placed on your page. Safe to expose in HTML.",
+                "zh": "放在頁面上的公開金鑰，放進 HTML 沒問題。"
+              }
+            },
+            {
+              "icon": "password",
+              "title": { "en": "Secret key", "zh": "Secret key（密鑰）" },
+              "text": {
+                "en": "Private key used only on your server to verify tokens. Keep it secret!",
+                "zh": "只在伺服器端用來驗證權杖的私密金鑰。一定要保密！"
+              }
+            },
+            {
+              "icon": "toll",
+              "title": { "en": "Token", "zh": "Token（權杖）" },
+              "text": {
+                "en": "A one-time pass the widget issues after a visitor passes. Valid 300s, usable once.",
+                "zh": "訪客通過後 widget 發的一次性通行證。有效 300 秒，只能用一次。"
+              }
+            },
+            {
+              "icon": "check_circle",
+              "title": { "en": "Siteverify", "zh": "Siteverify（驗證 API）" },
+              "text": {
+                "en": "The Cloudflare API your server calls to confirm a token is genuine.",
+                "zh": "你伺服器呼叫的 Cloudflare API，用來確認權杖是真的。"
+              }
+            },
+            {
+              "icon": "visibility",
+              "title": { "en": "Managed widget", "zh": "Managed（智慧型）widget" },
+              "text": {
+                "en": "Default mode — decides on its own whether to show a checkbox based on risk.",
+                "zh": "預設模式 —— 依風險自行決定要不要跳出勾選框。"
+              }
+            },
+            {
+              "icon": "visibility_off",
+              "title": { "en": "Invisible widget", "zh": "Invisible（隱形）widget" },
+              "text": {
+                "en": "Runs completely in the background with no visible element at all.",
+                "zh": "完全在背景運作，畫面上看不到任何元件。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "shield",
+          "title": { "en": "Always verify server-side", "zh": "一定要在伺服器端驗證" },
+          "text": {
+            "en": "A clever bot can fake the client widget. The Siteverify check on your server is the part that actually keeps you safe — never skip it.",
+            "zh": "聰明的機器人可以偽造前端 widget。真正保護你的是伺服器上的 Siteverify 檢查 —— 千萬別省略。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Turnstile is free with unlimited verifications, even on the Free plan.",
+              "It does not require your whole site to be proxied through Cloudflare — it works on any site.",
+              "Tokens expire after 300 seconds and can only be validated once, so verify promptly.",
+              "Pick widget size (normal, flexible, compact) and theme (auto/light/dark) with data- attributes."
+            ],
+            "zh": [
+              "Turnstile 免費且驗證次數無上限，連 Free 方案也是。",
+              "不需要把整個網站都接過 Cloudflare 代理 —— 任何網站都能用。",
+              "權杖 300 秒後失效，且只能驗證一次，所以要儘快驗證。",
+              "用 data- 屬性挑 widget 尺寸（normal、flexible、compact）與主題（auto／light／dark）。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "waf", "label": { "en": "WAF", "zh": "WAF" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "access", "label": { "en": "Access", "zh": "Access" } },
+    { "slug": "ssl-tls", "label": { "en": "SSL/TLS", "zh": "SSL/TLS" } }
+  ],
+  "docs": "https://developers.cloudflare.com/turnstile/"
+}

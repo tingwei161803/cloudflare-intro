@@ -1,0 +1,300 @@
+{
+  "slug": "browser-rendering",
+  "category": "ai",
+  "icon": "web",
+  "title": { "en": "Browser Rendering", "zh": "Browser Rendering" },
+  "subtitle": {
+    "en": "A real Chrome browser you control from code",
+    "zh": "一個用程式碼就能操控的真實 Chrome 瀏覽器"
+  },
+  "hero": {
+    "badge": { "en": "AI", "zh": "人工智慧" },
+    "tagline": {
+      "en": "Open web pages, take screenshots, make PDFs and scrape content — using a headless Chromium that runs on Cloudflare's network.",
+      "zh": "開啟網頁、擷取畫面、產生 PDF、抓取內容——靠跑在 Cloudflare 網路上的無頭（headless）Chromium 完成。"
+    }
+  },
+  "stats": [
+    { "value": "8+", "label": { "en": "REST endpoints", "zh": "REST 端點" } },
+    { "value": "120", "label": { "en": "Concurrent browsers (Paid)", "zh": "同時開啟瀏覽器（付費）" } },
+    { "value": "10 min", "label": { "en": "Free time per day", "zh": "每日免費時數" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Browser Rendering?", "zh": "Browser Rendering 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Browser Rendering gives you a headless browser — a real Chromium with no visible window — running on Cloudflare's network. You control it from code to load pages, click, type, screenshot, export PDFs and pull out content.",
+            "zh": "Browser Rendering 給你一個 headless（無頭，也就是沒有可見視窗）的瀏覽器——一個真正的 Chromium——跑在 Cloudflare 網路上。你用程式碼操控它來載入網頁、點擊、輸入、截圖、輸出 PDF 並擷取內容。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "It works two ways: simple REST API endpoints for one-off jobs (just send a URL, get a screenshot back), or full programmatic control inside a Worker using Puppeteer or Playwright — the popular libraries for driving Chrome.",
+            "zh": "它有兩種用法：用簡單的 REST API 端點處理一次性工作（送出網址、拿回截圖），或在 Worker 裡用 Puppeteer 或 Playwright（操控 Chrome 的熱門函式庫）完全程式化地操控。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "smart_toy",
+          "title": { "en": "Think of it like a robot using a browser", "zh": "把它想成一個會用瀏覽器的機器人" },
+          "text": {
+            "en": "Imagine a tireless robot that opens Chrome, visits any page, snaps a photo or saves a PDF, copies the text, and never needs a screen. You hand it instructions in code; it does the clicking. That's Browser Rendering.",
+            "zh": "想像一個不知疲倦的機器人，它打開 Chrome、造訪任何網頁、拍張照或存成 PDF、複製文字，而且完全不需要螢幕。你用程式碼下指令，它替你點擊。這就是 Browser Rendering。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Running headless Chrome yourself is heavy: it eats memory, crashes, and is hard to scale. Browser Rendering hands you ready browsers on demand, right next to your Workers.",
+            "zh": "自己跑 headless Chrome 很吃重：耗記憶體、容易崩潰、又難擴充。Browser Rendering 在你需要時直接給你現成的瀏覽器，而且就在 Workers 旁邊。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "photo_camera",
+              "title": { "en": "Screenshots & PDFs", "zh": "截圖與 PDF" },
+              "text": {
+                "en": "Turn any web page into an image or a print-ready PDF — great for previews, receipts or reports.",
+                "zh": "把任何網頁變成圖片或可列印的 PDF——很適合做預覽、收據或報表。"
+              }
+            },
+            {
+              "icon": "travel_explore",
+              "title": { "en": "Scrape dynamic sites", "zh": "抓取動態網站" },
+              "text": {
+                "en": "Many pages build their content with JavaScript. A real browser sees the finished page, so you get the actual data.",
+                "zh": "很多網頁是用 JavaScript 組出內容的。真實瀏覽器看得到完成後的頁面，你才抓得到真正的資料。"
+              }
+            },
+            {
+              "icon": "data_object",
+              "title": { "en": "Feed AI clean data", "zh": "餵乾淨資料給 AI" },
+              "text": {
+                "en": "Convert pages to clean Markdown or structured JSON, perfect input for Workers AI or a RAG pipeline.",
+                "zh": "把網頁轉成乾淨的 Markdown 或結構化 JSON，正是 Workers AI 或 RAG 流程的理想輸入。"
+              }
+            },
+            {
+              "icon": "rocket",
+              "title": { "en": "Scales for you", "zh": "替你自動擴充" },
+              "text": {
+                "en": "Spin up many browsers with low cold-start overhead, and reuse sessions to go even faster.",
+                "zh": "以很低的冷啟動成本開出大量瀏覽器，還能重用工作階段（session）跑得更快。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "preview",
+              "title": { "en": "Link previews", "zh": "連結預覽圖" },
+              "text": {
+                "en": "Generate thumbnail images of pages for social cards or a dashboard.",
+                "zh": "為社群卡片或儀表板產生網頁的縮圖。"
+              }
+            },
+            {
+              "icon": "receipt_long",
+              "title": { "en": "PDF documents", "zh": "PDF 文件" },
+              "text": {
+                "en": "Create invoices, tickets or reports from an HTML template, on the fly.",
+                "zh": "從 HTML 範本即時產生發票、票券或報表。"
+              }
+            },
+            {
+              "icon": "content_paste_search",
+              "title": { "en": "Data extraction", "zh": "資料擷取" },
+              "text": {
+                "en": "Collect prices, listings or articles from pages that need JavaScript to render.",
+                "zh": "從需要 JavaScript 才能呈現的網頁，蒐集價格、列表或文章。"
+              }
+            },
+            {
+              "icon": "checklist_rtl",
+              "title": { "en": "Automated testing", "zh": "自動化測試" },
+              "text": {
+                "en": "Drive a real browser to click through and verify that your own site works.",
+                "zh": "操控真實瀏覽器點過一遍，驗證自家網站運作正常。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "h3",
+          "text": { "en": "Quick way: the REST API", "zh": "最快的方式：REST API" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "For one-off jobs you don't even need a Worker. Send a URL to an endpoint like /screenshot and get the result back. Other endpoints include /pdf, /content, /scrape, /snapshot, /json, /links and /markdown.",
+            "zh": "處理一次性工作時，你連 Worker 都不用寫。把網址送到像 /screenshot 這樣的端點，就能拿回結果。其他端點還有 /pdf、/content、/scrape、/snapshot、/json、/links 和 /markdown。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Screenshot via REST API", "zh": "用 REST API 截圖" },
+          "body": "curl -X POST 'https://api.cloudflare.com/client/v4/accounts/{account_id}/browser-rendering/screenshot' \\\n  -H 'Authorization: Bearer {api_token}' \\\n  -H 'Content-Type: application/json' \\\n  -d '{ \"url\": \"https://example.com\" }' \\\n  --output screenshot.png"
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Full control: Puppeteer in a Worker", "zh": "完全操控：在 Worker 裡用 Puppeteer" }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Install the library", "zh": "安裝函式庫" },
+              "text": {
+                "en": "Add Cloudflare's Puppeteer package to your Worker project.",
+                "zh": "把 Cloudflare 版的 Puppeteer 套件加進你的 Worker 專案。"
+              },
+              "code": { "lang": "bash", "body": "npm install @cloudflare/puppeteer" }
+            },
+            {
+              "title": { "en": "Add the browser binding", "zh": "加上瀏覽器繫結" },
+              "text": {
+                "en": "Declare a browser binding in wrangler.jsonc so env.MYBROWSER is available in code.",
+                "zh": "在 wrangler.jsonc 宣告一個 browser 繫結，程式裡就能用 env.MYBROWSER。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"my-browser-worker\",\n  \"main\": \"src/index.js\",\n  \"compatibility_date\": \"2025-06-01\",\n  \"browser\": {\n    \"binding\": \"MYBROWSER\"\n  }\n}" }
+            },
+            {
+              "title": { "en": "Drive the browser", "zh": "操控瀏覽器" },
+              "text": {
+                "en": "Launch Chromium, open a page, go to a URL and screenshot it. Always close the browser when done to free resources.",
+                "zh": "啟動 Chromium、開一個分頁、前往網址並截圖。用完一定要關閉瀏覽器以釋放資源。"
+              },
+              "code": { "lang": "js", "body": "import puppeteer from \"@cloudflare/puppeteer\";\n\nexport default {\n  async fetch(request, env) {\n    const browser = await puppeteer.launch(env.MYBROWSER);\n    const page = await browser.newPage();\n    await page.goto(\"https://example.com\");\n    const image = await page.screenshot();\n    await browser.close();\n    return new Response(image, {\n      headers: { \"content-type\": \"image/png\" }\n    });\n  }\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish your Worker and call it from anywhere.",
+                "zh": "把 Worker 發佈出去，就能從任何地方呼叫。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "visibility_off",
+              "title": { "en": "Headless browser", "zh": "無頭瀏覽器" },
+              "text": {
+                "en": "A full browser running without a visible window — perfect for automation on a server.",
+                "zh": "一個沒有可見視窗、照常運作的完整瀏覽器——最適合在伺服器上做自動化。"
+              }
+            },
+            {
+              "icon": "integration_instructions",
+              "title": { "en": "Puppeteer & Playwright", "zh": "Puppeteer 與 Playwright" },
+              "text": {
+                "en": "Popular libraries that let your code tell the browser what to click, type and capture.",
+                "zh": "熱門的函式庫，讓你的程式碼告訴瀏覽器要點什麼、輸入什麼、擷取什麼。"
+              }
+            },
+            {
+              "icon": "api",
+              "title": { "en": "REST API vs Bindings", "zh": "REST API 對比繫結" },
+              "text": {
+                "en": "REST endpoints are quick and code-free; bindings inside a Worker give full step-by-step control.",
+                "zh": "REST 端點快速又免寫程式；Worker 裡的繫結則能逐步完全操控。"
+              }
+            },
+            {
+              "icon": "sync",
+              "title": { "en": "Sessions", "zh": "工作階段（Session）" },
+              "text": {
+                "en": "Reuse a warm browser across requests instead of launching a fresh one each time — faster and cheaper.",
+                "zh": "跨請求重用一個已暖機的瀏覽器，而不是每次都重開一個——更快也更省。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & limits", "zh": "小提示與限制" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "timer",
+          "title": { "en": "Always close the browser", "zh": "記得關閉瀏覽器" },
+          "text": {
+            "en": "Call browser.close() (or reuse a session) when you're done. On the Free plan you get 10 minutes of browser time per day, so leaving browsers open wastes your quota.",
+            "zh": "做完後請呼叫 browser.close()（或重用 session）。免費方案每天只有 10 分鐘的瀏覽器時間，讓瀏覽器一直開著會白白用掉額度。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Free plan: up to 3 concurrent browsers, a new one every 20 seconds, and 10 minutes total per day.",
+              "Workers Paid plan: up to 120 concurrent browsers and a new one every second.",
+              "Browsers idle out after 60 seconds by default (extendable up to 10 minutes).",
+              "Reuse sessions to cut cold starts and stay within limits."
+            ],
+            "zh": [
+              "免費方案：最多同時 3 個瀏覽器，每 20 秒可新開一個，每天合計 10 分鐘。",
+              "Workers 付費方案：最多同時 120 個瀏覽器，每秒可新開一個。",
+              "瀏覽器預設閒置 60 秒後關閉（可延長至 10 分鐘）。",
+              "重用 session 可減少冷啟動，也比較不會撞到限制。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "workers-ai", "label": { "en": "Workers AI", "zh": "Workers AI" } },
+    { "slug": "agents", "label": { "en": "Agents", "zh": "Agents" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } }
+  ],
+  "docs": "https://developers.cloudflare.com/browser-rendering/"
+}

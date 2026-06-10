@@ -1,0 +1,301 @@
+{
+  "slug": "gateway",
+  "category": "security",
+  "icon": "filter_alt",
+  "title": { "en": "Gateway", "zh": "Gateway" },
+  "subtitle": {
+    "en": "A Secure Web Gateway that filters outbound DNS, network, and HTTP traffic",
+    "zh": "過濾對外 DNS、網路與 HTTP 流量的安全網路閘道"
+  },
+  "hero": {
+    "badge": { "en": "Security", "zh": "安全" },
+    "tagline": {
+      "en": "A safety filter for everything your devices try to reach — blocks malware, phishing, and unwanted sites.",
+      "zh": "替你裝置「想連出去的所有東西」把關 —— 擋掉惡意程式、釣魚與不該上的網站。"
+    }
+  },
+  "stats": [
+    { "value": "3 layers", "label": { "en": "DNS · Network · HTTP", "zh": "DNS·網路·HTTP" } },
+    { "value": "< 60s", "label": { "en": "Policy deploys globally", "zh": "政策全球生效" } },
+    { "value": "50 users", "label": { "en": "Free Zero Trust seats", "zh": "免費 Zero Trust 名額" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Gateway?", "zh": "Gateway 是什麼?" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Gateway is a Secure Web Gateway (SWG): it inspects the traffic leaving your devices and decides what's allowed out. It blocks dangerous or unwanted destinations before a connection is ever made.",
+            "zh": "Cloudflare Gateway 是一個「安全網路閘道(Secure Web Gateway,SWG)」:它檢查從你裝置「往外送出」的流量,決定什麼能出去。在連線真正建立之前,就先擋掉危險或不該連的目的地。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "While a WAF protects traffic coming into your website, Gateway protects traffic going out from your people and devices — like a filter for your whole team's or family's internet use.",
+            "zh": "WAF 保護的是「進入你網站」的流量;Gateway 保護的則是「你的人與裝置往外連出去」的流量 —— 等於替整個團隊或全家人的上網行為加一層過濾。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "filter_alt",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A water filter on your tap. Every drop (request) passes through it; clean water flows, but contaminants (malware, phishing, blocked categories) get caught before reaching the glass.",
+            "zh": "水龍頭上的濾水器。每一滴水(每個請求)都流經它;乾淨的水流出來,但雜質(惡意程式、釣魚、被封鎖的分類)在進到杯子前就被攔下。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layers",
+      "icon": "layers",
+      "heading": { "en": "Three filtering layers", "zh": "三層過濾" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Gateway can filter at three depths. You can start with just DNS (the easiest) and add the deeper layers later.",
+            "zh": "Gateway 可以在三種深度做過濾。你可以先從最簡單的 DNS 開始,之後再加上更深的層次。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "dns",
+              "title": { "en": "DNS filtering", "zh": "DNS 過濾" },
+              "text": {
+                "en": "The fastest layer. When a device asks 'what's the IP of this domain?', Gateway can refuse to answer for bad domains — blocking them before they load. Sees domain names, not full URLs.",
+                "zh": "最快的一層。當裝置問「這個網域的 IP 是多少?」時,Gateway 可以對壞網域拒絕回答 —— 在它載入前就擋掉。它看得到網域名稱,但看不到完整網址。"
+              }
+            },
+            {
+              "icon": "lan",
+              "title": { "en": "Network filtering", "zh": "網路過濾" },
+              "text": {
+                "en": "Inspects raw packets by IP, port, and protocol. Useful for non-web services like SSH or RDP.",
+                "zh": "依 IP、連接埠、通訊協定檢查原始封包。適合 SSH、RDP 這類非網頁服務。"
+              }
+            },
+            {
+              "icon": "http",
+              "title": { "en": "HTTP filtering", "zh": "HTTP 過濾" },
+              "text": {
+                "en": "The deepest layer. Inspects full URLs, uploads, and downloads — even inside HTTPS — to scan for malware or data leaks. Needs a certificate installed on devices.",
+                "zh": "最深的一層。檢查完整網址、上傳與下載 —— 連 HTTPS 內部都看 —— 用來掃描惡意程式或資料外洩。需要在裝置上安裝一張憑證。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼用它?" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "coronavirus",
+              "title": { "en": "Block malware & phishing", "zh": "擋惡意程式與釣魚" },
+              "text": {
+                "en": "Stops devices from reaching known-malicious or scam sites organization-wide.",
+                "zh": "全公司一起,阻止裝置連到已知的惡意或詐騙網站。"
+              }
+            },
+            {
+              "icon": "family_restroom",
+              "title": { "en": "Content control", "zh": "內容管控" },
+              "text": {
+                "en": "Block whole categories — adult content, gambling — for schools, families, or offices.",
+                "zh": "整類封鎖 —— 成人內容、賭博 —— 適合學校、家庭或辦公室。"
+              }
+            },
+            {
+              "icon": "no_accounts",
+              "title": { "en": "Stop data leaks", "zh": "防止資料外洩" },
+              "text": {
+                "en": "Prevent uploading confidential files to personal cloud storage.",
+                "zh": "防止把機密檔案上傳到個人雲端硬碟。"
+              }
+            },
+            {
+              "icon": "travel_explore",
+              "title": { "en": "Works anywhere", "zh": "走到哪保護到哪" },
+              "text": {
+                "en": "With the WARP client, protection follows remote and travelling employees.",
+                "zh": "搭配 WARP 用戶端,保護跟著遠端與出差的員工走。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to set it up", "zh": "怎麼設定?" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "First you decide how traffic reaches Gateway, then you write policies. Here's the quickest path: block malware via a DNS policy.",
+            "zh": "先決定流量怎麼送到 Gateway,再來寫政策。以下是最快的做法:用一條 DNS 政策擋掉惡意程式。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Choose how to connect", "zh": "選擇連接方式" },
+              "text": {
+                "en": "Two options. WARP client: install Cloudflare's app on devices — enables all three layers plus identity. DNS location: point your network's DNS to Cloudflare — simplest, DNS filtering only.",
+                "zh": "兩種選擇。WARP 用戶端:在裝置上安裝 Cloudflare 的 App —— 啟用全部三層加上身分辨識。DNS location:把你網路的 DNS 指向 Cloudflare —— 最簡單,只做 DNS 過濾。"
+              }
+            },
+            {
+              "title": { "en": "Open Gateway policies", "zh": "打開 Gateway 政策" },
+              "text": {
+                "en": "In the Zero Trust dashboard go to Gateway → Firewall policies → DNS, then Add a policy.",
+                "zh": "在 Zero Trust 儀表板進入 Gateway → Firewall policies → DNS,然後 Add a policy(新增政策)。"
+              }
+            },
+            {
+              "title": { "en": "Block security threats", "zh": "封鎖資安威脅" },
+              "text": {
+                "en": "Set a condition matching the Security threats categories, choose action Block, and save. It deploys worldwide in under a minute.",
+                "zh": "設定條件,選 Security threats(資安威脅)分類,動作選 Block(封鎖),儲存。不到一分鐘就全球生效。"
+              },
+              "code": {
+                "lang": "text",
+                "body": "Selector:  Security Categories\nOperator:  in\nValue:     Malware, Phishing, Command & Control\nAction:    Block"
+              }
+            },
+            {
+              "title": { "en": "Add a content policy (optional)", "zh": "加一條內容政策(選用)" },
+              "text": {
+                "en": "Add another DNS policy matching Content Categories (e.g. Adult Themes) with action Block to filter unwanted content.",
+                "zh": "再加一條 DNS 政策,比對 Content Categories(內容分類,例如成人主題),動作選 Block,過濾不該看的內容。"
+              }
+            },
+            {
+              "title": { "en": "Review the logs", "zh": "查看紀錄" },
+              "text": {
+                "en": "Open Logs → Gateway to see which domains were queried and blocked, then tune policies that are too strict.",
+                "zh": "打開 Logs → Gateway,看哪些網域被查詢、被擋,再調整太嚴格的政策。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shield_moon",
+              "title": { "en": "Secure Web Gateway", "zh": "安全網路閘道(SWG)" },
+              "text": {
+                "en": "A security checkpoint all outbound traffic passes through to be filtered.",
+                "zh": "所有對外流量都會經過的安全檢查哨,在這裡被過濾。"
+              }
+            },
+            {
+              "icon": "policy",
+              "title": { "en": "Policy", "zh": "政策(Policy)" },
+              "text": {
+                "en": "An if-this-then-that rule. Conditions match traffic; actions allow, block, or override.",
+                "zh": "一條「如果…就…」的規則。條件比對流量;動作決定允許、封鎖或覆寫。"
+              }
+            },
+            {
+              "icon": "category",
+              "title": { "en": "Categories", "zh": "分類(Categories)" },
+              "text": {
+                "en": "Cloudflare groups domains (malware, gambling, social media) so you filter by type, not one by one.",
+                "zh": "Cloudflare 把網域分群(惡意程式、賭博、社群媒體),讓你按類型過濾,不用一個一個列。"
+              }
+            },
+            {
+              "icon": "install_mobile",
+              "title": { "en": "WARP client", "zh": "WARP 用戶端" },
+              "text": {
+                "en": "Cloudflare's device app that sends traffic to Gateway and unlocks network + HTTP filtering.",
+                "zh": "Cloudflare 的裝置 App,把流量導向 Gateway,並解鎖網路與 HTTP 過濾。"
+              }
+            },
+            {
+              "icon": "travel_explore",
+              "title": { "en": "DNS location", "zh": "DNS location" },
+              "text": {
+                "en": "A network whose DNS points at Cloudflare; the no-install way to get DNS filtering.",
+                "zh": "把 DNS 指向 Cloudflare 的一個網路;免安裝就能做 DNS 過濾的方式。"
+              }
+            },
+            {
+              "icon": "lock_open",
+              "title": { "en": "TLS decryption", "zh": "TLS 解密" },
+              "text": {
+                "en": "Lets HTTP filtering look inside encrypted traffic. Requires installing Cloudflare's certificate.",
+                "zh": "讓 HTTP 過濾能看進加密流量內部。需要安裝 Cloudflare 的憑證。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "start",
+          "title": { "en": "Start with DNS-only", "zh": "先從只做 DNS 開始" },
+          "text": {
+            "en": "DNS filtering needs no software install and blocks the vast majority of malware and phishing for quick wins. Add the WARP client later when you want network and HTTP filtering.",
+            "zh": "DNS 過濾不用裝任何軟體,就能擋掉絕大多數惡意程式與釣魚,快速見效。等你想做網路與 HTTP 過濾時,再加上 WARP 用戶端。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Gateway is part of Cloudflare Zero Trust; the free plan covers up to 50 users.",
+              "Policies are evaluated in order: DNS first, then network, then HTTP.",
+              "Changes deploy globally in under a minute.",
+              "HTTP filtering (inspecting inside HTTPS) requires installing Cloudflare's certificate on devices."
+            ],
+            "zh": [
+              "Gateway 屬於 Cloudflare Zero Trust;免費方案涵蓋最多 50 位使用者。",
+              "政策依序評估:先 DNS,再網路,最後 HTTP。",
+              "變更不到一分鐘就全球生效。",
+              "HTTP 過濾(看進 HTTPS 內部)需要在裝置上安裝 Cloudflare 的憑證。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "access", "label": { "en": "Access", "zh": "Access" } },
+    { "slug": "tunnel", "label": { "en": "Cloudflare Tunnel", "zh": "Cloudflare Tunnel" } },
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } },
+    { "slug": "waf", "label": { "en": "WAF", "zh": "WAF" } }
+  ],
+  "docs": "https://developers.cloudflare.com/cloudflare-one/policies/gateway/"
+}

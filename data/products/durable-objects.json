@@ -1,0 +1,366 @@
+{
+  "slug": "durable-objects",
+  "category": "compute",
+  "icon": "dataset",
+  "title": { "en": "Durable Objects", "zh": "Durable Objects" },
+  "subtitle": {
+    "en": "Tiny stateful servers that remember things and coordinate users",
+    "zh": "會記住資料、又能協調多人的迷你有狀態伺服器"
+  },
+  "hero": {
+    "badge": { "en": "Compute", "zh": "運算" },
+    "tagline": {
+      "en": "A single, always-there object that combines code with its own storage — perfect for live chat, multiplayer, and anything where everyone must agree on one source of truth.",
+      "zh": "一個單一、永遠都在的物件，把程式碼和自己的儲存結合在一起——很適合即時聊天、多人連線，以及任何「大家必須對齊同一份真相」的場景。"
+    }
+  },
+  "stats": [
+    { "value": "1", "label": { "en": "Instance per name", "zh": "每個名稱一個實例" } },
+    { "value": "10 GB", "label": { "en": "SQLite storage each", "zh": "每個 SQLite 儲存" } },
+    { "value": "∞", "label": { "en": "Objects per account", "zh": "每帳號物件數" } },
+    { "value": "0ms", "label": { "en": "Cold starts", "zh": "冷啟動時間" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What are Durable Objects?", "zh": "Durable Objects 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "A Durable Object is a special kind of Worker that uniquely combines compute (running code) with its own private storage. For any given name there is exactly one instance, living in one place, that everyone in the world talks to.",
+            "zh": "Durable Object 是一種特別的 Worker，它把「運算（執行程式碼）」和「自己專屬的儲存」獨特地結合在一起。對於同一個名稱，全世界永遠只有「一個」實例（instance），住在同一個地方，所有人都跟它對話。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "\"Stateful\" means it remembers things between requests. A normal Worker forgets everything the moment it finishes — it's \"stateless.\" A Durable Object keeps its data (in memory and in durable storage), so the next request sees what the last one left behind.",
+            "zh": "「Stateful（有狀態）」是指它在請求之間會「記住」事情。一般的 Worker 一做完就忘光光，這叫「stateless（無狀態）」。Durable Object 則會保留它的資料（同時放在記憶體和持久儲存裡），所以下一個請求看得到上一個請求留下的東西。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "support_agent",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "Imagine one dedicated receptionist for each meeting room. Everyone who wants that room always goes to that exact same person, who keeps the room's schedule in their own notebook. No double-bookings, no confusion — one room, one keeper of the truth.",
+            "zh": "想像每間會議室都配一位專屬櫃檯人員。所有想用那間會議室的人，永遠都去找「同一位」櫃檯，而他把那間會議室的行程記在自己的小本子裡。不會重複預約、不會搞混——一間房、一位真相守門人。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Coordinating many users in real time is one of the hardest problems in software. Normally you need databases, locks, and message brokers to stop people from overwriting each other. Durable Objects make it simple: because there's only one instance per name, it naturally becomes the single point of coordination.",
+            "zh": "讓很多使用者「即時協調」是軟體中最難的問題之一。一般來說你得用資料庫、鎖（lock）、訊息中介來避免大家互相覆蓋。Durable Objects 把這件事變簡單：因為每個名稱只有「一個」實例，它自然就成了唯一的協調點。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "person_pin",
+              "title": { "en": "Single source of truth", "zh": "單一真相來源" },
+              "text": {
+                "en": "One instance per name means no conflicting copies and no race conditions to untangle.",
+                "zh": "每個名稱只有一個實例，就不會有互相衝突的副本，也不用解開競爭條件（race condition）。"
+              }
+            },
+            {
+              "icon": "memory",
+              "title": { "en": "Built-in storage", "zh": "內建儲存" },
+              "text": {
+                "en": "Each object has its own SQLite database — strongly consistent and fast, with no separate database to wire up.",
+                "zh": "每個物件都有自己的 SQLite 資料庫——強一致性又快，不用另外接一個資料庫。"
+              }
+            },
+            {
+              "icon": "sync_alt",
+              "title": { "en": "Real-time coordination", "zh": "即時協調" },
+              "text": {
+                "en": "Hold WebSocket connections open and broadcast updates to many clients at once.",
+                "zh": "可以長時間保持 WebSocket 連線，一次把更新廣播給很多使用者。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "No cold starts", "zh": "零冷啟動" },
+              "text": {
+                "en": "Like Workers, they spin up instantly and run at the edge near your users.",
+                "zh": "和 Workers 一樣，它瞬間啟動，並在離使用者最近的邊緣執行。"
+              }
+            },
+            {
+              "icon": "all_inclusive",
+              "title": { "en": "Scale by count", "zh": "靠數量擴充" },
+              "text": {
+                "en": "Create unlimited objects — one per chat room, document, or user — and they scale horizontally.",
+                "zh": "可以建立無限多個物件——一個聊天室、一份文件、一位使用者各一個——它們會橫向擴充。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": { "en": "Alarms", "zh": "鬧鐘（Alarms）" },
+              "text": {
+                "en": "Schedule an object to wake itself up later to run work — no external cron needed.",
+                "zh": "可以排程讓物件稍後叫醒自己來做事——不需要外部的定時排程。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Reach for Durable Objects whenever multiple people or requests need to share and agree on the same live state.",
+            "zh": "只要有多人或多個請求需要「共享並對齊同一份即時狀態」，就該想到 Durable Objects。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "chat",
+              "title": { "en": "Live chat rooms", "zh": "即時聊天室" },
+              "text": {
+                "en": "One object per room holds every connection and broadcasts each new message instantly.",
+                "zh": "一個房間一個物件，握著所有連線，並即時把每則新訊息廣播出去。"
+              }
+            },
+            {
+              "icon": "edit_document",
+              "title": { "en": "Collaborative editing", "zh": "協作編輯" },
+              "text": {
+                "en": "Google-Docs-style apps where many people edit one document at the same time.",
+                "zh": "像 Google 文件那樣，很多人同時編輯同一份文件。"
+              }
+            },
+            {
+              "icon": "sports_esports",
+              "title": { "en": "Multiplayer games", "zh": "多人遊戲" },
+              "text": {
+                "en": "One object per game session keeps the authoritative game state for all players.",
+                "zh": "一場遊戲一個物件，為所有玩家保管權威的遊戲狀態。"
+              }
+            },
+            {
+              "icon": "shopping_cart",
+              "title": { "en": "Carts & counters", "zh": "購物車與計數器" },
+              "text": {
+                "en": "A per-user cart or a per-resource counter that must never lose or double-count.",
+                "zh": "每位使用者的購物車、或每個資源的計數器，絕不能漏算或重複計算。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Rate limiting", "zh": "流量限制" },
+              "text": {
+                "en": "Track how often a user hits an API and enforce limits from one consistent place.",
+                "zh": "追蹤使用者打 API 的頻率，從一個一致的地方執行限制。"
+              }
+            },
+            {
+              "icon": "smart_toy",
+              "title": { "en": "AI agents", "zh": "AI 代理人" },
+              "text": {
+                "en": "Give each AI agent its own long-lived memory and state that persists across turns.",
+                "zh": "讓每個 AI 代理人擁有自己長期存在、跨回合保留的記憶與狀態。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you get started?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You write a Durable Object as a JavaScript/TypeScript class, register it in wrangler.jsonc with a binding and a migration, then call it from a normal Worker by looking it up by name.",
+            "zh": "你把 Durable Object 寫成一個 JavaScript / TypeScript 類別，在 wrangler.jsonc 裡用一個 binding（綁定）和一個 migration（遷移）登記它，然後在一般的 Worker 裡「用名稱查到它」並呼叫它。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a Worker project", "zh": "建立 Worker 專案" },
+              "text": {
+                "en": "Start from the Hello World template, then add your Durable Object class to the code.",
+                "zh": "從 Hello World 範本開始，再把你的 Durable Object 類別加進程式碼。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest -- my-do-app\ncd my-do-app" }
+            },
+            {
+              "title": { "en": "Register the object", "zh": "登記物件" },
+              "text": {
+                "en": "In wrangler.jsonc, add a binding (the name your Worker uses) and a migration (which tells Cloudflare this is a new SQLite-backed class).",
+                "zh": "在 wrangler.jsonc 裡加上一個 binding（Worker 用來呼叫它的名稱）和一個 migration（告訴 Cloudflare 這是一個新的、用 SQLite 儲存的類別）。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"durable_objects\": {\n    \"bindings\": [\n      { \"name\": \"MY_DURABLE_OBJECT\", \"class_name\": \"MyDurableObject\" }\n    ]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"MyDurableObject\"] }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署" },
+              "text": {
+                "en": "Publish to Cloudflare's network. Each unique name you request will get its own instance automatically.",
+                "zh": "發佈到 Cloudflare 的網路。你請求的每個不同名稱，都會自動拿到屬於自己的實例。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "title": { "en": "src/index.ts — an object with SQLite storage", "zh": "src/index.ts — 一個帶 SQLite 儲存的物件" },
+          "body": "import { DurableObject } from \"cloudflare:workers\";\n\nexport class MyDurableObject extends DurableObject {\n  // Run a query against this object's own private SQLite database\n  async sayHello() {\n    const row = this.ctx.storage.sql\n      .exec(\"SELECT 'Hello, World!' AS greeting\")\n      .one();\n    return row.greeting;\n  }\n}\n\nexport default {\n  async fetch(request, env) {\n    // getByName returns the ONE instance for this name (creating it if needed)\n    const stub = env.MY_DURABLE_OBJECT.getByName(\"room-42\");\n    // Call a method on it directly via RPC\n    const greeting = await stub.sayHello();\n    return new Response(greeting);\n  },\n};"
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "key",
+          "title": { "en": "Names map to instances", "zh": "名稱對應到實例" },
+          "text": {
+            "en": "getByName(\"room-42\") always returns the same single instance. Use \"room-42\" again from anywhere on Earth and you reach the exact same object with the same memory and storage. That is the whole magic.",
+            "zh": "getByName(\"room-42\") 永遠回傳「同一個」實例。不管在地球哪個角落再用一次 \"room-42\"，你都會連到一模一樣的物件，帶著相同的記憶體和儲存。這就是全部的魔法所在。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "fingerprint",
+              "title": { "en": "ID / name", "zh": "ID / 名稱" },
+              "text": {
+                "en": "A globally unique identifier that maps to exactly one instance. Same name = same object.",
+                "zh": "一個全球唯一的識別碼，對應到剛好一個實例。相同名稱 = 相同物件。"
+              }
+            },
+            {
+              "icon": "smart_button",
+              "title": { "en": "Stub", "zh": "Stub（代理）" },
+              "text": {
+                "en": "A local handle you call methods on; Cloudflare routes the call to the real object wherever it lives.",
+                "zh": "一個本地的把手，你在上面呼叫方法；Cloudflare 會把呼叫轉送到真正的物件所在之處。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "Storage API", "zh": "儲存 API" },
+              "text": {
+                "en": "Transactional, strongly consistent SQLite storage built right into each object.",
+                "zh": "內建在每個物件裡、具交易性與強一致性的 SQLite 儲存。"
+              }
+            },
+            {
+              "icon": "bedtime",
+              "title": { "en": "WebSocket Hibernation", "zh": "WebSocket 休眠" },
+              "text": {
+                "en": "Keep thousands of connections open cheaply — the object sleeps but its connections stay alive.",
+                "zh": "用很低成本保持成千上萬條連線——物件休眠，但連線依然活著。"
+              }
+            },
+            {
+              "icon": "alarm",
+              "title": { "en": "Alarms", "zh": "Alarms（鬧鐘）" },
+              "text": {
+                "en": "Schedule the object to wake itself at a future time to do work, like retries or cleanup.",
+                "zh": "排程讓物件在未來某個時間叫醒自己做事，例如重試或清理。"
+              }
+            },
+            {
+              "icon": "move_up",
+              "title": { "en": "Migration", "zh": "Migration（遷移）" },
+              "text": {
+                "en": "A small config entry that tells Cloudflare you're adding, renaming, or removing an object class.",
+                "zh": "一個小小的設定項目，告訴 Cloudflare 你要新增、改名或移除某個物件類別。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "Free to try", "zh": "免費試用" },
+          "text": {
+            "en": "SQLite-backed Durable Objects are available on the Workers Free plan (with lower limits), so you can build a real-time app and learn the model without paying.",
+            "zh": "用 SQLite 儲存的 Durable Objects 在 Workers 免費方案就能用（限制較低），所以你不用付費就能做一個即時 App、把這套模型學起來。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Good limits to remember", "zh": "值得記住的限制" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Number of objects: unlimited per account / per class",
+              "Storage per object: up to 10 GB of SQLite on the Paid plan",
+              "Throughput: a soft limit of ~1,000 requests/second per object",
+              "CPU time: 30s default, configurable up to 5 minutes",
+              "SQLite key + value combined: up to 2 MB"
+            ],
+            "zh": [
+              "物件數量：每帳號 / 每類別都是無上限",
+              "每個物件儲存：付費方案最多 10 GB 的 SQLite",
+              "吞吐量：每個物件約 1,000 請求/秒 的軟性上限",
+              "CPU 時間：預設 30 秒，最多可設定到 5 分鐘",
+              "SQLite 的鍵 + 值合計：最多 2 MB"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "balance",
+          "title": { "en": "One object = one bottleneck", "zh": "一個物件 = 一個瓶頸" },
+          "text": {
+            "en": "Because all traffic for a name funnels through a single instance, a hugely popular object can become a bottleneck (~1,000 req/s). Split work across many objects — e.g. one per room or user — to scale.",
+            "zh": "因為某個名稱的所有流量都匯集到單一實例，一個超熱門的物件可能變成瓶頸（約 1,000 req/s）。把工作拆給很多物件——例如一個房間或一位使用者各一個——就能擴充。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "containers", "label": { "en": "Containers", "zh": "Containers" } },
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } }
+  ],
+  "docs": "https://developers.cloudflare.com/durable-objects/"
+}

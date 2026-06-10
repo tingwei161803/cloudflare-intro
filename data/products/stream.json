@@ -1,0 +1,346 @@
+{
+  "slug": "stream",
+  "category": "media",
+  "icon": "movie",
+  "title": { "en": "Cloudflare Stream", "zh": "Cloudflare Stream" },
+  "subtitle": {
+    "en": "Upload, encode, store and deliver video with a built-in player",
+    "zh": "上傳、編碼、儲存並傳送影片，內建可調品質播放器"
+  },
+  "hero": {
+    "badge": { "en": "Media", "zh": "媒體" },
+    "tagline": {
+      "en": "Add live and on-demand video to your app with one API — no servers, no encoding pipeline to babysit.",
+      "zh": "用一支 API 就能在你的網站加上直播與隨選影片——不用架伺服器，也不用自己顧編碼流程。"
+    }
+  },
+  "stats": [
+    { "value": "$5", "label": { "en": "/ 1,000 min stored", "zh": "／每 1,000 分鐘儲存" } },
+    { "value": "$1", "label": { "en": "/ 1,000 min delivered", "zh": "／每 1,000 分鐘傳送" } },
+    { "value": "Free", "label": { "en": "Encoding & ingest", "zh": "編碼與上傳" } },
+    { "value": "30GB", "label": { "en": "Max upload size", "zh": "單檔最大上傳" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Cloudflare Stream?", "zh": "Cloudflare Stream 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Stream is an all-in-one video platform: you upload a video (or start a live broadcast) and Cloudflare encodes it, stores it, and delivers it worldwide with a ready-made player you can embed in one line.",
+            "zh": "Cloudflare Stream 是一套「全包式」影片平台：你上傳一支影片（或開一場直播），Cloudflare 會幫你編碼、儲存，並透過全球網路傳送，還附上一個只要一行就能嵌入的播放器。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Encoding (also called transcoding) means converting your raw video into multiple sizes and a streaming-friendly format. Stream does this automatically, so the same upload plays smoothly on a phone on slow data or a laptop on fast Wi-Fi.",
+            "zh": "編碼（又叫轉碼，transcoding）就是把你的原始影片轉成多種尺寸、以及適合串流的格式。Stream 會自動做好這件事，所以同一支上傳的影片，在訊號差的手機或快速 Wi-Fi 的筆電上都能順暢播放。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_shipping",
+          "title": { "en": "Think of it like a video factory + courier", "zh": "把它想成影片工廠＋宅配" },
+          "text": {
+            "en": "You drop off one master tape. The factory makes copies in every quality, and a global courier hands the right copy to each viewer based on their screen and internet speed — instantly.",
+            "zh": "你只交出一卷母帶，工廠幫你製作各種畫質的版本，全球宅配再依每位觀眾的螢幕與網速，即時把最合適的版本送到他手上。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Running your own video infrastructure is hard and expensive: encoding servers, storage, a streaming protocol, a player, and bandwidth bills. Stream replaces that whole stack with one API and predictable per-minute pricing.",
+            "zh": "自己經營影片基礎設施又難又貴：要有編碼伺服器、儲存空間、串流協定、播放器，還有可怕的頻寬帳單。Stream 用一支 API 取代這一整套，並採用好預估的「分鐘計費」。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "auto_awesome",
+              "title": { "en": "Encoding included", "zh": "內建編碼" },
+              "text": {
+                "en": "Uploads are transcoded into an adaptive bitrate ladder automatically. Encoding and ingest are free.",
+                "zh": "上傳的影片會自動轉成「自適應位元率」的多畫質版本。編碼與上傳都免費。"
+              }
+            },
+            {
+              "icon": "smart_display",
+              "title": { "en": "Free player", "zh": "免費播放器" },
+              "text": {
+                "en": "A polished, mobile-friendly player ships with it — embed via an iframe, no coding required.",
+                "zh": "附帶一個精緻、適配手機的播放器——用 iframe 就能嵌入，不用寫程式。"
+              }
+            },
+            {
+              "icon": "payments",
+              "title": { "en": "Simple pricing", "zh": "計費單純" },
+              "text": {
+                "en": "Pay only for minutes stored and minutes watched. No surprise egress (bandwidth) fees.",
+                "zh": "只為「儲存的分鐘數」與「被觀看的分鐘數」付費，沒有突如其來的流量（egress）費用。"
+              }
+            },
+            {
+              "icon": "lock",
+              "title": { "en": "Access control", "zh": "存取控制" },
+              "text": {
+                "en": "Signed URLs let you protect paid or private videos so only authorized viewers can play them.",
+                "zh": "用簽章網址（signed URL）保護付費或私人影片，只有獲授權的觀眾才能播放。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "school",
+              "title": { "en": "Online courses", "zh": "線上課程" },
+              "text": {
+                "en": "Host lesson videos that stream smoothly to students on any device or connection.",
+                "zh": "存放教學影片，讓學生在任何裝置、任何網速下都能順暢觀看。"
+              }
+            },
+            {
+              "icon": "sensors",
+              "title": { "en": "Live streaming", "zh": "即時直播" },
+              "text": {
+                "en": "Broadcast events, webinars, or gaming live, then keep the recording on demand.",
+                "zh": "直播活動、研討會或遊戲實況，結束後還能保留成隨選影片。"
+              }
+            },
+            {
+              "icon": "ondemand_video",
+              "title": { "en": "Creator platforms", "zh": "創作者平台" },
+              "text": {
+                "en": "Let users upload clips with one-time URLs and play them back instantly.",
+                "zh": "用一次性網址讓使用者上傳短片，並立即可播放。"
+              }
+            },
+            {
+              "icon": "campaign",
+              "title": { "en": "Marketing & product", "zh": "行銷與產品" },
+              "text": {
+                "en": "Embed product demos or hero videos without slowing down your site.",
+                "zh": "嵌入產品示範或主視覺影片，又不拖慢你的網站。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to get started", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "We'll upload a video, wait for it to finish encoding, then embed the player. You only need an API token and your Account ID from the Cloudflare dashboard.",
+            "zh": "我們會上傳一支影片、等它編碼完成，然後嵌入播放器。你只需要在 Cloudflare 控制台拿到一組 API 權杖和你的 Account ID。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Set your credentials", "zh": "設定憑證" },
+              "text": {
+                "en": "Export your API token and Account ID so the commands below can use them. The token is like a password for your code.",
+                "zh": "先把 API 權杖和 Account ID 設成環境變數，下面的指令才用得到。權杖就像給程式用的密碼。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "export CLOUDFLARE_API_TOKEN=\"your-token-here\"\nexport ACCOUNT_ID=\"your-account-id-here\""
+              }
+            },
+            {
+              "title": { "en": "Upload a video file", "zh": "上傳影片檔" },
+              "text": {
+                "en": "For files under 200 MB you can post the file directly. The -F file=@ part attaches a local video.",
+                "zh": "小於 200 MB 的檔案可以直接上傳，-F file=@ 就是附上本機影片檔。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -X POST \\\n  https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/stream \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\" \\\n  -F file=@/path/to/video.mp4"
+              }
+            },
+            {
+              "title": { "en": "Or copy from a URL", "zh": "或從網址匯入" },
+              "text": {
+                "en": "Already have the video online? Tell Stream to fetch it. The response includes a uid — the video's unique id.",
+                "zh": "影片已經在網路上了？直接叫 Stream 去抓。回應裡會有一個 uid，就是這支影片的唯一代號。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -X POST \\\n  https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/stream/copy \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\" \\\n  -d '{\"url\":\"https://example.com/video.mp4\",\"meta\":{\"name\":\"My first video\"}}'"
+              }
+            },
+            {
+              "title": { "en": "Check it is ready", "zh": "確認編碼完成" },
+              "text": {
+                "en": "Encoding takes a moment. When status.state is 'ready' and readyToStream is true, you can play it.",
+                "zh": "編碼需要一點時間。當 status.state 變成 ready、readyToStream 為 true，就可以播放了。"
+              },
+              "code": {
+                "lang": "json",
+                "body": "{\n  \"result\": {\n    \"uid\": \"6b9e68b07dfee8cc2d116e4c51d6a957\",\n    \"readyToStream\": true,\n    \"status\": { \"state\": \"ready\" }\n  },\n  \"success\": true\n}"
+              }
+            },
+            {
+              "title": { "en": "Embed the player", "zh": "嵌入播放器" },
+              "text": {
+                "en": "Paste this iframe into your page. Replace <CODE> with your customer code and <UID> with the video uid. Done — a full adaptive player appears.",
+                "zh": "把這段 iframe 貼到你的網頁，<CODE> 換成你的 customer code、<UID> 換成影片 uid。完成——一個完整的自適應播放器就出現了。"
+              },
+              "code": {
+                "lang": "html",
+                "body": "<iframe\n  src=\"https://customer-<CODE>.cloudflarestream.com/<UID>/iframe\"\n  title=\"My first video\"\n  allow=\"accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;\"\n  allowfullscreen=\"true\"\n  style=\"border: none; width: 100%; aspect-ratio: 16/9;\">\n</iframe>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "upload",
+          "title": { "en": "Big files? Use tus", "zh": "大檔案？用 tus" },
+          "text": {
+            "en": "For uploads over 200 MB (up to a 30 GB max), Stream supports the tus protocol, which resumes the upload if your connection drops.",
+            "zh": "超過 200 MB（最大 30 GB）的上傳，Stream 支援 tus 協定；它會在連線中斷時自動續傳，不用整個重來。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "graphic_eq",
+              "title": { "en": "Adaptive bitrate 自適應位元率", "zh": "Adaptive bitrate（自適應位元率）" },
+              "text": {
+                "en": "The player automatically switches between quality levels based on the viewer's network — fewer buffering spinners.",
+                "zh": "播放器會依觀眾的網速自動切換畫質，減少「轉圈圈」卡頓。"
+              }
+            },
+            {
+              "icon": "sync_alt",
+              "title": { "en": "Transcoding 轉碼", "zh": "Transcoding（轉碼）" },
+              "text": {
+                "en": "Converting your original into multiple resolutions and a streaming format (HLS/DASH). Stream does this for you.",
+                "zh": "把原始影片轉成多種解析度與串流格式（HLS／DASH）。這由 Stream 自動完成。"
+              }
+            },
+            {
+              "icon": "playlist_play",
+              "title": { "en": "HLS / DASH", "zh": "HLS／DASH" },
+              "text": {
+                "en": "Streaming protocols that chop video into small chunks so playback can adapt quality on the fly.",
+                "zh": "串流協定，把影片切成小片段，讓播放時能即時切換畫質。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "Signed URLs 簽章網址", "zh": "Signed URL（簽章網址）" },
+              "text": {
+                "en": "Time-limited tokens that restrict who can watch — perfect for paid or private content.",
+                "zh": "有時效的權杖，限制誰能觀看——很適合付費或私人內容。"
+              }
+            },
+            {
+              "icon": "drive_folder_upload",
+              "title": { "en": "Direct creator upload 直接上傳", "zh": "Direct creator upload（直接上傳）" },
+              "text": {
+                "en": "One-time upload URLs you give users so they upload to Stream without seeing your API token.",
+                "zh": "發給使用者的一次性上傳網址，讓他們直接上傳到 Stream，又看不到你的 API 權杖。"
+              }
+            },
+            {
+              "icon": "sensors",
+              "title": { "en": "Live input 直播輸入", "zh": "Live input（直播輸入）" },
+              "text": {
+                "en": "A reusable endpoint you stream to (via RTMPS/SRT) for live broadcasts, with optional recording.",
+                "zh": "一個可重複使用的端點，你用 RTMPS／SRT 推流上去做直播，還能選擇自動錄影。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "How billing works", "zh": "計費方式" },
+          "text": {
+            "en": "You pay $5 per 1,000 minutes of video stored per month, and $1 per 1,000 minutes delivered (watched). Uploading and encoding are always free, and there are no separate bandwidth charges.",
+            "zh": "每月每 1,000 分鐘「儲存」5 美元，每 1,000 分鐘「傳送（被觀看）」1 美元。上傳與編碼一律免費，也沒有額外的頻寬費。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "inventory_2",
+          "title": { "en": "Storage is prepaid", "zh": "儲存是預付制" },
+          "text": {
+            "en": "Stored minutes are bought in advance. If you run out, you can't upload new videos or start live streams until you add more storage or delete old videos.",
+            "zh": "儲存分鐘數是預先購買的。一旦用完，在你加購或刪掉舊影片之前，就無法上傳新影片或開新直播。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Live and on-demand video are billed the same way — by minutes stored and delivered.",
+              "Max single upload is 30 GB; use tus for anything large to get resumable uploads.",
+              "Add captions/subtitles and a thumbnail to make videos more accessible and clickable.",
+              "Use signed URLs for paid content so links can't be freely shared."
+            ],
+            "zh": [
+              "直播與隨選影片計費方式相同——都看「儲存」與「傳送」的分鐘數。",
+              "單檔上傳上限 30 GB；大檔請用 tus，才能斷線續傳。",
+              "加上字幕與縮圖，讓影片更易讀也更吸引點擊。",
+              "付費內容請用簽章網址，連結才不會被隨意轉傳。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } },
+    { "slug": "realtime", "label": { "en": "Realtime", "zh": "Realtime" } },
+    { "slug": "r2", "label": { "en": "R2 Storage", "zh": "R2 儲存" } },
+    { "slug": "cdn", "label": { "en": "CDN", "zh": "CDN" } }
+  ],
+  "docs": "https://developers.cloudflare.com/stream/"
+}

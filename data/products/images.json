@@ -1,0 +1,336 @@
+{
+  "slug": "images",
+  "category": "media",
+  "icon": "image",
+  "title": { "en": "Cloudflare Images", "zh": "Cloudflare Images" },
+  "subtitle": {
+    "en": "Store, resize, optimize and deliver images at the edge",
+    "zh": "在邊緣節點儲存、縮放、最佳化並傳送圖片"
+  },
+  "hero": {
+    "badge": { "en": "Media", "zh": "媒體" },
+    "tagline": {
+      "en": "One image in, every size and format out — automatically optimized for each visitor.",
+      "zh": "上傳一張原圖，自動產生各種尺寸與格式，為每位訪客送出最合適的版本。"
+    }
+  },
+  "stats": [
+    { "value": "$5", "label": { "en": "/ 100k images stored / mo", "zh": "／每 10 萬張儲存／月" } },
+    { "value": "$1", "label": { "en": "/ 100k images delivered / mo", "zh": "／每 10 萬張傳送／月" } },
+    { "value": "5,000", "label": { "en": "Free transformations / mo", "zh": "每月免費轉換次數" } },
+    { "value": "100MP", "label": { "en": "Max image area", "zh": "單張最大畫素面積" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Cloudflare Images?", "zh": "Cloudflare Images 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Images is a service that stores your images and serves the perfect version of each one to every visitor — the right size, the right format, and the smallest possible file — all done automatically at Cloudflare's edge.",
+            "zh": "Cloudflare Images 是一個幫你「存放圖片」並「即時最佳化」的服務。它會在 Cloudflare 的邊緣節點，自動為每位訪客送出最適合的圖片版本：合適的尺寸、合適的格式、最小的檔案大小，全程不用你手動處理。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "Edge means Cloudflare's servers spread across hundreds of cities worldwide. When someone opens your page, the image is processed and sent from a server physically close to them, so it arrives fast.",
+            "zh": "「邊緣（edge）」指的是 Cloudflare 散布在全球數百個城市的伺服器。當有人打開你的網頁時，圖片會由離他最近的伺服器處理並送出，所以載入很快。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "checkroom",
+          "title": { "en": "Think of it like a tailor", "zh": "把它想成一位裁縫師" },
+          "text": {
+            "en": "You hand over one outfit (the original image). The tailor instantly resizes and re-cuts it to fit whoever walks in — phone, laptop, or huge TV — without you keeping a closet full of every size.",
+            "zh": "你只交出一件衣服（原始圖片），裁縫師會在客人上門的當下，立刻改成最合身的尺寸——手機、筆電、還是大電視都行。你不必準備一整櫃各種尺寸的版本。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Handling images yourself is surprisingly painful: you need different sizes for phones and desktops, modern formats for speed, a place to store everything, and a fast way to deliver it. Images bundles all of that into one product.",
+            "zh": "自己處理圖片其實很麻煩：手機和桌機要不同尺寸、要用新格式才夠快、要找地方存放、還要能快速傳送。Images 把這些麻煩全部包成一個服務。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "photo_size_select_large",
+              "title": { "en": "No more manual resizing", "zh": "免手動縮放" },
+              "text": {
+                "en": "Stop exporting 5 sizes of every photo. Ask for any width in the URL and Images makes it on demand.",
+                "zh": "不用再為每張照片匯出 5 種尺寸。只要在網址裡指定寬度，Images 就即時幫你產生。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Faster pages", "zh": "網頁更快" },
+              "text": {
+                "en": "Smaller, modern formats (WebP/AVIF) mean less data to download and quicker load times.",
+                "zh": "更小、更新的格式（WebP／AVIF）代表下載資料更少、載入更快。"
+              }
+            },
+            {
+              "icon": "warehouse",
+              "title": { "en": "Built-in storage", "zh": "內建儲存" },
+              "text": {
+                "en": "Upload originals to Cloudflare and let it host them — no separate bucket or server needed.",
+                "zh": "把原圖上傳到 Cloudflare 由它代管，不必再另外架儲存空間或伺服器。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Global delivery", "zh": "全球傳送" },
+              "text": {
+                "en": "Images ride Cloudflare's worldwide network, so visitors everywhere get them quickly.",
+                "zh": "圖片走 Cloudflare 的全球網路，世界各地的訪客都能快速取得。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "storefront",
+              "title": { "en": "E-commerce stores", "zh": "電商網站" },
+              "text": {
+                "en": "Product photos in thumbnails, grids, and zoom views — all from one upload.",
+                "zh": "商品照要做縮圖、列表、放大檢視——一張原圖全包。"
+              }
+            },
+            {
+              "icon": "newspaper",
+              "title": { "en": "Blogs & news", "zh": "部落格與新聞" },
+              "text": {
+                "en": "Serve crisp cover images that adapt to phones and widescreens automatically.",
+                "zh": "封面圖會自動適配手機與寬螢幕，永遠清晰。"
+              }
+            },
+            {
+              "icon": "account_circle",
+              "title": { "en": "User uploads", "zh": "使用者上傳" },
+              "text": {
+                "en": "Let users upload avatars or photos straight to Images with one-time direct upload URLs.",
+                "zh": "用一次性的「直接上傳網址」，讓使用者把頭像或照片直接上傳到 Images。"
+              }
+            },
+            {
+              "icon": "devices",
+              "title": { "en": "Responsive sites", "zh": "響應式網站" },
+              "text": {
+                "en": "Any app that needs the same picture in many sizes across many devices.",
+                "zh": "任何需要同一張圖、在多種裝置上呈現多種尺寸的網站或 App。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to get started", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "There are two ways to use Images: (1) upload originals to Cloudflare and let it host them, or (2) keep images on your own site and transform them through a special URL. Below we do both.",
+            "zh": "Images 有兩種用法：（1）把原圖上傳到 Cloudflare 由它代管；（2）圖片留在你自己的網站，透過一個特殊網址即時轉換。下面兩種都會示範。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create an API token", "zh": "建立 API 權杖" },
+              "text": {
+                "en": "In the Cloudflare dashboard, create an API token with the Images permission. Save your Account ID too. A token is like a password that lets your code talk to Cloudflare safely.",
+                "zh": "在 Cloudflare 控制台建立一個有 Images 權限的 API 權杖（token），並記下你的 Account ID。權杖就像一組密碼，讓你的程式可以安全地跟 Cloudflare 溝通。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "export CLOUDFLARE_API_TOKEN=\"your-token-here\"\nexport ACCOUNT_ID=\"your-account-id-here\""
+              }
+            },
+            {
+              "title": { "en": "Upload an image file", "zh": "上傳一張圖片" },
+              "text": {
+                "en": "Send the file to the Images API. The -F file=@ part attaches a local file. The response gives you an image id and ready-to-use delivery URLs (variants).",
+                "zh": "把檔案傳到 Images API。指令裡 -F file=@ 就是附上本機檔案。回應會給你一個 image id，以及可直接使用的傳送網址（也就是各個 variant）。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/images/v1 \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\" \\\n  -F file=@/path/to/photo.jpg"
+              }
+            },
+            {
+              "title": { "en": "Read the response", "zh": "看懂回應" },
+              "text": {
+                "en": "You get back the image id and a delivery URL. The word at the end (here 'public') is a variant — a named size/quality preset you configure in the dashboard.",
+                "zh": "你會拿到 image id 和一條傳送網址。網址結尾那個字（這裡是 public）就是 variant——一組你在控制台設定好的「尺寸／品質」預設組合。"
+              },
+              "code": {
+                "lang": "json",
+                "body": "{\n  \"result\": {\n    \"id\": \"2cdc28f0-017a-49c4-9ed7-87056c83901\",\n    \"variants\": [\n      \"https://imagedelivery.net/abc123AccountHash/2cdc28f0-017a-49c4-9ed7-87056c83901/public\"\n    ]\n  },\n  \"success\": true\n}"
+              }
+            },
+            {
+              "title": { "en": "Show it on your page", "zh": "放到網頁上" },
+              "text": {
+                "en": "Drop the delivery URL straight into an <img> tag. That's it — Cloudflare serves the optimized image.",
+                "zh": "直接把傳送網址放進 <img> 標籤就好。完成——Cloudflare 會送出最佳化後的圖片。"
+              },
+              "code": {
+                "lang": "html",
+                "body": "<img\n  src=\"https://imagedelivery.net/abc123AccountHash/2cdc28f0-017a-49c4-9ed7-87056c83901/public\"\n  alt=\"My photo\"\n/>"
+              }
+            },
+            {
+              "title": { "en": "Or transform on the fly via URL", "zh": "或用網址即時轉換" },
+              "text": {
+                "en": "If your image already lives on your own domain, add /cdn-cgi/image/<options>/ in front of it. Here we ask for 800px wide, 75% quality, and format=auto (Cloudflare picks WebP or AVIF if the browser supports it).",
+                "zh": "如果圖片本來就放在你自己的網域，只要在網址前面加上 /cdn-cgi/image/<選項>/。下面是指定寬 800px、品質 75%、format=auto（Cloudflare 會自動挑瀏覽器支援的 WebP 或 AVIF）。"
+              },
+              "code": {
+                "lang": "text",
+                "body": "https://example.com/cdn-cgi/image/width=800,quality=75,format=auto/photo.jpg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "tune",
+              "title": { "en": "Variant 變體", "zh": "Variant（變體）" },
+              "text": {
+                "en": "A saved preset like 'thumbnail' (200px) or 'public' (full). You request a variant by name in the URL.",
+                "zh": "一組存好的預設，例如 thumbnail（200px）或 public（原尺寸）。你在網址裡用名字指定要哪個變體。"
+              }
+            },
+            {
+              "icon": "compress",
+              "title": { "en": "Format auto 自動格式", "zh": "Format auto（自動格式）" },
+              "text": {
+                "en": "format=auto lets Cloudflare deliver AVIF or WebP — newer, smaller formats — when the browser supports them, otherwise JPEG/PNG.",
+                "zh": "format=auto 讓 Cloudflare 在瀏覽器支援時送出 AVIF 或 WebP（更新、更小的格式），不支援就退回 JPEG／PNG。"
+              }
+            },
+            {
+              "icon": "crop",
+              "title": { "en": "Fit 縮放方式", "zh": "Fit（縮放方式）" },
+              "text": {
+                "en": "Controls how the image fills the target box: scale-down, contain, cover, crop, or pad.",
+                "zh": "決定圖片如何填進指定框：scale-down、contain、cover、crop、pad 等。"
+              }
+            },
+            {
+              "icon": "cloud",
+              "title": { "en": "Edge / CDN 邊緣網路", "zh": "Edge／CDN（邊緣網路）" },
+              "text": {
+                "en": "CDN means Content Delivery Network — servers worldwide that cache and serve content from near each visitor.",
+                "zh": "CDN 是「內容傳遞網路」：分布全球的伺服器，會就近快取並傳送內容給每位訪客。"
+              }
+            },
+            {
+              "icon": "upload_file",
+              "title": { "en": "Direct upload 直接上傳", "zh": "Direct upload（直接上傳）" },
+              "text": {
+                "en": "A one-time URL you give end users so they upload straight to Images without exposing your API token.",
+                "zh": "一個發給終端使用者的一次性網址，讓他們直接把檔案上傳到 Images，又不必外洩你的 API 權杖。"
+              }
+            },
+            {
+              "icon": "image",
+              "title": { "en": "Supported formats 支援格式", "zh": "支援格式" },
+              "text": {
+                "en": "Input: PNG, JPEG, GIF, WebP, SVG, AVIF, HEIC. Output: PNG, JPEG, GIF, WebP, AVIF.",
+                "zh": "可輸入：PNG、JPEG、GIF、WebP、SVG、AVIF、HEIC。可輸出：PNG、JPEG、GIF、WebP、AVIF。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "How billing works", "zh": "計費方式" },
+          "text": {
+            "en": "Storing originals costs $5 per 100,000 images per month; delivering them costs $1 per 100,000 images per month. URL transformations give you 5,000 free unique transformations each month, then $0.50 per 1,000 after that.",
+            "zh": "儲存原圖每月每 10 萬張 5 美元；傳送每月每 10 萬張 1 美元。網址轉換每月有 5,000 次免費的「不重複轉換」，超過後每 1,000 次 0.5 美元。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "straighten",
+          "title": { "en": "Size limits to remember", "zh": "要記住的尺寸限制" },
+          "text": {
+            "en": "Uploaded (hosted) images: up to 10 MB per file. Remote images you transform: up to 100 MB. Both cap at 100 megapixels of area and 12,000 px on any single side.",
+            "zh": "上傳（代管）的圖片：每張最大 10 MB。你拿來轉換的遠端圖片：最大 100 MB。兩者面積上限都是 1 億畫素（100 megapixels），單邊最長 12,000 px。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Use format=auto everywhere — it is the single biggest, easiest speed win.",
+              "Set a sensible max width; nobody needs a 6000px photo on a phone.",
+              "Animated GIF/WebP work too, but very large animations may skip transformation.",
+              "A 'unique transformation' is counted once per distinct set of options + source, then cached."
+            ],
+            "zh": [
+              "到處都加上 format=auto——這是最簡單又最有感的提速招數。",
+              "設定合理的最大寬度；手機根本不需要 6000px 的照片。",
+              "動態 GIF／WebP 也支援，但超大的動畫可能會略過轉換。",
+              "「不重複轉換」是依「選項組合＋來源圖」各算一次，之後會被快取重複使用。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "stream", "label": { "en": "Stream", "zh": "Stream" } },
+    { "slug": "r2", "label": { "en": "R2 Storage", "zh": "R2 儲存" } },
+    { "slug": "cdn", "label": { "en": "CDN", "zh": "CDN" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } }
+  ],
+  "docs": "https://developers.cloudflare.com/images/"
+}

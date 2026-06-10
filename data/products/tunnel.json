@@ -1,0 +1,336 @@
+{
+  "slug": "tunnel",
+  "category": "security",
+  "icon": "vpn_lock",
+  "title": { "en": "Cloudflare Tunnel", "zh": "Cloudflare Tunnel" },
+  "subtitle": {
+    "en": "Expose a local service to the internet without opening any firewall ports",
+    "zh": "不用開任何防火牆連接埠，就能把本機服務安全地對外公開"
+  },
+  "hero": {
+    "badge": { "en": "Security", "zh": "安全" },
+    "tagline": {
+      "en": "A secure tunnel from your machine to Cloudflare — no public IP, no open ports, no exposed server.",
+      "zh": "一條從你機器連到 Cloudflare 的安全通道 —— 不用公開 IP、不開連接埠、伺服器不外露。"
+    }
+  },
+  "stats": [
+    { "value": "0 ports", "label": { "en": "Inbound ports opened", "zh": "對外開放的連接埠" } },
+    { "value": "Outbound-only", "label": { "en": "Connection direction", "zh": "連線方向" } },
+    { "value": "Free", "label": { "en": "cloudflared daemon", "zh": "cloudflared 程式" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Cloudflare Tunnel?", "zh": "Cloudflare Tunnel 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Tunnel lets you publish a service running on your own computer or private network to the internet — safely — without giving it a public IP address or opening holes in your firewall.",
+            "zh": "Cloudflare Tunnel 讓你把跑在自己電腦或內網裡的服務安全地對外發佈 —— 而且不用給它公開 IP、也不用在防火牆上開洞。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "You run a tiny program called cloudflared. Instead of waiting for visitors to connect in, it makes an outbound connection from your machine up to Cloudflare. Visitors reach Cloudflare, and Cloudflare passes their requests down through that tunnel to your service.",
+            "zh": "你跑一支叫 cloudflared 的小程式。它不是被動等訪客連進來，而是從你的機器主動往上連到 Cloudflare（outbound，向外連線）。訪客連到 Cloudflare，Cloudflare 再把他們的請求順著這條通道送到你的服務。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "swap_vert",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A private valet who walks out to greet guests and escorts them in — instead of leaving your front door unlocked. Your house never has to expose an entrance to the street.",
+            "zh": "一位專屬接待員主動走出去迎接客人、再帶他們進門 —— 而不是把你家大門敞開不鎖。你家完全不必對著馬路露出任何入口。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Traditionally, to make a home server or office app reachable from the internet you'd need a public IP, port forwarding, and inbound firewall rules — each one a security risk and a hassle. Tunnel removes all of that.",
+            "zh": "傳統上要讓家用伺服器或辦公室應用程式能從網路連到，你得有公開 IP、設定連接埠轉發（port forwarding），還要開對內的防火牆規則 —— 每一項都是資安風險又麻煩。Tunnel 把這些全省掉。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "block",
+              "title": { "en": "No open ports", "zh": "不開連接埠" },
+              "text": {
+                "en": "You can block all inbound traffic at the firewall and still stay reachable.",
+                "zh": "你可以在防火牆封掉所有對內流量，卻依然能被連到。"
+              }
+            },
+            {
+              "icon": "wifi_off",
+              "title": { "en": "No public IP needed", "zh": "不用公開 IP" },
+              "text": {
+                "en": "Works behind home routers, CGNAT, or dynamic IPs that change all the time.",
+                "zh": "在家用路由器、CGNAT、會一直變動的浮動 IP 後面都能用。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "Hidden origin", "zh": "隱藏來源主機" },
+              "text": {
+                "en": "Your server's real IP is never exposed, so attackers can't target it directly.",
+                "zh": "你伺服器的真實 IP 從不外露，攻擊者沒辦法直接鎖定它。"
+              }
+            },
+            {
+              "icon": "https",
+              "title": { "en": "Free HTTPS", "zh": "免費 HTTPS" },
+              "text": {
+                "en": "Cloudflare terminates TLS at its edge, so your public URL is encrypted automatically.",
+                "zh": "Cloudflare 在邊緣處理 TLS 加密，你的公開網址自動就是加密的。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "home",
+              "title": { "en": "Home lab / self-hosting", "zh": "家用實驗室／自架服務" },
+              "text": {
+                "en": "Publish a Raspberry Pi app, NAS, or hobby project without router config.",
+                "zh": "把樹莓派應用、NAS 或興趣專案發佈出去，不用動路由器設定。"
+              }
+            },
+            {
+              "icon": "terminal",
+              "title": { "en": "Local dev demos", "zh": "本機開發示範" },
+              "text": {
+                "en": "Share a localhost site with a client or teammate via a real public URL.",
+                "zh": "用一個真正的公開網址，把跑在 localhost 的網站分享給客戶或同事。"
+              }
+            },
+            {
+              "icon": "lan",
+              "title": { "en": "Internal tools", "zh": "內部工具" },
+              "text": {
+                "en": "Reach an internal dashboard or database without a full VPN setup.",
+                "zh": "不用架整套 VPN，就能連到內部儀表板或資料庫。"
+              }
+            },
+            {
+              "icon": "terminal",
+              "title": { "en": "SSH / RDP", "zh": "SSH／遠端桌面" },
+              "text": {
+                "en": "Securely reach machines for remote admin without exposing those ports.",
+                "zh": "安全地遠端管理機器，又不用把那些連接埠暴露出去。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to create a tunnel", "zh": "怎麼建立一條通道？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "There are two ways: the dashboard (remotely-managed, beginner-friendly) or the command line. Here's the classic CLI flow once cloudflared is installed.",
+            "zh": "有兩種做法：用儀表板（遠端管理，最適合新手）或用命令列。以下是裝好 cloudflared 後的經典命令列流程。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Install cloudflared", "zh": "安裝 cloudflared" },
+              "text": {
+                "en": "Install the connector daemon on the machine running your service (macOS example shown).",
+                "zh": "在跑著你服務的機器上安裝這支連接器程式（以下示範 macOS）。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "# macOS (Homebrew)\nbrew install cloudflared\n\n# or download a binary for Linux/Windows from Cloudflare"
+              }
+            },
+            {
+              "title": { "en": "Log in", "zh": "登入授權" },
+              "text": {
+                "en": "This opens a browser to authorize cloudflared and pick which domain the tunnel belongs to.",
+                "zh": "這會開啟瀏覽器,授權 cloudflared 並選擇這條通道要綁哪個網域。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "cloudflared tunnel login"
+              }
+            },
+            {
+              "title": { "en": "Create the tunnel", "zh": "建立通道" },
+              "text": {
+                "en": "Give it a name. Cloudflare generates a unique tunnel ID and a credentials file on your machine.",
+                "zh": "幫它取個名字。Cloudflare 會產生一個唯一的通道 ID,並在你機器上建立一個憑證檔。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "cloudflared tunnel create my-tunnel"
+              }
+            },
+            {
+              "title": { "en": "Route a hostname to it", "zh": "把網址指到這條通道" },
+              "text": {
+                "en": "Create the DNS record so app.example.com points at your tunnel.",
+                "zh": "建立 DNS 紀錄,讓 app.example.com 指向你的通道。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "cloudflared tunnel route dns my-tunnel app.example.com"
+              }
+            },
+            {
+              "title": { "en": "Map your local service", "zh": "對應你的本機服務" },
+              "text": {
+                "en": "In ~/.cloudflared/config.yml, point the hostname at your local service (e.g. a site on localhost:8080).",
+                "zh": "在 ~/.cloudflared/config.yml 裡,把網址對應到你的本機服務（例如跑在 localhost:8080 的網站）。"
+              },
+              "code": {
+                "lang": "yaml",
+                "body": "tunnel: my-tunnel\ncredentials-file: /Users/you/.cloudflared/<TUNNEL-ID>.json\n\ningress:\n  - hostname: app.example.com\n    service: http://localhost:8080\n  - service: http_status:404   # catch-all, required"
+              }
+            },
+            {
+              "title": { "en": "Run it", "zh": "啟動它" },
+              "text": {
+                "en": "Start the tunnel. Your local service is now live at https://app.example.com. Later, install it as a service so it runs on boot.",
+                "zh": "啟動通道。你的本機服務現在就上線在 https://app.example.com 了。之後可把它裝成系統服務,開機就自動跑。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "cloudflared tunnel run my-tunnel\n\n# run automatically on startup (Linux/macOS):\n# sudo cloudflared service install"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "memory",
+              "title": { "en": "cloudflared", "zh": "cloudflared" },
+              "text": {
+                "en": "The lightweight daemon (background program) that creates and maintains the tunnel.",
+                "zh": "建立並維持通道的輕量 daemon（背景程式）。"
+              }
+            },
+            {
+              "icon": "fingerprint",
+              "title": { "en": "Tunnel", "zh": "通道（Tunnel）" },
+              "text": {
+                "en": "A persistent object with a unique UUID linking your origin to Cloudflare.",
+                "zh": "一個有唯一 UUID 的長期物件,把你的來源主機跟 Cloudflare 連起來。"
+              }
+            },
+            {
+              "icon": "north_east",
+              "title": { "en": "Outbound-only", "zh": "只往外連" },
+              "text": {
+                "en": "cloudflared dials out to Cloudflare; nothing ever connects inbound to you.",
+                "zh": "cloudflared 主動撥出去連 Cloudflare,沒有任何東西能反過來連進你這裡。"
+              }
+            },
+            {
+              "icon": "alt_route",
+              "title": { "en": "Ingress rules", "zh": "Ingress 規則" },
+              "text": {
+                "en": "The config that maps each public hostname to a local service.",
+                "zh": "把每個公開網址對應到某個本機服務的設定。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Connector", "zh": "連接器(Connector)" },
+              "text": {
+                "en": "Each running cloudflared process; you can run several for redundancy.",
+                "zh": "每個正在跑的 cloudflared 程序;可同時跑多個做備援。"
+              }
+            },
+            {
+              "icon": "settings_remote",
+              "title": { "en": "Remotely-managed", "zh": "遠端管理" },
+              "text": {
+                "en": "Configure the whole tunnel from the Zero Trust dashboard, no local config file.",
+                "zh": "從 Zero Trust 儀表板設定整條通道,不用本機設定檔。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "badge",
+          "title": { "en": "Add a login wall with Access", "zh": "用 Access 加上登入門檻" },
+          "text": {
+            "en": "Pair Tunnel with Cloudflare Access to require a login (Google, GitHub, email PIN) before anyone can reach your service — perfect for private internal tools.",
+            "zh": "把 Tunnel 搭配 Cloudflare Access,在任何人連到你服務前先要求登入(Google、GitHub、email 一次性密碼)—— 拿來保護私人內部工具超合適。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "cloudflared and Cloudflare Tunnel are free to use.",
+              "Block all inbound ports on your firewall once the tunnel works — outbound-only is the whole point.",
+              "Run cloudflared as a system service so the tunnel survives reboots.",
+              "The dashboard (remotely-managed) flow is the easiest start; the CLI gives you more control via config.yml."
+            ],
+            "zh": [
+              "cloudflared 與 Cloudflare Tunnel 都免費使用。",
+              "通道一旦能用,就把防火牆所有對內連接埠都封掉 —— 只往外連正是它的精髓。",
+              "把 cloudflared 跑成系統服務,讓通道在重開機後依然存活。",
+              "儀表板(遠端管理)流程最好上手;命令列則透過 config.yml 給你更多掌控。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "access", "label": { "en": "Access", "zh": "Access" } },
+    { "slug": "gateway", "label": { "en": "Gateway", "zh": "Gateway" } },
+    { "slug": "ssl-tls", "label": { "en": "SSL/TLS", "zh": "SSL/TLS" } },
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } }
+  ],
+  "docs": "https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/"
+}

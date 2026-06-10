@@ -1,0 +1,292 @@
+{
+  "slug": "web-analytics",
+  "category": "performance",
+  "icon": "monitoring",
+  "title": { "en": "Web Analytics", "zh": "網站分析" },
+  "subtitle": {
+    "en": "Privacy-first, cookie-free analytics that show how fast and popular your pages are",
+    "zh": "隱私優先、不用 Cookie 的網站分析，讓你看到頁面有多快、多受歡迎"
+  },
+  "hero": {
+    "badge": { "en": "Performance", "zh": "效能" },
+    "tagline": {
+      "en": "Understand your visitors and Core Web Vitals — without cookies and without tracking people.",
+      "zh": "了解你的訪客與核心網頁指標，不用 Cookie，也不追蹤個人。"
+    }
+  },
+  "stats": [
+    { "value": "$0", "label": { "en": "Free on all plans", "zh": "所有方案免費" } },
+    { "value": "0", "label": { "en": "Cookies used", "zh": "使用的 Cookie 數" } },
+    { "value": "100%", "label": { "en": "Of page views measured", "zh": "可量測的瀏覽量比例" } },
+    { "value": "1", "label": { "en": "Snippet to install", "zh": "只需安裝一段程式碼" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Web Analytics?", "zh": "Web Analytics 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Web Analytics is Cloudflare's free, privacy-first way to see how people use your website — page views, visits, top pages, where visitors come from, and how fast your pages feel. It does all this without cookies and without collecting personal data, so it respects your visitors' privacy by design.",
+            "zh": "Web Analytics 是 Cloudflare 免費、隱私優先的網站分析，讓你看到人們怎麼使用你的網站，包括瀏覽量、造訪數、熱門頁面、訪客從哪裡來，以及頁面開起來有多快。它完全不用 Cookie、也不蒐集個人資料，從設計上就尊重訪客隱私。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "groups",
+          "title": { "en": "Think of it like a shop's people-counter", "zh": "把它想成店門口的人流計數器" },
+          "text": {
+            "en": "A people-counter at a shop door tells you how many came in and which aisles were busy — without asking anyone's name. Web Analytics counts visits and popular pages the same way: useful numbers, no personal tracking.",
+            "zh": "店門口的人流計數器會告訴你進來幾個人、哪些走道最熱鬧，卻不問任何人的名字。Web Analytics 也是這樣計算造訪數與熱門頁面：給你有用的數字，但不做個人追蹤。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "It works whether or not your site is proxied through Cloudflare. For sites not behind Cloudflare, you simply add a tiny piece of JavaScript called a beacon.",
+            "zh": "不管你的網站有沒有經過 Cloudflare 代理，它都能運作。對於不在 Cloudflare 後面的網站，你只要加上一小段叫做「信標（beacon）」的 JavaScript 就好。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why choose it over the usual analytics?", "zh": "為什麼選它，而不是一般的分析工具？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Many analytics tools rely on cookies and collect personal data, which can slow your site, trigger cookie-consent banners, and raise privacy concerns. Web Analytics takes a lighter, more respectful approach.",
+            "zh": "很多分析工具依賴 Cookie 並蒐集個人資料，這會拖慢網站、觸發 Cookie 同意橫幅，也帶來隱私疑慮。Web Analytics 採取更輕量、更尊重隱私的做法。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "cookie",
+              "title": { "en": "No cookies", "zh": "不用 Cookie" },
+              "text": {
+                "en": "Nothing is stored on the visitor's device, so you often don't need a cookie-consent banner just for analytics.",
+                "zh": "訪客裝置上不存任何東西，所以你常常不需要單為分析掛上 Cookie 同意橫幅。"
+              }
+            },
+            {
+              "icon": "shield_person",
+              "title": { "en": "Privacy-first", "zh": "隱私優先" },
+              "text": {
+                "en": "It doesn't fingerprint users or collect personal data, making GDPR-style compliance much easier.",
+                "zh": "它不對使用者做指紋辨識、也不蒐集個人資料，讓 GDPR 等法規的遵循容易許多。"
+              }
+            },
+            {
+              "icon": "feather",
+              "title": { "en": "Lightweight", "zh": "輕量" },
+              "text": {
+                "en": "The beacon is tiny and loaded with 'defer', so it barely affects how fast your pages load.",
+                "zh": "信標非常小，並用 defer 延後載入，幾乎不影響你網頁的載入速度。"
+              }
+            },
+            {
+              "icon": "monitoring",
+              "title": { "en": "Real performance data", "zh": "真實效能資料" },
+              "text": {
+                "en": "It reports Core Web Vitals from actual visits, so you see how real users experience your speed.",
+                "zh": "它回報來自真實造訪的核心網頁指標（Core Web Vitals），讓你看到真實使用者體驗到的速度。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "What it measures", "zh": "它量測什麼" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "visibility",
+              "title": { "en": "Page views & visits", "zh": "瀏覽量與造訪數" },
+              "text": {
+                "en": "Page views count how many pages were loaded; visits count browsing sessions that started on your site.",
+                "zh": "瀏覽量（page views）計算共載入了幾個頁面；造訪數（visits）計算從你網站開始的瀏覽工作階段。"
+              }
+            },
+            {
+              "icon": "trending_up",
+              "title": { "en": "Top pages & referrers", "zh": "熱門頁面與來源" },
+              "text": {
+                "en": "See which pages are most popular and which sites or searches sent visitors to you.",
+                "zh": "看到哪些頁面最受歡迎，以及哪些網站或搜尋把訪客帶來給你。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Country, browser, device", "zh": "國家、瀏覽器、裝置" },
+              "text": {
+                "en": "Understand your audience by location, browser, and whether they're on mobile or desktop — all anonymized.",
+                "zh": "依地點、瀏覽器，以及是用手機還是電腦來了解你的受眾，全部都是匿名的。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Core Web Vitals", "zh": "核心網頁指標" },
+              "text": {
+                "en": "LCP, INP, and CLS from real visits show whether your pages load fast, respond quickly, and stay stable.",
+                "zh": "來自真實造訪的 LCP、INP、CLS，告訴你頁面是否載入快、反應快、版面穩。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to add it to your site", "zh": "怎麼把它加到你的網站" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Open Web Analytics", "zh": "開啟 Web Analytics" },
+              "text": {
+                "en": "In the Cloudflare dashboard go to Analytics & Logs > Web Analytics, then select 'Add a site'.",
+                "zh": "在 Cloudflare 儀表板進入 Analytics & Logs > Web Analytics，然後選「Add a site（新增網站）」。"
+              }
+            },
+            {
+              "title": { "en": "Enter your hostname", "zh": "輸入你的主機名稱" },
+              "text": {
+                "en": "Type your website's hostname (for example example.com) and confirm. Cloudflare generates a unique tracking token for it.",
+                "zh": "輸入你網站的主機名稱（例如 example.com）並確認。Cloudflare 會為它產生一個專屬的追蹤權杖（token）。"
+              }
+            },
+            {
+              "title": { "en": "Copy the beacon snippet", "zh": "複製信標程式碼" },
+              "text": {
+                "en": "From 'Manage site', copy the JS snippet. It contains a data-cf-beacon attribute holding your unique token, which tells Cloudflare which site the data belongs to.",
+                "zh": "在「Manage site（管理網站）」複製 JS 程式碼。裡面有一個 data-cf-beacon 屬性，存著你的專屬 token，用來告訴 Cloudflare 這些資料屬於哪個網站。"
+              }
+            },
+            {
+              "title": { "en": "Paste before the closing body tag", "zh": "貼在 body 結束標籤之前" },
+              "text": {
+                "en": "Add the snippet to your HTML pages just before </body>. Within a few minutes, data starts appearing in the dashboard.",
+                "zh": "把程式碼加到你 HTML 頁面的 </body> 之前。幾分鐘內，資料就會開始出現在儀表板上。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "html",
+          "title": { "en": "The beacon snippet", "zh": "信標程式碼" },
+          "body": "<!-- Cloudflare Web Analytics -->\n<script defer\n  src=\"https://static.cloudflareinsights.com/beacon.min.js\"\n  data-cf-beacon='{\"token\": \"YOUR_UNIQUE_TOKEN_HERE\"}'></script>\n<!-- End Cloudflare Web Analytics -->"
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "bolt",
+          "title": { "en": "Already proxied through Cloudflare?", "zh": "已經透過 Cloudflare 代理了嗎？" },
+          "text": {
+            "en": "If your site is proxied (orange cloud), Cloudflare can enable Web Analytics automatically and inject the beacon for you — no manual editing needed.",
+            "zh": "如果你的網站已被代理（橘色雲朵），Cloudflare 可以自動啟用 Web Analytics 並幫你注入信標，不必手動編輯程式碼。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "gavel",
+              "title": { "en": "Privacy-sensitive sites", "zh": "在意隱私的網站" },
+              "text": {
+                "en": "Ideal when you want useful stats without cookie banners or heavy compliance overhead.",
+                "zh": "當你想要有用的數據，又不想要 Cookie 橫幅或沉重的法規負擔時，最理想。"
+              }
+            },
+            {
+              "icon": "article",
+              "title": { "en": "Blogs & portfolios", "zh": "部落格與作品集" },
+              "text": {
+                "en": "Lightweight tracking of which posts and pages resonate, without slowing the site.",
+                "zh": "輕量地追蹤哪些文章和頁面受歡迎，又不拖慢網站。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "Performance tuning", "zh": "效能調校" },
+              "text": {
+                "en": "Pair it with Speed to watch Core Web Vitals from real users improve after each change.",
+                "zh": "搭配 Speed，觀察每次改動後真實使用者的核心網頁指標如何改善。"
+              }
+            },
+            {
+              "icon": "payments",
+              "title": { "en": "Tight budgets", "zh": "預算有限" },
+              "text": {
+                "en": "It's free on every plan, so there's no cost barrier to understanding your traffic.",
+                "zh": "它在每個方案都免費，了解你的流量沒有任何成本門檻。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "block",
+          "title": { "en": "Mind ad blockers", "zh": "留意廣告攔截器" },
+          "text": {
+            "en": "Some ad or privacy blockers stop external analytics scripts, so your real numbers may be a little higher than reported. The trend over time still tells you what's working.",
+            "zh": "部分廣告或隱私攔截器會擋掉外部分析腳本，所以你真實的數字可能比報表稍高一點。但長期的趨勢仍能告訴你什麼有效。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Web Analytics is free on all Cloudflare plans.",
+              "Use Filters to focus on one path, country, or referrer.",
+              "Add the beacon to every page (or a shared template) so no traffic is missed.",
+              "It needs no DNS change and no Cloudflare proxy — great for sites hosted anywhere."
+            ],
+            "zh": [
+              "Web Analytics 在所有 Cloudflare 方案都免費。",
+              "用篩選器（Filters）聚焦在某個路徑、國家或來源。",
+              "把信標加到每一頁（或共用的版型）上，才不會漏掉流量。",
+              "它不需要改 DNS，也不需要 Cloudflare 代理，網站放在哪裡都能用。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "speed", "label": { "en": "Speed", "zh": "速度優化" } },
+    { "slug": "cdn", "label": { "en": "CDN & Cache", "zh": "CDN 與快取" } },
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } },
+    { "slug": "smart-shield", "label": { "en": "Smart Shield", "zh": "Smart Shield" } }
+  ],
+  "docs": "https://developers.cloudflare.com/web-analytics/"
+}

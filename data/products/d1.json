@@ -1,0 +1,295 @@
+{
+  "slug": "d1",
+  "category": "storage",
+  "icon": "database",
+  "title": { "en": "D1", "zh": "D1" },
+  "subtitle": {
+    "en": "Serverless SQL database built on SQLite",
+    "zh": "以 SQLite 打造的無伺服器 SQL 資料庫"
+  },
+  "hero": {
+    "badge": { "en": "Storage & Databases", "zh": "儲存與資料庫" },
+    "tagline": {
+      "en": "A real SQL database you can spin up in seconds — no servers to run.",
+      "zh": "幾秒就能開好的真正 SQL 資料庫——完全不用自己架伺服器。"
+    }
+  },
+  "stats": [
+    { "value": "5M", "label": { "en": "Free rows read / day", "zh": "每日免費讀取列數" } },
+    { "value": "100K", "label": { "en": "Free rows written / day", "zh": "每日免費寫入列數" } },
+    { "value": "5 GB", "label": { "en": "Free storage", "zh": "免費儲存空間" } },
+    { "value": "30 days", "label": { "en": "Time Travel recovery", "zh": "時光回溯還原期" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is D1?", "zh": "D1 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "D1 is a serverless SQL database (SQL = the standard language for storing data in tables of rows and columns; serverless = you never set up or manage a database server yourself). It runs on SQLite, a tiny, rock-solid database engine used in billions of devices.",
+            "zh": "D1 是一個無伺服器的 SQL 資料庫（SQL 是用「表格、列、欄」儲存資料的標準語言；無伺服器代表你完全不用自己架設或維護資料庫伺服器）。它底層用的是 SQLite——一個小巧又超穩定、內建在數十億台裝置裡的資料庫引擎。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "You define tables, write familiar SQL queries (SELECT, INSERT, UPDATE), and D1 handles the storage, backups, and scaling for you. It is designed to work hand-in-hand with Cloudflare Workers.",
+            "zh": "你定義好資料表、寫熟悉的 SQL 查詢（SELECT、INSERT、UPDATE），D1 就幫你處理儲存、備份和擴充。它一開始就是為了和 Cloudflare Workers 搭配而設計的。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "table_chart",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A super-powered spreadsheet that lives in the cloud. Each table is a sheet with named columns, every row is one record, and SQL is how you ask precise questions like 'show me all customers in Taipei'.",
+            "zh": "一份住在雲端、火力全開的試算表。每張資料表就像一個分頁、有命名好的欄位，每一列是一筆紀錄，而 SQL 就是你用來精準提問的方式，例如「列出所有在台北的客戶」。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use D1?", "zh": "為什麼要用 D1？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Running your own database means provisioning servers, patching them, and paying even when idle. D1 removes all of that and bills only for the queries and storage you actually use.",
+            "zh": "自己跑資料庫要開伺服器、打更新、就算閒置也得付錢。D1 把這些麻煩全拿掉，只依你真正用到的查詢量和儲存量計費。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "toll",
+              "title": { "en": "Pay per query", "zh": "依查詢計費" },
+              "text": {
+                "en": "No idle server costs — you pay for rows read/written and storage, nothing else.",
+                "zh": "沒有閒置伺服器費用——只算讀寫的列數和儲存量，其他都不收。"
+              }
+            },
+            {
+              "icon": "library_add",
+              "title": { "en": "Thousands of databases", "zh": "可開上千個資料庫" },
+              "text": {
+                "en": "Create a separate database per customer or project at no extra base cost.",
+                "zh": "可以為每個客戶或專案各開一個獨立資料庫，沒有額外的基礎費用。"
+              }
+            },
+            {
+              "icon": "history",
+              "title": { "en": "Time Travel backups", "zh": "時光回溯備份" },
+              "text": {
+                "en": "Restore your database to any point in the last 30 days if something goes wrong.",
+                "zh": "出狀況時，可把資料庫還原到過去 30 天內的任一時間點。"
+              }
+            },
+            {
+              "icon": "code",
+              "title": { "en": "Standard SQL", "zh": "標準 SQL" },
+              "text": {
+                "en": "If you know SQLite or basic SQL, you already know how to use D1.",
+                "zh": "只要你會 SQLite 或基本 SQL，就已經會用 D1 了。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用 D1？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "checklist",
+              "title": { "en": "App data with relations", "zh": "有關聯的應用資料" },
+              "text": {
+                "en": "Users, posts, orders — data where rows relate to each other and you query with SQL.",
+                "zh": "使用者、貼文、訂單——這類彼此有關聯、需要用 SQL 查詢的資料。"
+              }
+            },
+            {
+              "icon": "person",
+              "title": { "en": "Per-tenant databases", "zh": "每個租戶一個資料庫" },
+              "text": {
+                "en": "Give each customer their own isolated database for clean separation.",
+                "zh": "讓每位客戶擁有自己獨立的資料庫，資料乾淨分離。"
+              }
+            },
+            {
+              "icon": "rocket",
+              "title": { "en": "Side projects & MVPs", "zh": "副專案與 MVP" },
+              "text": {
+                "en": "The generous free tier makes it ideal for prototypes and small apps.",
+                "zh": "佛心的免費額度，最適合做原型和小型應用。"
+              }
+            },
+            {
+              "icon": "hub",
+              "title": { "en": "Full-stack on Workers", "zh": "在 Workers 上做全端" },
+              "text": {
+                "en": "Pair D1 with Workers so your API and database live in the same platform.",
+                "zh": "把 D1 和 Workers 搭在一起，讓你的 API 和資料庫住在同一個平台。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "These steps create a database, define a table, run a query from the terminal, and read it from a Worker. The --remote flag means 'run against the real cloud database' (leave it off to test locally).",
+            "zh": "以下步驟會建立資料庫、定義資料表、從終端機跑查詢，再從 Worker 讀取它。指令裡的 --remote 代表「對雲端上真正的資料庫執行」（不加的話就是在本機測試）。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a database", "zh": "建立資料庫" },
+              "text": {
+                "en": "Wrangler prints a database_id — copy it for the next step.",
+                "zh": "Wrangler 會印出一組 database_id——把它複製起來，下一步會用到。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 create my-app-db" }
+            },
+            {
+              "title": { "en": "Bind the database", "zh": "綁定資料庫" },
+              "text": {
+                "en": "Add this to wrangler.jsonc so your Worker can reach it as env.DB.",
+                "zh": "把這段加進 wrangler.jsonc，讓你的 Worker 能用 env.DB 存取它。"
+              },
+              "code": { "lang": "json", "body": "{\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"my-app-db\",\n      \"database_id\": \"<paste-your-id-here>\"\n    }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Create a table & add data", "zh": "建立資料表並加入資料" },
+              "text": {
+                "en": "Run SQL straight from the terminal with --command.",
+                "zh": "用 --command 直接在終端機跑 SQL。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler d1 execute my-app-db --remote \\\n  --command \"CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT, city TEXT);\"\n\nnpx wrangler d1 execute my-app-db --remote \\\n  --command \"INSERT INTO customers (name, city) VALUES ('Mei', 'Taipei');\"" }
+            },
+            {
+              "title": { "en": "Query from a Worker", "zh": "從 Worker 查詢" },
+              "text": {
+                "en": "prepare() builds a safe query, bind() fills in the ? placeholder (this prevents SQL injection), and all() returns the rows.",
+                "zh": "prepare() 建立安全查詢，bind() 填入 ? 佔位符（這能防止 SQL 注入攻擊），all() 則回傳所有列。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const { results } = await env.DB\n      .prepare(\"SELECT * FROM customers WHERE city = ?\")\n      .bind(\"Taipei\")\n      .all();\n    return Response.json(results);\n  },\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Publish the Worker and your database-backed API is live.",
+                "zh": "發布這個 Worker，你那個有資料庫撐腰的 API 就上線了。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "grid_on",
+              "title": { "en": "Table, row, column", "zh": "資料表、列、欄" },
+              "text": {
+                "en": "A table holds rows (records); each column is a named field like name or city.",
+                "zh": "資料表裝著一列列的紀錄；每個欄位是一個有名字的欄，例如 name 或 city。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "Prepared statements", "zh": "預備語句" },
+              "text": {
+                "en": "Using prepare() + bind() keeps user input out of the SQL text, blocking injection attacks.",
+                "zh": "用 prepare() 加 bind() 把使用者輸入和 SQL 文字分開，擋掉注入攻擊。"
+              }
+            },
+            {
+              "icon": "cloud_sync",
+              "title": { "en": "Local vs remote", "zh": "本機與遠端" },
+              "text": {
+                "en": "Without --remote you query a local copy for fast testing; with it you hit the real cloud database.",
+                "zh": "不加 --remote 時查的是本機副本、測試很快；加上後則打到雲端上真正的資料庫。"
+              }
+            },
+            {
+              "icon": "restore",
+              "title": { "en": "Time Travel", "zh": "時光回溯" },
+              "text": {
+                "en": "D1 keeps history so you can roll back to any moment in the past 30 days.",
+                "zh": "D1 會保留歷史，讓你能回滾到過去 30 天內的任一時刻。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "payments",
+          "title": { "en": "Billed by rows, not time", "zh": "依列數計費，不看時間" },
+          "text": {
+            "en": "D1 counts rows read and rows written, plus storage. The free tier gives 5 million rows read and 100,000 rows written per day, and 5 GB of storage.",
+            "zh": "D1 計算的是讀取列數、寫入列數，再加上儲存量。免費額度每天給你 500 萬列讀取、10 萬列寫入，以及 5 GB 儲存空間。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Add indexes on columns you filter by often to read fewer rows (and save money).",
+              "Keep schema changes in a schema.sql file and apply with --file=./schema.sql.",
+              "Paid plan includes 25 billion rows read and 50 million rows written per month before extra charges.",
+              "Use D1 for relational data; use KV for simple key lookups and R2 for large files."
+            ],
+            "zh": [
+              "在常用來篩選的欄位上建索引（index），可以少讀很多列、同時省錢。",
+              "把資料表結構放進 schema.sql 檔，再用 --file=./schema.sql 套用。",
+              "付費方案每月內含 250 億列讀取、5,000 萬列寫入，超過才額外計費。",
+              "關聯式資料用 D1；單純的鍵值查找用 KV；大型檔案則交給 R2。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "kv", "label": { "en": "Workers KV", "zh": "Workers KV" } },
+    { "slug": "hyperdrive", "label": { "en": "Hyperdrive", "zh": "Hyperdrive" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } }
+  ],
+  "docs": "https://developers.cloudflare.com/d1/"
+}

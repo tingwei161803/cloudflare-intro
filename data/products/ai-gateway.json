@@ -1,0 +1,287 @@
+{
+  "slug": "ai-gateway",
+  "category": "ai",
+  "icon": "alt_route",
+  "title": { "en": "AI Gateway", "zh": "AI Gateway" },
+  "subtitle": {
+    "en": "One control panel in front of every AI provider",
+    "zh": "擺在所有 AI 供應商前面的單一控制台"
+  },
+  "hero": {
+    "badge": { "en": "AI", "zh": "人工智慧" },
+    "tagline": {
+      "en": "See, cache, slow down and protect every AI request — without changing your model code.",
+      "zh": "觀察、快取、限速並保護每一次 AI 請求——完全不用改動你的模型程式碼。"
+    }
+  },
+  "stats": [
+    { "value": "23+", "label": { "en": "Supported providers", "zh": "支援的供應商" } },
+    { "value": "1", "label": { "en": "URL change to enable", "zh": "改一個網址就啟用" } },
+    { "value": "All", "label": { "en": "Plans included", "zh": "所有方案皆可用" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is AI Gateway?", "zh": "AI Gateway 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "AI Gateway is a smart middleman that sits between your app and whatever AI provider you use (OpenAI, Anthropic, Workers AI and more). Every request passes through it, so you instantly get logs, analytics, caching and rate limiting.",
+            "zh": "AI Gateway 是一個聰明的中間人，站在你的應用程式和你用的 AI 供應商（OpenAI、Anthropic、Workers AI 等）之間。每次請求都經過它，你就立刻擁有紀錄、分析、快取和限速。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "You don't rewrite your app. You just point your existing AI calls at the gateway's URL instead of the provider's URL — that's the whole setup.",
+            "zh": "你不用重寫應用程式，只要把原本打給供應商的網址，改成打給 Gateway 的網址就好——設定就這麼簡單。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "router",
+          "title": { "en": "Think of it like a smart power strip", "zh": "把它想成一個智慧電源延長線" },
+          "text": {
+            "en": "Plug all your appliances (AI providers) into one smart strip. Now you can see how much each uses, switch one off if it draws too much, and remember the last setting so you don't waste power. AI Gateway does that for AI requests.",
+            "zh": "把所有電器（AI 供應商）都插在同一條智慧延長線上，你就能看到每台用多少電、用太兇時把它關掉、還能記住上次的設定不浪費電。AI Gateway 對 AI 請求做的就是這件事。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Once your app starts calling AI, you quickly hit four worries: How much is this costing? Is it slow? What if the provider goes down? Are people abusing it? AI Gateway answers all four.",
+            "zh": "一旦你的應用開始呼叫 AI，很快會冒出四個煩惱：到底花了多少錢？會不會很慢？供應商掛掉怎麼辦？有沒有人在濫用？AI Gateway 把這四個都解決。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "monitoring",
+              "title": { "en": "See everything", "zh": "全都看得到" },
+              "text": {
+                "en": "Dashboards show request counts, token usage and cost per app, plus real-time logs of every call.",
+                "zh": "儀表板顯示每個應用的請求數、token 用量和花費，還有每次呼叫的即時紀錄。"
+              }
+            },
+            {
+              "icon": "cached",
+              "title": { "en": "Cache repeats", "zh": "快取重複請求" },
+              "text": {
+                "en": "If the same question comes in again, serve the saved answer from Cloudflare instead of paying the provider again.",
+                "zh": "同樣的問題再次進來時，直接從 Cloudflare 回傳存好的答案，不必再付一次錢給供應商。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Rate limit", "zh": "限制流量" },
+              "text": {
+                "en": "Cap how many requests can come through, so one user (or a bug) can't run up a huge bill.",
+                "zh": "限制能通過的請求數量，避免某個使用者（或某個 bug）把帳單衝爆。"
+              }
+            },
+            {
+              "icon": "restart_alt",
+              "title": { "en": "Retry & fallback", "zh": "重試與備援" },
+              "text": {
+                "en": "If a provider fails, automatically retry or fall back to another provider so your app keeps working.",
+                "zh": "某個供應商失敗時，自動重試或改用另一個供應商，讓你的應用繼續運作。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "attach_money",
+              "title": { "en": "Watching costs", "zh": "想盯緊成本" },
+              "text": {
+                "en": "When you need to know exactly how much your AI features cost and where the spend goes.",
+                "zh": "當你需要清楚知道 AI 功能花了多少錢、錢花在哪裡時。"
+              }
+            },
+            {
+              "icon": "shield",
+              "title": { "en": "Going to production", "zh": "要正式上線" },
+              "text": {
+                "en": "Before real users arrive, add rate limits and fallbacks so a spike or outage can't break things.",
+                "zh": "真正的使用者上門前，加上限速和備援，避免流量暴衝或供應商當機時出包。"
+              }
+            },
+            {
+              "icon": "swap_horiz",
+              "title": { "en": "Using many providers", "zh": "同時用多家供應商" },
+              "text": {
+                "en": "When you mix OpenAI, Anthropic and others and want one place to manage them all.",
+                "zh": "當你同時混用 OpenAI、Anthropic 等，想用一個地方統一管理時。"
+              }
+            },
+            {
+              "icon": "bug_report",
+              "title": { "en": "Debugging prompts", "zh": "想除錯提示詞" },
+              "text": {
+                "en": "Real-time logs let you replay exactly what was sent and what came back.",
+                "zh": "即時紀錄讓你重現當時送出了什麼、又收到了什麼。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a gateway", "zh": "建立一個 Gateway" },
+              "text": {
+                "en": "In the Cloudflare dashboard, open AI Gateway and create one. You'll get an account ID and a gateway name to use in the URL.",
+                "zh": "在 Cloudflare 控制台打開 AI Gateway 並建立一個。你會拿到一個帳號 ID 和一個 Gateway 名稱，要放進網址裡。"
+              }
+            },
+            {
+              "title": { "en": "Swap the base URL", "zh": "換掉基底網址" },
+              "text": {
+                "en": "Replace your provider's URL with the gateway URL. The pattern is below — your real provider call goes after the gateway part.",
+                "zh": "把供應商的網址換成 Gateway 網址。格式如下——你真正要打給供應商的部分接在 Gateway 後面。"
+              },
+              "code": { "lang": "text", "body": "https://gateway.ai.cloudflare.com/v1/{account_id}/{gateway_id}/{provider}" }
+            },
+            {
+              "title": { "en": "Send a request", "zh": "送出一個請求" },
+              "text": {
+                "en": "Here we route a request to OpenAI through the gateway. Notice only the host changed — the rest is the normal OpenAI call.",
+                "zh": "這裡我們透過 Gateway 把請求轉給 OpenAI。注意只有主機網址變了——其餘都是平常的 OpenAI 呼叫。"
+              },
+              "code": { "lang": "bash", "body": "curl https://gateway.ai.cloudflare.com/v1/{account_id}/{gateway_id}/openai/chat/completions \\\n  -H \"Authorization: Bearer {openai_token}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"gpt-4o-mini\",\n    \"messages\": [{ \"role\": \"user\", \"content\": \"What is Cloudflare?\" }]\n  }'" }
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Bonus: automatic fallback", "zh": "進階：自動備援" }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "The Universal Endpoint accepts a list of providers. If the first one fails, the gateway automatically tries the next — great for resilience.",
+            "zh": "Universal Endpoint（通用端點）可以接受一串供應商清單。第一個失敗時，Gateway 會自動換下一個——很適合做容錯。"
+          }
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "title": { "en": "Fallback request", "zh": "備援請求" },
+          "body": "curl https://gateway.ai.cloudflare.com/v1/{account_id}/{gateway_id} \\\n  -H \"Content-Type: application/json\" \\\n  -d '[\n    {\n      \"provider\": \"workers-ai\",\n      \"endpoint\": \"@cf/meta/llama-3.1-8b-instruct\",\n      \"headers\": { \"Authorization\": \"Bearer {cf_token}\" },\n      \"query\": { \"messages\": [{ \"role\": \"user\", \"content\": \"Hi\" }] }\n    },\n    {\n      \"provider\": \"openai\",\n      \"endpoint\": \"chat/completions\",\n      \"headers\": { \"Authorization\": \"Bearer {openai_token}\" },\n      \"query\": { \"model\": \"gpt-4o-mini\", \"messages\": [{ \"role\": \"user\", \"content\": \"Hi\" }] }\n    }\n  ]'"
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "hub",
+              "title": { "en": "Universal Endpoint", "zh": "通用端點" },
+              "text": {
+                "en": "One URL that can reach any supported provider — and try several in order as a fallback chain.",
+                "zh": "一個能連到任何支援供應商的網址——還能依序嘗試多個，組成備援鏈。"
+              }
+            },
+            {
+              "icon": "lan",
+              "title": { "en": "Provider", "zh": "供應商" },
+              "text": {
+                "en": "An AI service such as OpenAI, Anthropic or Workers AI. AI Gateway supports 23+ of them.",
+                "zh": "像 OpenAI、Anthropic 或 Workers AI 這樣的 AI 服務。AI Gateway 支援超過 23 家。"
+              }
+            },
+            {
+              "icon": "cached",
+              "title": { "en": "Caching", "zh": "快取" },
+              "text": {
+                "en": "Storing a previous answer so identical future requests are free and instant.",
+                "zh": "把之前的答案存起來，讓之後一模一樣的請求免費又即時。"
+              }
+            },
+            {
+              "icon": "token",
+              "title": { "en": "Token & cost tracking", "zh": "Token 與成本追蹤" },
+              "text": {
+                "en": "Tokens (詞元) are the chunks of text models bill by. The gateway tallies them so you can see spend.",
+                "zh": "Token（詞元）是模型計費的文字單位。Gateway 幫你統計，讓你看清花費。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "check_circle",
+          "title": { "en": "Available on every plan", "zh": "所有方案都能用" },
+          "text": {
+            "en": "AI Gateway is included on all Cloudflare plans, including the free one. Adding it is usually just a one-line URL change.",
+            "zh": "AI Gateway 在所有 Cloudflare 方案都內建，連免費方案也有。導入通常只要改一行網址。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Turn on caching first — it often gives the biggest instant savings.",
+              "Set rate limits early so a runaway loop can't drain your budget.",
+              "Use the real-time logs to debug bad prompts before users notice.",
+              "Pair it with Workers AI or Agents for a fully managed AI stack."
+            ],
+            "zh": [
+              "先打開快取——通常能立刻省下最多錢。",
+              "及早設定限速，避免失控的迴圈把預算燒光。",
+              "用即時紀錄在使用者發現前，先除錯有問題的提示詞。",
+              "搭配 Workers AI 或 Agents，組成全託管的 AI 技術棧。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers-ai", "label": { "en": "Workers AI", "zh": "Workers AI" } },
+    { "slug": "agents", "label": { "en": "Agents", "zh": "Agents" } },
+    { "slug": "vectorize", "label": { "en": "Vectorize", "zh": "Vectorize" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } }
+  ],
+  "docs": "https://developers.cloudflare.com/ai-gateway/"
+}

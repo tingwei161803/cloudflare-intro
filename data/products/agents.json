@@ -1,0 +1,279 @@
+{
+  "slug": "agents",
+  "category": "ai",
+  "icon": "support_agent",
+  "title": { "en": "Agents", "zh": "Agents" },
+  "subtitle": {
+    "en": "Build AI agents that remember, act and run on their own",
+    "zh": "打造會記憶、會行動、能自己運作的 AI 代理"
+  },
+  "hero": {
+    "badge": { "en": "AI", "zh": "人工智慧" },
+    "tagline": {
+      "en": "An AI agent is software that can decide and act on its own. The Agents SDK gives each one memory, real-time chat and a built-in scheduler.",
+      "zh": "AI 代理是一種會自己做決定、自己採取行動的軟體。Agents SDK 讓每個代理都有記憶、即時對話和內建排程器。"
+    }
+  },
+  "stats": [
+    { "value": "330+", "label": { "en": "Cities it runs in", "zh": "可執行的城市" } },
+    { "value": "1", "label": { "en": "Command to scaffold", "zh": "一個指令建專案" } },
+    { "value": "SQL", "label": { "en": "Database per agent", "zh": "每個代理自帶資料庫" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What are Agents?", "zh": "Agents 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "The Agents SDK is a toolkit for building AI agents — programs that can hold a conversation, remember what happened, call AI models and tools, and even wake themselves up later to do work. They run on Cloudflare Workers, backed by Durable Objects for memory.",
+            "zh": "Agents SDK 是用來打造 AI 代理的工具包——這種程式能跟你對話、記住發生過的事、呼叫 AI 模型和工具，甚至能在稍後自己醒來做事。它跑在 Cloudflare Workers 上，靠 Durable Objects（持久物件）來記憶。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "A plain AI chatbot forgets everything the moment a request ends. An agent is different: each one keeps its own memory and can run tasks over time, like a tireless personal assistant that never loses its notes.",
+            "zh": "普通的 AI 聊天機器人，請求一結束就把一切忘光。代理不一樣：每個代理都保有自己的記憶，還能跨時間執行任務，就像一個永不疲倦、筆記永遠不會掉的私人助理。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "badge",
+          "title": { "en": "Think of it like a dedicated assistant", "zh": "把它想成一位專屬助理" },
+          "text": {
+            "en": "Imagine hiring an assistant who has their own desk and filing cabinet (state), takes your calls live (WebSockets), and remembers to follow up next Tuesday (scheduling). Each user can get their very own assistant — that's an agent.",
+            "zh": "想像你請了一位助理，他有自己的辦公桌和檔案櫃（狀態 state）、能即時接你的電話（WebSocket）、還記得下週二要追進度（排程）。每個使用者都能配一位專屬助理——這就是代理。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Building agents from scratch means juggling memory, real-time connections and background jobs across servers. The Agents SDK bundles all of that into one class so you can focus on behavior, not plumbing.",
+            "zh": "從零打造代理，得在多台伺服器間處理記憶、即時連線和背景工作，非常麻煩。Agents SDK 把這些全包進一個類別（class），讓你專心設計代理的行為，而不是搞底層水管。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "save",
+              "title": { "en": "Built-in memory", "zh": "內建記憶" },
+              "text": {
+                "en": "Each agent has its own state and a private SQL database, kept safe by Durable Objects — no separate database to set up.",
+                "zh": "每個代理都有自己的狀態和私人 SQL 資料庫，由 Durable Objects 保管——不必另外架資料庫。"
+              }
+            },
+            {
+              "icon": "bolt",
+              "title": { "en": "Real-time by default", "zh": "預設即時" },
+              "text": {
+                "en": "WebSockets let users stream a conversation live, with messages flowing both ways instantly.",
+                "zh": "WebSocket 讓使用者即時串流對話，訊息雙向瞬間傳遞。"
+              }
+            },
+            {
+              "icon": "schedule",
+              "title": { "en": "Wakes itself up", "zh": "會自己醒來" },
+              "text": {
+                "en": "An agent can schedule future work — 'check this again in an hour' — without an external cron server.",
+                "zh": "代理可以排定未來的工作——『一小時後再檢查一次』——不需要外部的排程伺服器。"
+              }
+            },
+            {
+              "icon": "extension",
+              "title": { "en": "Tools & MCP", "zh": "工具與 MCP" },
+              "text": {
+                "en": "Agents can call AI models and external tools, including Model Context Protocol (MCP) tools, to actually get things done.",
+                "zh": "代理能呼叫 AI 模型和外部工具，包含 Model Context Protocol（MCP，模型情境協定）工具，真正把事情做完。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用它？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "forum",
+              "title": { "en": "Stateful chatbots", "zh": "有記憶的聊天機器人" },
+              "text": {
+                "en": "A support or coding assistant that remembers the whole conversation, not just the last message.",
+                "zh": "記得整段對話、而不只是上一句的客服或寫程式助理。"
+              }
+            },
+            {
+              "icon": "checklist",
+              "title": { "en": "Multi-step workflows", "zh": "多步驟流程" },
+              "text": {
+                "en": "Tasks that take several steps or tool calls, where the agent tracks progress along the way.",
+                "zh": "需要好幾個步驟或多次呼叫工具的任務，由代理一路追蹤進度。"
+              }
+            },
+            {
+              "icon": "alarm",
+              "title": { "en": "Scheduled jobs", "zh": "排程工作" },
+              "text": {
+                "en": "Follow-ups, reminders or recurring checks that should run later without you triggering them.",
+                "zh": "稍後自動執行的追蹤、提醒或定期檢查，不必你親自觸發。"
+              }
+            },
+            {
+              "icon": "groups",
+              "title": { "en": "One agent per user", "zh": "每位使用者一個代理" },
+              "text": {
+                "en": "Give every user or document its own isolated agent with its own memory and state.",
+                "zh": "為每位使用者或每份文件配一個獨立、各有記憶與狀態的代理。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Scaffold from the starter", "zh": "用範本建立專案" },
+              "text": {
+                "en": "One command creates a ready-to-run agent project with chat, tools and scheduling already wired up.",
+                "zh": "一個指令就能建好可立即執行的代理專案，聊天、工具和排程都已接好。"
+              },
+              "code": { "lang": "bash", "body": "npm create cloudflare@latest agents-starter -- --template cloudflare/agents-starter\ncd agents-starter\nnpm install\nnpm run dev" }
+            },
+            {
+              "title": { "en": "Configure the agent binding", "zh": "設定代理的繫結" },
+              "text": {
+                "en": "Agents are Durable Objects. In wrangler.jsonc, register your class and add a migration that uses new_sqlite_classes so each agent gets its own SQL database.",
+                "zh": "代理就是 Durable Objects。在 wrangler.jsonc 註冊你的類別，並加一段使用 new_sqlite_classes 的遷移設定，讓每個代理都有自己的 SQL 資料庫。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"name\": \"my-agent\",\n  \"main\": \"src/index.ts\",\n  \"compatibility_date\": \"2025-06-01\",\n  \"durable_objects\": {\n    \"bindings\": [{ \"name\": \"MyAgent\", \"class_name\": \"MyAgent\" }]\n  },\n  \"migrations\": [\n    { \"tag\": \"v1\", \"new_sqlite_classes\": [\"MyAgent\"] }\n  ]\n}" }
+            },
+            {
+              "title": { "en": "Write the agent class", "zh": "撰寫代理類別" },
+              "text": {
+                "en": "Extend the Agent class. onRequest handles HTTP, this.setState saves memory, and this.schedule books future work. routeAgentRequest connects incoming requests to the right agent.",
+                "zh": "繼承 Agent 類別。onRequest 處理 HTTP，this.setState 儲存記憶，this.schedule 預約未來工作。routeAgentRequest 會把進來的請求導向正確的代理。"
+              },
+              "code": { "lang": "ts", "body": "import { Agent, routeAgentRequest } from \"agents\";\n\nexport class MyAgent extends Agent {\n  async onRequest(request) {\n    const count = (this.state?.count ?? 0) + 1;\n    this.setState({ count });\n    // run a task 10 seconds from now\n    this.schedule(10, \"remind\", { note: \"follow up\" });\n    return Response.json({ visits: count });\n  }\n\n  async remind(payload) {\n    console.log(\"Scheduled task ran:\", payload.note);\n  }\n}\n\nexport default {\n  async fetch(request, env) {\n    return (\n      (await routeAgentRequest(request, env)) ||\n      new Response(\"Not found\", { status: 404 })\n    );\n  }\n};" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署上線" },
+              "text": {
+                "en": "Ship your agent to Cloudflare's global network with one command.",
+                "zh": "一個指令就能把代理發佈到 Cloudflare 全球網路。"
+              },
+              "code": { "lang": "bash", "body": "wrangler deploy" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "smart_toy",
+              "title": { "en": "Agent", "zh": "代理（Agent）" },
+              "text": {
+                "en": "A class you write that handles requests, holds memory and runs tasks. Each live copy is an independent worker.",
+                "zh": "你寫的一個類別，負責處理請求、保存記憶、執行任務。每個運行中的副本都是獨立的工作者。"
+              }
+            },
+            {
+              "icon": "database",
+              "title": { "en": "Durable Objects", "zh": "Durable Objects" },
+              "text": {
+                "en": "Cloudflare's tool for giving each agent a single, consistent place to store memory and a built-in SQL database.",
+                "zh": "Cloudflare 的工具，讓每個代理擁有一個一致的記憶儲存點和內建 SQL 資料庫。"
+              }
+            },
+            {
+              "icon": "memory",
+              "title": { "en": "State 狀態", "zh": "狀態（State）" },
+              "text": {
+                "en": "The agent's memory. Read this.state and update it with this.setState — it survives between requests.",
+                "zh": "代理的記憶。用 this.state 讀取、this.setState 更新——它在多次請求之間都會保留。"
+              }
+            },
+            {
+              "icon": "event_repeat",
+              "title": { "en": "Scheduling 排程", "zh": "排程（Scheduling）" },
+              "text": {
+                "en": "this.schedule() books a method to run later — in seconds, at a time, or on a repeating cron.",
+                "zh": "this.schedule() 預約某個方法稍後執行——可指定幾秒後、某個時間點，或週期性的 cron。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "It's Workers + Durable Objects", "zh": "它就是 Workers 加 Durable Objects" },
+          "text": {
+            "en": "There's no separate 'Agents' bill. You pay the normal Workers and Durable Objects usage, so learning Workers first makes Agents click faster.",
+            "zh": "沒有單獨的『Agents』帳單。你付的是一般的 Workers 和 Durable Objects 用量，所以先學會 Workers，再上手 Agents 會更快。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Use the agents-starter template — it ships with streaming chat, tools and human-in-the-loop approval.",
+              "Connect Workers AI, OpenAI or Anthropic as the agent's 'brain'.",
+              "Keep one agent per user or per document for clean, isolated memory.",
+              "Put AI Gateway in front to add logging, caching and cost limits."
+            ],
+            "zh": [
+              "用 agents-starter 範本——它已內建串流聊天、工具和人工審核（human-in-the-loop）。",
+              "把 Workers AI、OpenAI 或 Anthropic 接上來當代理的『大腦』。",
+              "每位使用者或每份文件配一個代理，記憶才乾淨又獨立。",
+              "前面加上 AI Gateway，補上紀錄、快取和成本上限。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "workers-ai", "label": { "en": "Workers AI", "zh": "Workers AI" } },
+    { "slug": "ai-gateway", "label": { "en": "AI Gateway", "zh": "AI Gateway" } }
+  ],
+  "docs": "https://developers.cloudflare.com/agents/"
+}

@@ -1,0 +1,368 @@
+{
+  "slug": "queues",
+  "category": "compute",
+  "icon": "queue",
+  "title": { "en": "Queues", "zh": "Queues" },
+  "subtitle": {
+    "en": "A waiting line for messages, so Workers can hand off slow work",
+    "zh": "訊息的排隊線，讓 Workers 可以把慢工作交接出去"
+  },
+  "hero": {
+    "badge": { "en": "Compute", "zh": "運算" },
+    "tagline": {
+      "en": "One Worker drops messages into a queue and replies instantly; another Worker picks them up later, in batches, with automatic retries — no message gets lost.",
+      "zh": "一個 Worker 把訊息丟進佇列後立刻回覆；另一個 Worker 之後再成批取出處理，還會自動重試——而且一則訊息都不會弄丟。"
+    }
+  },
+  "stats": [
+    { "value": "5,000", "label": { "en": "Messages / sec per queue", "zh": "每佇列訊息 / 秒" } },
+    { "value": "100", "label": { "en": "Messages per batch", "zh": "每批訊息數" } },
+    { "value": "128 KB", "label": { "en": "Max message size", "zh": "最大訊息大小" } },
+    { "value": "$0", "label": { "en": "Egress fees", "zh": "流出流量費" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What are Queues?", "zh": "Queues 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Queues is a message queue: a reliable waiting line where one Worker drops off messages and another Worker picks them up to process later. It guarantees delivery, so nothing is lost even if the receiver is busy or briefly fails.",
+            "zh": "Cloudflare Queues 是一個「訊息佇列（message queue）」：一條可靠的排隊線，一個 Worker 把訊息放進去，另一個 Worker 之後再取出來處理。它保證送達，所以就算接收方很忙、或短暫出錯，訊息也不會弄丟。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "A \"message\" is just a small chunk of data — for example \"send a welcome email to user 123\" or \"resize this uploaded photo.\" Instead of doing that slow work while the user waits, you put a message in the queue and respond immediately. The work happens in the background.",
+            "zh": "「訊息（message）」就是一小塊資料——例如「寄歡迎信給使用者 123」或「把這張剛上傳的照片縮圖」。與其讓使用者乾等你做完那件慢事，你把訊息丟進佇列、馬上回應，慢工作就在背景進行。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "local_post_office",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A queue is like a restaurant's order rail. The waiter (one Worker) clips order tickets on the rail and goes back to serving customers. The kitchen (another Worker) grabs tickets when ready and cooks them in batches. Nobody waits at the counter for their food to be made.",
+            "zh": "佇列就像餐廳的點餐夾單軌。服務生（一個 Worker）把點餐單夾上去後，就回去招呼客人；廚房（另一個 Worker）有空時把單子取下來，一次煮好幾張。沒有人要站在櫃檯前面等餐做好。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "If your Worker tries to do everything during a single request, slow tasks make users wait and a single failure loses the work. A queue decouples \"accepting the work\" from \"doing the work,\" making your app faster and far more reliable.",
+            "zh": "如果你的 Worker 想在「一次請求」裡把所有事做完，慢任務會讓使用者乾等，而且一出錯整個工作就沒了。佇列把「接下工作」和「執行工作」拆開，讓你的 App 更快、也可靠許多。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "rocket_launch",
+              "title": { "en": "Respond instantly", "zh": "立刻回應" },
+              "text": {
+                "en": "Acknowledge the request in milliseconds, then do the heavy lifting in the background.",
+                "zh": "幾毫秒內就先確認收到請求，再把粗重工作丟到背景做。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "Guaranteed delivery", "zh": "保證送達" },
+              "text": {
+                "en": "Messages are stored until successfully processed — they survive crashes and restarts.",
+                "zh": "訊息會一直保存到成功處理為止——就算當機、重啟也還在。"
+              }
+            },
+            {
+              "icon": "replay",
+              "title": { "en": "Automatic retries", "zh": "自動重試" },
+              "text": {
+                "en": "If processing fails, the message is retried automatically. No custom retry code needed.",
+                "zh": "如果處理失敗，訊息會自動重試。不用自己寫重試的程式碼。"
+              }
+            },
+            {
+              "icon": "inventory",
+              "title": { "en": "Batching", "zh": "成批處理" },
+              "text": {
+                "en": "Process up to 100 messages at once for big efficiency gains on bulk work.",
+                "zh": "一次最多處理 100 則訊息，做大量工作時效率大幅提升。"
+              }
+            },
+            {
+              "icon": "payments",
+              "title": { "en": "No egress fees", "zh": "免流出流量費" },
+              "text": {
+                "en": "You're never charged for bandwidth moving messages out of the queue.",
+                "zh": "訊息流出佇列的頻寬，永遠不收費。"
+              }
+            },
+            {
+              "icon": "trending_down",
+              "title": { "en": "Smooths spikes", "zh": "削平尖峰" },
+              "text": {
+                "en": "A sudden flood of work piles up safely in the queue instead of overwhelming your system.",
+                "zh": "突然湧入的大量工作會安全地堆在佇列裡，而不是把你的系統壓垮。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Use Queues whenever work can happen later instead of right now, or when one part of your system needs to hand a job to another safely.",
+            "zh": "只要某件工作「可以晚點做、不用馬上做」，或是系統的某一部分需要安全地把工作交給另一部分，就用 Queues。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "mail",
+              "title": { "en": "Sending emails", "zh": "寄送 email" },
+              "text": {
+                "en": "Queue a welcome or receipt email so the user's request returns instantly.",
+                "zh": "把歡迎信或收據信丟進佇列，讓使用者的請求立刻返回。"
+              }
+            },
+            {
+              "icon": "image",
+              "title": { "en": "Media processing", "zh": "媒體處理" },
+              "text": {
+                "en": "Resize images or transcode video in the background after an upload.",
+                "zh": "上傳之後，在背景縮圖或轉檔影片。"
+              }
+            },
+            {
+              "icon": "webhook",
+              "title": { "en": "Webhooks", "zh": "Webhook" },
+              "text": {
+                "en": "Accept incoming webhooks fast, then process them reliably with retries.",
+                "zh": "快速接住外部送來的 webhook，再帶著重試機制可靠地處理。"
+              }
+            },
+            {
+              "icon": "swap_horiz",
+              "title": { "en": "Worker-to-Worker", "zh": "Worker 對 Worker" },
+              "text": {
+                "en": "Pass jobs between Workers without them having to call each other directly.",
+                "zh": "在 Workers 之間傳遞工作，而不用它們彼此直接呼叫。"
+              }
+            },
+            {
+              "icon": "analytics",
+              "title": { "en": "Batch ingestion", "zh": "批次匯入" },
+              "text": {
+                "en": "Buffer events and write them to storage in efficient batches.",
+                "zh": "先把事件緩衝起來，再以高效率的批次寫入儲存。"
+              }
+            },
+            {
+              "icon": "notifications",
+              "title": { "en": "Notifications", "zh": "通知推送" },
+              "text": {
+                "en": "Fan out push or in-app notifications without blocking the original request.",
+                "zh": "推播或站內通知時，不會卡住原本的請求。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you get started?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "You create a queue with Wrangler, then wire one Worker as the producer (sends messages) and another handler as the consumer (processes them). A single Worker can be both.",
+            "zh": "你用 Wrangler 建立一個佇列，然後把一個 Worker 設成 producer（生產者，負責送訊息），把另一個 handler 設成 consumer（消費者，負責處理）。同一個 Worker 也可以同時兼任兩者。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Create a queue", "zh": "建立佇列" },
+              "text": {
+                "en": "Make a new queue by name. This is where messages will wait.",
+                "zh": "用一個名稱建立新佇列。訊息就會在這裡排隊等候。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler queues create my-queue" }
+            },
+            {
+              "title": { "en": "Add bindings in config", "zh": "在設定檔加上綁定" },
+              "text": {
+                "en": "In wrangler.jsonc, declare the queue as a producer (so the Worker can send to it) and as a consumer (so the Worker is invoked to process batches).",
+                "zh": "在 wrangler.jsonc 裡，把佇列宣告成 producer（讓 Worker 能送訊息進去）以及 consumer（讓 Worker 被叫來處理一批批訊息）。"
+              },
+              "code": { "lang": "jsonc", "body": "{\n  \"queues\": {\n    \"producers\": [\n      { \"queue\": \"my-queue\", \"binding\": \"MY_QUEUE\" }\n    ],\n    \"consumers\": [\n      {\n        \"queue\": \"my-queue\",\n        \"max_batch_size\": 10,\n        \"max_batch_timeout\": 5\n      }\n    ]\n  }\n}" }
+            },
+            {
+              "title": { "en": "Deploy", "zh": "部署" },
+              "text": {
+                "en": "Publish your Worker. Use wrangler tail to watch messages being consumed live.",
+                "zh": "發佈你的 Worker。用 wrangler tail 就能即時看到訊息被消費的過程。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler deploy\nnpx wrangler tail" }
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": "js",
+          "title": { "en": "src/index.js — producer + consumer in one Worker", "zh": "src/index.js — 生產者與消費者寫在同一個 Worker" },
+          "body": "export default {\n  // PRODUCER: runs on each HTTP request and sends a message\n  async fetch(request, env, ctx) {\n    await env.MY_QUEUE.send({\n      url: request.url,\n      time: Date.now(),\n    });\n    return new Response(\"Queued!\");\n  },\n\n  // CONSUMER: runs in the background with a batch of messages\n  async queue(batch, env, ctx) {\n    for (const message of batch.messages) {\n      console.log(\"Processing:\", message.body);\n      // ...do the slow work here...\n      message.ack(); // mark this message as done\n    }\n  },\n};"
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "done_all",
+          "title": { "en": "ack and retry", "zh": "ack 與重試" },
+          "text": {
+            "en": "Call message.ack() when a message is handled successfully. If your consumer throws an error or calls message.retry(), Queues will redeliver that message later — up to the retry limit — so failures heal themselves.",
+            "zh": "訊息成功處理完就呼叫 message.ack()（確認）。如果你的消費者丟出錯誤、或呼叫 message.retry()，Queues 之後會重新投遞那則訊息——直到達到重試上限——所以失敗會自我修復。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "outbox",
+              "title": { "en": "Producer", "zh": "Producer（生產者）" },
+              "text": {
+                "en": "The Worker that sends messages into the queue with env.QUEUE.send().",
+                "zh": "用 env.QUEUE.send() 把訊息送進佇列的那個 Worker。"
+              }
+            },
+            {
+              "icon": "inbox",
+              "title": { "en": "Consumer", "zh": "Consumer（消費者）" },
+              "text": {
+                "en": "The queue() handler that Cloudflare invokes with batches of messages to process.",
+                "zh": "Cloudflare 會帶著一批批訊息來呼叫的 queue() 處理函式。"
+              }
+            },
+            {
+              "icon": "inventory",
+              "title": { "en": "Batch", "zh": "Batch（批次）" },
+              "text": {
+                "en": "A group of up to 100 messages delivered together for efficient processing.",
+                "zh": "一次最多 100 則訊息一起送來，方便高效率地處理。"
+              }
+            },
+            {
+              "icon": "done_outline",
+              "title": { "en": "Acknowledge (ack)", "zh": "確認（ack）" },
+              "text": {
+                "en": "Marking a message as successfully done so it won't be delivered again.",
+                "zh": "把訊息標記成「成功完成」，這樣它就不會被再送一次。"
+              }
+            },
+            {
+              "icon": "replay",
+              "title": { "en": "Retry", "zh": "重試（retry）" },
+              "text": {
+                "en": "Redelivery of a message that failed, automatically, up to 100 attempts.",
+                "zh": "失敗的訊息會被自動重新投遞，最多 100 次。"
+              }
+            },
+            {
+              "icon": "report",
+              "title": { "en": "Dead Letter Queue", "zh": "死信佇列（DLQ）" },
+              "text": {
+                "en": "A separate queue where messages go after exhausting all retries, so you can inspect them.",
+                "zh": "訊息用完所有重試後會被送到的另一個佇列，方便你事後檢查它們。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "report",
+          "title": { "en": "Always set a Dead Letter Queue", "zh": "一定要設死信佇列" },
+          "text": {
+            "en": "Configure a dead letter queue so messages that keep failing don't vanish — they land somewhere you can inspect and fix later, instead of being dropped after the retry limit.",
+            "zh": "設定一個死信佇列（dead letter queue），讓一直失敗的訊息不會憑空消失——它們會落到一個你之後能檢查、修復的地方，而不是用完重試後就被丟掉。"
+          }
+        },
+        {
+          "type": "h3",
+          "text": { "en": "Good limits to remember", "zh": "值得記住的限制" }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Up to 10,000 queues per account",
+              "Max message size: 128 KB",
+              "Max batch: 100 messages (or 256 KB total)",
+              "Max batch wait: 60 seconds",
+              "Throughput: up to 5,000 messages/second per queue",
+              "Retries: up to 100; retention configurable up to 14 days"
+            ],
+            "zh": [
+              "每個帳號最多 10,000 個佇列",
+              "最大訊息大小：128 KB",
+              "最大批次：100 則訊息（或合計 256 KB）",
+              "最長批次等待：60 秒",
+              "吞吐量：每個佇列最多 5,000 則訊息/秒",
+              "重試：最多 100 次；保留期可設定到最多 14 天"
+            ]
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "savings",
+          "title": { "en": "Free to start, no egress", "zh": "免費起步、不收流出費" },
+          "text": {
+            "en": "Queues is available on both Free and Paid plans, and never charges egress (bandwidth) fees. On the Free plan, message retention is fixed at 24 hours.",
+            "zh": "Queues 在免費與付費方案都能用，而且永遠不收 egress（流出流量）費用。免費方案的訊息保留期固定為 24 小時。"
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } }
+  ],
+  "docs": "https://developers.cloudflare.com/queues/"
+}

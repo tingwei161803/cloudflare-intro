@@ -1,0 +1,169 @@
+{
+  "questions": [
+    {
+      "q": {"en": "At its core, what is Cloudflare best known for?", "zh": "Cloudflare 最廣為人知的核心定位是什麼？"},
+      "options": [
+        {"en": "A global network for CDN, security, and developer services", "zh": "一個提供 CDN、資安與開發者服務的全球網路"},
+        {"en": "A desktop operating system", "zh": "一套桌面作業系統"},
+        {"en": "A social media platform", "zh": "一個社群媒體平台"},
+        {"en": "A video game console", "zh": "一台電玩遊戲主機"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Cloudflare runs a worldwide network that speeds up, protects, and hosts web apps close to your users.", "zh": "Cloudflare 經營遍布全球的網路，能在靠近使用者的地方加速、保護並託管網頁應用程式。"}
+    },
+    {
+      "q": {"en": "What is a Cloudflare Worker?", "zh": "Cloudflare Worker 是什麼？"},
+      "options": [
+        {"en": "A serverless function that runs at the edge", "zh": "一段在邊緣執行的無伺服器函式"},
+        {"en": "A physical server you rent monthly", "zh": "你按月租用的實體伺服器"},
+        {"en": "A type of database", "zh": "一種資料庫"},
+        {"en": "A CSS framework", "zh": "一個 CSS 框架"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Workers run your code on Cloudflare's global edge network with no server to manage.", "zh": "Workers 讓你的程式碼跑在 Cloudflare 全球邊緣網路上，完全不用管理伺服器。"}
+    },
+    {
+      "q": {"en": "Which storage product is best for caching small key-value data that is read very often?", "zh": "若要快取「讀取非常頻繁」的小型鍵值資料，最適合用哪個儲存產品？"},
+      "options": [
+        {"en": "Workers KV", "zh": "Workers KV"},
+        {"en": "R2", "zh": "R2"},
+        {"en": "D1", "zh": "D1"},
+        {"en": "Durable Objects", "zh": "Durable Objects"}
+      ],
+      "answer": 0,
+      "explain": {"en": "KV is a globally distributed key-value store optimized for high-read, low-write workloads like config and session lookups.", "zh": "KV 是全球分散式的鍵值儲存，專為「多讀少寫」情境（如設定檔、Session 查詢）最佳化。"}
+    },
+    {
+      "q": {"en": "You need to store large files like images, videos, and backups. Which product fits best?", "zh": "你需要存放圖片、影片、備份等大型檔案，最適合用哪個產品？"},
+      "options": [
+        {"en": "R2 (object storage)", "zh": "R2（物件儲存）"},
+        {"en": "Workers KV", "zh": "Workers KV"},
+        {"en": "D1", "zh": "D1"},
+        {"en": "Turnstile", "zh": "Turnstile"}
+      ],
+      "answer": 0,
+      "explain": {"en": "R2 is S3-compatible object storage built for large blobs of unstructured data such as media files.", "zh": "R2 是相容 S3 的物件儲存，專門用來存放媒體檔案等大型、非結構化的資料。"}
+    },
+    {
+      "q": {"en": "Which Cloudflare product gives you a relational database you can query with SQL?", "zh": "哪個 Cloudflare 產品提供可用 SQL 查詢的關聯式資料庫？"},
+      "options": [
+        {"en": "D1", "zh": "D1"},
+        {"en": "R2", "zh": "R2"},
+        {"en": "Workers KV", "zh": "Workers KV"},
+        {"en": "Vectorize", "zh": "Vectorize"}
+      ],
+      "answer": 0,
+      "explain": {"en": "D1 is Cloudflare's serverless SQL database (built on SQLite) for structured, relational data.", "zh": "D1 是 Cloudflare 以 SQLite 為基礎的無伺服器 SQL 資料庫，適合結構化的關聯式資料。"}
+    },
+    {
+      "q": {"en": "What problem do Durable Objects uniquely solve?", "zh": "Durable Objects 最獨特能解決的問題是什麼？"},
+      "options": [
+        {"en": "Coordinating state consistently for a single entity (e.g. a chat room)", "zh": "為單一實體（例如一個聊天室）提供一致的狀態協調"},
+        {"en": "Serving static HTML pages faster", "zh": "更快地提供靜態 HTML 頁面"},
+        {"en": "Compressing images automatically", "zh": "自動壓縮圖片"},
+        {"en": "Registering domain names", "zh": "註冊網域名稱"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Each Durable Object is a single, addressable instance that gives you strongly consistent, coordinated state—ideal for real-time apps.", "zh": "每個 Durable Object 都是單一且可定址的實例，能提供強一致、可協調的狀態，最適合即時應用程式。"}
+    },
+    {
+      "q": {"en": "What does Workers AI let you do?", "zh": "Workers AI 讓你能做什麼？"},
+      "options": [
+        {"en": "Run AI/ML model inference on Cloudflare's network", "zh": "在 Cloudflare 網路上執行 AI/ML 模型推論"},
+        {"en": "Buy GPU hardware to install at home", "zh": "購買 GPU 硬體帶回家安裝"},
+        {"en": "Edit videos in a timeline UI", "zh": "在時間軸介面中剪輯影片"},
+        {"en": "Replace your DNS records", "zh": "取代你的 DNS 紀錄"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Workers AI runs popular open models on Cloudflare's GPUs so you can add inference with a simple API call.", "zh": "Workers AI 在 Cloudflare 的 GPU 上執行熱門開源模型，讓你用簡單的 API 呼叫就能加入推論功能。"}
+    },
+    {
+      "q": {"en": "What is Vectorize used for?", "zh": "Vectorize 主要用來做什麼？"},
+      "options": [
+        {"en": "Storing and searching vector embeddings (e.g. for semantic search / RAG)", "zh": "儲存與搜尋向量嵌入（例如語意搜尋／RAG）"},
+        {"en": "Drawing vector graphics like SVG icons", "zh": "繪製 SVG 圖示等向量圖形"},
+        {"en": "Sending marketing emails", "zh": "寄送行銷電子郵件"},
+        {"en": "Hosting Git repositories", "zh": "託管 Git 程式碼倉庫"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Vectorize is a vector database for storing embeddings and finding similar items—the backbone of semantic search and RAG.", "zh": "Vectorize 是向量資料庫，用來存放嵌入並找出相似項目，是語意搜尋與 RAG 的核心。"}
+    },
+    {
+      "q": {"en": "What is the main job of a Web Application Firewall (WAF)?", "zh": "網頁應用程式防火牆（WAF）的主要工作是什麼？"},
+      "options": [
+        {"en": "Filter and block malicious HTTP traffic like SQL injection and XSS", "zh": "過濾並阻擋 SQL 注入、XSS 等惡意 HTTP 流量"},
+        {"en": "Speed up your CSS animations", "zh": "加速你的 CSS 動畫"},
+        {"en": "Generate AI images", "zh": "生成 AI 圖片"},
+        {"en": "Store your database backups", "zh": "存放你的資料庫備份"}
+      ],
+      "answer": 0,
+      "explain": {"en": "A WAF inspects incoming requests and blocks common web attacks before they reach your application.", "zh": "WAF 會檢查進來的請求，在惡意流量抵達你的應用程式前就先擋下常見的網頁攻擊。"}
+    },
+    {
+      "q": {"en": "What is Cloudflare Turnstile?", "zh": "Cloudflare Turnstile 是什麼？"},
+      "options": [
+        {"en": "A privacy-friendly CAPTCHA alternative to tell humans from bots", "zh": "一個注重隱私、用來分辨真人與機器人的 CAPTCHA 替代方案"},
+        {"en": "A paid SSL certificate authority", "zh": "一個付費的 SSL 憑證簽發機構"},
+        {"en": "A code editor", "zh": "一個程式碼編輯器"},
+        {"en": "A cryptocurrency wallet", "zh": "一個加密貨幣錢包"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Turnstile verifies visitors are human without the annoying puzzles of traditional CAPTCHAs.", "zh": "Turnstile 不用傳統 CAPTCHA 那種惱人的拼圖，就能驗證訪客是不是真人。"}
+    },
+    {
+      "q": {"en": "When a visitor loads your site, what does Cloudflare's CDN cache do?", "zh": "當訪客載入你的網站時，Cloudflare 的 CDN 快取做了什麼？"},
+      "options": [
+        {"en": "Serves copies of your content from a nearby edge location for speed", "zh": "從鄰近的邊緣節點提供內容副本以加快速度"},
+        {"en": "Permanently deletes your origin server", "zh": "永久刪除你的來源伺服器"},
+        {"en": "Rewrites your application's source code", "zh": "改寫你應用程式的原始碼"},
+        {"en": "Encrypts your password into the database", "zh": "把你的密碼加密寫進資料庫"}
+      ],
+      "answer": 0,
+      "explain": {"en": "The CDN stores cached copies at edge locations worldwide, so users get content from a server near them instead of your distant origin.", "zh": "CDN 會在全球各地的邊緣節點存放快取副本，讓使用者就近取得內容，而不必連到遙遠的來源伺服器。"}
+    },
+    {
+      "q": {"en": "In Cloudflare's Zero Trust suite, how do Tunnel and Access work together?", "zh": "在 Cloudflare 的 Zero Trust 方案中，Tunnel 與 Access 是如何搭配運作的？"},
+      "options": [
+        {"en": "Tunnel securely connects your private app to Cloudflare without open inbound ports, and Access enforces identity-based login before users reach it", "zh": "Tunnel 在不開放對外連接埠的情況下，安全地把你的內網應用連到 Cloudflare；Access 則在使用者進入前強制以身分為基礎的登入"},
+        {"en": "Tunnel mines cryptocurrency and Access compresses images", "zh": "Tunnel 負責挖加密貨幣，Access 負責壓縮圖片"},
+        {"en": "Both are paid SSL certificate authorities", "zh": "兩者都是付費的 SSL 憑證簽發機構"},
+        {"en": "Tunnel writes your unit tests and Access translates your website", "zh": "Tunnel 幫你寫單元測試，Access 幫你翻譯網站"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Tunnel makes an outbound-only connection so no public inbound ports are exposed, while Access checks each user's identity and policy (e.g. via SSO)—together replacing a traditional VPN.", "zh": "Tunnel 建立「只對外」的連線，不暴露任何對外入站連接埠；Access 則驗證每位使用者的身分與政策（例如透過 SSO），兩者搭配可取代傳統 VPN。"}
+    },
+    {
+      "q": {"en": "What is Wrangler?", "zh": "Wrangler 是什麼？"},
+      "options": [
+        {"en": "The official command-line tool (CLI) for building and deploying Workers", "zh": "用來開發與部署 Workers 的官方命令列工具（CLI）"},
+        {"en": "A paid analytics dashboard", "zh": "一個付費的數據分析儀表板"},
+        {"en": "A font family", "zh": "一套字型家族"},
+        {"en": "A managed Postgres database", "zh": "一個代管的 Postgres 資料庫"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Wrangler is the CLI you use to develop, test locally, and deploy Workers and related resources.", "zh": "Wrangler 是你用來開發、在本機測試並部署 Workers 及相關資源的命令列工具。"}
+    },
+    {
+      "q": {"en": "A big reason teams choose R2 over traditional cloud object storage is that R2 charges...", "zh": "團隊選擇 R2 而非傳統雲端物件儲存的一大原因是，R2 收費方式為……"},
+      "options": [
+        {"en": "No egress fees for data transferred out", "zh": "資料傳出（egress）不收流量費"},
+        {"en": "A higher fee every time you read data", "zh": "每次讀取資料都收更高的費用"},
+        {"en": "A fixed fee per HTML tag used", "zh": "依使用的 HTML 標籤數量收固定費用"},
+        {"en": "Extra charges based on your CPU temperature", "zh": "依你的 CPU 溫度額外收費"}
+      ],
+      "answer": 0,
+      "explain": {"en": "R2 has zero egress fees, so serving or moving data out doesn't rack up the bandwidth bills typical of other providers.", "zh": "R2 不收 egress 流量費，因此把資料傳出或對外提供時，不會像其他供應商那樣累積高額頻寬費用。"}
+    },
+    {
+      "q": {"en": "What is a simple way to think about Cloudflare Pages vs Workers?", "zh": "該如何簡單理解 Cloudflare Pages 與 Workers 的差別？"},
+      "options": [
+        {"en": "Pages focuses on deploying front-end/static sites; Workers focuses on running custom backend code", "zh": "Pages 著重在部署前端／靜態網站；Workers 著重在執行自訂的後端程式碼"},
+        {"en": "Pages is for databases; Workers is for images only", "zh": "Pages 專門做資料庫；Workers 只能處理圖片"},
+        {"en": "They are the exact same product with two names", "zh": "它們是同一個產品的兩個名字，完全一樣"},
+        {"en": "Pages runs on your laptop; Workers runs on paper", "zh": "Pages 跑在你的筆電上；Workers 跑在紙上"}
+      ],
+      "answer": 0,
+      "explain": {"en": "Pages is built for deploying websites and front-end frameworks, while Workers is the general-purpose way to run backend logic at the edge (and they can be used together).", "zh": "Pages 是為了部署網站與前端框架而設計，Workers 則是在邊緣執行後端邏輯的通用方式，兩者也可以搭配使用。"}
+    }
+  ]
+}

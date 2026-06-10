@@ -1,0 +1,308 @@
+{
+  "slug": "ssl-tls",
+  "category": "security",
+  "icon": "https",
+  "title": { "en": "SSL/TLS", "zh": "SSL/TLS 加密憑證" },
+  "subtitle": {
+    "en": "Free certificates that turn your site into a secure, padlocked HTTPS site",
+    "zh": "免費憑證，讓你的網站變成有鎖頭的安全 HTTPS 網站"
+  },
+  "hero": {
+    "badge": { "en": "Security", "zh": "安全" },
+    "tagline": {
+      "en": "The padlock in the address bar — it encrypts traffic so nobody can read or tamper with it.",
+      "zh": "網址列上那把鎖頭 —— 把流量加密，沒人能偷看或竄改。"
+    }
+  },
+  "stats": [
+    { "value": "Free", "label": { "en": "Universal SSL certificates", "zh": "Universal SSL 免費憑證" } },
+    { "value": "Auto-renew", "label": { "en": "No manual renewals", "zh": "自動續期免人工" } },
+    { "value": "Full (strict)", "label": { "en": "Recommended mode", "zh": "建議的加密模式" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is SSL/TLS?", "zh": "SSL/TLS 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "SSL/TLS is the technology that encrypts the connection between a visitor's browser and your website. It's what turns http:// into the secure https:// with a padlock icon.",
+            "zh": "SSL/TLS 是一種把「訪客瀏覽器」與「你的網站」之間連線加密的技術。它就是把 http:// 升級成有鎖頭的安全 https:// 的關鍵。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "TLS (Transport Layer Security) is the modern version; SSL is the older name people still use. To prove your site is really yours, it presents a certificate — a digital ID card signed by a trusted authority. Cloudflare issues these for free.",
+            "zh": "TLS（Transport Layer Security，傳輸層安全協定）是現代版本；SSL 是大家還在沿用的舊名稱。為了證明這個網站真的是你的，網站會出示一張「憑證（certificate）」—— 等於一張由可信機構簽署的數位身分證。Cloudflare 免費幫你發。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "mail_lock",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "Sending a sealed, tamper-proof envelope instead of a postcard. Without TLS, anyone handling the mail (your Wi-Fi, your ISP) can read everything; with it, only the recipient can open it.",
+            "zh": "用「密封、防拆的信封」取代「明信片」。沒有 TLS 時，任何經手郵件的人（你的 Wi-Fi、你的網路業者）都能看光內容；有了它，只有收件人打得開。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why does it matter?", "zh": "為什麼很重要？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "visibility_off",
+              "title": { "en": "Privacy", "zh": "隱私" },
+              "text": {
+                "en": "Encrypts passwords, payments, and personal data so eavesdroppers see only scrambled noise.",
+                "zh": "把密碼、付款、個人資料加密，竊聽者只看到一堆亂碼。"
+              }
+            },
+            {
+              "icon": "verified",
+              "title": { "en": "Trust", "zh": "信任" },
+              "text": {
+                "en": "Browsers label http:// sites 'Not secure'. The padlock reassures visitors your site is legit.",
+                "zh": "瀏覽器會把 http:// 網站標成「不安全」。鎖頭讓訪客安心，知道你的站是正牌的。"
+              }
+            },
+            {
+              "icon": "search",
+              "title": { "en": "SEO ranking", "zh": "搜尋排名" },
+              "text": {
+                "en": "Google ranks HTTPS sites higher than insecure ones.",
+                "zh": "Google 會把 HTTPS 網站排在不安全網站前面。"
+              }
+            },
+            {
+              "icon": "edit_off",
+              "title": { "en": "No tampering", "zh": "防止竄改" },
+              "text": {
+                "en": "Stops attackers injecting ads or malware into pages as they travel to the visitor.",
+                "zh": "阻止攻擊者在頁面傳送途中偷塞廣告或惡意程式。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modes",
+      "icon": "tune",
+      "heading": { "en": "Encryption modes", "zh": "加密模式" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "There are two legs of the journey: visitor → Cloudflare, and Cloudflare → your origin server. The encryption mode controls how the second leg is secured. Cloudflare recommends Full (strict).",
+            "zh": "整段旅程分兩段：訪客 → Cloudflare，以及 Cloudflare → 你的來源伺服器（origin server，存放網站本體的主機）。加密模式決定第二段怎麼保護。Cloudflare 建議用 Full (strict)。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "lock_open",
+              "title": { "en": "Off", "zh": "Off（關閉）" },
+              "text": {
+                "en": "No encryption at all. Almost never appropriate — everything is sent as plain text.",
+                "zh": "完全不加密。幾乎沒有適用時機 —— 所有東西都用明文傳送。"
+              }
+            },
+            {
+              "icon": "lock",
+              "title": { "en": "Flexible", "zh": "Flexible（彈性）" },
+              "text": {
+                "en": "Visitor→Cloudflare is encrypted, but Cloudflare→origin is not. A stopgap for origins that can't do HTTPS yet.",
+                "zh": "訪客→Cloudflare 有加密，但 Cloudflare→來源伺服器沒有。適合暫時還做不了 HTTPS 的來源主機過渡用。"
+              }
+            },
+            {
+              "icon": "https",
+              "title": { "en": "Full", "zh": "Full（完整）" },
+              "text": {
+                "en": "Both legs encrypted, but the origin's certificate isn't validated. OK for self-signed certs.",
+                "zh": "兩段都加密，但不驗證來源伺服器的憑證。來源用自簽憑證時可用。"
+              }
+            },
+            {
+              "icon": "gpp_good",
+              "title": { "en": "Full (strict) ⭐", "zh": "Full (strict)（嚴格）⭐" },
+              "text": {
+                "en": "Both legs encrypted AND the origin certificate is validated. The recommended, most secure option.",
+                "zh": "兩段都加密，而且驗證來源憑證。最安全、官方建議的選項。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to enable HTTPS", "zh": "怎麼開啟 HTTPS？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Once your site is on Cloudflare, a free Universal SSL certificate is issued automatically. These steps make sure every visitor uses HTTPS.",
+            "zh": "只要網站接上 Cloudflare，系統就會自動發一張免費的 Universal SSL 憑證。以下步驟確保每位訪客都走 HTTPS。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Confirm Universal SSL is active", "zh": "確認 Universal SSL 已啟用" },
+              "text": {
+                "en": "Go to SSL/TLS → Edge Certificates. Your free certificate appears here automatically, usually within minutes of adding your domain.",
+                "zh": "進入 SSL/TLS → Edge Certificates（邊緣憑證）。你的免費憑證會自動出現在這裡，通常加入網域後幾分鐘內就好。"
+              }
+            },
+            {
+              "title": { "en": "Set the encryption mode", "zh": "設定加密模式" },
+              "text": {
+                "en": "Go to SSL/TLS → Overview and choose Full (strict). Make sure your origin server has a valid certificate — Cloudflare offers a free Origin CA certificate for exactly this.",
+                "zh": "進入 SSL/TLS → Overview（總覽），選 Full (strict)。確認你的來源伺服器裝了有效憑證 —— Cloudflare 提供免費的 Origin CA 憑證就是為了這個。"
+              }
+            },
+            {
+              "title": { "en": "Turn on Always Use HTTPS", "zh": "開啟 Always Use HTTPS" },
+              "text": {
+                "en": "Go to SSL/TLS → Edge Certificates and enable Always Use HTTPS. Any http:// visitor is instantly redirected to the secure https:// version.",
+                "zh": "進入 SSL/TLS → Edge Certificates，開啟 Always Use HTTPS（一律使用 HTTPS）。任何用 http:// 進來的訪客都會立刻被導向安全的 https:// 版本。"
+              }
+            },
+            {
+              "title": { "en": "Enable Automatic HTTPS Rewrites", "zh": "開啟自動 HTTPS 改寫" },
+              "text": {
+                "en": "On the same page, switch on Automatic HTTPS Rewrites so old http:// links inside your pages are fixed on the fly, avoiding 'mixed content' warnings.",
+                "zh": "在同一頁開啟 Automatic HTTPS Rewrites（自動 HTTPS 改寫），讓頁面內舊的 http:// 連結即時被修正，避免出現「混合內容（mixed content）」警告。"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "Get a free origin certificate", "zh": "拿一張免費的來源憑證" },
+          "text": {
+            "en": "Under SSL/TLS → Origin Server, click Create Certificate to generate a free Cloudflare Origin CA cert (valid up to 15 years) and install it on your server — this is what makes Full (strict) work.",
+            "zh": "在 SSL/TLS → Origin Server（來源伺服器）點 Create Certificate，產生一張免費的 Cloudflare Origin CA 憑證（最長 15 年效期）裝到你的主機上 —— 這就是讓 Full (strict) 成立的關鍵。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "card_membership",
+              "title": { "en": "Certificate", "zh": "憑證" },
+              "text": {
+                "en": "A digital ID that proves your domain's identity and holds the keys used to encrypt traffic.",
+                "zh": "一張數位身分證，證明你網域的身分，並存放用來加密流量的金鑰。"
+              }
+            },
+            {
+              "icon": "public",
+              "title": { "en": "Edge certificate", "zh": "邊緣憑證" },
+              "text": {
+                "en": "Secures the visitor → Cloudflare leg. Universal SSL provides this for free, auto-renewed.",
+                "zh": "保護「訪客 → Cloudflare」那一段。Universal SSL 免費提供，自動續期。"
+              }
+            },
+            {
+              "icon": "dns",
+              "title": { "en": "Origin certificate", "zh": "來源憑證" },
+              "text": {
+                "en": "Secures the Cloudflare → origin leg. Cloudflare's free Origin CA cert fills this role.",
+                "zh": "保護「Cloudflare → 來源伺服器」那一段。Cloudflare 免費的 Origin CA 憑證負責這塊。"
+              }
+            },
+            {
+              "icon": "all_inclusive",
+              "title": { "en": "Total TLS", "zh": "Total TLS" },
+              "text": {
+                "en": "Automatically issues certificates for every subdomain, so nothing is left unencrypted.",
+                "zh": "自動為每個子網域簽發憑證，不漏掉任何一個沒加密的角落。"
+              }
+            },
+            {
+              "icon": "autorenew",
+              "title": { "en": "Auto-renewal", "zh": "自動續期" },
+              "text": {
+                "en": "Cloudflare renews certificates before they expire — no more 'certificate expired' outages.",
+                "zh": "Cloudflare 會在憑證到期前自動更新 —— 不再有「憑證過期」害網站掛掉的慘劇。"
+              }
+            },
+            {
+              "icon": "key",
+              "title": { "en": "Origin CA cert", "zh": "Origin CA 憑證" },
+              "text": {
+                "en": "A free certificate from Cloudflare to install on your server, valid for up to 15 years.",
+                "zh": "Cloudflare 發的免費憑證，裝在你伺服器上，最長 15 年有效。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & billing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "warning",
+          "title": { "en": "Avoid Flexible mode", "zh": "別用 Flexible 模式" },
+          "text": {
+            "en": "Flexible can cause redirect loops and leaves the Cloudflare→origin leg unencrypted. As soon as your server supports HTTPS, switch to Full (strict).",
+            "zh": "Flexible 可能造成轉址無限迴圈，而且 Cloudflare→來源主機那段沒加密。只要伺服器支援 HTTPS，就趕快改成 Full (strict)。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Universal SSL is free on every Cloudflare plan, including Free.",
+              "Certificates auto-renew, so you never deal with expiry yourself.",
+              "Use the Origin CA certificate (free) to enable secure Full (strict) without buying anything.",
+              "Advanced certificates and uploading your own custom certificate are available on paid plans."
+            ],
+            "zh": [
+              "Universal SSL 在每個 Cloudflare 方案（含免費版）都免費。",
+              "憑證自動續期，你完全不用管到期問題。",
+              "用免費的 Origin CA 憑證就能開啟安全的 Full (strict)，不必花錢買。",
+              "進階憑證與上傳你自己的自訂憑證，是付費方案的功能。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "waf", "label": { "en": "WAF", "zh": "WAF" } },
+    { "slug": "dns", "label": { "en": "DNS", "zh": "DNS" } },
+    { "slug": "cdn", "label": { "en": "CDN", "zh": "CDN" } },
+    { "slug": "tunnel", "label": { "en": "Cloudflare Tunnel", "zh": "Cloudflare Tunnel" } }
+  ],
+  "docs": "https://developers.cloudflare.com/ssl/"
+}

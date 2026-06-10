@@ -1,0 +1,262 @@
+{
+  "slug": "smart-shield",
+  "category": "performance",
+  "icon": "shield_moon",
+  "title": { "en": "Smart Shield", "zh": "Smart Shield" },
+  "subtitle": {
+    "en": "Automatic edge protections that speed up and safeguard your site with little to no setup",
+    "zh": "在邊緣自動運作的防護組合，幾乎不用設定就能加速並保護你的網站"
+  },
+  "hero": {
+    "badge": { "en": "Performance", "zh": "效能" },
+    "tagline": {
+      "en": "Put your site behind Cloudflare and get smart traffic management, delivery, and origin protection by default.",
+      "zh": "把網站放到 Cloudflare 之後，預設就享有智慧流量管理、內容傳遞與來源保護。"
+    }
+  },
+  "stats": [
+    { "value": "330+", "label": { "en": "Cities defending the edge", "zh": "守護邊緣的城市" } },
+    { "value": "348 Tbps", "label": { "en": "Network capacity to absorb attacks", "zh": "可吸收攻擊的網路總頻寬" } },
+    { "value": "Free", "label": { "en": "SSL/TLS included", "zh": "內含免費 SSL/TLS" } },
+    { "value": "Auto", "label": { "en": "Sensible defaults on by default", "zh": "合理的預設值自動開啟" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Smart Shield?", "zh": "Smart Shield 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Smart Shield is Cloudflare's umbrella for the automatic protections that work the moment your site is proxied through the network. It intelligently manages traffic, optimizes how content is delivered, and safeguards your origin infrastructure — combining performance and security so a beginner gets sensible, safe defaults without configuring each feature by hand.",
+            "zh": "Smart Shield 是 Cloudflare 對「網站一經過代理就自動生效的防護」的統稱。它會智慧管理流量、優化內容傳遞，並保護你的來源基礎設施（origin infrastructure），把效能與安全綁在一起，讓初學者不必逐一手動設定，就能擁有合理又安全的預設值。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "info",
+          "title": { "en": "A bundle, not a single switch", "zh": "它是組合，不是單一開關" },
+          "text": {
+            "en": "Smart Shield is best understood as Cloudflare's bundle of automatic edge behaviours — free SSL, default caching, DDoS mitigation, smart routing, and compression. The exact features included depend on your plan; this page describes the protections honestly and generally.",
+            "zh": "Smart Shield 最好理解成 Cloudflare 一組自動的邊緣行為，包括免費 SSL、預設快取、DDoS 緩解、智慧路由與壓縮。實際包含哪些功能會依方案而定；本頁以誠實、通用的方式描述這些防護。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "security",
+          "title": { "en": "Think of it like a smart building lobby", "zh": "把它想成大樓的智慧門廳" },
+          "text": {
+            "en": "Before anyone reaches your office (origin server), they pass through a staffed lobby. It checks IDs, turns away troublemakers, hands visitors what they came for from a nearby shelf, and guides them in by the quickest hallway — all automatically.",
+            "zh": "任何人在抵達你的辦公室（來源伺服器）之前，都要先經過有人員駐守的門廳。它會查證件、擋掉鬧事者、從附近的架上直接把訪客要的東西給他，並引導他走最快的走廊，這一切都自動完成。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "What does it do for you?", "zh": "它為你做了什麼？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Setting up performance and security separately is hard and easy to get wrong. Smart Shield gives you battle-tested defaults so the common protections are simply on.",
+            "zh": "分別設定效能與安全既困難又容易出錯。Smart Shield 提供經過實戰考驗的預設值，讓常見的防護直接就是開著的。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "https",
+              "title": { "en": "Free HTTPS everywhere", "zh": "處處免費 HTTPS" },
+              "text": {
+                "en": "A free SSL/TLS certificate encrypts traffic between visitors and Cloudflare automatically, so your site shows the padlock without buying a certificate.",
+                "zh": "免費的 SSL/TLS 憑證自動加密訪客與 Cloudflare 之間的流量，不用買憑證，你的網站就有那個安全鎖頭。"
+              }
+            },
+            {
+              "icon": "gpp_good",
+              "title": { "en": "DDoS protection", "zh": "DDoS 防護" },
+              "text": {
+                "en": "Cloudflare's huge network absorbs and filters denial-of-service attacks before they can reach and overwhelm your server.",
+                "zh": "Cloudflare 龐大的網路會在阻斷服務攻擊（DDoS）抵達並壓垮你的伺服器前，先把它吸收並過濾掉。"
+              }
+            },
+            {
+              "icon": "visibility_off",
+              "title": { "en": "Hidden origin", "zh": "隱藏來源伺服器" },
+              "text": {
+                "en": "Proxying hides your server's real IP address, so attackers see Cloudflare instead of your machine.",
+                "zh": "代理會藏起你伺服器真實的 IP 位址，攻擊者看到的是 Cloudflare，而不是你的主機。"
+              }
+            },
+            {
+              "icon": "smart_toy",
+              "title": { "en": "Bot mitigation", "zh": "機器人緩解" },
+              "text": {
+                "en": "Automatic checks separate real visitors from abusive bots and scrapers, reducing junk traffic.",
+                "zh": "自動檢查會把真實訪客和惡意機器人、爬蟲分開，減少垃圾流量。"
+              }
+            },
+            {
+              "icon": "route",
+              "title": { "en": "Smart traffic management", "zh": "智慧流量管理" },
+              "text": {
+                "en": "Traffic is steered over efficient paths and served from cache where possible, easing load on your origin.",
+                "zh": "流量會被導向有效率的路徑，能用快取就用快取，減輕來源伺服器的負擔。"
+              }
+            },
+            {
+              "icon": "compress",
+              "title": { "en": "Automatic compression", "zh": "自動壓縮" },
+              "text": {
+                "en": "Modern compression like Brotli and protocols like HTTP/3 are applied at the edge to shrink and speed up responses.",
+                "zh": "邊緣會套用 Brotli 等現代壓縮與 HTTP/3 等通訊協定，縮小並加快回應。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "Who is it for?", "zh": "它適合誰？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "person",
+              "title": { "en": "Beginners & small teams", "zh": "初學者與小團隊" },
+              "text": {
+                "en": "If you don't have a security or performance expert, sensible automatic defaults are exactly what you want.",
+                "zh": "如果你沒有安全或效能專家，合理的自動預設值正是你需要的。"
+              }
+            },
+            {
+              "icon": "rocket_launch",
+              "title": { "en": "New sites & launches", "zh": "新網站與上線" },
+              "text": {
+                "en": "Get protection and speed from day one without a long configuration checklist.",
+                "zh": "從第一天起就有防護與速度，不用照著一長串設定清單慢慢勾。"
+              }
+            },
+            {
+              "icon": "savings",
+              "title": { "en": "Budget-conscious owners", "zh": "預算有限的站長" },
+              "text": {
+                "en": "Free SSL, caching, and DDoS protection mean fewer separate tools and bills to manage.",
+                "zh": "免費 SSL、快取與 DDoS 防護，代表要管理的工具和帳單更少。"
+              }
+            },
+            {
+              "icon": "trending_up",
+              "title": { "en": "Growing traffic", "zh": "流量成長中" },
+              "text": {
+                "en": "As you scale, the same defaults keep absorbing spikes and attacks without re-architecting.",
+                "zh": "當你規模變大，同一套預設值仍能吸收流量尖峰與攻擊，不必重新架構。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to turn it on", "zh": "怎麼開啟它" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Most Smart Shield protections activate simply by routing your domain through Cloudflare. The key step is proxying your DNS records.",
+            "zh": "大多數 Smart Shield 防護只要讓網域的流量經過 Cloudflare 就會啟用。關鍵步驟是把你的 DNS 紀錄設為代理。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Proxy your DNS records", "zh": "代理你的 DNS 紀錄" },
+              "text": {
+                "en": "In DNS > Records, make sure your A/AAAA/CNAME records show the orange cloud. That single toggle routes traffic through Cloudflare and switches on the edge protections.",
+                "zh": "在 DNS > Records，確認 A／AAAA／CNAME 紀錄顯示橘色雲朵。這個開關會把流量導入 Cloudflare，並啟用邊緣防護。"
+              }
+            },
+            {
+              "title": { "en": "Set SSL/TLS to a secure mode", "zh": "把 SSL/TLS 設成安全模式" },
+              "text": {
+                "en": "Under SSL/TLS, choose Full (strict) so traffic is encrypted end to end between visitors, Cloudflare, and your origin.",
+                "zh": "在 SSL/TLS 裡選 Full (strict)（完整嚴格），讓訪客、Cloudflare 與來源伺服器之間全程加密。"
+              }
+            },
+            {
+              "title": { "en": "Enable Always Use HTTPS", "zh": "啟用 Always Use HTTPS" },
+              "text": {
+                "en": "Turn on 'Always Use HTTPS' so any http:// request is automatically upgraded to the secure https:// version.",
+                "zh": "開啟「Always Use HTTPS（一律使用 HTTPS）」，讓任何 http:// 請求自動升級成安全的 https:// 版本。"
+              }
+            },
+            {
+              "title": { "en": "Confirm protection is active", "zh": "確認防護已生效" },
+              "text": {
+                "en": "Check the response headers — a 'server: cloudflare' header confirms your traffic is now flowing through and protected by the edge.",
+                "zh": "檢查回應標頭，看到「server: cloudflare」就代表流量已經穿過邊緣並受到保護。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -sI https://example.com | grep -iE 'server|cf-ray'\n# server: cloudflare\n# cf-ray: 8a1b2c3d4e5f6789-LAX"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "tune",
+          "title": { "en": "Defaults first, then tune", "zh": "先用預設值，再來微調" },
+          "text": {
+            "en": "The automatic defaults are safe for almost everyone. Once you're comfortable, layer on WAF rules, finer cache rules, and Argo Smart Routing to go further.",
+            "zh": "自動預設值對幾乎所有人都安全。等你上手後，再疊上 WAF 規則、更細的快取規則與 Argo 智慧路由，走得更遠。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Core protections like free SSL, default caching, and unmetered DDoS mitigation are available on the Free plan.",
+              "Advanced pieces (like Argo Smart Routing or higher-tier WAF) are paid upgrades.",
+              "Always pick Full (strict) SSL so the connection to your origin is also encrypted.",
+              "Don't proxy mail records — keep MX and email-auth records DNS-only (grey cloud)."
+            ],
+            "zh": [
+              "核心防護如免費 SSL、預設快取與不限量 DDoS 緩解，在免費方案就有。",
+              "進階部分（如 Argo 智慧路由或更高階 WAF）是付費升級。",
+              "務必選 Full (strict) SSL，連到來源伺服器的連線才會一起加密。",
+              "別代理郵件相關紀錄，MX 與郵件驗證紀錄保持僅 DNS（灰色雲朵）。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "cdn", "label": { "en": "CDN & Cache", "zh": "CDN 與快取" } },
+    { "slug": "speed", "label": { "en": "Speed", "zh": "速度優化" } },
+    { "slug": "waf", "label": { "en": "WAF", "zh": "WAF 防火牆" } },
+    { "slug": "ssl-tls", "label": { "en": "SSL/TLS", "zh": "SSL/TLS" } }
+  ],
+  "docs": "https://developers.cloudflare.com/"
+}

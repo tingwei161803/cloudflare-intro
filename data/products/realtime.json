@@ -1,0 +1,335 @@
+{
+  "slug": "realtime",
+  "category": "media",
+  "icon": "graphic_eq",
+  "title": { "en": "Cloudflare Realtime", "zh": "Cloudflare Realtime" },
+  "subtitle": {
+    "en": "WebRTC infrastructure for real-time audio and video (formerly Calls)",
+    "zh": "即時音訊與影像的 WebRTC 基礎設施（前身為 Calls）"
+  },
+  "hero": {
+    "badge": { "en": "Media", "zh": "媒體" },
+    "tagline": {
+      "en": "Build video calls and live audio that scale to thousands — Cloudflare's global network does the heavy lifting.",
+      "zh": "打造能擴展到上千人的視訊通話與即時語音——繁重的工作交給 Cloudflare 的全球網路。"
+    }
+  },
+  "stats": [
+    { "value": "$0.05", "label": { "en": "/ GB SFU egress", "zh": "／每 GB SFU 流出量" } },
+    { "value": "1,000GB", "label": { "en": "Free SFU egress / mo", "zh": "每月免費 SFU 流量" } },
+    { "value": "Free", "label": { "en": "TURN with SFU", "zh": "搭配 SFU 的 TURN" } },
+    { "value": "100s", "label": { "en": "Cities worldwide", "zh": "全球城市數" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What is Cloudflare Realtime?", "zh": "Cloudflare Realtime 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Cloudflare Realtime (formerly Cloudflare Calls) is infrastructure for building live audio and video apps — video calls, voice chat, watch parties, and more — using WebRTC, the technology browsers use for real-time media.",
+            "zh": "Cloudflare Realtime（前身叫 Cloudflare Calls）是用來打造即時音訊／影像應用的基礎設施——視訊通話、語音聊天、一起看影片等等——背後用的是 WebRTC，也就是瀏覽器用來傳即時影音的技術。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "WebRTC (Web Real-Time Communication) lets browsers send audio and video to each other with very low delay. The hard part is making it work for many people at once — that's what Realtime solves with its SFU.",
+            "zh": "WebRTC（Web Real-Time Communication，網頁即時通訊）讓瀏覽器之間能以極低延遲互傳音訊與影像。難的是「很多人同時連線」這件事——而這正是 Realtime 用它的 SFU 來解決的。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "hub",
+          "title": { "en": "Think of it like a switchboard", "zh": "把它想成一個總機交換台" },
+          "text": {
+            "en": "Instead of everyone calling everyone directly (which melts phones in big groups), each person sends their stream once to Cloudflare's switchboard, which forwards it to all the others. One send, many receives.",
+            "zh": "與其讓每個人直接打給每個人（人一多就把裝置操爆），不如每人只把自己的串流送一次到 Cloudflare 的交換台，再由它轉發給其他所有人。送一次、多人收。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use it?", "zh": "為什麼要用它？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "In a plain peer-to-peer (mesh) call, each person sends a copy of their video to every other person. With 5 people that's already 20 streams — it quickly overwhelms phones and laptops. An SFU fixes this by relaying media for everyone.",
+            "zh": "在單純的點對點（mesh，網狀）通話裡，每個人都要把自己的影像各複製一份送給其他所有人。5 個人就已經是 20 條串流——很快就把手機和筆電壓垮。SFU 透過「集中轉發」幫大家解決這個問題。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "groups",
+              "title": { "en": "Scales to big rooms", "zh": "撐得起大房間" },
+              "text": {
+                "en": "Each client uploads once; the SFU fans it out. Rooms can grow far beyond what mesh allows.",
+                "zh": "每個用戶端只上傳一次，由 SFU 負責分送。房間人數可遠遠超過 mesh 的極限。"
+              }
+            },
+            {
+              "icon": "speed",
+              "title": { "en": "Low latency", "zh": "低延遲" },
+              "text": {
+                "en": "Media is relayed from a Cloudflare data center near each user, keeping conversations snappy.",
+                "zh": "媒體由離每位使用者最近的 Cloudflare 資料中心轉發，讓對話保持即時。"
+              }
+            },
+            {
+              "icon": "vpn_lock",
+              "title": { "en": "Works behind firewalls", "zh": "穿透防火牆" },
+              "text": {
+                "en": "The built-in TURN service relays media when strict networks block direct connections.",
+                "zh": "內建的 TURN 服務會在嚴格網路擋掉直連時，幫忙中繼媒體。"
+              }
+            },
+            {
+              "icon": "tune",
+              "title": { "en": "You stay in control", "zh": "彈性掌控" },
+              "text": {
+                "en": "It's unopinionated infrastructure — build whatever UI and logic you want on top.",
+                "zh": "它是不預設立場的基礎設施——上層的介面與邏輯都由你自由打造。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "videocam",
+              "title": { "en": "Video meetings", "zh": "視訊會議" },
+              "text": {
+                "en": "Group calls and conferencing where many people see and hear each other.",
+                "zh": "多人互看互聽的群組通話與會議。"
+              }
+            },
+            {
+              "icon": "podcasts",
+              "title": { "en": "Live audio rooms", "zh": "即時語音房" },
+              "text": {
+                "en": "Drop-in voice chat, talk shows, or social audio with many listeners.",
+                "zh": "隨進隨聊的語音聊天、談話節目，或多人收聽的社群語音。"
+              }
+            },
+            {
+              "icon": "sports_esports",
+              "title": { "en": "Interactive streaming", "zh": "互動直播" },
+              "text": {
+                "en": "Game lobbies, watch parties, or events where audience can hop on mic.",
+                "zh": "遊戲大廳、一起看影片，或觀眾能上麥互動的活動。"
+              }
+            },
+            {
+              "icon": "support_agent",
+              "title": { "en": "Live support & sales", "zh": "即時客服與銷售" },
+              "text": {
+                "en": "One-to-one or small-group video for help desks, tutoring, or telehealth.",
+                "zh": "一對一或小組視訊，用於客服、家教或遠距醫療。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How to get started", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Realtime offers three layers: RealtimeKit (ready-made SDKs with UI), the SFU (low-level WebRTC server), and TURN (a relay). Below we use the SFU HTTPS API directly: create a session, then push a local track. First create a Realtime app in the dashboard to get an App ID and App Secret.",
+            "zh": "Realtime 有三層：RealtimeKit（內建介面的現成 SDK）、SFU（低階 WebRTC 伺服器）、TURN（中繼服務）。下面直接用 SFU 的 HTTPS API：先建立 session，再推送一條本地軌道（track）。請先在控制台建立一個 Realtime app，取得 App ID 與 App Secret。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Set your app credentials", "zh": "設定 app 憑證" },
+              "text": {
+                "en": "Your App ID identifies the app; the App Secret is its password. Keep the secret on your server, never in the browser.",
+                "zh": "App ID 用來辨識你的 app；App Secret 是它的密碼。Secret 要放在你的伺服器，千萬別放進瀏覽器。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "export APP_ID=\"your-app-id\"\nexport APP_SECRET=\"your-app-secret\""
+              }
+            },
+            {
+              "title": { "en": "Create a new session", "zh": "建立一個 session" },
+              "text": {
+                "en": "A session is one WebRTC connection between a user and Cloudflare. The response gives you a sessionId to use in the next call.",
+                "zh": "一個 session 就是某位使用者與 Cloudflare 之間的一條 WebRTC 連線。回應會給你一個 sessionId，下一步會用到。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -X POST \\\n  https://rtc.live.cloudflare.com/v1/apps/$APP_ID/sessions/new \\\n  -H \"Authorization: Bearer $APP_SECRET\"\n\n# Response:\n# { \"sessionId\": \"<SESSION_ID>\" }"
+              }
+            },
+            {
+              "title": { "en": "Push a local track", "zh": "推送本地軌道" },
+              "text": {
+                "en": "A track is one media stream (audio or video). Your browser creates a WebRTC 'offer' (an SDP) describing what it wants to send; you forward it here. location 'local' means you are sending media up to Cloudflare.",
+                "zh": "一條 track 就是一路媒體串流（音訊或影像）。瀏覽器會產生一個 WebRTC「offer」（一段 SDP），描述它想送什麼；你把它轉送到這裡。location 設成 local，表示你正把媒體往上送到 Cloudflare。"
+              },
+              "code": {
+                "lang": "bash",
+                "body": "curl -X POST \\\n  https://rtc.live.cloudflare.com/v1/apps/$APP_ID/sessions/$SESSION_ID/tracks/new \\\n  -H \"Authorization: Bearer $APP_SECRET\" \\\n  -d '{\n    \"sessionDescription\": { \"type\": \"offer\", \"sdp\": \"<LOCAL_OFFER_SDP>\" },\n    \"tracks\": [\n      { \"location\": \"local\", \"mid\": \"0\", \"trackName\": \"mic\" },\n      { \"location\": \"local\", \"mid\": \"1\", \"trackName\": \"camera\" }\n    ]\n  }'"
+              }
+            },
+            {
+              "title": { "en": "Apply the answer", "zh": "套用 answer" },
+              "text": {
+                "en": "Cloudflare replies with an 'answer' SDP. Your browser applies it to finish the handshake, and media starts flowing. To let others watch, they create their own session and pull these tracks as 'remote'.",
+                "zh": "Cloudflare 會回一段「answer」SDP。瀏覽器套用後就完成交握，媒體開始傳輸。要讓別人觀看，他們各自建立 session，並以 remote 方式拉取這些軌道即可。"
+              },
+              "code": {
+                "lang": "json",
+                "body": "{\n  \"requiresImmediateRenegotiation\": false,\n  \"sessionDescription\": {\n    \"type\": \"answer\",\n    \"sdp\": \"<CLOUDFLARE_ANSWER_SDP>\"\n  },\n  \"tracks\": [ { \"mid\": \"0\", \"trackName\": \"mic\" } ]\n}"
+              }
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "widgets",
+          "title": { "en": "Want it easier? Use RealtimeKit", "zh": "想更省事？用 RealtimeKit" },
+          "text": {
+            "en": "If you don't want to touch raw WebRTC, RealtimeKit gives you SDKs with ready-made call UI components — meetings in a fraction of the code.",
+            "zh": "如果你不想碰原始的 WebRTC，RealtimeKit 提供帶有現成通話介面元件的 SDK——用少很多的程式碼就能做出會議功能。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "cell_tower",
+              "title": { "en": "WebRTC", "zh": "WebRTC" },
+              "text": {
+                "en": "The browser standard for real-time audio, video, and data with very low latency — no plugins needed.",
+                "zh": "瀏覽器內建的即時音訊、影像與資料標準，延遲極低，不需外掛。"
+              }
+            },
+            {
+              "icon": "account_tree",
+              "title": { "en": "SFU 選擇性轉發單元", "zh": "SFU（選擇性轉發單元）" },
+              "text": {
+                "en": "Selective Forwarding Unit: a server that receives each person's stream once and forwards it to the others.",
+                "zh": "Selective Forwarding Unit：一台伺服器，接收每人一份串流後，再轉發給其他人。"
+              }
+            },
+            {
+              "icon": "swap_calls",
+              "title": { "en": "Mesh vs SFU", "zh": "Mesh 對比 SFU" },
+              "text": {
+                "en": "Mesh = everyone connects to everyone (heavy). SFU = everyone connects to one relay (scalable).",
+                "zh": "Mesh＝人人互連（很吃資源）。SFU＝大家連到同一個中繼（可擴展）。"
+              }
+            },
+            {
+              "icon": "link",
+              "title": { "en": "Session 連線階段", "zh": "Session（連線階段）" },
+              "text": {
+                "en": "One WebRTC PeerConnection between a client and Cloudflare. It holds one or more tracks.",
+                "zh": "用戶端與 Cloudflare 之間的一條 WebRTC PeerConnection，內含一條或多條 track。"
+              }
+            },
+            {
+              "icon": "graphic_eq",
+              "title": { "en": "Track 軌道", "zh": "Track（軌道）" },
+              "text": {
+                "en": "A single media stream — one for the mic, one for the camera. Tracks are 'local' (sent) or 'remote' (received).",
+                "zh": "單一路媒體串流——麥克風一條、鏡頭一條。track 分 local（送出）與 remote（接收）。"
+              }
+            },
+            {
+              "icon": "router",
+              "title": { "en": "TURN 中繼伺服器", "zh": "TURN（中繼伺服器）" },
+              "text": {
+                "en": "A relay that carries media when firewalls block direct connections. Free when paired with the SFU.",
+                "zh": "當防火牆擋掉直連時，負責中繼媒體的伺服器。搭配 SFU 使用時免費。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & pricing", "zh": "小提示與計費" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "tip",
+          "icon": "savings",
+          "title": { "en": "How billing works", "zh": "計費方式" },
+          "text": {
+            "en": "The SFU charges $0.05 per GB of egress (media sent out of Cloudflare), with the first 1,000 GB free every month. TURN is free when used with the SFU; on its own it's also $0.05/GB egress with 1,000 GB free monthly.",
+            "zh": "SFU 以「流出量（egress，從 Cloudflare 送出的媒體）」計費，每 GB 0.05 美元，每月前 1,000 GB 免費。TURN 搭配 SFU 使用時免費；單獨使用同樣是每 GB 0.05 美元、每月 1,000 GB 免費。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "warn",
+          "icon": "shield_lock",
+          "title": { "en": "Keep the App Secret server-side", "zh": "App Secret 只放伺服器端" },
+          "text": {
+            "en": "Never ship your App Secret to the browser. Have your backend create sessions and tracks, then pass only what the client needs.",
+            "zh": "絕對不要把 App Secret 送進瀏覽器。讓你的後端負責建立 session 與 track，再把用戶端真正需要的東西傳過去就好。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Choose RealtimeKit for speed, the SFU for full control — they're complementary.",
+              "An SFU scales far better than mesh once you have more than ~3-4 participants.",
+              "Pair Realtime with Durable Objects or Workers to manage room state and signaling.",
+              "It was renamed from Cloudflare Calls, so older guides may use that name."
+            ],
+            "zh": [
+              "想快用 RealtimeKit，想完全掌控用 SFU——兩者互補。",
+              "一旦參與者超過約 3～4 人，SFU 的擴展性就遠勝 mesh。",
+              "搭配 Durable Objects 或 Workers 來管理房間狀態與信令（signaling）。",
+              "它是由 Cloudflare Calls 改名而來，舊文件可能仍用舊名稱。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "stream", "label": { "en": "Stream", "zh": "Stream" } },
+    { "slug": "durable-objects", "label": { "en": "Durable Objects", "zh": "Durable Objects" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "images", "label": { "en": "Images", "zh": "Images" } }
+  ],
+  "docs": "https://developers.cloudflare.com/realtime/"
+}

@@ -1,0 +1,295 @@
+{
+  "slug": "pipelines",
+  "category": "storage",
+  "icon": "linear_scale",
+  "title": { "en": "Pipelines", "zh": "Pipelines" },
+  "subtitle": {
+    "en": "Ingest streaming data and land it in R2",
+    "zh": "把串流資料即時收進來，落地到 R2"
+  },
+  "hero": {
+    "badge": { "en": "Storage & Databases", "zh": "儲存與資料庫" },
+    "tagline": {
+      "en": "Fire-hose of events in, neatly stored files in R2 out — no servers to babysit.",
+      "zh": "事件像消防水柱一樣灌進來，整齊的檔案落到 R2——不用顧任何伺服器。"
+    }
+  },
+  "stats": [
+    { "value": "R2", "label": { "en": "Delivers into R2", "zh": "資料落地到 R2" } },
+    { "value": "HTTP", "label": { "en": "Ingest endpoint", "zh": "HTTP 收資料端點" } },
+    { "value": "Once", "label": { "en": "Exactly-once delivery", "zh": "恰好一次的交付" } },
+    { "value": "Beta", "label": { "en": "Open beta", "zh": "公開測試中" } }
+  ],
+  "sections": [
+    {
+      "id": "what",
+      "icon": "lightbulb",
+      "heading": { "en": "What are Pipelines?", "zh": "Pipelines 是什麼？" },
+      "blocks": [
+        {
+          "type": "lead",
+          "text": {
+            "en": "Pipelines ingest streaming data (streaming data = a continuous flow of small events arriving non-stop, like clicks or sensor readings), optionally transform it, and write it neatly into R2 object storage for you.",
+            "zh": "Pipelines 負責接收「串流資料（streaming data，指源源不絕、一筆筆小事件不停湧入的資料，例如點擊或感測器讀數）」，可選擇做轉換，再把它整整齊齊地寫進 R2 物件儲存。"
+          }
+        },
+        {
+          "type": "p",
+          "text": {
+            "en": "A pipeline has three parts: a stream (where events come in, via an HTTP endpoint or a Worker), an optional SQL transformation (to filter or reshape events), and a sink (the R2 destination where files are saved, as Iceberg tables, Parquet, or JSON).",
+            "zh": "一條 pipeline 有三個部分：stream（事件進來的地方，透過 HTTP 端點或 Worker）、可選的 SQL 轉換（用來過濾或重塑事件），以及 sink（資料落地的 R2 目的地，可存成 Iceberg 表、Parquet 或 JSON 檔）。"
+          }
+        },
+        {
+          "type": "callout",
+          "variant": "analogy",
+          "icon": "water_drop",
+          "title": { "en": "Think of it like…", "zh": "把它想成…" },
+          "text": {
+            "en": "A water treatment plant. A messy stream of raw events flows in (stream), gets filtered and cleaned (SQL transform), and is bottled into tidy files on a shelf (R2 sink) ready to drink later.",
+            "zh": "一座淨水廠。雜亂的原始事件流進來（stream），經過過濾與清洗（SQL 轉換），最後裝瓶成架上一罐罐整齊的檔案（R2 sink），等之後要用時隨時取用。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "icon": "help",
+      "heading": { "en": "Why use Pipelines?", "zh": "為什麼要用 Pipelines？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "Collecting a non-stop flood of events reliably is hard: you must buffer spikes, batch them into files, and never lose or duplicate data. Pipelines does all of that as a managed service, then hands you clean files in R2.",
+            "zh": "可靠地收下源源不絕的大量事件其實很難：你得緩衝突發尖峰、把它們批次寫成檔案，還不能掉資料或重複資料。Pipelines 把這些全包辦成一個受管服務，最後在 R2 給你乾淨的檔案。"
+          }
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "shield",
+              "title": { "en": "Durable ingestion", "zh": "可靠的接收" },
+              "text": {
+                "en": "Events are safely buffered so traffic spikes do not drop data.",
+                "zh": "事件會被安全緩衝，流量暴衝時也不會掉資料。"
+              }
+            },
+            {
+              "icon": "done_all",
+              "title": { "en": "Exactly-once delivery", "zh": "恰好一次交付" },
+              "text": {
+                "en": "Each event lands in R2 once — no missing rows, no duplicates.",
+                "zh": "每筆事件恰好落地 R2 一次——不漏、不重複。"
+              }
+            },
+            {
+              "icon": "filter_alt",
+              "title": { "en": "Transform on the way", "zh": "傳輸中即轉換" },
+              "text": {
+                "en": "Use SQL to filter, reshape, or enrich events before they are stored.",
+                "zh": "用 SQL 在資料存下前先過濾、重塑或加料。"
+              }
+            },
+            {
+              "icon": "savings",
+              "title": { "en": "Cheap to store", "zh": "存起來便宜" },
+              "text": {
+                "en": "Output lands in R2, which has zero egress fees when you read it back.",
+                "zh": "輸出落在 R2，之後讀回來還是零流出費。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "icon": "target",
+      "heading": { "en": "When should you use it?", "zh": "什麼時候該用 Pipelines？" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "ads_click",
+              "title": { "en": "Clickstream analytics", "zh": "點擊流分析" },
+              "text": {
+                "en": "Capture every page view and click to analyze user behavior later.",
+                "zh": "蒐集每一次瀏覽和點擊，之後分析使用者行為。"
+              }
+            },
+            {
+              "icon": "receipt_long",
+              "title": { "en": "Logs & events", "zh": "日誌與事件" },
+              "text": {
+                "en": "Stream server logs or app events into R2 for archiving and querying.",
+                "zh": "把伺服器日誌或應用事件串流進 R2，做封存與查詢。"
+              }
+            },
+            {
+              "icon": "sensors",
+              "title": { "en": "IoT telemetry", "zh": "物聯網遙測" },
+              "text": {
+                "en": "Collect readings from many devices into one organized data lake.",
+                "zh": "把眾多裝置的讀數蒐集進同一個井然有序的資料湖。"
+              }
+            },
+            {
+              "icon": "insights",
+              "title": { "en": "Feeding a data lake", "zh": "灌入資料湖" },
+              "text": {
+                "en": "Land structured files in R2 ready for big-data tools to query.",
+                "zh": "把結構化檔案落到 R2，供大數據工具直接查詢。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "icon": "rocket_launch",
+      "heading": { "en": "How do you start?", "zh": "怎麼開始用？" },
+      "blocks": [
+        {
+          "type": "p",
+          "text": {
+            "en": "The guided setup command creates the stream, the SQL transform, and the R2 sink in one go. Then you send events to the HTTP endpoint and query the stored data.",
+            "zh": "引導式的設定指令會一次幫你建好 stream、SQL 轉換和 R2 sink。接著你把事件送到 HTTP 端點，再查詢存下來的資料。"
+          }
+        },
+        {
+          "type": "steps",
+          "items": [
+            {
+              "title": { "en": "Install Wrangler & log in", "zh": "安裝 Wrangler 並登入" },
+              "text": {
+                "en": "Pipelines is available on the Workers Paid plan during open beta.",
+                "zh": "Pipelines 在公開測試期間，於 Workers 付費方案下提供。"
+              },
+              "code": { "lang": "bash", "body": "npm install -g wrangler\nwrangler login" }
+            },
+            {
+              "title": { "en": "Run the guided setup", "zh": "執行引導式設定" },
+              "text": {
+                "en": "This walks you through naming the pipeline, enabling the HTTP endpoint, choosing an R2 bucket as the sink, and picking a transform.",
+                "zh": "它會帶你一步步命名 pipeline、開啟 HTTP 端點、選一個 R2 儲存桶當 sink，並挑選一個轉換方式。"
+              },
+              "code": { "lang": "bash", "body": "npx wrangler pipelines setup --name ecommerce" }
+            },
+            {
+              "title": { "en": "Send events to the endpoint", "zh": "把事件送到端點" },
+              "text": {
+                "en": "POST a JSON array of events to your stream's ingest URL. Replace {stream-id} with the id from setup.",
+                "zh": "用 POST 把一個 JSON 事件陣列送到你 stream 的接收 URL。把 {stream-id} 換成設定時拿到的 id。"
+              },
+              "code": { "lang": "bash", "body": "curl -X POST https://{stream-id}.ingest.cloudflare.com \\\n  -H \"Content-Type: application/json\" \\\n  -d '[{\"user_id\":\"u_123\",\"event\":\"purchase\",\"amount\":29.99}]'" }
+            },
+            {
+              "title": { "en": "Send events from a Worker", "zh": "從 Worker 送出事件" },
+              "text": {
+                "en": "You can also push events from Worker code by POSTing to the same ingest URL.",
+                "zh": "你也可以在 Worker 程式碼裡用 POST 打同一個接收 URL 來推送事件。"
+              },
+              "code": { "lang": "js", "body": "export default {\n  async fetch(request, env) {\n    const event = { user_id: \"u_123\", event: \"page_view\", path: \"/home\" };\n    await fetch(\"https://{stream-id}.ingest.cloudflare.com\", {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify([event]),\n    });\n    return new Response(\"event sent\");\n  },\n};" }
+            },
+            {
+              "title": { "en": "Query the stored data", "zh": "查詢存下來的資料" },
+              "text": {
+                "en": "Once events land in R2, query them with R2 SQL using your warehouse name.",
+                "zh": "事件落地 R2 後，用你的 warehouse 名稱搭配 R2 SQL 來查詢它們。"
+              },
+              "code": { "lang": "bash", "body": "export WRANGLER_R2_SQL_AUTH_TOKEN=your_api_token\n\nnpx wrangler r2 sql query \"YOUR_WAREHOUSE_NAME\" \\\n  \"SELECT user_id, event, amount FROM default.ecommerce LIMIT 10\"" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "icon": "school",
+      "heading": { "en": "Key concepts", "zh": "重點概念" },
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "input",
+              "title": { "en": "Stream", "zh": "Stream（串流入口）" },
+              "text": {
+                "en": "The entry point where events arrive — via an HTTP endpoint or a Worker binding.",
+                "zh": "事件進來的入口——透過 HTTP 端點或 Worker 綁定。"
+              }
+            },
+            {
+              "icon": "transform",
+              "title": { "en": "SQL transformation", "zh": "SQL 轉換" },
+              "text": {
+                "en": "An optional SQL step that filters, reshapes, or enriches events as they pass through.",
+                "zh": "一個可選的 SQL 步驟，在事件經過時做過濾、重塑或加料。"
+              }
+            },
+            {
+              "icon": "output",
+              "title": { "en": "Sink", "zh": "Sink（落地目的地）" },
+              "text": {
+                "en": "The R2 destination where data is written as Iceberg, Parquet, or JSON files.",
+                "zh": "資料寫入的 R2 目的地，存成 Iceberg、Parquet 或 JSON 檔案。"
+              }
+            },
+            {
+              "icon": "inventory",
+              "title": { "en": "Batching", "zh": "批次寫入" },
+              "text": {
+                "en": "Many small events are grouped into larger files so storage and querying stay efficient.",
+                "zh": "把許多小事件聚成較大的檔案，讓儲存與查詢都更有效率。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "icon": "tips_and_updates",
+      "heading": { "en": "Tips & status", "zh": "小提示與目前狀態" },
+      "blocks": [
+        {
+          "type": "callout",
+          "variant": "note",
+          "icon": "science",
+          "title": { "en": "Open beta", "zh": "公開測試中" },
+          "text": {
+            "en": "Pipelines is in open beta on the Workers Paid plan. During beta you are not billed for Pipelines itself — you only pay standard R2 storage costs for the data it writes.",
+            "zh": "Pipelines 目前在 Workers 付費方案下處於公開測試。測試期間 Pipelines 本身不收費——你只需支付它寫入資料時標準的 R2 儲存費用。"
+          }
+        },
+        {
+          "type": "ul",
+          "items": {
+            "en": [
+              "Send events as a JSON array so you can batch many records in one request.",
+              "Pick Parquet or Iceberg output if you plan to query the data with big-data tools.",
+              "Because output lives in R2, reading your data back out costs zero egress.",
+              "Need a simple message queue between Workers instead? Look at Queues."
+            ],
+            "zh": [
+              "把事件包成 JSON 陣列，就能在一個請求裡批次送出多筆紀錄。",
+              "若打算用大數據工具查詢，輸出格式選 Parquet 或 Iceberg。",
+              "因為輸出存在 R2，把資料讀回來是零流出費。",
+              "只是想在 Workers 之間放個簡單訊息佇列？可以看看 Queues。"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "related": [
+    { "slug": "r2", "label": { "en": "R2", "zh": "R2" } },
+    { "slug": "workers", "label": { "en": "Workers", "zh": "Workers" } },
+    { "slug": "queues", "label": { "en": "Queues", "zh": "Queues" } },
+    { "slug": "d1", "label": { "en": "D1", "zh": "D1" } }
+  ],
+  "docs": "https://developers.cloudflare.com/pipelines/"
+}

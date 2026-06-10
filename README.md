@@ -10,7 +10,7 @@
 
 | | |
 |---|---|
-| 🌐 網站 | <https://tingwei161803.github.io/cloudflare-intro/> |
+| 🌐 網站 | <https://cloudflare-intro.peteraim.com/> |
 
 > 直接點進去就能用，無需安裝。每一頁都有獨立網址，例如產品頁 `…/workers.html`、分類頁 `…/compute.html`，方便分享與收藏。
 

@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
-SITE_URL = "https://tingwei161803.github.io/cloudflare-intro/"
+SITE_URL = "https://cloudflare-intro.peteraim.com/"
 GA4_ID = "G-CTETKN2KDW"
 THEME_COLOR = "#F6821F"
 

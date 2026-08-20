@@ -32,7 +32,174 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "HTML 表單 → Worker → 資料庫", "description": "最經典的流程：送出表單、存起來、再顯示出來——搭配真正的伺服器端驗證", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/form-to-database.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="form-to-database">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">dynamic_form</span></span><h1 class="lhero__title">HTML 表單 → Worker → 資料庫</h1></div><p class="lhero__tagline">一個聯絡或註冊表單：POST 到 Worker、通過驗證，再存進 D1 資料庫。</p><div class="lhero__stats"><div class="lhero__stat"><b>3</b><span>層串接</span></div><div class="lhero__stat"><b>1</b><span>個資料表存資料</span></div><div class="lhero__stat"><b>201</b><span>成功建立</span></div><div class="lhero__stat"><b>400</b><span>輸入不合法</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要串什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>每一層負責什麼</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>資料模型</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>請求流程</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>一步步動手串</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>陷阱與小提示</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要串什麼？</h2></div><p class="lead">這是網頁開發最常見的任務：訪客填寫表單、你把他輸入的內容存起來、再回覆他成功了。我們要把三個層串在一起——前端 HTML 表單、一個 Cloudflare Worker（在邊緣執行的伺服器端程式碼）、以及一個 D1 資料庫（無伺服器的 SQL 資料庫），每一筆送出都會變成資料表裡的一列。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">local_post_office</span></span><div class="callout__body"><p class="callout__title">把它想成…</p><p class="callout__text">一個服務櫃台。訪客遞交一張紙本表單（HTML 表單）。櫃台人員檢查是不是都填對了（Worker 驗證），再歸檔進抽屜（D1）。如果有欄位空白，櫃台會把表單退回來、指出問題——它永遠不會進抽屜。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>架構一眼看</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  U[&quot;訪客 / 瀏覽器&quot;] --&gt;|&quot;填寫並送出&quot;| F[&quot;前端網頁 (HTML + JS)&quot;]
+  F --&gt;|&quot;fetch POST /api/submit&quot;| W[&quot;Worker (驗證 + 邏輯)&quot;]
+  W --&gt;|&quot;INSERT 一筆資料&quot;| D[&quot;D1 資料庫&quot;]
+  D --&gt;|&quot;成功 / 失敗&quot;| W
+  W --&gt;|&quot;JSON 回應&quot;| F
+  F --&gt;|&quot;顯示成功或錯誤&quot;| U"></div></figure></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>每一層負責什麼</h2></div><p>每一層都只負責一件事。把它們分開，才能讓應用既好理解又安全。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">web</span></span><p class="icard__t">前端（表單）</p><p class="icard__d">用 HTML 做出欄位，再用 JS 攔截送出動作、用 fetch 把資料傳出去，並負責顯示成功或錯誤訊息。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">verified_user</span></span><p class="icard__t">Worker（把關人）</p><p class="icard__d">接收 POST、驗證每一個欄位，確認無誤才寫進資料庫。這是唯一你真正能信任的地方。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">D1（儲存）</p><p class="icard__d">一個 SQL 資料庫，把每筆送出存成一列。Worker 透過 env.DB binding（綁定）跟它溝通。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">shield_lock</span></span><p class="icard__t">Turnstile（選配）</p><p class="icard__d">免費、不用解拼圖的機器人檢查。加上它可以防止垃圾訊息灌爆你的資料表。</p></div></div><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">dns</span></span><div class="callout__body"><p class="callout__title">同一個網域、兩條路徑</p><p class="callout__text">透過 Workers 静態資源（static assets），同一個 Worker 可以同時伺服你的 HTML 頁面（例如 /）跟處理 API（/api/submit）。因為同源，fetch 就不需要設定 CORS。</p></div></div></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>資料模型</h2></div><p>我們只需要一個資料表：submissions。每一列就是一筆填好的表單。id 會自動遞增，created_at 會自動蓋上時間，讓你知道每筆訊息什麼時候進來的。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>submissions 資料表</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  SUBMISSIONS {
+    integer id PK &quot;主鍵&quot;
+    text name &quot;訪客姓名&quot;
+    text email &quot;聯絡信箱&quot;
+    text message &quot;訊息內容&quot;
+    text created_at &quot;建立時間&quot;
+  }"></div></figure><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><span class="codeblock__name">schema.sql</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>-- schema.sql
+CREATE TABLE IF NOT EXISTS submissions (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  name       TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  message    TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);</code></pre></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">schedule</span></span><div class="callout__body"><p class="callout__title">讓資料庫蓋時間戳</p><p class="callout__text">用 DEFAULT (datetime('now')) 代表你永遠不用從前端傳 created_at——時間由伺服器決定，所以偽造不了。</p></div></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>請求流程</h2></div><p>跟著一筆送出，從點擊一路看到回覆。注意驗證是在 Worker 上進行，而且只有當每個欄位都合法時，才會動到資料庫。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>送出 → 驗證 → 儲存 → 回覆</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;訪客&quot;
+  participant F as &quot;前端網頁&quot;
+  participant W as &quot;Worker&quot;
+  participant D as &quot;D1 資料庫&quot;
+  U-&gt;&gt;F: 填寫表單並按下送出
+  F-&gt;&gt;W: POST /api/submit (JSON)
+  W-&gt;&gt;W: 驗證欄位 (姓名 / 信箱 / 訊息)
+  alt 欄位有效
+    W-&gt;&gt;D: INSERT INTO submissions
+    D--&gt;&gt;W: 寫入成功
+    W--&gt;&gt;F: 201 Created + JSON
+    F--&gt;&gt;U: 顯示成功訊息
+  else 欄位無效
+    W--&gt;&gt;F: 400 + 錯誤清單
+    F--&gt;&gt;U: 顯示欄位錯誤
+  end"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">swap_horiz</span></span><div class="callout__body"><p class="callout__title">狀態碼就是約定</p><p class="callout__text">Worker 成功時回 201（已建立）、輸入不合法時回 400（請求有誤）。前端看 res.ok 來決定要清空表單還是顯示錯誤。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>一步步動手串</h2></div><p class="lead">下面是全部：資料庫與資料表、wrangler 設定、前端表單，以及把它們串起來的 Worker。把每一段貼進對應的檔案里。</p><ol class="steps"><li class="step"><p class="step__t">建立資料庫與資料表</p><p class="step__d">把上面的 CREATE TABLE 存成 schema.sql，再跑這兩行。--remote 代表「套用到雲端上真正的資料庫」（不加就是在本機測試）。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># 1) Create the database (copy the printed database_id)
+npx wrangler d1 create contact-db
+
+# 2) Apply the table from schema.sql to the real cloud database
+npx wrangler d1 execute contact-db --remote --file=./schema.sql</code></pre></div></li><li class="step"><p class="step__t">在 wrangler.jsonc 綁定 D1</p><p class="step__d">貼上第 1 步拿到的 database_id。binding 名稱 DB 就是你的 Worker 用 env.DB 存取資料庫的方式。assets 那段讓同一個 Worker 能伺服你的 HTML。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">json</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>{
+  "name": "contact-form",
+  "main": "src/index.js",
+  "compatibility_date": "2025-01-01",
+  "assets": { "directory": "./public" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "contact-db",
+      "database_id": "&lt;paste-your-id-here&gt;"
+    }
+  ]
+}</code></pre></div></li><li class="step"><p class="step__t">做出前端表單</p><p class="step__d">把這個存成 public/index.html。它用 FormData 收集欄位、用 fetch 以 JSON 送出，再依回應更新狀態文字。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;!doctype html&gt;
+&lt;html lang="zh-Hant"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;title&gt;Contact us&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;form id="contact-form"&gt;
+    &lt;input name="name" type="text" placeholder="Your name" required /&gt;
+    &lt;input name="email" type="email" placeholder="you@example.com" required /&gt;
+    &lt;textarea name="message" placeholder="Message" required&gt;&lt;/textarea&gt;
+    &lt;button type="submit"&gt;Send&lt;/button&gt;
+    &lt;p id="status"&gt;&lt;/p&gt;
+  &lt;/form&gt;
+
+  &lt;script&gt;
+    const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) =&gt; {
+      e.preventDefault();                 // stop the normal full-page reload
+      statusEl.textContent = 'Sending...';
+
+      // FormData -&gt; plain object -&gt; JSON the Worker can read
+      const data = Object.fromEntries(new FormData(form));
+
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        statusEl.textContent = 'Thanks! We received your message.';
+        form.reset();
+      } else {
+        // result.errors looks like { email: 'Invalid email' }
+        statusEl.textContent = 'Please fix: ' + Object.values(result.errors).join(', ');
+      }
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div></li><li class="step"><p class="step__t">寫 Worker（驗證 + 寫入）</p><p class="step__d">把這個存成 src/index.js。它檢查方法與路徑、驗證每個欄位，並用帶 bind() 的預備語句，讓使用者輸入永遠不會變成 SQL。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Only the form endpoint is handled here
+    if (request.method !== 'POST' || url.pathname !== '/api/submit') {
+      return new Response('Not found', { status: 404 });
+    }
+
+    // 1. Read the body safely (bad JSON must not crash the Worker)
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return Response.json({ errors: { form: 'Invalid JSON' } }, { status: 400 });
+    }
+
+    // 2. Validate EVERY field on the server. Never trust the client.
+    const errors = {};
+    const name = String(body.name || '').trim();
+    const email = String(body.email || '').trim();
+    const message = String(body.message || '').trim();
+
+    if (name.length &lt; 2) errors.name = 'Name is too short';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errors.email = 'Invalid email';
+    if (message.length &lt; 5) errors.message = 'Message is too short';
+    if (message.length &gt; 2000) errors.message = 'Message is too long';
+
+    if (Object.keys(errors).length &gt; 0) {
+      return Response.json({ errors }, { status: 400 });
+    }
+
+    // 3. Insert with a prepared statement. bind() fills the ? holes
+    //    so user input can never become SQL (blocks SQL injection).
+    await env.DB
+      .prepare('INSERT INTO submissions (name, email, message) VALUES (?, ?, ?)')
+      .bind(name, email, message)
+      .run();
+
+    // 4. Confirm success with 201 Created
+    return Response.json({ ok: true }, { status: 201 });
+  },
+};</code></pre></div></li><li class="step"><p class="step__t">（選配）用 Turnstile 擋機器人</p><p class="step__d">在表單加上 Turnstile widget，再在 Worker 最上方（驗證之前）驗證 token——讓機器人在碰到你的驗證或資料庫之前就被擋下。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// Optional: block bots BEFORE you validate or insert.
+// Add a Turnstile widget to the form (see the Turnstile guide),
+// it adds a "cf-turnstile-response" token to the submitted data.
+
+const token = body['cf-turnstile-response'];
+
+const verify = await fetch(
+  'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      secret: env.TURNSTILE_SECRET_KEY, // a Worker secret, never hardcoded
+      response: token || '',
+      remoteip: request.headers.get('CF-Connecting-IP') || '',
+    }),
+  }
+);
+
+const outcome = await verify.json();
+if (!outcome.success) {
+  return Response.json({ errors: { form: 'Bot check failed' } }, { status: 403 });
+}</code></pre></div></li><li class="step"><p class="step__t">部署上線</p><p class="step__d">發布這個 Worker。你的表單頁面跟 API 就在同一個網址上線了。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler deploy</code></pre></div></li></ol><h3>伺服器端驗證，一條條分支</h3><p>這就是 Worker 對每個請求做的判斷。恰好只有一條順利路徑（儲存並回 201）和一條拒絕路徑（回 400 並附上哪裡有問題的清單）。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>驗證分支</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  A[&quot;收到 POST 請求&quot;] --&gt; B[&quot;解析 JSON 內容&quot;]
+  B --&gt; C{&quot;欄位全部通過?&quot;}
+  C --&gt;|&quot;是&quot;| D[&quot;INSERT INTO submissions&quot;]
+  D --&gt; E[&quot;回傳 201 + 成功&quot;]
+  C --&gt;|&quot;否&quot;| F[&quot;收集錯誤訊息&quot;]
+  F --&gt; G[&quot;回傳 400 + 錯誤清單&quot;]"></div></figure><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">gpp_bad</span></span><div class="callout__body"><p class="callout__title">絕不要信任前端——為什麼？</p><p class="callout__text">HTML 上的 required 或 type=email 只是給老實使用者的提示。任何人都可以打開開發者工具，或用 curl 直接送一個原始請求，完全跳過頁面。Worker 才是真正的守門員：它必須自己重新檢查長度、格式與必填欄位，因為它是攻擊者唯一改不了的程式碼。</p></div></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">block</span></span><p class="icard__t">preventDefault()</p><p class="icard__d">阻止瀏覽器預設的表單送出（整頁重新載入），讓你的 JS 改用 fetch 把資料送出。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">dataset</span></span><p class="icard__t">FormData</p><p class="icard__d">一個內建物件，能抓出表單裡所有有 name 的欄位。Object.fromEntries 再把它變成可以交給 JSON.stringify 的純物件。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">key</span></span><p class="icard__t">預備語句</p><p class="icard__d">prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。? 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">link</span></span><p class="icard__t">Binding（env.DB）</p><p class="icard__d">binding 是你 Worker 到某個資源的一條具名連線。wrangler.jsonc 把名稱 DB 對到你的資料庫；程式裡就是 env.DB。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">tag</span></span><p class="icard__t">HTTP 狀態碼</p><p class="icard__d">201 = 已建立（成功）。400 = 請求有誤（你的輸入不對）。403 = 禁止（例如機器人檢查未通過）。前端依這些狀態碼分支。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">smart_toy</span></span><p class="icard__t">Turnstile token</p><p class="icard__d">widget 加進表單的一次性通行證。Worker 把它送到 Cloudflare 的 Siteverify API，確認是真人送出的。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>陷阱與小提示</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">report</span></span><div class="callout__body"><p class="callout__title">先驗證、再儲存——順序別錯</p><p class="callout__text">一個常見的 bug 是先 INSERT 再驗證。請務必在 INSERT 之前就拒絕不合法的輸入，你的資料表才不會被垃圾或超大的資料塞滿。</p></div></div><ul><li>回傳一個結構化的 errors 物件（每個欄位一個），讓前端能指出每個問題，而不是只說「失敗」。</li><li>在伺服器端 trim 輸入並限制長度；千萬不要只靠 HTML 的 maxlength。</li><li>把 request.json() 包進 try/catch——格式不對的 body 應該回一個乾淨的 400，而不是讓程式崩潰。</li><li>如果你常列出最近的送出，在 created_at 建立索引（index）以減少讀取的列數。</li><li>用 'wrangler secret put TURNSTILE_SECRET_KEY' 存放 Turnstile 密鑰——絕不要寫死在程式裡。</li><li>D1 免費額度每天給 500 萬列讀取、10 萬列寫入——對一個聯絡表單絕對夠用。</li></ul><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">verified</span></span><div class="callout__body"><p class="callout__title">縱深防禦</p><p class="callout__text">把防禦分層疊起來：HTML 提示管體驗、Worker 驗證管正確性、預備語句擋注入、Turnstile 擋機器人。單靠任一層都不夠。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="turnstile.html"><span class="material-symbols-rounded">arrow_forward</span>Turnstile</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="frontend-worker-d1-crud.html"><span class="material-symbols-rounded">arrow_forward</span>前端 ↔ Worker ↔ D1 CRUD</a></div><a class="docs-btn" href="https://developers.cloudflare.com/d1/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

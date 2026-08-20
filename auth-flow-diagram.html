@@ -32,7 +32,91 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "各種登入授權流程圖解", "description": "用一張張循序圖,一步步看懂四種常見的登入與授權流程到底是怎麼運作的。", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/auth-flow-diagram.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="auth-flow-diagram">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">key</span></span><h1 class="lhero__title">各種登入授權流程圖解</h1></div><p class="lhero__tagline">SSO、session cookie、JWT bearer 權杖、OAuth —— 每一種都畫成看得懂的圖。</p><div class="lhero__stats"><div class="lhero__stat"><b>4</b><span>流程圖解</span></div><div class="lhero__stat"><b>5</b><span>Mermaid 圖</span></div><div class="lhero__stat"><b>0 code</b><span>Access SSO 免寫程式</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要圖解什麼?</a><a href="#sso" data-toc="sso"><span class="material-symbols-rounded">badge</span>1. Cloudflare Access SSO</a><a href="#session" data-toc="session"><span class="material-symbols-rounded">cookie</span>2. Session cookie 登入</a><a href="#jwt" data-toc="jwt"><span class="material-symbols-rounded">token</span>3. JWT bearer 權杖 API 驗證</a><a href="#oauth" data-toc="oauth"><span class="material-symbols-rounded">link</span>4. OAuth 第三方登入</a><a href="#when" data-toc="when"><span class="material-symbols-rounded">target</span>什麼時候用哪一種?</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點術語</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>小提示與陷阱</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要圖解什麼?</h2></div><p class="lead">登入驗證之所以難懂,是因為最關鍵的步驟都「看不見」—— 它們發生在瀏覽器、你的伺服器、身分提供者之間。這篇把四種最常見的登入流程畫成循序圖(sequence diagram),讓你親眼看到:誰跟誰說話、順序是什麼、中間傳了什麼東西。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">lightbulb</span></span><div class="callout__body"><p class="callout__title">驗證(Authentication) vs 授權(Authorization)</p><p class="callout__text">驗證(authentication)回答的是「你是誰?」(在門口出示證件);授權(authorization)回答的是「你被允許做什麼?」(你的票能不能進 VIP 室)。底下每一種流程,都是先做一次驗證,之後每次請求再帶著「我已驗證過」的憑證。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>我該用哪一種登入流程?</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  Start[&quot;誰要登入?&quot;] --&gt; Q1{&quot;內部團隊用的應用程式?&quot;}
+  Q1 --&gt;|&quot;是&quot;| A[&quot;Cloudflare Access SSO&quot;]
+  Q1 --&gt;|&quot;否&quot;| Q2{&quot;有登入頁的網頁應用?&quot;}
+  Q2 --&gt;|&quot;伺服器 session&quot;| S[&quot;Session cookie&quot;]
+  Q2 --&gt;|&quot;API 或手機 App&quot;| J[&quot;JWT bearer 權杖&quot;]
+  Q2 --&gt;|&quot;用 Google 登入&quot;| O[&quot;OAuth 第三方&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="sso"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">badge</span></span><h2>1. Cloudflare Access SSO</h2></div><p>SSO(Single Sign-On,單一登入)是指:你只在一個身分提供者登入一次,之後就能進到很多應用程式、不用重複登入。用 Cloudflare Access 時,Cloudflare 會擋在你的應用程式前面、把整個登入流程包辦掉 —— 你完全不用自己寫驗證程式碼。登入後,Cloudflare 會給瀏覽器一個「已簽章的 cookie」,讓你的應用程式可以信任。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>Access SSO 登入</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;瀏覽器&quot;
+  participant CF as &quot;Cloudflare Access&quot;
+  participant IdP as &quot;身分提供者&quot;
+  participant App as &quot;你的應用程式&quot;
+  U-&gt;&gt;CF: 打開應用程式網址
+  CF-&gt;&gt;U: 沒有登入狀態,導回登入頁
+  U-&gt;&gt;IdP: 用 Google 登入
+  IdP--&gt;&gt;CF: 身分確認成功
+  CF-&gt;&gt;U: 發出已簽章的 Access cookie
+  U-&gt;&gt;App: 帶著 Access cookie 發出請求
+  App-&gt;&gt;CF: 驗證這個 cookie
+  CF--&gt;&gt;App: 權杖有效
+  App--&gt;&gt;U: 顯示受保護的頁面"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">verified_user</span></span><div class="callout__body"><p class="callout__title">為什麼團隊愛用它</p><p class="callout__text">你的應用程式永遠看不到密碼,你也不用寫任何登入邏輯。Cloudflare 負責執行政策(誰能進),只把「已驗證」的請求轉給你。拿來保護內部儀表板、後台管理頁面最適合。</p></div></div></section><section class="lsec reveal" data-item="" id="session"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">cookie</span></span><h2>2. Session cookie 登入</h2></div><p>session(連線階段)是伺服器對「某一位已登入訪客」的記憶。登入成功後,伺服器會存一筆 session 紀錄(這裡放在 Workers KV),並發給瀏覽器一個 cookie,裡面只放一串隨機的 session id。瀏覽器之後每次請求都會自動帶上這個 cookie,伺服器再用這個 id 去查出「你是誰」。這是傳統伺服器渲染網頁最經典的流程。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>Session cookie 生命週期</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;瀏覽器&quot;
+  participant W as &quot;Worker&quot;
+  participant KV as &quot;Workers KV&quot;
+  U-&gt;&gt;W: 送出 email 和密碼
+  W-&gt;&gt;W: 驗證密碼
+  W-&gt;&gt;KV: 建立並儲存一筆 session
+  KV--&gt;&gt;W: 已儲存
+  W--&gt;&gt;U: 回傳 session cookie
+  Note over U,W: 下一次請求會自動帶上 cookie
+  U-&gt;&gt;W: 帶 cookie 取得儀表板
+  W-&gt;&gt;KV: 用 session id 查詢
+  KV--&gt;&gt;W: session 有效,回傳 user id
+  W--&gt;&gt;U: 渲染儀表板"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">lock</span></span><div class="callout__body"><p class="callout__title">把 cookie 顧好</p><p class="callout__text">把 cookie 設成 HttpOnly(JavaScript 讀不到)、Secure(只走 HTTPS)、SameSite(降低 CSRF 跨站偽造請求)。並給 KV 的 session 設一個 TTL(存活時間)讓它自動過期。cookie 本身不放任何使用者資料 —— 它只是一把查表用的鑰匙。</p></div></div></section><section class="lsec reveal" data-item="" id="jwt"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">token</span></span><h2>3. JWT bearer 權杖 API 驗證</h2></div><p>JWT(JSON Web Token)是一段「已簽章的字串」,裡面帶有 claims(聲明),例如 user id 和到期時間。因為它是用密鑰簽出來的,伺服器不用存任何東西就能信任它 —— 只要驗章就好。用戶端會把它放在 Authorization 標頭裡當作 bearer(持有者)權杖送出,意思是「誰持有這個權杖,誰就能進」。這是 API、單頁應用(SPA)、手機 App 最常用的流程。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>JWT bearer 權杖流程</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant C as &quot;用戶端&quot;
+  participant W as &quot;Worker API&quot;
+  C-&gt;&gt;W: 帶帳號密碼呼叫登入
+  W-&gt;&gt;W: 用密鑰簽出一個 JWT
+  W--&gt;&gt;C: 回傳 JWT
+  Note over C: 把權杖存在記憶體
+  C-&gt;&gt;W: 用 bearer 標頭取資料
+  W-&gt;&gt;W: 驗證 JWT 簽章
+  W--&gt;&gt;C: 回傳 JSON 資料"></div></figure><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">worker-verify-bearer.js</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>export default {
+  async fetch(req, env) {
+    const header = req.headers.get("Authorization") || "";
+    const [scheme, token] = header.split(" ");
+    if (scheme !== "Bearer" || !token) {
+      return new Response("Missing bearer token", { status: 401 });
+    }
+    const valid = await verifyJWT(token, env.JWT_SECRET);
+    if (!valid) return new Response("Invalid token", { status: 401 });
+    return Response.json({ ok: true, message: "Welcome back!" });
+  }
+};
+
+// Verify an HS256 JWT signature with the Web Crypto API
+async function verifyJWT(token, secret) {
+  const [head, body, sig] = token.split(".");
+  if (!head || !body || !sig) return false;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["verify"]
+  );
+  const signed = new TextEncoder().encode(head + "." + body);
+  const bytes = Uint8Array.from(
+    atob(sig.replace(/-/g, "+").replace(/_/g, "/")),
+    (c) =&gt; c.charCodeAt(0)
+  );
+  return crypto.subtle.verify("HMAC", key, bytes, signed);
+}</code></pre></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">schedule</span></span><div class="callout__body"><p class="callout__title">光驗簽章還不夠</p><p class="callout__text">簽章驗過之後,還要解開 payload(內容),如果 exp(到期時間)已經過了就拒絕。權杖要設短效期(幾分鐘到一小時),而密鑰要放在 Worker secret(密鑰)裡,絕對不要寫死在程式碼。</p></div></div></section><section class="lsec reveal" data-item="" id="oauth"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">link</span></span><h2>4. OAuth 第三方登入</h2></div><p>OAuth 讓使用者用「他原本就有的帳號」(例如 Google、GitHub)登入,而不用把密碼交給你的應用程式。你的應用程式把使用者導向提供者,使用者按下同意,提供者再帶著一組短效的「授權碼(code)」導回來。接著你的應用程式在伺服器端用這組 code 去換取存取權杖(access token)。底下這種「authorization code(授權碼)」流程,就是最安全、最推薦的做法。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>OAuth 授權碼流程</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;瀏覽器&quot;
+  participant App as &quot;你的應用程式&quot;
+  participant P as &quot;OAuth 提供者&quot;
+  U-&gt;&gt;App: 點選用 Google 登入
+  App-&gt;&gt;U: 導向 OAuth 提供者
+  U-&gt;&gt;P: 檢視並同意授權
+  P--&gt;&gt;U: 帶著授權碼導回
+  U-&gt;&gt;App: 把授權碼交給應用程式
+  App-&gt;&gt;P: 用授權碼換取權杖
+  P--&gt;&gt;App: 回傳存取權杖與個資
+  App--&gt;&gt;U: 完成登入,建立 session"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">shield</span></span><div class="callout__body"><p class="callout__title">瀏覽器拿到的是 code,不是 token</p><p class="callout__text">瀏覽器自始至終只看得到一次性的 code;真正的權杖是伺服器對伺服器去拿的,所以不會外洩。client secret(用戶端密鑰)要留在伺服器,並用 state 參數加上 PKCE 來擋掉偽造的 callback(回呼)。</p></div></div></section><section class="lsec reveal" data-item="" id="when"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">target</span></span><h2>什麼時候用哪一種?</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">badge</span></span><p class="icard__t">Access SSO</p><p class="icard__d">給自己團隊用的內部工具。不用寫登入程式碼 —— Cloudflare 替你守門,並決定誰能進。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cookie</span></span><p class="icard__t">Session cookie</p><p class="icard__d">傳統、伺服器渲染的網站,而且只有瀏覽器這一種用戶端。觀念簡單,也容易隨時讓登入失效。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">token</span></span><p class="icard__t">JWT bearer</p><p class="icard__d">API、單頁應用、手機 App,以及服務對服務的呼叫。無狀態(stateless)—— 不需要 session 儲存區。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">link</span></span><p class="icard__t">OAuth</p><p class="icard__d">讓使用者用 Google、GitHub 等帳號登入 —— 或在取得他們同意後,存取他們在那些服務上的資料。</p></div></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點術語</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">key</span></span><p class="icard__t">SSO 單一登入</p><p class="icard__d">Single Sign-On:登入一次,就能進到很多應用程式、不用重複登入。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">history</span></span><p class="icard__t">Session 連線階段</p><p class="icard__d">伺服器對「某一位已登入訪客」的紀錄,通常存在 KV 這類儲存區。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cookie</span></span><p class="icard__t">Cookie</p><p class="icard__d">瀏覽器存起來、每次請求都會自動再送出的一小段值 —— 這裡用來帶 session id。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">token</span></span><p class="icard__t">JWT</p><p class="icard__d">一個已簽章的 JSON 權杖,帶有 claims(user id、到期時間),伺服器不用查表就能信任。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">vpn_key</span></span><p class="icard__t">Bearer 權杖</p><p class="icard__d">用 'Authorization: Bearer &lt;token&gt;' 送出。誰持有它,就被當作已獲授權。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">link</span></span><p class="icard__t">OAuth</p><p class="icard__d">一套標準,讓你用別的服務的帳號登入,而不用把密碼分享出去。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>小提示與陷阱</h2></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">https</span></span><div class="callout__body"><p class="callout__title">一律走 HTTPS</p><p class="callout__text">cookie 和 bearer 權杖就像鑰匙 —— 誰複製到就能假冒使用者。HTTPS 能讓它們在傳輸途中不被偷看,而且只要網域掛在 Cloudflare 代理後面,預設就已開啟。</p></div></div><ul><li>能避免就別把原始 JWT 或 session id 存在 localStorage —— 用 HttpOnly cookie 對 XSS(跨站腳本)更安全。</li><li>在伺服器端「同時」驗證 JWT 的簽章「和」到期時間;絕對不要只信 payload 內容。</li><li>純內部工具的話,Cloudflare Access 常常能取代上面這一切,完全免寫驗證程式碼。</li><li>在登入表單加上 Turnstile,在機器人碰到你的密碼檢查之前就先擋掉。</li><li>給 session 和權杖設短效期,並做一個真正的登出 —— 會刪掉伺服器端的 session。</li></ul></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="access.html"><span class="material-symbols-rounded">arrow_forward</span>Cloudflare Access</a><a href="auth-fullstack.html"><span class="material-symbols-rounded">arrow_forward</span>全端身分驗證</a><a href="kv.html"><span class="material-symbols-rounded">arrow_forward</span>Workers KV</a><a href="turnstile.html"><span class="material-symbols-rounded">arrow_forward</span>Turnstile</a></div><a class="docs-btn" href="https://developers.cloudflare.com/cloudflare-one/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

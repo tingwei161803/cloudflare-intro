@@ -32,7 +32,122 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "用 Queues 打造事件驅動應用", "description": "接下請求、幾毫秒內回覆，再把慢工作交給佇列稍後處理——還帶批次、重試、死信佇列與冪等性。", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/event-driven-queues.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="event-driven-queues">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">conveyor_belt</span></span><h1 class="lhero__title">用 Queues 打造事件驅動應用</h1></div><p class="lhero__tagline">別再讓使用者乾等寄信、縮圖、同步。生產者 Worker 立刻回一句『收到了（202）』；消費者 Worker 之後成批清空佇列、失敗自動重試、無解的就丟進死信佇列。</p><div class="lhero__stats"><div class="lhero__stat"><b>202</b><span>立即回傳狀態碼</span></div><div class="lhero__stat"><b>100</b><span>每批訊息數</span></div><div class="lhero__stat"><b>≤100</b><span>自動重試上限</span></div><div class="lhero__stat"><b>$0</b><span>流出流量費</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要把什麼串起來？</a><a href="#roles" data-toc="roles"><span class="material-symbols-rounded">account_tree</span>各個角色與它們的職責</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>跟著一個請求走：先回 202，工作稍後做</a><a href="#reliability" data-toc="reliability"><span class="material-symbols-rounded">shield</span>重試、死信佇列與冪等性</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>親手做：生產者、消費者、設定</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點術語一次看懂</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>常見陷阱、限制與計費</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要把什麼串起來？</h2></div><p class="lead">有些工作很慢：寄一封 email、產生縮圖、把資料同步到別的系統。如果你在使用者等待時才做，頁面會卡卡的，而且一個小閃失就把工作弄丟了。事件驅動（event-driven）設計同時解決這兩個問題：請求只先記下『這件事要做』就立刻返回；真正的工作之後在背景可靠地進行。</p><p>在 Cloudflare 上，把它們黏起來的膠水就是 Queues——一條可靠的訊息排隊線。生產者（producer）Worker 接下請求，把一則訊息丟進佇列；消費者（consumer）Worker 之後被叫來，帶著一批訊息做粗重工作（寫進 D1、把檔案存到 R2、呼叫外部 API）。這兩個 Worker 從不直接互相呼叫，佇列就坐在中間。這種分離就叫做「解耦（decoupling）」。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">local_post_office</span></span><div class="callout__body"><p class="callout__title">把它想成寄物櫃</p><p class="callout__text">你把外套交出去，幾秒就拿到一張號碼牌——你不用站在那裡等它被掛好。之後，後場的工作人員會成批把外套掛起來。那張號碼牌就是你的保證：就算你已經走開了，工作還是會被完成。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>整條管線一眼看懂</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  REQ[&quot;進來的請求&quot;] --&gt;|&quot;POST /upload&quot;| P[&quot;生產者 Worker&quot;]
+  P --&gt;|&quot;send(msg)&quot;| Q[&quot;佇列&quot;]
+  P --&gt;|&quot;202 Accepted&quot;| REQ
+  Q --&gt;|&quot;成批取出&quot;| C[&quot;消費者 Worker&quot;]
+  C --&gt;|&quot;寫入資料列&quot;| D1[&quot;D1 資料庫&quot;]
+  C --&gt;|&quot;存檔案&quot;| R2[&quot;R2 儲存&quot;]
+  C --&gt;|&quot;呼叫 API&quot;| EXT[&quot;外部 API&quot;]"></div></figure><p>注意從生產者出發有兩個箭頭：一個進入佇列（送出訊息）；另一個直接回到呼叫端，回傳 202 Accepted——而且是在任何慢工作開始之前。這個分岔，就是事件驅動應用的核心。</p></section><section class="lsec reveal" data-item="" id="roles"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>各個角色與它們的職責</h2></div><p>事件驅動流程裡有五個你會一直碰到的概念：生產者、佇列、消費者，再加上可靠度三寶——批次、重試、死信佇列。下面用一句話講清楚每一個。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">outbox</span></span><p class="icard__t">Producer（生產者）</p><p class="icard__d">接下請求、呼叫 env.MY_QUEUE.send(msg) 的那個 Worker。它立刻返回，不等工作做完。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">inbox</span></span><p class="icard__t">Consumer（消費者）</p><p class="icard__d">Cloudflare 在背景帶著一批訊息來呼叫的 queue() 處理函式，負責真正去處理工作。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">inventory_2</span></span><p class="icard__t">Batch（批次）</p><p class="icard__d">一次最多 100 則訊息一起交給消費者，讓大量工作（寫 DB、呼叫 API）效率高很多。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">replay</span></span><p class="icard__t">Retry（重試）</p><p class="icard__d">訊息失敗時，Queues 會自動重新投遞——最多到 max_retries 次——讓暫時性的錯誤自我修復。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">report</span></span><p class="icard__t">死信佇列（DLQ）</p><p class="icard__d">訊息用完所有重試後會落到的另一個佇列，所以永遠不會弄丟——你之後可以檢查並重新處理它們。</p></div></div><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">bolt</span></span><div class="callout__body"><p class="callout__title">一個 Worker 可身兼兩職</p><p class="callout__text">同一個 Worker 可以同時匯出 fetch（生產者）和 queue（消費者）。它們住在同一個專案，但在不同時間執行：fetch 在每次請求時跑，queue 之後在背景跑。下面把它們拆成兩個檔案，只是為了讓角色更清楚。</p></div></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>跟著一個請求走：先回 202，工作稍後做</h2></div><p>想像一個註冊表單。使用者送出後，我們欠他一封歡迎信。訣竅是：工作一進佇列就回 202 Accepted，之後再寄信。下面是完整的來回——注意使用者在信還沒寄出之前，就已經被放走了。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>請求幾毫秒返回；email 非同步寄出</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;用戶端&quot;
+  participant P as &quot;生產者&quot;
+  participant Q as &quot;佇列&quot;
+  participant C as &quot;消費者&quot;
+  participant X as &quot;信件服務&quot;
+  U-&gt;&gt;P: POST /signup
+  P-&gt;&gt;Q: 把寄信工作丟進佇列
+  P--&gt;&gt;U: 202 Accepted
+  Note over U,P: 請求幾毫秒就結束
+  Q-&gt;&gt;C: 稍後成批投遞
+  C-&gt;&gt;X: 寄出 email
+  X--&gt;&gt;C: 已送達
+  C-&gt;&gt;C: ack 確認訊息"></div></figure><h3>每一步在做什麼</h3><ul><li>POST /signup：瀏覽器把表單送到生產者 Worker。</li><li>把寄信工作丟進佇列：生產者呼叫 send()，丟出一則描述這份工作的訊息。</li><li>202 Accepted：生產者馬上回應——『202』的意思是『我收下了，之後會處理』。</li><li>稍後成批投遞：訊息備妥時，Cloudflare 帶著一批訊息來呼叫消費者。</li><li>寄出 email：消費者向信件服務做真正的慢工作。</li><li>ack 確認訊息：成功後消費者送出確認，訊息就永遠離開佇列了。</li></ul><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">schedule</span></span><div class="callout__body"><p class="callout__title">為什麼是 202，不是 200？</p><p class="callout__text">200 OK 通常表示『做完了』。在這裡，202 Accepted 才是誠實的答案：請求已被接受、會以非同步（asynchronously）方式處理——結果還沒好。它告訴用戶端：別期待在這個回應裡拿到完成的工作。</p></div></div></section><section class="lsec reveal" data-item="" id="reliability"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">shield</span></span><h2>重試、死信佇列與冪等性</h2></div><p>背景工作有時會失敗——信件伺服器掛了、API 逾時。Queues 用一條簡單規則處理：訊息會一直活著，直到被 ack 為止。如果處理時丟出錯誤（或你呼叫 retry()），訊息之後會被重新投遞。失敗達到 max_retries 次後，它會被移到死信佇列（DLQ），而不是被丟掉。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>成功 → ack；失敗 → 重試 → N 次後進 DLQ</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  M[&quot;訊息被投遞&quot;] --&gt; PROC[&quot;消費者開始處理&quot;]
+  PROC --&gt; OK{&quot;成功？&quot;}
+  OK --&gt;|&quot;是&quot;| ACK[&quot;ack：移出佇列&quot;]
+  OK --&gt;|&quot;否&quot;| RT{&quot;次數 &lt; max_retries？&quot;}
+  RT --&gt;|&quot;是&quot;| WAIT[&quot;稍等後重新投遞&quot;]
+  WAIT --&gt; PROC
+  RT --&gt;|&quot;否&quot;| DLQ[&quot;死信佇列 DLQ&quot;]
+  DLQ --&gt; SEE[&quot;檢查並告警&quot;]"></div></figure><h3>冪等性：扛得住重複</h3><p>Queues 是「至少一次（at-least-once）」投遞：同一則訊息偶爾可能被投遞超過一次（例如消費者處理成功了，卻在 ack 之前當機）。所以你的處理函式必須是「冪等的（idempotent）」——用同一則訊息跑兩次，結果要跟跑一次一樣。經典做法：給每則訊息一個唯一 id，把做完的 id 記下來，遇到已經看過的 id 就略過。</p><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">content_copy</span></span><div class="callout__body"><p class="callout__title">假設每則訊息都可能來兩次</p><p class="callout__text">少了冪等性檢查，一次重試就可能寄出兩封歡迎信、或刷兩次卡。動手之前先問『這個 id 我是不是處理過了？』——如果是，直接 ack 然後跳過。這一道防線，讓你可以安心依賴重試與 DLQ。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>親手做：生產者、消費者、設定</h2></div><p>下面是一個完整、可跑的範例：一個把工作丟進佇列並回 202 的生產者 Worker、一個成批冪等處理並 ack 的消費者 Worker、把佇列接好（含重試與 DLQ）的 wrangler.toml、追蹤已完成 id 的 D1 資料表，以及把所有東西建好並部署的指令。</p><ol class="steps"><li class="step"><p class="step__t">1. 生產者 Worker — 接下請求、回 202</p><p class="step__d">每次請求時，它建一則帶唯一 id 的訊息，透過 MY_QUEUE 綁定送進佇列，然後立刻回 202。這裡不做任何慢工作。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/producer.js
+export default {
+  // PRODUCER: runs on every HTTP request
+  async fetch(request, env, ctx) {
+    const { email } = await request.json();
+
+    // Build a job with a unique id (used later for idempotency)
+    const msg = {
+      id: crypto.randomUUID(),
+      type: "welcome_email",
+      email,
+      ts: Date.now(),
+    };
+
+    // Hand the slow work to the queue, then reply immediately
+    await env.MY_QUEUE.send(msg);
+
+    return new Response(JSON.stringify({ queued: true }), {
+      status: 202,
+      headers: { "content-type": "application/json" },
+    });
+  },
+};</code></pre></div></li><li class="step"><p class="step__t">2. 消費者 Worker — 成批處理並 ack</p><p class="step__d">Cloudflare 帶著一批訊息呼叫 queue()。我們對 batch.messages 跑迴圈，略過已完成的 id（冪等），做慢工作，成功就 ack、失敗就 retry。失敗的訊息會被重新投遞，達到 max_retries 後自動進 DLQ。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/consumer.js
+export default {
+  // CONSUMER: Cloudflare calls this with a batch of messages
+  async queue(batch, env, ctx) {
+    for (const m of batch.messages) {
+      try {
+        const job = m.body;
+
+        // Idempotency: skip if this id was already handled
+        const done = await env.DB
+          .prepare("SELECT 1 FROM processed WHERE id = ?")
+          .bind(job.id)
+          .first();
+        if (done) {
+          m.ack();
+          continue;
+        }
+
+        // Do the slow work: send the email
+        await sendEmail(env, job.email);
+
+        // Record the id so a retry never sends twice
+        await env.DB
+          .prepare("INSERT INTO processed (id, ts) VALUES (?, ?)")
+          .bind(job.id, Date.now())
+          .run();
+
+        m.ack(); // success -&gt; remove from the queue
+      } catch (err) {
+        m.retry(); // failure -&gt; redeliver later, then DLQ
+      }
+    }
+  },
+};</code></pre></div></li><li class="step"><p class="step__t">3. wrangler.toml — 接好生產者、消費者與 DLQ</p><p class="step__d">queues.producers 把佇列以 env.MY_QUEUE 的名義開放給你的程式碼。queues.consumers 告訴 Cloudflare 用一批批訊息來呼叫 queue()，並設定批次大小、重試次數，以及用盡重試的訊息要落到的 dead_letter_queue。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">toml</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>name = "queue-app"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# PRODUCER: send to the "jobs" queue as env.MY_QUEUE
+[[queues.producers]]
+queue = "jobs"
+binding = "MY_QUEUE"
+
+# CONSUMER: Cloudflare invokes queue() with batches from "jobs"
+[[queues.consumers]]
+queue = "jobs"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 3
+dead_letter_queue = "jobs-dlq"
+
+# D1 used for idempotency bookkeeping (env.DB)
+[[d1_databases]]
+binding = "DB"
+database_name = "queue-app-db"
+database_id = "&lt;paste-your-database-id&gt;"</code></pre></div></li><li class="step"><p class="step__t">4. D1 資料表 — 記住已完成的 id</p><p class="step__d">一張以訊息 id 為主鍵的小表。消費者做完後插入一列，並在動手前先查這張表，讓它在重試與重複投遞之間保持冪等。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>-- schema.sql
+CREATE TABLE IF NOT EXISTS processed (
+  id  TEXT PRIMARY KEY,
+  ts  INTEGER NOT NULL
+);</code></pre></div></li><li class="step"><p class="step__t">5. 建立佇列 + DLQ，然後部署</p><p class="step__d">建立主佇列和死信佇列（它就是另一個普通佇列），建立 D1 資料庫、載入 schema、部署，再用 tail 即時看到訊息被消費的過程。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler queues create jobs
+npx wrangler queues create jobs-dlq
+npx wrangler d1 create queue-app-db
+npx wrangler d1 execute queue-app-db --remote --file=./schema.sql
+npx wrangler deploy
+npx wrangler tail</code></pre></div></li></ol><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">north_east</span></span><div class="callout__body"><p class="callout__title">下一步：真正的圖片管線</p><p class="callout__text">把『寄信』換成『把上傳的圖縮圖並存到 R2』，你就有了一條媒體管線。姊妹藍圖用 R2 與 Images 從頭到尾串好的正是這個。</p></div></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點術語一次看懂</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">schedule</span></span><p class="icard__t">非同步（Async）</p><p class="icard__d">稍後才發生、而不是讓呼叫端乾等的工作。回應會在工作完成之前就先回來。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">link_off</span></span><p class="icard__t">解耦（Decoupling）</p><p class="icard__d">生產者與消費者不直接互相呼叫，佇列坐在中間，所以兩邊可以各自失敗、各自擴展、各自部署。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">inventory_2</span></span><p class="icard__t">批次（Batch）</p><p class="icard__d">一次最多 100 則訊息一起送來，讓批量操作比一則一則做高效許多。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">replay</span></span><p class="icard__t">重試（Retry）</p><p class="icard__d">失敗訊息的自動重新投遞，最多到 max_retries，讓暫時性錯誤不用寫程式就能復原。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">fingerprint</span></span><p class="icard__t">冪等性（Idempotency）</p><p class="icard__d">同一則訊息處理兩次，結果跟處理一次一樣。一個唯一 id 加上『看過了嗎』的檢查，就讓重試變安全。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">report</span></span><p class="icard__t">死信佇列（DLQ）</p><p class="icard__d">一個專門承接『用盡所有重試』訊息的另一個佇列，讓任何東西都不會默默消失。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>常見陷阱、限制與計費</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">report</span></span><div class="callout__body"><p class="callout__title">一定要設一個 DLQ</p><p class="callout__text">沒有死信佇列，一直失敗的訊息在重試用完後就被丟掉。有了它，這些訊息會待在一個你能檢查、修 bug、再重新處理的地方。把 DLQ 當成你的安全網，而不是事後才想到的東西。</p></div></div><h3>初學者常踩的雷</h3><ul><li>忘了 ack：沒被 ack 的訊息會被當成失敗、重新投遞——成功時記得呼叫 m.ack()。</li><li>沒有冪等：至少一次投遞代表會出現重複；每個副作用都要用唯一 id 檢查擋一下。</li><li>把慢工作塞進生產者：讓 fetch() 保持快——只 send() 然後回 202，粗重工作交給消費者。</li><li>批次太小：調整 max_batch_size 與 max_batch_timeout，讓消費者高效處理，而不是一則一則做。</li><li>忽略 DLQ：訊息可能默默躺在那裡——加個告警或定期檢查，才會發現失敗。</li></ul><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">savings</span></span><div class="callout__body"><p class="callout__title">值得記住的限制</p><p class="callout__text">最大訊息 128 KB；每批最多 100 則（或合計 256 KB）；每佇列最多 5,000 則/秒；重試最多 100 次。Queues 永不收 egress（流出）費用，免費與付費方案都能用（免費方案訊息保留 24 小時）。上線前請到官方文件確認最新數字。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="queues.html"><span class="material-symbols-rounded">arrow_forward</span>Queues</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="r2.html"><span class="material-symbols-rounded">arrow_forward</span>R2</a><a href="blueprint-image-pipeline.html"><span class="material-symbols-rounded">arrow_forward</span>圖片管線藍圖</a></div><a class="docs-btn" href="https://developers.cloudflare.com/queues/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

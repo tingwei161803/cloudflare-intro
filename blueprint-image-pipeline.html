@@ -32,7 +32,197 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "架構藍圖：圖片上傳與處理流水線", "description": "先即時收下上傳，再用 R2、Queues、Images 與 D1 在背景把圖片最佳化", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/blueprint-image-pipeline.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="blueprint-image-pipeline">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">image</span></span><h1 class="lhero__title">架構藍圖：圖片上傳與處理流水線</h1></div><p class="lhero__tagline">處理使用者圖片的參考架構：上傳到 R2、把工作丟進佇列，讓消費者 Worker 用 Images 縮放轉檔、把變體寫回 R2、在 D1 記錄中繼資料，最後送出又快又最佳化的圖片。</p><div class="lhero__stats"><div class="lhero__stat"><b>202</b><span>即時收下</span></div><div class="lhero__stat"><b>async</b><span>非同步處理</span></div><div class="lhero__stat"><b>5</b><span>串接產品</span></div><div class="lhero__stat"><b>$0</b><span>R2 / Queues 流出費</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要蓋什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>每個角色負責什麼？</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>資料模型</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>隨時間推進的流程</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>動手蓋出來</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>小提示、陷阱與計費</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要蓋什麼？</h2></div><p class="lead">圖片處理很慢——把一張大照片縮放、轉檔可能要好幾秒。如果你讓使用者乾等著做完，上傳就會卡卡的，而且一出錯整個工作就沒了。這份藍圖把工作切成兩半：流水線的前半段收下檔案、立刻回應，後半段則在背景默默做粗重的事。</p><p>把兩半黏起來的關鍵是「佇列（queue）」。上傳 Worker 把原圖存進 R2（物件儲存），然後把一則很小的工作訊息丟進 Cloudflare Queues。另一個獨立的消費者 Worker 之後再把那則工作取出來，用 Cloudflare Images 把圖片最佳化、把變體寫回 R2，並把結果記在 D1（一個 SQL 資料庫）裡。這就是經典的「生產者—消費者（producer–consumer）」模式。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">dry_cleaning</span></span><div class="callout__body"><p class="callout__title">把它想成…</p><p class="callout__text">乾洗店。你把襯衫交出去，馬上拿到一張號碼牌（HTTP 202 +『pending 處理中』）——你不會站在那裡等它洗好。襯衫們掛在吊桿上排隊（佇列），店員在後場成批處理；等你的洗好，號碼牌就翻成『ready 完成』，你就能來取件。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>完整流水線</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  B[&quot;瀏覽器&quot;] --&gt;|&quot;上傳&quot;| W[&quot;上傳 Worker&quot;]
+  W --&gt;|&quot;存原圖&quot;| RO[(&quot;R2 原圖&quot;)]
+  W --&gt;|&quot;送工作&quot;| Q[&quot;Queues 佇列&quot;]
+  Q --&gt;|&quot;投遞批次&quot;| CW[&quot;消費者 Worker&quot;]
+  CW --&gt;|&quot;轉檔&quot;| IMG[&quot;Images 影像處理&quot;]
+  IMG --&gt;|&quot;變體&quot;| RV[(&quot;R2 變體圖&quot;)]
+  CW --&gt;|&quot;寫入一列&quot;| D1[(&quot;D1 中繼資料&quot;)]
+  RV --&gt;|&quot;送出&quot;| CDN[&quot;CDN 邊緣&quot;]
+  CDN --&gt;|&quot;最佳化圖片&quot;| B"></div></figure></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>每個角色負責什麼？</h2></div><p>流水線裡每個產品都只負責一件清楚的事。把職責切開正是系統可靠的關鍵：任何一塊變慢、或短暫出錯，都不會把其他部分一起拖垮。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">devices</span></span><p class="icard__t">瀏覽器（用戶端）</p><p class="icard__d">把原始檔案送給上傳 Worker，之後再依需要的尺寸請求最佳化後的圖片。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cloud_upload</span></span><p class="icard__t">上傳 Worker（生產者）</p><p class="icard__d">把原圖存進 R2、在 D1 新增一筆 pending 紀錄、把工作排進佇列，然後立刻回應 202。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">R2（物件儲存）</p><p class="icard__d">存放原始位元組與每一個產生的變體。CDN 讀取時不收流出（egress）費用。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">queue</span></span><p class="icard__t">Queues（緩衝佇列）</p><p class="icard__d">把『接下工作』和『執行工作』拆開。緩衝工作、成批投遞，並在失敗時自動重試。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">settings_suggest</span></span><p class="icard__t">消費者 Worker</p><p class="icard__d">每來一批就被喚醒，從 R2 讀原圖、操作 Images、寫入變體、更新 D1。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">auto_fix_high</span></span><p class="icard__t">Images（影像處理）</p><p class="icard__d">縮放、裁切並轉成 WebP/AVIF 等現代格式——真正做最佳化的那一步。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">schema</span></span><p class="icard__t">D1（中繼資料）</p><p class="icard__d">狀態的真實來源：有哪些圖、是否已完成、各有幾個變體。</p></div></div><h3>解耦的那條界線</h3><p>佇列是生產者與消費者之間的單向閥。生產者永遠不等消費者；消費者忙碌或失敗時，工作就乖乖排隊、稍後重試。兩邊都不需要知道對方是否健在。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>生產者—消費者解耦</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  P[&quot;上傳 Worker&quot;] --&gt;|&quot;送工作&quot;| Q[&quot;Queues 緩衝&quot;]
+  Q --&gt;|&quot;投遞批次&quot;| C[&quot;消費者 Worker&quot;]
+  C --&gt;|&quot;成功確認&quot;| Q
+  C --&gt;|&quot;失敗重試&quot;| Q"></div></figure></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>資料模型</h2></div><p>D1 追蹤每一張圖與它的變體。images 表是主要紀錄（id、R2 key、status、尺寸、變體數）；variants 表則每個產生的尺寸放一列，用 image_id 連回去。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>images 與 variants 表</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  IMAGES ||--o{ VARIANTS : &quot;產生&quot;
+  IMAGES {
+    text id PK
+    text key
+    text status
+    int width
+    int height
+    int variants
+  }
+  VARIANTS {
+    text id PK
+    text image_id FK
+    text label
+    text key
+    int width
+  }"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">info</span></span><div class="callout__body"><p class="callout__title">status 是心跳</p><p class="callout__text">因為工作是稍後才做的，前端不能假設一上傳圖片就好了。status 欄位（pending → ready → failed）讓 UI 可以輪詢、或先顯示轉圈圈，直到變體真的生出來。這就是『最終一致性（eventual consistency）』在實務上的樣子。</p></div></div><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><span class="codeblock__name">schema.sql</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>CREATE TABLE images (
+  id        TEXT PRIMARY KEY,
+  key       TEXT NOT NULL,
+  status    TEXT NOT NULL DEFAULT 'pending',
+  width     INTEGER,
+  height    INTEGER,
+  variants  INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE variants (
+  id        TEXT PRIMARY KEY,
+  image_id  TEXT NOT NULL REFERENCES images(id),
+  label     TEXT NOT NULL,
+  key       TEXT NOT NULL,
+  width     INTEGER NOT NULL
+);
+
+-- Fast lookups of jobs still waiting to be processed
+CREATE INDEX idx_images_status ON images (status);</code></pre></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>隨時間推進的流程</h2></div><p>由上往下看。關鍵時刻是那個 202 回應：上傳在任何處理發生之前就先返回了。界線以下的所有步驟，都是在背景非同步進行的。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>上傳 → 排隊 → 處理 → 完成</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant B as &quot;瀏覽器&quot;
+  participant W as &quot;上傳 Worker&quot;
+  participant R as &quot;R2&quot;
+  participant Q as &quot;Queues&quot;
+  participant C as &quot;消費者 Worker&quot;
+  participant I as &quot;Images&quot;
+  participant D as &quot;D1&quot;
+  B-&gt;&gt;W: 上傳檔案
+  W-&gt;&gt;R: 存入原始物件
+  W-&gt;&gt;D: 新增一列 狀態 pending
+  W-&gt;&gt;Q: 送出工作訊息
+  W--&gt;&gt;B: 202 已排入佇列
+  Note over Q,C: 背景非同步
+  Q-&gt;&gt;C: 投遞批次
+  C-&gt;&gt;R: 取出原圖
+  C-&gt;&gt;I: 縮放並轉檔
+  C-&gt;&gt;R: 寫入變體
+  C-&gt;&gt;D: 更新狀態 ready
+  Note over B: 稍後
+  B-&gt;&gt;W: 用 id 取圖
+  W-&gt;&gt;D: 讀取狀態與變體
+  W--&gt;&gt;B: 最佳化圖片"></div></figure></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>動手蓋出來</h2></div><p>你會建立三個資源（一個 R2 bucket、一個佇列、一個 D1 資料庫），把它們設成 binding（綁定），再寫一個生產者、一個消費者和一個小前端。Images binding 不需要建立資源——它是執行期就有的能力。</p><ol class="steps"><li class="step"><p class="step__t">建立資源</p><p class="step__d">一個 R2 bucket 同時放原圖與變體；一個佇列載送工作；一個 D1 資料庫存中繼資料。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler r2 bucket create user-images
+npx wrangler queues create image-jobs
+npx wrangler queues create image-jobs-dlq
+npx wrangler d1 create image-meta</code></pre></div></li><li class="step"><p class="step__t">設定綁定</p><p class="step__d">在 wrangler.jsonc 裡宣告 R2、佇列（同時當生產者與消費者）、D1 與 Images binding。死信佇列會接住一直失敗的工作。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">jsonc</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>{
+  "name": "image-pipeline",
+  "main": "src/index.js",
+  "compatibility_date": "2025-01-01",
+
+  "r2_buckets": [
+    { "binding": "IMAGES_BUCKET", "bucket_name": "user-images" }
+  ],
+  "queues": {
+    "producers": [
+      { "queue": "image-jobs", "binding": "IMAGE_QUEUE" }
+    ],
+    "consumers": [
+      {
+        "queue": "image-jobs",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+        "dead_letter_queue": "image-jobs-dlq"
+      }
+    ]
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "image-meta", "database_id": "&lt;your-d1-id&gt;" }
+  ],
+  "images": { "binding": "IMAGES" }
+}</code></pre></div></li><li class="step"><p class="step__t">建立資料表</p><p class="step__d">把 schema 套用到你的 D1 資料庫。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 execute image-meta --remote --file=./schema.sql</code></pre></div></li></ol><h3>前端 — 上傳檔案</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><span class="codeblock__name">upload.html</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;input type="file" id="file" accept="image/*" /&gt;
+&lt;button id="send"&gt;Upload&lt;/button&gt;
+
+&lt;script&gt;
+  document.getElementById("send").onclick = async () =&gt; {
+    const file = document.getElementById("file").files[0];
+
+    // Stream the raw bytes straight to the Upload Worker
+    const res = await fetch("/upload", {
+      method: "POST",
+      headers: { "content-type": file.type },
+      body: file,
+    });
+
+    const job = await res.json(); // { id, status: "pending" }
+    console.log("Queued job", job.id, "-&gt;", job.status);
+  };
+&lt;/script&gt;</code></pre></div><h3>生產者 — 收下並排隊</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">src/producer.js</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>export default {
+  // PRODUCER: store the upload, then enqueue a background job
+  async fetch(request, env, ctx) {
+    if (request.method !== "POST") {
+      return new Response("Use POST to upload", { status: 405 });
+    }
+
+    const id = crypto.randomUUID();
+    const key = `originals/${id}`;
+    const bytes = await request.arrayBuffer();
+    const contentType = request.headers.get("content-type") || "image/jpeg";
+
+    // 1) Save the ORIGINAL image to R2
+    await env.IMAGES_BUCKET.put(key, bytes, {
+      httpMetadata: { contentType },
+    });
+
+    // 2) Record metadata in D1 with status = pending
+    await env.DB.prepare(
+      "INSERT INTO images (id, key, status) VALUES (?, ?, 'pending')"
+    ).bind(id, key).run();
+
+    // 3) Enqueue a job and reply instantly (do NOT wait for processing)
+    await env.IMAGE_QUEUE.send({ id, key });
+
+    return Response.json({ id, status: "pending" }, { status: 202 });
+  },
+};</code></pre></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">fast_forward</span></span><div class="callout__body"><p class="callout__title">訊息要小</p><p class="callout__text">注意訊息只有 { id, key }——絕不放圖片位元組。佇列訊息上限是 128 KB，而位元組已經在 R2 裡了。工作只需要說明『要處理哪個物件』就好。</p></div></div><h3>消費者 — 處理整批</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">src/consumer.js</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>export default {
+  // CONSUMER: Cloudflare invokes this with a batch of queued jobs
+  async queue(batch, env, ctx) {
+    for (const message of batch.messages) {
+      try {
+        const { id, key } = message.body;
+
+        // 1) Read the original back from R2
+        const original = await env.IMAGES_BUCKET.get(key);
+        if (!original) {
+          message.ack(); // nothing to do
+          continue;
+        }
+
+        // 2) Build optimized variants with the Images binding
+        const sizes = [256, 1024];
+        const variantKeys = [];
+        for (const width of sizes) {
+          const result = await env.IMAGES
+            .input(original.body)
+            .transform({ width })
+            .output({ format: "image/webp" });
+
+          const variantKey = `variants/${id}/w${width}.webp`;
+          await env.IMAGES_BUCKET.put(variantKey, result.image());
+          variantKeys.push(variantKey);
+        }
+
+        // 3) Mark the row ready and record how many variants exist
+        await env.DB.prepare(
+          "UPDATE images SET status = 'ready', variants = ? WHERE id = ?"
+        ).bind(variantKeys.length, id).run();
+
+        message.ack(); // success — never deliver again
+      } catch (err) {
+        message.retry(); // failure — Queues will redeliver later
+      }
+    }
+  },
+};</code></pre></div><h3>送出 — Images 轉換網址</h3><p>你也可以用 Cloudflare Images 的轉換路徑，直接從網址即時縮放。瀏覽器只請求它需要的尺寸，CDN 再把結果快取在邊緣。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><span class="codeblock__name">serve.html</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;!-- Resize + convert on the fly with a transformation URL --&gt;
+&lt;!-- /cdn-cgi/image/&lt;options&gt;/&lt;source-path&gt; --&gt;
+
+&lt;img
+  src="https://media.example.com/cdn-cgi/image/width=512,quality=80,format=auto/variants/abc123/w1024.webp"
+  width="512"
+  alt="optimized photo"
+/&gt;</code></pre></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">call_split</span></span><p class="icard__t">非同步解耦</p><p class="icard__d">『接下工作』與『執行工作』被佇列隔開，所以後端再慢也不會拖慢上傳。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">sync_alt</span></span><p class="icard__t">生產者與消費者</p><p class="icard__d">生產者用 env.IMAGE_QUEUE.send() 送工作；消費者的 queue() 處理函式成批處理。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">restart_alt</span></span><p class="icard__t">冪等性</p><p class="icard__d">一則工作可能被送來不只一次，所以重跑必須安全——覆寫同樣的變體 key 即可。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">photo_library</span></span><p class="icard__t">變體（variants）</p><p class="icard__d">同一張圖預先產生的多種尺寸/格式（例如 256px WebP、1024px WebP），與原圖放在一起。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">report</span></span><p class="icard__t">死信佇列（DLQ）</p><p class="icard__d">工作用完重試後落腳的另一個佇列，讓失敗可被檢查，而不是無聲消失。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">hourglass_top</span></span><p class="icard__t">最終一致性</p><p class="icard__d">剛上傳時圖還沒好；status 欄位會告訴用戶端變體何時生出來。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>小提示、陷阱與計費</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">warning</span></span><div class="callout__body"><p class="callout__title">讓消費者保持冪等</p><p class="callout__text">Queues 保證『至少一次（at-least-once）』投遞，也就是同一則工作可能來兩次（例如重試之後）。請永遠寫入像 variants/&lt;id&gt;/w256.webp 這種固定的 key，這樣重跑只會覆寫——不會重複堆疊。</p></div></div><h3>值得記住的事</h3><ul><li>一定要設死信佇列（DLQ），讓一直失敗的工作落到你能檢查的地方，而不是憑空消失。</li><li>存好 status（pending / ready / failed），讓前端可以輪詢、或先顯示轉圈圈，直到變體生出來。</li><li>佇列訊息要小——只送 id 與 R2 key，絕不送圖片位元組（128 KB 訊息上限）。</li><li>R2 與 Queues 都不收流出（egress）費用；把產生的變體存起來，而不是每次請求都重新轉檔。</li><li>流量尖峰時，調整 max_batch_size 與 max_batch_timeout，在延遲與吞吐量之間取捨。</li></ul><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">savings</span></span><div class="callout__body"><p class="callout__title">成本花在哪</p><p class="callout__text">R2 收儲存空間加上操作次數（不收流出費）。Queues 以每百萬次操作計費。Images 以每次轉換或每張儲存圖片計費。這個設計最大的好處就是『快取變體』：你只付一次轉換的錢，之後就從 R2 經由 CDN 免費送出已存好的結果。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="r2.html"><span class="material-symbols-rounded">arrow_forward</span>R2</a><a href="images.html"><span class="material-symbols-rounded">arrow_forward</span>Images</a><a href="queues.html"><span class="material-symbols-rounded">arrow_forward</span>Queues</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="file-upload-r2.html"><span class="material-symbols-rounded">arrow_forward</span>直接上傳到 R2</a></div><a class="docs-btn" href="https://developers.cloudflare.com/queues/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

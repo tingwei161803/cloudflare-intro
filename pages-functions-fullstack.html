@@ -32,7 +32,114 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "用 Pages + Functions 部署全端應用", "description": "用同一個 Cloudflare Pages 專案，同時放前端網頁、跑後端 API", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/pages-functions-fullstack.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="pages-functions-fullstack">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">web</span></span><h1 class="lhero__title">用 Pages + Functions 部署全端應用</h1></div><p class="lhero__tagline">一個 git repo、一次部署：靜態網頁和 /api/* 後端一起上線。</p><div class="lhero__stats"><div class="lhero__stat"><b>1</b><span>個 repo 跑全端</span></div><div class="lhero__stat"><b>500</b><span>每月免費建置</span></div><div class="lhero__stat"><b>100</b><span>自訂網域</span></div><div class="lhero__stat"><b>25 MiB</b><span>單檔上限</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要串什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>各層的職責</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>從 git push 到請求上線</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>一步步動手做</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>小提示、陷阱與計費</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要串什麼？</h2></div><p class="lead">Cloudflare Pages 負責放你的前端（瀏覽器會下載的 HTML、CSS、JavaScript）。而 Pages Functions（Pages 函式）讓「同一個專案」也能跑後端程式碼——也就是你的 API。你只要把檔案丟進 functions/ 資料夾，每個檔案就會自動變成一條 API 路由，再綁定 D1 資料庫（SQL）或 KV 儲存（鍵值對），後端就能讀寫資料了。</p><p>重點在於：靜態網站和 API 住在同一個 repository（程式碼倉庫）裡、一起部署。打 / 會回傳靜態檔案；打 /api/hello 則會執行一個 Function。不用另外架伺服器，也不用維護第二條部署流程。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>專案結構與請求路由</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  USER[&quot;瀏覽器&quot;] --&gt; EDGE[&quot;Cloudflare 邊緣節點&quot;]
+  EDGE --&gt;|&quot;靜態路徑&quot;| STATIC[&quot;靜態檔案 (HTML/CSS/JS)&quot;]
+  EDGE --&gt;|&quot;/api/*&quot;| FN[&quot;functions/api/[[route]].js&quot;]
+  STATIC --&gt;|&quot;呼叫 /api/hello&quot;| FN
+  FN --&gt; DB[&quot;D1 資料庫 (env.DB)&quot;]
+  FN --&gt; KV[&quot;KV 命名空間 (env.CACHE)&quot;]"></div></figure><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">home_work</span></span><div class="callout__body"><p class="callout__title">把它想成…</p><p class="callout__text">一間「前面是店面、後面是辦公室」的店，全在同一個屋簷下。店面（靜態網頁）是客人看到的門面；後台辦公室（Functions）處理訂單、去翻檔案櫃（D1／KV）。一棟建築、一把鑰匙、一個地址。</p></div></div></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>各層的職責</h2></div><p>這是你實際會建立的資料夾。放在「建置輸出資料夾」（這裡是 public/）的東西，都會被當成靜態檔案直接送出；放在 functions/ 裡的，則會變成對應到某個網址的後端程式碼。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">text</span><span style="flex:1"></span><span class="codeblock__name">資料夾結構</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>my-fullstack-app/
+├── public/            # static front-end (served as-is)
+│   └── index.html
+├── functions/         # each file = one API route
+│   └── api/
+│       └── hello.js   # -&gt; /api/hello
+├── schema.sql         # D1 table + seed data
+└── wrangler.toml      # bindings + build output dir</code></pre></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">html</span></span><p class="icard__t">靜態前端</p><p class="icard__d">public/ 裡的檔案（HTML、CSS、JS、圖片）會被快取，並從 Cloudflare 全球邊緣節點直接送出。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">function</span></span><p class="icard__t">functions/ 就是你的 API</p><p class="icard__d">functions/api/hello.js 會自動回應 /api/hello。檔案的路徑，就等於網址的路徑。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cable</span></span><p class="icard__t">綁定（Bindings）</p><p class="icard__d">綁定就是一個有名字的把手（例如 env.DB、env.CACHE），把 Function 接到 D1 或 KV——不用連線字串、不用密碼。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">merge</span></span><p class="icard__t">一次部署</p><p class="icard__d">推上 git（或跑一行指令），靜態網站和 Functions 就會一起上線、掛在同一個網域下。</p></div></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>從 git push 到請求上線</h2></div><p>當你把 repo 連上 Pages 後，每次 push 都會觸發一次建置（build）。Pages 會編譯前端、把 functions/ 資料夾打包起來，然後一起部署。之後邊緣節點會「逐一請求」判斷：要回傳靜態檔案，還是執行一個 Function。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>推送、建置、部署、回應</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant Dev as &quot;開發者&quot;
+  participant Git as GitHub
+  participant Pages as &quot;Pages 建置&quot;
+  participant Edge as &quot;Cloudflare 邊緣&quot;
+  participant User as &quot;瀏覽器&quot;
+  Dev-&gt;&gt;Git: git push
+  Git-&gt;&gt;Pages: webhook 觸發建置
+  Pages-&gt;&gt;Pages: 執行建置指令
+  Pages-&gt;&gt;Edge: 部署靜態檔案 + Functions
+  User-&gt;&gt;Edge: GET /
+  Edge--&gt;&gt;User: index.html (靜態)
+  User-&gt;&gt;Edge: GET /api/hello
+  Edge--&gt;&gt;User: Function 回傳 JSON"></div></figure></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>一步步動手做</h2></div><p>我們會做一個小網頁去抓 /api/hello、一個從 D1 讀名字並用 KV 計數的 Function、把綁定設好、再部署。前端、Function、資料層三邊，全部塞進同一個專案。</p><ol class="steps"><li class="step"><p class="step__t">寫前端</p><p class="step__d">把這段放進 public/index.html。fetch('/api/hello') 是同源請求（same-origin）——不用處理 CORS、不用寫完整網址——因為 API 就住在同一個專案裡。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Hello Pages&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1 id="msg"&gt;Loading…&lt;/h1&gt;
+    &lt;script&gt;
+      // Same origin: the Function is at /api/hello in the SAME project
+      fetch("/api/hello")
+        .then((r) =&gt; r.json())
+        .then((data) =&gt; {
+          document.getElementById("msg").textContent = data.message;
+        })
+        .catch((err) =&gt; {
+          document.getElementById("msg").textContent = "Error: " + err;
+        });
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre></div></li><li class="step"><p class="step__t">寫 Function</p><p class="step__d">建立 functions/api/hello.js。匯出的 onRequest 會處理所有 HTTP 方法；context.env 就握著你的綁定。（想只處理單一方法，就用 onRequestGet／onRequestPost。）</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// functions/api/hello.js  -&gt;  GET/POST /api/hello
+export async function onRequest(context) {
+  // context.env carries your bindings (DB, CACHE) + vars + secrets
+  const { env } = context;
+
+  // Read one row from the D1 database bound as DB
+  const { results } = await env.DB
+    .prepare("SELECT name FROM greetings WHERE id = ?")
+    .bind(1)
+    .all();
+  const name = results[0]?.name ?? "world";
+
+  // Count visits in the KV namespace bound as CACHE
+  const hits = Number(await env.CACHE.get("hits")) + 1;
+  await env.CACHE.put("hits", String(hits));
+
+  return Response.json({ message: `Hello from ${name}!`, hits });
+}</code></pre></div></li><li class="step"><p class="step__t">建立資料層</p><p class="step__d">建立一個 D1 資料庫和一個 KV 命名空間，然後把資料表灌進去。先把下面的 SQL 存成 schema.sql。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>-- schema.sql: create the table the Function reads, then seed one row
+CREATE TABLE IF NOT EXISTS greetings (
+  id   INTEGER PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
+INSERT INTO greetings (id, name) VALUES (1, 'Taipei');</code></pre></div></li><li class="step"><p class="step__t">開好 D1 + KV</p><p class="step__d">Wrangler 會各印出一組 id——把它們複製到下一步的 wrangler.toml。--remote 代表對雲端上真正的資料庫執行。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 create my-app-db
+npx wrangler kv namespace create CACHE
+
+# seed the D1 table from your SQL file
+npx wrangler d1 execute my-app-db --remote --file=./schema.sql</code></pre></div></li><li class="step"><p class="step__t">把 D1 + KV 綁到專案</p><p class="step__d">wrangler.toml 告訴 Pages：要把哪些儲存以 env.DB、env.CACHE 的名字交給 Functions，以及哪個資料夾是靜態輸出。pages_build_output_dir 這一行，正是它被視為 Pages 設定的關鍵。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">toml</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>name = "my-fullstack-app"
+pages_build_output_dir = "./public"
+compatibility_date = "2025-01-01"
+
+# D1 -&gt; reachable in Functions as env.DB
+[[d1_databases]]
+binding = "DB"
+database_name = "my-app-db"
+database_id = "&lt;paste-your-d1-id&gt;"
+
+# KV -&gt; reachable in Functions as env.CACHE
+[[kv_namespaces]]
+binding = "CACHE"
+id = "&lt;paste-your-kv-id&gt;"</code></pre></div></li><li class="step"><p class="step__t">設定建置</p><p class="step__d">純 HTML 沒東西要編譯，所以建置指令留空、輸出設成 public/。如果是框架（Vite／React），就設好建置指令、把輸出指向 dist/。這些設定在 Pages 儀表板的 Settings &gt; Builds，或寫在 wrangler.toml 裡。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">text</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># Pages build settings (dashboard, or wrangler.toml)
+Build command:           (blank for plain static, or: npm run build)
+Build output directory:  public      # plain HTML/CSS/JS
+Root directory:          /
+
+# For a Vite / React app instead:
+#   Build command:          npm run build
+#   Build output directory: dist</code></pre></div></li><li class="step"><p class="step__t">兩種部署方式</p><p class="step__d">直接部署（direct deploy）會立刻把資料夾上傳。Git 連動才是正式做法：在儀表板把 repo 連一次、設好建置指令與輸出資料夾，之後每次 push 到正式分支，都會自動建置並部署。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># Option A: direct deploy (great for a quick first try)
+npx wrangler pages deploy ./public
+
+# Option B: git-connected (recommended)
+#   1. Push your repo to GitHub/GitLab
+#   2. Cloudflare dashboard &gt; Workers &amp; Pages &gt; Create &gt; Pages &gt; Connect to Git
+#   3. Set build command + output dir, add D1/KV bindings
+#   4. Every push to main now builds &amp; deploys automatically
+git push origin main</code></pre></div></li></ol></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><p>最常見的疑問：到底該用 Pages Functions，還是獨立的 Worker？下面這張圖給你一個快速判斷準則。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>Pages Functions 與獨立 Worker 怎麼選</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  Q[&quot;也要同時架網站嗎？&quot;] --&gt;|&quot;要：前端 + API&quot;| PF[&quot;用 Pages + Functions&quot;]
+  Q --&gt;|&quot;不用：只要 API&quot;| WK[&quot;用獨立的 Worker&quot;]
+  PF --&gt; ONE[&quot;一個 repo、一次部署&quot;]
+  WK --&gt; API[&quot;純後端服務&quot;]"></div></figure><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">compare_arrows</span></span><p class="icard__t">Pages 與 Workers 的差別</p><p class="icard__d">Pages 本質是「前端網站托管」，再外掛 Functions 當後端；Worker 則是「純程式碼」、本身不附帶靜態托管。其實 Pages Functions 底層就是跑在 Workers 上的。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">route</span></span><p class="icard__t">檔案即路由</p><p class="icard__d">functions/api/hello.js 對應 /api/hello。[id].js 只接一段路徑（例如 /users/42）；[[route]].js 是 catch-all，後面接幾層都吃得下。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">api</span></span><p class="icard__t">onRequest 處理器</p><p class="icard__d">匯出 onRequest 處理所有方法；或用 onRequestGet／onRequestPost／onRequestPut／onRequestDelete 各自對應一個 HTTP 動詞。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">deployed_code</span></span><p class="icard__t">context 物件</p><p class="icard__d">每個處理器都會拿到 context，裡面有 env（綁定）、params（動態路由的值）、request、next（中介層 middleware）和 waitUntil（背景工作）。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">vpn_key</span></span><p class="icard__t">用綁定，不用密碼</p><p class="icard__d">綁定讓 Function 透過 env.NAME 直接、已驗證地存取 D1／KV／R2。程式碼裡不會出現連線字串或密碼。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">layers</span></span><p class="icard__t">用 _middleware.js 做中介層</p><p class="icard__d">資料夾裡的 _middleware.js 會在該層路由之前先跑——很適合做驗證或記錄。呼叫 context.next() 就會繼續往下交給命中的 Function。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>小提示、陷阱與計費</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">report</span></span><div class="callout__body"><p class="callout__title">functions/ 資料夾是特別的</p><p class="callout__text">別把 functions/ 放進「建置輸出資料夾」裡。Pages 會「另外」讀 functions/ 來產生路由；如果你的前端建置流程清空或搬動了它，你的 /api/* 路由就會無聲無息地消失。</p></div></div><ul><li>綁定要在儀表板裡幫「正式（Production）」和「預覽（Preview）」兩個環境都各加一次，否則預覽部署在 env.DB 會炸出 undefined。</li><li>用這行在本機整包跑起來：npx wrangler pages dev ./public——它會把靜態檔案、Functions 和你的綁定一起服務。</li><li>Function 的呼叫次數會算進你的 Workers 額度：免費方案每天含 100,000 次請求。</li><li>免費方案：每月 500 次建置、每次部署最多 20,000 個檔案、單一檔案上限 25 MiB。</li><li>關聯式／SQL 資料用 D1；快速鍵值查找與快取用 KV；大型檔案則交給 R2。</li></ul><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">bolt</span></span><div class="callout__body"><p class="callout__title">先靜態，再長成全端</p><p class="callout__text">你今天可以先上一個純靜態網站，之後想加第一個後端，只要新增 functions/api/hello.js 就好。其他什麼都不用改——同一個專案、同一條部署。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="kv.html"><span class="material-symbols-rounded">arrow_forward</span>Workers KV</a><a href="rest-api-worker.html"><span class="material-symbols-rounded">arrow_forward</span>用 Worker 做 REST API</a></div><a class="docs-btn" href="https://developers.cloudflare.com/pages/functions/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

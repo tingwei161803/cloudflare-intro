@@ -32,7 +32,218 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "前端 ↔ Worker ↔ D1：完整 CRUD 串接", "description": "把網頁串到 Worker API，再接上 SQL 資料庫", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/frontend-worker-d1-crud.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="frontend-worker-d1-crud">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">sync_alt</span></span><h1 class="lhero__title">前端 ↔ Worker ↔ D1：完整 CRUD 串接</h1></div><p class="lhero__tagline">做一個真正能跑的待辦事項 App：用一個 HTML 頁面，透過一個 Worker 對雲端 SQL 資料庫做新增、讀取、更新、刪除。</p><div class="lhero__stats"><div class="lhero__stat"><b>3</b><span>層串接</span></div><div class="lhero__stat"><b>4</b><span>CRUD 動詞</span></div><div class="lhero__stat"><b>1</b><span>SQL 資料庫</span></div><div class="lhero__stat"><b>0</b><span>要管的伺服器</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要串什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>哪一層負責什麼？</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>資料模型</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>一次完整的往返</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>一步一步串起來</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>陷阱與計費</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要串什麼？</h2></div><p class="lead">CRUD 是 Create、Read、Update、Delete（新增、讀取、更新、刪除）的縮寫，幾乎每個 App 對資料都在做這四件事。這篇我們要做一個小小的待辦事項 App：瀏覽器跟 Worker（跑在 Cloudflare 邊緣上的小程式）講話，Worker 再去讀寫 D1 資料庫（一個以 SQLite 為底的無伺服器 SQL 資料庫）。</p><p>三層、一條資料流。前端永遠不會直接碰資料庫——它一律透過 Worker，而唯一拿著資料庫綁定（binding）的也只有 Worker。先看一下全貌：</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>架構：瀏覽器 → Worker → D1</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  B[&quot;瀏覽器（HTML / JS）&quot;] --&gt;|&quot;fetch /api/todos&quot;| W[&quot;Worker API&quot;]
+  W --&gt;|&quot;prepare().bind()&quot;| D[&quot;D1（SQLite）&quot;]
+  D --&gt;|&quot;資料列&quot;| W
+  W --&gt;|&quot;JSON 回應&quot;| B"></div></figure><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">restaurant</span></span><div class="callout__body"><p class="callout__title">把它想成一間餐廳</p><p class="callout__text">瀏覽器是點餐的客人，Worker 是把點單送進廩房、再把菜端出來的服務生，而 D1 就是存放所有食材（你的資料）的廩房。客人不會自己走進廩房——一律跟服務生點。</p></div></div></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>哪一層負責什麼？</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">web</span></span><p class="icard__t">前端（瀏覽器）</p><p class="icard__d">負責畫面並用 fetch() 呼叫 API。它只知道網址和 JSON 長什麼樣——完全不碰 SQL。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bolt</span></span><p class="icard__t">Worker（API）</p><p class="icard__d">接收 HTTP 請求、驗證輸入、依方法分流，透過 env.DB 綁定跑 SQL，再回傳 JSON。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">D1（資料庫）</p><p class="icard__d">存放 todos 資料表，安全地執行真正的 SELECT / INSERT / UPDATE / DELETE 語句。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">vpn_key</span></span><p class="icard__t">綁定（binding）</p><p class="icard__d">wrangler.toml 把 Worker 和 D1 以 env.DB 這個名字接起來——不用連線字串、也不用密碼。</p></div></div><p>四個 CRUD 動作都打到同一條 /api/todos 路徑；Worker 依 HTTP 方法（GET、POST、PUT、DELETE）決定要做什麼。一張圖看懂路由邏輯：</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>Worker 依 HTTP 方法路由</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  R[&quot;請求 /api/todos&quot;] --&gt; M{&quot;HTTP 方法？&quot;}
+  M --&gt;|GET| S1[&quot;SELECT * FROM todos&quot;]
+  M --&gt;|POST| S2[&quot;INSERT INTO todos&quot;]
+  M --&gt;|PUT| S3[&quot;UPDATE todos SET ...&quot;]
+  M --&gt;|DELETE| S4[&quot;DELETE FROM todos&quot;]
+  S1 --&gt; J[&quot;Response.json(...)&quot;]
+  S2 --&gt; J
+  S3 --&gt; J
+  S4 --&gt; J"></div></figure></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>資料模型</h2></div><p>我們的 App 只需要一張資料表：todos。每一列就是一件待辦事項。id 是主鍵（PK，用來唯一識別一列的號碼），title 是待辦內容，done 是 0 或 1（SQLite 沒有真正的布林型別，所以用整數代替），created_at 則是自動填上的時間戳記。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>todos 資料表（ER 圖）</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  TODOS {
+    integer id PK &quot;自動遞增&quot;
+    text title &quot;待辦內容&quot;
+    integer done &quot;0 或 1&quot;
+    text created_at &quot;建立時間&quot;
+  }"></div></figure><p>轉成 SQL，這張表長這樣。把它存成 schema.sql——下面的動手步驟會把它套用到 D1。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><span class="codeblock__name">schema.sql</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>CREATE TABLE IF NOT EXISTS todos (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  title      TEXT    NOT NULL,
+  done       INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT    NOT NULL DEFAULT (datetime('now'))
+);</code></pre></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>一次完整的往返</h2></div><p>我們跟蹤一次 Create 從頭到尾：使用者打完待辦事項、送出表單。瀏覽器發出 POST /api/todos（帶著 JSON 資料），Worker 驗證後跑 INSERT，D1 透過 RETURNING * 回傳剛建好的那一列，Worker 再把那筆 JSON 送回來，畫面就能馬上顯示。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>新增往返（POST）</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;瀏覽器&quot;
+  participant W as &quot;Worker&quot;
+  participant D as &quot;D1&quot;
+  U-&gt;&gt;W: POST /api/todos（title）
+  W-&gt;&gt;W: 驗證 title
+  W-&gt;&gt;D: INSERT INTO todos RETURNING *
+  D--&gt;&gt;W: 新資料列
+  W--&gt;&gt;U: 201 Created + JSON
+  U-&gt;&gt;U: 畫出新待辦事項"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">bolt</span></span><div class="callout__body"><p class="callout__title">為什麼用 RETURNING *？</p><p class="callout__text">沒有 RETURNING 的話，你得再跑一次 SELECT 才能拿到新的 id 跟 created_at。RETURNING * 讓你一個查詢就拿到整列資料——往返更少、程式更簡單。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>一步一步串起來</h2></div><p>跟著這七個步驟走，你就會有一個部署上線的全端待辦事項 App。你只需要裝好 Node.js；其他全都透過 npx wrangler（Cloudflare 的命令列工具）來跑。</p><ol class="steps"><li class="step"><p class="step__t">建立 D1 資料庫</p><p class="step__d">Wrangler 會印出一組 database_id——複製起來，下一步要貼進 wrangler.toml。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 create todo-db</code></pre></div></li><li class="step"><p class="step__t">把 D1 綁定到 Worker</p><p class="step__d">[[d1_databases]] 這段讓資料庫以 env.DB 的名字出現在 Worker 裡。把步驟 1 的 id 貼進來。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">toml</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>name = "todo-api"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "todo-db"
+database_id = "&lt;paste-your-id-here&gt;"</code></pre></div></li><li class="step"><p class="step__t">套用資料表結構</p><p class="step__d">把 schema.sql 跑在雲端真正的資料庫上。想先在本機測試的話，把 --remote 換成 --local。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 execute todo-db --remote --file=./schema.sql
+
+# quick check it worked
+npx wrangler d1 execute todo-db --remote --command "SELECT name FROM sqlite_master WHERE type='table';"</code></pre></div></li><li class="step"><p class="step__t">寫 Worker（src/index.js）</p><p class="step__d">一個 fetch 處理函式用 prepare().bind() 加上 .all() / .first() / .run()，把四個 CRUD 動詞全都路由到 D1。CORS 標頭則讓另一個來源（origin）的瀏覽器能呼叫這個 API。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const id = url.pathname.match(/^\/api\/todos\/(\d+)$/);
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type"
+    };
+
+    if (request.method === "OPTIONS") return new Response(null, { headers: cors });
+
+    try {
+      // READ: list every todo
+      if (url.pathname === "/api/todos" &amp;&amp; request.method === "GET") {
+        const { results } = await env.DB
+          .prepare("SELECT * FROM todos ORDER BY created_at DESC")
+          .all();
+        return json(results, 200, cors);
+      }
+
+      // CREATE: insert one todo
+      if (url.pathname === "/api/todos" &amp;&amp; request.method === "POST") {
+        const { title } = await request.json();
+        if (!title) return json({ error: "title required" }, 400, cors);
+        const row = await env.DB
+          .prepare("INSERT INTO todos (title) VALUES (?) RETURNING *")
+          .bind(title)
+          .first();
+        return json(row, 201, cors);
+      }
+
+      // UPDATE: toggle done or edit title
+      if (id &amp;&amp; request.method === "PUT") {
+        const { title, done } = await request.json();
+        const row = await env.DB
+          .prepare("UPDATE todos SET title = COALESCE(?, title), done = COALESCE(?, done) WHERE id = ? RETURNING *")
+          .bind(title ?? null, done ?? null, Number(id[1]))
+          .first();
+        return row ? json(row, 200, cors) : json({ error: "not found" }, 404, cors);
+      }
+
+      // DELETE: remove one todo
+      if (id &amp;&amp; request.method === "DELETE") {
+        const info = await env.DB
+          .prepare("DELETE FROM todos WHERE id = ?")
+          .bind(Number(id[1]))
+          .run();
+        return json({ deleted: info.meta.changes }, 200, cors);
+      }
+
+      return json({ error: "not found" }, 404, cors);
+    } catch (err) {
+      return json({ error: err.message }, 500, cors);
+    }
+  }
+};
+
+function json(data, status, cors) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json", ...cors }
+  });
+}</code></pre></div></li><li class="step"><p class="step__t">前端：四個 fetch 呼叫</p><p class="step__d">這幾個小函式跟 CRUD 一對一：GET 讀、POST 新增、PUT 更新、DELETE 刪除。把 API 指向你部署好的 Worker 網址。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>const API = "https://todo-api.&lt;your-subdomain&gt;.workers.dev/api/todos";
+
+// READ — GET all todos
+export async function listTodos() {
+  const res = await fetch(API);
+  return res.json();
+}
+
+// CREATE — POST a new todo
+export async function addTodo(title) {
+  const res = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title })
+  });
+  return res.json();
+}
+
+// UPDATE — PUT to toggle done (or edit title)
+export async function toggleTodo(id, done) {
+  const res = await fetch(`${API}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ done })
+  });
+  return res.json();
+}
+
+// DELETE — remove a todo
+export async function removeTodo(id) {
+  const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+  return res.json();
+}</code></pre></div></li><li class="step"><p class="step__t">接進網頁（index.html）</p><p class="step__d">一個完整、能跑的頁面：表單負責 POST 新增、清單負責 GET 讀取、勾選框負責 PUT 切換完成、按鈕負責 DELETE。用任何靜態伺服器打開即可。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-Hant"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;title&gt;Todo&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;My Todos&lt;/h1&gt;
+  &lt;form id="new"&gt;
+    &lt;input id="title" placeholder="What needs doing?" required /&gt;
+    &lt;button type="submit"&gt;Add&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;ul id="list"&gt;&lt;/ul&gt;
+
+  &lt;script type="module"&gt;
+    const API = "https://todo-api.&lt;your-subdomain&gt;.workers.dev/api/todos";
+
+    async function load() {
+      const todos = await (await fetch(API)).json();
+      const ul = document.getElementById("list");
+      ul.innerHTML = "";
+      for (const t of todos) {
+        const li = document.createElement("li");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.checked = !!t.done;
+        box.onchange = () =&gt; update(t.id, box.checked ? 1 : 0);
+        const span = document.createElement("span");
+        span.textContent = " " + t.title + " ";
+        const del = document.createElement("button");
+        del.textContent = "x";
+        del.onclick = () =&gt; remove(t.id);
+        li.append(box, span, del);
+        ul.appendChild(li);
+      }
+    }
+
+    async function update(id, done) {
+      await fetch(`${API}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ done })
+      });
+      load();
+    }
+
+    async function remove(id) {
+      await fetch(`${API}/${id}`, { method: "DELETE" });
+      load();
+    }
+
+    document.getElementById("new").addEventListener("submit", async (e) =&gt; {
+      e.preventDefault();
+      const title = document.getElementById("title").value.trim();
+      if (!title) return;
+      await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title })
+      });
+      e.target.reset();
+      load();
+    });
+
+    load();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div></li><li class="step"><p class="step__t">本機跑跑看，再部署</p><p class="step__d">wrangler dev 在本機跑 Worker；wrangler deploy 把它發布到全世界，並印出你上線的 workers.dev 網址。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># develop with live reload
+npx wrangler dev
+
+# ship it
+npx wrangler deploy</code></pre></div></li></ol></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">shield</span></span><p class="icard__t">預備語句</p><p class="icard__d">prepare("... ?").bind(value) 把使用者輸入和 SQL 文字分開，擋掉 SQL 注入攻擊。千萬不要用字串拼接來組 SQL。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">data_object</span></span><p class="icard__t">.all()、.first()、.run()</p><p class="icard__d">all() 回傳多列，first() 回傳一列（或 null），run() 用在只需要知道改了幾列的寫入操作。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">swap_horiz</span></span><p class="icard__t">HTTP 方法就是意圖</p><p class="icard__d">GET 讀、POST 新增、PUT/PATCH 更新、DELETE 刪除。同一網址、不同動詞——這就是 REST 的精髓。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">public</span></span><p class="icard__t">CORS（跨來源存取）</p><p class="icard__d">除非伺服器回以 Access-Control-* 標頭，否則瀏覽器會擋掉跨來源呼叫。這就是為什麼 Worker 每個回應都要加上它們。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cloud_sync</span></span><p class="icard__t">本機與遠端 D1</p><p class="icard__d">--local 打的是你磁碟上的 SQLite 檔、測試很快；--remote 打的是雲端真資料庫。兩邊是分開的，記得都要填資料。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">playlist_add_check</span></span><p class="icard__t">RETURNING *</p><p class="icard__d">SQLite 的功能，讓 INSERT/UPDATE 在同一查詢裡就把受影響的那列送回來——不用再 SELECT 一次。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>陷阱與計費</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">warning</span></span><div class="callout__body"><p class="callout__title">不要把 D1 直接露給瀏覽器</p><p class="callout__text">env.DB 綁定只存在於 Worker 內部。千萬不要想從前端 JavaScript 查 D1——一律走 Worker，讓驗證和權限判斷都留在伺服器端。</p></div></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">payments</span></span><div class="callout__body"><p class="callout__title">依列數計費，不看時間</p><p class="callout__text">D1 算的是讀取列數、寫入列數，再加上儲存量。免費額度每天給 500 萬列讀取、10 萬列寫入、加上 5 GB 儲存——做個待辦 App 綽綽有餘。</p></div></div><ul><li>在 Worker 裡先驗證輸入（例如拒絕空白的 title），再去碰資料庫。</li><li>在常用來篩選或排序的欄位上建索引（index），可以少讀很多列、同時省錢。</li><li>狀態碼要用得有意義：201 代表建立成功、404 找不到、400 輸入有誤。</li><li>記得 --local 與 --remote 的 D1 是兩個不同的資料庫；你在測哪個就要填哪個。</li><li>把前端放到 Cloudflare Pages，讓 HTML 和 API 共用同一個網域（連 CORS 都可以省）。</li></ul></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="rest-api-worker.html"><span class="material-symbols-rounded">arrow_forward</span>用 Worker 做 REST API</a><a href="form-to-database.html"><span class="material-symbols-rounded">arrow_forward</span>表單存進資料庫</a></div><a class="docs-btn" href="https://developers.cloudflare.com/d1/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

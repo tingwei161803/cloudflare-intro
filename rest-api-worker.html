@@ -32,7 +32,167 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "用 Workers 設計 REST API", "description": "在單一個 Worker 上打造乾淨的 HTTP 後端：用「方法 + 路徑」做路由、解析請求、回傳帶正確狀態碼的 JSON，並用 CORS 讓瀏覽器前端可以直接呼叫它。", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/rest-api-worker.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="rest-api-worker">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">api</span></span><h1 class="lhero__title">用 Workers 設計 REST API</h1></div><p class="lhero__tagline">這是「前端 ↔ 後端」裡的後端那一半：用一個 Worker 檔案，像正規的 REST API 一樣回應 GET、POST、PUT、DELETE。</p><div class="lhero__stats"><div class="lhero__stat"><b>4</b><span>CRUD 動詞</span></div><div class="lhero__stat"><b>1</b><span>個 Worker 檔</span></div><div class="lhero__stat"><b>0ms</b><span>冷啟動</span></div><div class="lhero__stat"><b>CORS</b><span>瀏覽器可直連</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要做什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>路由器怎麼做決定</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>瀏覽器呼叫的逐步流程</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>動手做</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>小提示與常見陷阱</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要做什麼？</h2></div><p class="lead">我們要在單一個 Cloudflare Worker 上做一個 REST API。所謂「REST API」（Representational State Transfer，表現層狀態轉換）其實就是前端跟後端「用 HTTP 要資料」的一套共同約定：你用一段網址路徑代表一種資源（例如 /api/users），再用一個 HTTP 方法（GET、POST、PUT、DELETE）表示你想對它做什麼。</p><p>整個後端就放在一個 Worker 裡。當一個請求進來，Worker 會讀兩樣東西——方法（method）跟路徑（path）——決定該跑哪一段處理程式，做完事，再回傳一個帶狀態碼的 JSON 回應。就這樣，連框架都不用。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>整體架構</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  B[&quot;瀏覽器前端 (fetch)&quot;] --&gt;|&quot;HTTP 請求&quot;| W[&quot;Worker REST API&quot;]
+  W --&gt; R[&quot;路由器 (方法 + 路徑)&quot;]
+  R --&gt; H1[&quot;GET 處理函式&quot;]
+  R --&gt; H2[&quot;POST 處理函式&quot;]
+  R --&gt; H3[&quot;PUT 處理函式&quot;]
+  R --&gt; H4[&quot;DELETE 處理函式&quot;]
+  H1 --&gt; J[&quot;JSON + 狀態碼&quot;]
+  H2 --&gt; J
+  H3 --&gt; J
+  H4 --&gt; J
+  J --&gt;|&quot;附上 CORS 標頭&quot;| B"></div></figure><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">restaurant_menu</span></span><div class="callout__body"><p class="callout__title">把它想成一家餐廳</p><p class="callout__text">網址路徑就像桌號（指哪一種資源），HTTP 方法就是你對服務生說的話：GET =「給我看菜單」、POST =「我要點這個」、PUT =「改一下我的餐點」、DELETE =「取消」。狀態碼則是服務生的回覆：200「好的給你」、201「已幫你下單」、404「我們沒有這個」。</p></div></div></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>路由器怎麼做決定</h2></div><p>在 Worker 內部，路由其實就是依據兩個從請求讀到的值來分流：request.method，以及 new URL(request.url) 取出的 pathname（路徑）。每一組「方法/路徑」對應到一個處理函式，每個處理函式都回傳一個帶有合適狀態碼的回應。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">front_hand</span></span><p class="icard__t">OPTIONS — 預檢</p><p class="icard__d">瀏覽器的 CORS 安全檢查。最先處理它，回 204 加上 CORS 標頭，再談後面的事。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">download</span></span><p class="icard__t">GET — 讀取</p><p class="icard__d">列出整批（/api/users）或拿單一筆（/api/users/:id）。回 200，找不到就回 404。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">add_circle</span></span><p class="icard__t">POST — 新增</p><p class="icard__d">讀取 JSON 內容、驗證、建立資源。回 201 Created，內容不合法就回 400。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">edit</span></span><p class="icard__t">PUT — 更新</p><p class="icard__d">用 :id 找到該筆並替換欄位。回 200、輸入不對回 400、找不到回 404。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">delete</span></span><p class="icard__t">DELETE — 刪除</p><p class="icard__d">用 :id 刪掉該筆。刪掉了回 200，本來就沒有就回 404。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">block</span></span><p class="icard__t">其他情況</p><p class="icard__d">不認識的路徑回 404；路徑存在但方法不對，回 405 Method Not Allowed（方法不允許）。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>請求路由器</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  REQ[&quot;收到請求&quot;] --&gt; M{&quot;method?&quot;}
+  M --&gt;|OPTIONS| CORS[&quot;204 + CORS 標頭&quot;]
+  M --&gt;|GET| P{&quot;path?&quot;}
+  M --&gt;|POST| C[&quot;新增 → 201 / 400&quot;]
+  M --&gt;|PUT| U[&quot;更新 → 200 / 400 / 404&quot;]
+  M --&gt;|DELETE| D[&quot;刪除 → 200 / 404&quot;]
+  M --&gt;|other| NA[&quot;405 方法不允許&quot;]
+  P --&gt;|&quot;/api/users&quot;| LIST[&quot;列出 → 200&quot;]
+  P --&gt;|&quot;/api/users/:id&quot;| ONE[&quot;單筆 → 200 / 404&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>瀏覽器呼叫的逐步流程</h2></div><p>當某個網域上的網頁去呼叫另一個網域的 API 時，瀏覽器會執行 CORS（Cross-Origin Resource Sharing，跨來源資源共用）——這是一條保護使用者、避免被偷偷跨站請求的規則。對某些請求，瀏覽器會先送出一個「預檢（preflight）」：一個 OPTIONS 請求，問 API「你同意我呼叫你嗎？」。只有當 API 回應正確的 Access-Control-* 標頭，瀏覽器才會送出真正的請求。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>先預檢再 GET</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant B as 瀏覽器
+  participant W as &quot;Worker API&quot;
+  Note over B,W: CORS 預檢
+  B-&gt;&gt;W: OPTIONS /api/users
+  W--&gt;&gt;B: 204 + Access-Control-Allow-*
+  Note over B,W: 真正的請求
+  B-&gt;&gt;W: GET /api/users
+  W-&gt;&gt;W: 依方法與路徑路由
+  W--&gt;&gt;B: 200 JSON + CORS 標頭"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">info</span></span><div class="callout__body"><p class="callout__title">不是每個請求都會預檢</p><p class="callout__text">「簡單請求」（單純的 GET，或用基本內容類型的 POST）會跳過 OPTIONS 那一步。但只要你送出 Content-Type: application/json 或自訂標頭，瀏覽器就會預檢——這就是為什麼 JSON API 一定要處理 OPTIONS。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>單一處理函式內部</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  H[&quot;處理函式執行&quot;] --&gt; T{&quot;結果?&quot;}
+  T --&gt;|&quot;成功&quot;| OK[&quot;200 / 201 JSON&quot;]
+  T --&gt;|&quot;輸入錯誤&quot;| BAD[&quot;400 錯誤 JSON&quot;]
+  T --&gt;|&quot;找不到&quot;| NF[&quot;404 錯誤 JSON&quot;]
+  T --&gt;|&quot;程式爆錯&quot;| ERR[&quot;500 錯誤 JSON&quot;]
+  OK --&gt; ADD[&quot;附上 CORS 標頭&quot;]
+  BAD --&gt; ADD
+  NF --&gt; ADD
+  ERR --&gt; ADD
+  ADD --&gt; SEND[&quot;回傳給瀏覽器&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>動手做</h2></div><p>以下是完整後端（單一檔案）、對應的前端 fetch 範例，以及 wrangler 設定。Worker 用一個小小的記憶體陣列當作「假資料庫」，讓你專心看路由——要真正持久保存資料時，再換成 D1 或 KV。</p><ol class="steps"><li class="step"><p class="step__t">建立 Worker 專案</p><p class="step__d">用 JavaScript 產生一個最單純的「Hello World」Worker，然後打開 src/index.js。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npm create cloudflare@latest -- my-api
+cd my-api</code></pre></div></li><li class="step"><p class="step__t">寫 REST 路由器</p><p class="step__d">把 src/index.js 換成下面的後端程式碼。它會讀取方法與路徑、路由到對應的處理函式，並用 Response.json(...) 回傳正確狀態碼與 CORS 標頭。</p></li><li class="step"><p class="step__t">先本機跑，再部署</p><p class="step__d">在 http://localhost:8787/api/users 測試，再發佈到公開的 *.workers.dev 網址。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler dev
+npx wrangler deploy</code></pre></div></li></ol><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">src/index.js — REST API</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// A single-file REST API on one Worker.
+
+// CORS = Cross-Origin Resource Sharing（跨來源資源共用）：
+// 這些標頭讓「別的網域」的瀏覽器前端可以呼叫我們。
+const CORS = {
+  "Access-Control-Allow-Origin": "*", // 誰可以呼叫（* = 任何人；正式環境請鎖成你的網域）
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+// 一個小小的記憶體資料（重啟會清空——正式請改用 D1 / KV）。
+let users = [
+  { id: 1, name: "Ada" },
+  { id: 2, name: "Linus" },
+];
+let nextId = 3;
+
+// 用一個 helper 統一產生每個 JSON 回應：資料 + 狀態碼 + CORS 標頭。
+function json(data, status = 200) {
+  return Response.json(data, { status, headers: CORS });
+}
+
+export default {
+  async fetch(request) {
+    const { pathname } = new URL(request.url); // 例如 "/api/users/2"
+    const method = request.method;             // 例如 "GET"
+
+    // 1) CORS 預檢：瀏覽器在真正跨站請求前會先送 OPTIONS。
+    if (method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: CORS });
+    }
+
+    // 2) 只服務我們的 API 路徑；其餘一律 404 Not Found（找不到）。
+    if (!pathname.startsWith("/api/users")) {
+      return json({ error: "Not found" }, 404);
+    }
+
+    // 3) 從 /api/users/:id 取出可有可無的 id。
+    const parts = pathname.split("/").filter(Boolean); // ["api","users","2"]
+    const id = parts[2] ? Number(parts[2]) : null;
+
+    try {
+      // GET /api/users → 列出全部（200 OK）
+      if (method === "GET" &amp;&amp; id === null) {
+        return json(users, 200);
+      }
+
+      // GET /api/users/:id → 取單筆（200，找不到 404）
+      if (method === "GET" &amp;&amp; id !== null) {
+        const user = users.find((u) =&gt; u.id === id);
+        return user ? json(user, 200) : json({ error: "User not found" }, 404);
+      }
+
+      // POST /api/users → 新增（201 Created，輸入不合法 400 Bad Request）
+      if (method === "POST" &amp;&amp; id === null) {
+        const body = await request.json();
+        if (typeof body?.name !== "string") {
+          return json({ error: "name is required" }, 400);
+        }
+        const user = { id: nextId++, name: body.name };
+        users.push(user);
+        return json(user, 201);
+      }
+
+      // PUT /api/users/:id → 更新（200 / 400 / 404）
+      if (method === "PUT" &amp;&amp; id !== null) {
+        const user = users.find((u) =&gt; u.id === id);
+        if (!user) return json({ error: "User not found" }, 404);
+        const body = await request.json();
+        if (typeof body?.name !== "string") {
+          return json({ error: "name is required" }, 400);
+        }
+        user.name = body.name;
+        return json(user, 200);
+      }
+
+      // DELETE /api/users/:id → 刪除（200，找不到 404）
+      if (method === "DELETE" &amp;&amp; id !== null) {
+        const before = users.length;
+        users = users.filter((u) =&gt; u.id !== id);
+        return before === users.length
+          ? json({ error: "User not found" }, 404)
+          : json({ ok: true }, 200);
+      }
+
+      // 路徑存在，但方法不對 → 405 Method Not Allowed（方法不允許）。
+      return json({ error: "Method not allowed" }, 405);
+    } catch (err) {
+      // JSON 內容壞掉或其他意外 → 400 Bad Request。
+      return json({ error: "Invalid request" }, 400);
+    }
+  },
+};</code></pre></div><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">前端 — 用 fetch() 呼叫 API</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// 這段跑在瀏覽器裡。換成你部署後拿到的網址。
+const API = "https://my-api.&lt;your-subdomain&gt;.workers.dev/api/users";
+
+// GET：列出全部使用者
+const res = await fetch(API);
+console.log(res.status, await res.json()); // 200, [ {id:1,...}, ... ]
+
+// POST：新增一筆（把 JSON 放在 body，並標明 Content-Type）
+const created = await fetch(API, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ name: "Grace" }),
+});
+console.log(created.status, await created.json()); // 201, { id: 3, name: "Grace" }
+
+// PUT：更新 id = 3 那筆
+await fetch(`${API}/3`, {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ name: "Grace H." }),
+});
+
+// DELETE：刪掉 id = 3 那筆
+await fetch(`${API}/3`, { method: "DELETE" });</code></pre></div><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">toml</span><span style="flex:1"></span><span class="codeblock__name">wrangler.toml</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>name = "my-api"
+main = "src/index.js"
+compatibility_date = "2025-01-01"</code></pre></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">database</span></span><div class="callout__body"><p class="callout__title">記憶體資料不會留存</p><p class="callout__text">每個 Worker isolate（隔離環境）都有自己一份 users 陣列，而且過一段時間就會重置。拿來學路由很完美，但要存真資料就需要儲存層。可參考 D1 CRUD 教學，把這個 API 接到 SQL 資料庫。</p></div></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">http</span></span><p class="icard__t">HTTP 方法</p><p class="icard__d">請求的「動詞」——GET 讀、POST 建立、PUT 更新、DELETE 刪除。用 request.method 讀到它。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">link</span></span><p class="icard__t">URL 與路徑</p><p class="icard__d">new URL(request.url) 會解析網址。它的 pathname（例如 /api/users/2）告訴你對方想要哪個資源。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">data_object</span></span><p class="icard__t">JSON 內容</p><p class="icard__d">POST 與 PUT 會在請求內容（body）裡帶資料。await request.json() 把它轉成 JavaScript 物件——記得一定要驗證。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">check_circle</span></span><p class="icard__t">狀態碼</p><p class="icard__d">三位數的結果：2xx 成功、4xx 用戶端出錯、5xx 伺服器出錯。它讓前端不必解析文字就能判斷狀況。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">tune</span></span><p class="icard__t">Response.json()</p><p class="icard__d">Workers 的便利函式：把物件序列化成 JSON 並自動設好 Content-Type。第二個參數可放 { status, headers }。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">public</span></span><p class="icard__t">CORS</p><p class="icard__d">授權「別的網域」瀏覽器呼叫你的標頭。要處理 OPTIONS，並在每個回應加上 Access-Control-Allow-*。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">fork_right</span></span><p class="icard__t">路由</p><p class="icard__d">把「方法 + 路徑」對應到一個處理函式。路由不多時，幾個 if 判斷就贏過任何框架；路由很多時，可改用 itty-router 或 Hono。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">rule</span></span><p class="icard__t">冪等性</p><p class="icard__d">GET、PUT、DELETE 重複呼叫結果應一樣；POST 通常每次都會新建一筆。這會幫你決定該選哪個動詞。</p></div></div><h3>最常用的狀態碼</h3><ul><li>200 OK — 請求成功（GET、PUT、DELETE）</li><li>201 Created — 成功建立了新資源（POST）</li><li>204 No Content — 成功但沒有內容（很適合 OPTIONS 預檢）</li><li>400 Bad Request — 用戶端送了不合法的資料</li><li>404 Not Found — 該路徑 / id 沒有對應的資源</li><li>405 Method Not Allowed — 路徑存在，但不支援這個動詞</li><li>500 Internal Server Error — 你這邊的程式爆掉了</li></ul></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>小提示與常見陷阱</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">report</span></span><div class="callout__body"><p class="callout__title">最常見的 CORS 錯誤</p><p class="callout__text">如果你忘了處理 OPTIONS，或在錯誤回應上漏掉 CORS 標頭，瀏覽器就會擋下這次呼叫，主控台會出現讓人摸不著頭緒的「CORS error」——即使你的 Worker 其實有跑。請在「每一個」回應上都附上 CORS 標頭，不論成功或失敗。</p></div></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">lock</span></span><div class="callout__body"><p class="callout__title">正式環境請鎖定來源</p><p class="callout__text">學習階段用 Access-Control-Allow-Origin: * 沒問題，但正式環境請改成你真正的前端網域（例如 https://app.example.com），這樣才只有你的網站能從瀏覽器呼叫這個 API。</p></div></div><h3>讓 API 保持乾淨的好習慣</h3><ul><li>永遠把 request.json() 包在 try/catch 裡——內容壞掉時要回 400，而不是讓 Worker 當掉</li><li>信任任何欄位前都要先驗證；絕不要把未檢查的輸入寫進儲存層</li><li>錯誤一律用一致的 JSON 形狀，例如 { "error": "訊息" }，前端才能統一處理</li><li>依「意圖」選動詞：讀取 = GET、新增 = POST、整筆替換 = PUT、刪除 = DELETE</li><li>保留單一個 json() helper，讓狀態碼與 CORS 標頭只在一個地方設定</li><li>當路由變多時，從一堆 if 改用 Hono 之類的路由函式庫，維持可讀性</li></ul><blockquote>好的 REST API 是「刻意無聊」的：路徑可預測、動詞可預測、狀態碼也可預測。</blockquote></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="frontend-worker-d1-crud.html"><span class="material-symbols-rounded">arrow_forward</span>前端 ↔ Worker ↔ D1 CRUD</a><a href="auth-fullstack.html"><span class="material-symbols-rounded">arrow_forward</span>全端身分驗證</a></div><a class="docs-btn" href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

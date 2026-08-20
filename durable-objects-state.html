@@ -32,7 +32,94 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "用 Durable Objects 管理強一致狀態", "description": "讓單一 Durable Object 成為計數器、鎖、即時房間的唯一真相來源", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/durable-objects-state.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="durable-objects-state">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">hub</span></span><h1 class="lhero__title">用 Durable Objects 管理強一致狀態</h1></div><p class="lhero__tagline">當狀態「一定要正確」時，把每個請求都導向同一個實例、一次處理一個——不用鎖、沒有競爭條件、不會遺失更新。</p><div class="lhero__stats"><div class="lhero__stat"><b>1</b><span>每個名稱一個實例</span></div><div class="lhero__stat"><b>Strong</b><span>一致性</span></div><div class="lhero__stat"><b>0</b><span>遺失的更新</span></div><div class="lhero__stat"><b>~1k</b><span>每物件請求數/秒</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要串什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>各部件，以及為何此處 DO 勝過 KV</a><a href="#consistency" data-toc="consistency"><span class="material-symbols-rounded">swap_vert</span>一次一個：不會遺失更新</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>動手做：前端 + Worker + 物件儲存</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念，以及何時該用它</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>陷阱、限制與計費</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要串什麼？</h2></div><p class="lead">有時候你需要全世界「剛好只有一個地方」來保管某份狀態——一個絕不能算錯的計數器、一個流量限制器、一個遊戲房間、或一份即時文件。Durable Object（DO，持久物件）正是為此而生：一個實例，用「名稱」定址，一次處理一個請求，而且自帶儲存。</p><p>這篇教學會把瀏覽器前端串到一個 Worker，再讓 Worker 把每個請求都轉送給「同一個」共享的 Counter Durable Object。因為某個名稱的所有流量都匯流到同一個實例，計數的累加永遠不會互撞。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>多個用戶端，一個實例</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  C1[&quot;用戶端 A&quot;] --&gt; W[&quot;Worker&quot;]
+  C2[&quot;用戶端 B&quot;] --&gt; W
+  C3[&quot;用戶端 C&quot;] --&gt; W
+  W --&gt;|&quot;idFromName(global)&quot;| ID[&quot;DO 識別碼&quot;]
+  ID --&gt; DO[&quot;Counter（唯一實例）&quot;]
+  DO --&gt; S[&quot;儲存（v）&quot;]"></div></figure><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">support_agent</span></span><div class="callout__body"><p class="callout__title">把它想成…</p><p class="callout__text">想成熱門活動的「單一售票口」。不管來多少人，都只有一位櫃檯人員、一次發一張號碼牌。沒有人會拿到重複的號碼，數量永遠正確——因為計數的就只有這一位櫃檯。</p></div></div></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>各部件，以及為何此處 DO 勝過 KV</h2></div><p>這裡有四個角色。Worker 是大門；id 是物件的「地址」；stub（代理把手）是一支遙控器；instance（實例）則是那個帶著自己儲存的「真正物件」。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">door_front</span></span><p class="icard__t">Worker（大門）</p><p class="icard__d">一個普通、無狀態的 Worker，負責接住 HTTP 請求，並決定要把它轉給哪個物件。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">fingerprint</span></span><p class="icard__t">id（地址）</p><p class="icard__d">idFromName("global") 把一個好記的名稱轉成全球唯一的 ID。相同名稱永遠對應到相同的實例。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">settings_remote</span></span><p class="icard__t">stub（遙控器）</p><p class="icard__d">env.COUNTER.get(id) 回傳一個 stub。你在本地呼叫 stub.fetch()，Cloudflare 會把它轉送到真正的物件。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">hub</span></span><p class="icard__t">instance（單一物件）</p><p class="icard__d">那個唯一存活的 Counter，帶著自己專屬的儲存，實際負責修改並保存數值。</p></div></div><p>為什麼不直接用 Workers KV？KV 是「最終一致（eventual consistency）」：一次寫入會隨著時間擴散到各邊緣副本，所以不同地區的兩個讀取者可能短暫看到不同的值。對計數器來說這是致命的——兩邊都讀到 5、都寫回 6，你就少算了一次。Durable Object 則是「強一致（strong consistency）」：只有一份副本，讀取永遠看到最新的寫入。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>KV（最終一致）vs Durable Object（強一致）</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  WR[&quot;寫入 v=6&quot;] --&gt; KV[&quot;KV（最終一致）&quot;]
+  KV --&gt; R1[&quot;邊緣副本 1（最新）&quot;]
+  KV --&gt; R2[&quot;邊緣副本 2（過時）&quot;]
+  WR2[&quot;寫入 v=6&quot;] --&gt; DO[&quot;Durable Object（強一致）&quot;]
+  DO --&gt; ONE[&quot;唯一數值，永遠最新&quot;]"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">balance</span></span><div class="callout__body"><p class="callout__title">判斷原則</p><p class="callout__text">讀到稍舊的資料沒關係時（設定檔、快取 HTML）就用 KV。當很多寫入者必須對齊「同一個正確、即時的值」時，就用 Durable Object。</p></div></div></section><section class="lsec reveal" data-item="" id="consistency"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>一次一個：不會遺失更新</h2></div><p>這就是關鍵特性：Durable Object 會「序列化（serialize）」處理進來的請求——一個完全做完，下一個才開始。所以就算用戶端 A 和 B 在同一毫秒打到計數器，物件也會把它們排好隊，依序執行「讀取 → 累加 → 寫入」兩次。最後的值是 2，絕不會只是 1。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>兩個並行的累加，被序列化處理</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant A as &quot;用戶端 A&quot;
+  participant B as &quot;用戶端 B&quot;
+  participant DO as &quot;Counter DO&quot;
+  participant S as &quot;儲存&quot;
+  A-&gt;&gt;DO: POST /increment
+  B-&gt;&gt;DO: POST /increment
+  Note over DO: 序列化，一次處理一個
+  DO-&gt;&gt;S: 讀取 v = 0
+  S--&gt;&gt;DO: 0
+  DO-&gt;&gt;S: 寫入 v = 1
+  DO--&gt;&gt;A: 1
+  DO-&gt;&gt;S: 讀取 v = 1
+  S--&gt;&gt;DO: 1
+  DO-&gt;&gt;S: 寫入 v = 2
+  DO--&gt;&gt;B: 2"></div></figure><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">lock</span></span><div class="callout__body"><p class="callout__title">你免費拿到一把鎖</p><p class="callout__text">用一般資料庫時，你得自己寫交易（transaction）或鎖（lock）來避免兩個請求互相覆蓋。Durable Object 的「單執行緒、一次一個」執行方式，自動就給了你這種互斥（mutual exclusion）——沒有會寫錯的鎖程式碼。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>動手做：前端 + Worker + 物件儲存</h2></div><p>三層，後端集中在一個檔案。Worker（大門）和 Counter 類別（實例＋儲存）都放在 src/index.js；wrangler.toml 把它們綁在一起；再用一小段瀏覽器程式碼呼叫 API。請注意：這裡的「資料層」就是物件自己的儲存——不用另外架一個資料庫。</p><ol class="steps"><li class="step"><p class="step__t">建立 Worker 專案</p><p class="step__d">先建立一個全新專案。等一下我們會用自己的 Counter 取代產生出來的程式碼。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npm create cloudflare@latest -- counter-app
+cd counter-app</code></pre></div></li><li class="step"><p class="step__t">寫 Worker ＋ Durable Object</p><p class="step__d">Worker 用名稱解析出 id 並轉送請求；Counter 類別則讀取、累加、保存它的值。完整的 src/index.js 在下方。</p></li><li class="step"><p class="step__t">在 wrangler.toml 綁定並設定 migration</p><p class="step__d">加上 binding（Worker 用來呼叫它的名稱）和 migration（告訴 Cloudflare：Counter 是一個新的、用 SQLite 儲存的類別）。</p></li><li class="step"><p class="step__t">部署</p><p class="step__d">發佈到 Cloudflare 的網路。"global" 這個名稱的實例，會在第一次使用時自動建立。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler deploy</code></pre></div></li><li class="step"><p class="step__t">測試看看</p><p class="step__d">連打幾次——不管誰來打，數字每次都剛好加一。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>curl -X POST https://counter-app.&lt;your-subdomain&gt;.workers.dev/
+# 1
+curl -X POST https://counter-app.&lt;your-subdomain&gt;.workers.dev/
+# 2</code></pre></div></li></ol><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">src/index.js — Worker ＋ Counter 物件</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// The Durable Object: one instance holds and mutates the count
+export class Counter {
+  constructor(state, env) {
+    this.state = state; // gives access to this object's private storage
+    this.env = env;
+  }
+
+  async fetch(req) {
+    // Read the current value from THIS object's own storage (0 if unset)
+    let v = (await this.state.storage.get('v')) || 0;
+    v++;
+    // Persist before responding; the next request will read this value
+    await this.state.storage.put('v', v);
+    return new Response(v.toString(), {
+      headers: { 'content-type': 'text/plain' }
+    });
+  }
+}
+
+// The Worker (front door): forward every request to the ONE instance
+export default {
+  async fetch(request, env) {
+    // Same name -&gt; same single instance, anywhere on Earth
+    const id = env.COUNTER.idFromName('global');
+    const stub = env.COUNTER.get(id);
+    // Cloudflare routes this call to the real Counter object
+    return stub.fetch(request);
+  }
+};</code></pre></div><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">toml</span><span style="flex:1"></span><span class="codeblock__name">wrangler.toml — 綁定 ＋ migration</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>name = "counter-app"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Bind the COUNTER namespace in env to the Counter class
+[[durable_objects.bindings]]
+name = "COUNTER"
+class_name = "Counter"
+
+# Register Counter as a new SQLite-backed Durable Object class
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Counter"]</code></pre></div><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><span class="codeblock__name">前端 — 大家共用的同一個計數器</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;button id="go"&gt;+1&lt;/button&gt;
+&lt;span id="count"&gt;0&lt;/span&gt;
+
+&lt;script&gt;
+  document.querySelector('#go').addEventListener('click', async () =&gt; {
+    // Every click hits the ONE shared Counter behind the Worker
+    const res = await fetch('https://counter-app.example.workers.dev/', {
+      method: 'POST'
+    });
+    document.querySelector('#count').textContent = await res.text();
+  });
+&lt;/script&gt;</code></pre></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">warning</span></span><div class="callout__body"><p class="callout__title">別在 Worker 裡讀狀態</p><p class="callout__text">Worker 是無狀態的，而且會同時在很多地方執行。所有的讀寫都要放進 Durable Object 的 fetch 裡——那是唯一能保證「一次一個的順序」與「強一致」的地方。</p></div></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念，以及何時該用它</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">badge</span></span><p class="icard__t">名稱（Name）</p><p class="icard__d">一個好記的字串，例如 "global" 或 "room-42"，傳給 idFromName。決定你連到哪個實例。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">fingerprint</span></span><p class="icard__t">id（識別碼）</p><p class="icard__d">由名稱推導出的全球唯一地址。相同名稱永遠得到相同 id。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">settings_remote</span></span><p class="icard__t">Stub（代理）</p><p class="icard__d">由 .get(id) 拿到的本地把手。呼叫 stub.fetch() 會透明地連到真正的物件。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">looks_one</span></span><p class="icard__t">單一實例</p><p class="icard__d">全世界每個名稱剛好只有一個存活的物件——唯一的真相來源。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">format_list_numbered</span></span><p class="icard__t">序列化執行</p><p class="icard__d">請求在物件內一次跑一個，所以不會有兩個交錯而把狀態弄亂。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">verified</span></span><p class="icard__t">強一致性</p><p class="icard__d">資料只有一份；每次讀取都看到最新的寫入。永遠不會讀到過時的值。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">儲存（Storage）</p><p class="icard__d">每個物件都有專屬、具交易性的儲存，透過 this.state.storage.get / put 存取。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">move_up</span></span><p class="icard__t">Migration（遷移）</p><p class="icard__d">wrangler.toml 裡的一個項目，用來登記、改名或移除某個物件類別。</p></div></div><p>不確定該選哪種儲存？跟著這棵小小的決策樹走一遍。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>我該用哪種儲存？</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  Q[&quot;需要共享狀態嗎？&quot;] --&gt;|&quot;不用，只是快取&quot;| KV[&quot;用 KV&quot;]
+  Q --&gt;|&quot;需要，而且要一致&quot;| Q2[&quot;是單一熱點或協調點嗎？&quot;]
+  Q2 --&gt;|&quot;是&quot;| DO[&quot;用 Durable Object&quot;]
+  Q2 --&gt;|&quot;不是，是大量關聯式資料&quot;| D1[&quot;用 D1&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>陷阱、限制與計費</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">balance</span></span><div class="callout__body"><p class="callout__title">一個物件 = 一個瓶頸</p><p class="callout__text">某個名稱的所有流量都匯集到單一實例（約 1,000 req/s 的軟性上限）。全域計數器是教學範例；正式環境請把熱點狀態切分到很多物件——一個房間、一位使用者、或一份文件各一個。</p></div></div><h3>常見錯誤</h3><ul><li>把值快取在 Worker 而不是從物件讀取——Worker 沒有共享狀態。</li><li>拿 KV 來做計數器或鎖——最終一致會讓兩個寫入者遺失一次更新。</li><li>忘了寫 [[migrations]] 項目——在類別登記之前部署都會失敗。</li><li>以為不同名稱會共用資料——"room-1" 和 "room-2" 是完全分開的兩個實例。</li></ul><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">savings</span></span><div class="callout__body"><p class="callout__title">免費就能開始</p><p class="callout__text">用 SQLite 儲存的 Durable Objects 在 Workers 免費方案就能跑（限制較低），所以你不用付費就能把這套模型做出來、學起來。計費依據是請求數、運算時間，以及儲存的資料量。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="durable-objects.html"><span class="material-symbols-rounded">arrow_forward</span>Durable Objects</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="blueprint-realtime-chat.html"><span class="material-symbols-rounded">arrow_forward</span>即時聊天藍圖</a><a href="kv.html"><span class="material-symbols-rounded">arrow_forward</span>Workers KV</a></div><a class="docs-btn" href="https://developers.cloudflare.com/durable-objects/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

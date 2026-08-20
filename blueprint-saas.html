@@ -32,7 +32,170 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "架構藍圖：多租戶 SaaS", "description": "一套參考架構：用同一個應用程式服務很多客戶，而且每個客戶的資料都安全地彼此隔離", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/blueprint-saas.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="blueprint-saas">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">apartment</span></span><h1 class="lhero__title">架構藍圖：多租戶 SaaS</h1></div><p class="lhero__tagline">Pages + Worker API + Access JWT + D1（每一列都帶 tenant_id）+ KV + Durable Objects + Web Analytics —— 串成一套安全的多租戶藍圖。</p><div class="lhero__stats"><div class="lhero__stat"><b>1 DB</b><span>一個資料庫、多個租戶</span></div><div class="lhero__stat"><b>tenant_id</b><span>每一列都有</span></div><div class="lhero__stat"><b>7</b><span>串接的 Cloudflare 服務</span></div><div class="lhero__stat"><b>100/min</b><span>每租戶限流</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要蓋什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>每個角色負責什麼？</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>資料模型</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>一次帶身分的請求，逐步拆解</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>動手做：中介層 + 租戶範圍查詢</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>陷阱與計費</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要蓋什麼？</h2></div><p class="lead">多租戶 SaaS（multi-tenant SaaS）是「一套應用程式同時服務很多獨立客戶」的架構，這些客戶稱為「租戶（tenant）」，大家共用同一份程式碼、同一個資料庫。可以想成一棟辦公大樓：一棟樓、一個櫃台，但每間公司都有自己上鎖的樓層。我們的任務，就是確保「租戶 A」永遠看不到「租戶 B」的資料。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">apartment</span></span><div class="callout__body"><p class="callout__title">把它想成一棟公寓大樓</p><p class="callout__text">大家共用大廳、電梯和水管（共用的基礎設施），但每位住戶手上的鑰匙只能打開自己那一戶（tenant_id）。門口的管理員（Access）在大門口查證件；進到裡面後，鑰匙（tenant_id）決定哪一扇門能打開。</p></div></div><p>下面這張圖把整個系統濃縮在一頁。使用者打開前端（放在 Pages 上），Cloudflare Access 先確認他是誰，並交給 Worker 一個簽章過的權杖（JWT）。Worker 從權杖裡讀出 tenant_id，檢查該租戶的限流額度、載入該租戶的設定，最後執行一個「只查這一個租戶」的資料庫查詢。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>系統架構</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  U[&quot;瀏覽器 (Pages)&quot;] --&gt; ACC[&quot;Access：驗證 JWT&quot;]
+  ACC --&gt; W[&quot;Worker API&quot;]
+  W --&gt; MW[&quot;中介層：解析 tenant_id&quot;]
+  MW --&gt; RL[&quot;Durable Object：每租戶限流&quot;]
+  RL --&gt; CFG[&quot;KV：每租戶設定&quot;]
+  CFG --&gt; Q[&quot;D1 查詢：WHERE tenant_id = ?&quot;]
+  Q --&gt; RES[&quot;租戶隔離的資料&quot;]
+  W --&gt; WA[&quot;Web Analytics&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>每個角色負責什麼？</h2></div><p>藍圖裡每個 Cloudflare 服務都只負責一件清楚的事。把職責切乾淨，系統才好理解、也才安全。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">web</span></span><p class="icard__t">Pages —— 前端</p><p class="icard__d">把靜態網頁應用程式（HTML/JS/CSS）放在 Cloudflare 全球邊緣節點上。它用 fetch 呼叫 Worker API，再把結果顯示出來。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">dns</span></span><p class="icard__t">Worker —— API</p><p class="icard__d">系統的大腦。它執行身分／租戶中介層、強制限流，而且是唯一會跟資料庫對話的角色。前端絕不直接碰 D1。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">badge</span></span><p class="icard__t">Access —— 身分驗證</p><p class="icard__d">門口管理員。它讓使用者登入（Google、GitHub、email PIN），並交給 Worker 一個簽章過的 JWT，裡面帶著 email、tenant_id 等聲明（claims）。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">D1 —— SQL 資料庫</p><p class="icard__d">一個大家共用的 SQLite 資料庫。每個屬於租戶的資料表都帶一個 tenant_id 欄位，而且每次查詢都用它來過濾。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bolt</span></span><p class="icard__t">KV —— 每租戶設定</p><p class="icard__d">一個快速的鍵值（key-value）儲存，放小而常讀的資料：每個租戶的功能旗標、方案上限、快取設定，用 tenant_id 當鍵。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">speed</span></span><p class="icard__t">Durable Objects —— 限流</p><p class="icard__d">每個租戶配一個有狀態的小實例，用 tenant_id 命名。它負責計算請求數，讓某個流量爆量的租戶不會拖慢其他人。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">monitoring</span></span><p class="icard__t">Web Analytics —— 觀測</p><p class="icard__d">為前端提供「隱私優先、不用 cookie」的流量統計，讓你觀察使用情況與效能，又不拖慢頁面。</p></div></div><h3>資料隔離實際上怎麼運作</h3><p>我們用最簡單、也最常見的做法：共用一個資料庫，每一列都標上自己的 tenant_id。不需要為每個客戶開一個獨立資料庫。隔離來自一條鐵律 —— 每一個查詢都加上 WHERE tenant_id = ?，而且這個值是 Worker 從「已驗證的 JWT」填進去的，絕不採用使用者自己輸入的任何內容。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>共用資料表、隔離資料列</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  TA[&quot;租戶 A&quot;] --&gt;|&quot;tenant_id = A&quot;| DB[&quot;共用的 D1 資料表&quot;]
+  TB[&quot;租戶 B&quot;] --&gt;|&quot;tenant_id = B&quot;| DB
+  DB --&gt;|&quot;已過濾&quot;| OA[&quot;A 只看到 A 的資料列&quot;]
+  DB --&gt;|&quot;已過濾&quot;| OB[&quot;B 只看到 B 的資料列&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>資料模型</h2></div><p>三張表就能說明這個模式：tenants（客戶本身）、users（屬於某個租戶的人）、projects（一個範例資源）。注意：除了 tenants 以外，每張表都帶一個 tenant_id 外鍵（foreign key）—— 正是這個欄位讓隔離成為可能。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>實體關聯圖</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  TENANTS ||--o{ USERS : &quot;擁有&quot;
+  TENANTS ||--o{ PROJECTS : &quot;擁有&quot;
+  USERS ||--o{ PROJECTS : &quot;建立&quot;
+  TENANTS {
+    text id PK
+    text name
+    text plan
+  }
+  USERS {
+    text id PK
+    text tenant_id FK
+    text email
+    text role
+  }
+  PROJECTS {
+    text id PK
+    text tenant_id FK
+    text owner_id FK
+    text name
+  }"></div></figure><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">key</span></span><div class="callout__body"><p class="callout__title">為什麼 tenant_id 要當外鍵</p><p class="callout__text">把 tenant_id 設成指向 tenants(id) 的外鍵，等於讓資料庫本身拒絕建立「指向不存在租戶」的資料列。這是在應用程式邏輯之上、免費又內建的一層安全網。</p></div></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>一次帶身分的請求，逐步拆解</h2></div><p>跟著一次 API 呼叫，從瀏覽器一路走到資料庫再回來。關鍵時刻在中間：Worker 從 JWT 解析出 tenant_id，然後把 SQL 查詢限縮到該租戶。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>帶身分的請求流程</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant B as &quot;瀏覽器&quot;
+  participant AC as &quot;Access&quot;
+  participant W as &quot;Worker API&quot;
+  participant DO as &quot;Durable Object&quot;
+  participant KV as &quot;KV&quot;
+  participant D1 as &quot;D1&quot;
+  B-&gt;&gt;AC: 請求 + JWT
+  AC-&gt;&gt;W: 已驗證的 JWT
+  W-&gt;&gt;W: 解析 tenant_id
+  W-&gt;&gt;DO: 檢查租戶限流
+  DO--&gt;&gt;W: 放行
+  W-&gt;&gt;KV: 載入租戶設定
+  KV--&gt;&gt;W: 設定
+  W-&gt;&gt;D1: SELECT WHERE tenant_id = ?
+  D1--&gt;&gt;W: 只回該租戶的資料列
+  W--&gt;&gt;B: JSON"></div></figure><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">gpp_maybe</span></span><div class="callout__body"><p class="callout__title">tenant_id 絕不能信任前端</p><p class="callout__text">tenant_id 一定要來自 Access 驗證過的簽章 JWT —— 不能來自網址參數、請求內容、或使用者能控制的標頭。如果讓前端自己挑 tenant_id，任何人都能直接索取別的租戶的資料。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>動手做：中介層 + 租戶範圍查詢</h2></div><p class="lead">下面是整套東西的真實、可執行程式碼：SQL 結構、前端、身分／租戶中介層、每租戶限流器、租戶範圍查詢，以及把全部綁在一起的 wrangler 設定。</p><ol class="steps"><li class="step"><p class="step__t">1. 建立 D1 結構（到處都有 tenant_id）</p><p class="step__d">每張屬於租戶的表都加上一個帶外鍵的 tenant_id 欄位，再建索引，讓資料變多後範圍查詢依然很快。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>-- Every tenant-owned table carries tenant_id. Index it for fast, scoped queries.
+CREATE TABLE tenants (
+  id    TEXT PRIMARY KEY,
+  name  TEXT NOT NULL,
+  plan  TEXT NOT NULL DEFAULT 'free'
+);
+
+CREATE TABLE users (
+  id         TEXT PRIMARY KEY,
+  tenant_id  TEXT NOT NULL REFERENCES tenants(id),
+  email      TEXT NOT NULL,
+  role       TEXT NOT NULL DEFAULT 'member'
+);
+
+CREATE TABLE projects (
+  id         TEXT PRIMARY KEY,
+  tenant_id  TEXT NOT NULL REFERENCES tenants(id),
+  owner_id   TEXT NOT NULL REFERENCES users(id),
+  name       TEXT NOT NULL
+);
+
+-- Index tenant_id so WHERE tenant_id = ? stays fast as rows grow.
+CREATE INDEX idx_projects_tenant ON projects(tenant_id);
+CREATE INDEX idx_users_tenant    ON users(tenant_id);</code></pre></div></li><li class="step"><p class="step__t">2. 前端（Pages）呼叫 API</p><p class="step__d">頁面只要用 fetch 呼叫 /api/projects。Access 早已驗證過使用者，所以驗證用的 cookie 會自動帶上 —— 前端根本不會看到、也不會送出 tenant_id。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// public/app.js - served by Cloudflare Pages
+// Access already verified the user; the auth cookie rides along automatically.
+async function loadProjects() {
+  const res = await fetch('/api/projects', {
+    headers: { 'Accept': 'application/json' },
+    credentials: 'include'
+  });
+  if (!res.ok) {
+    document.getElementById('status').textContent = 'Error ' + res.status;
+    return;
+  }
+  const data = await res.json();
+  document.getElementById('list').innerHTML =
+    data.projects.map(p =&gt; `&lt;li&gt;${p.name}&lt;/li&gt;`).join('');
+}
+loadProjects();</code></pre></div></li><li class="step"><p class="step__t">3. 身分 + 租戶中介層</p><p class="step__d">讀取 Access 已經驗證過的 JWT，從中取出 tenant_id 聲明。租戶只在這一個地方被決定 —— 來自權杖，絕不來自使用者輸入。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/index.js - Worker API entry
+export { RateLimiter } from './rate-limiter.js';
+
+// Auth + tenant middleware: read the JWT Access already verified,
+// then pull the tenant_id claim out of it.
+function resolveTenant(request) {
+  const jwt = request.headers.get('Cf-Access-Jwt-Assertion');
+  if (!jwt) return null;
+  const parts = jwt.split('.');
+  if (parts.length !== 3) return null;
+  const json = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));
+  const claims = JSON.parse(json);
+  if (!claims.tenant_id) return null;
+  return { tenantId: claims.tenant_id, email: claims.email };
+}</code></pre></div></li><li class="step"><p class="step__t">4. 每租戶限流器（Durable Object）</p><p class="step__d">每個租戶一個 Durable Object 實例（用 tenant_id 命名），各自維護一個獨立計數器。「每分鐘 100 次」的視窗，代表某個忙碌的租戶永遠用不掉別的租戶的額度。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/rate-limiter.js - one Durable Object instance per tenant.
+export class RateLimiter {
+  constructor(state) {
+    this.state = state;
+  }
+  async fetch() {
+    const now = Date.now();
+    const windowMs = 60000;   // 1-minute window
+    const limit = 100;        // 100 requests / minute / tenant
+    let w = (await this.state.storage.get('w')) || { start: now, count: 0 };
+    if (now - w.start &gt; windowMs) w = { start: now, count: 0 };
+    w.count += 1;
+    await this.state.storage.put('w', w);
+    const ok = w.count &lt;= limit;
+    return new Response(ok ? 'ok' : 'limited', { status: ok ? 200 : 429 });
+  }
+}</code></pre></div></li><li class="step"><p class="step__t">5. 請求流水線 + 租戶範圍查詢</p><p class="step__d">把全部串起來：解析租戶、檢查限流、讀取它的 KV 設定，然後執行帶 WHERE tenant_id = ? 的 D1 查詢，並把 JWT 來的值綁定（bind）進去。這個綁定就是隔離的保證。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/index.js (continued) - the request pipeline
+export default {
+  async fetch(request, env) {
+    // 1) Who is this, and which tenant do they belong to?
+    const tenant = resolveTenant(request);
+    if (!tenant) return new Response('Unauthorized', { status: 401 });
+
+    // 2) Per-tenant rate limit: one Durable Object named after the tenant.
+    const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(tenant.tenantId));
+    const rl = await stub.fetch('https://do/check');
+    if (rl.status === 429) return new Response('Too Many Requests', { status: 429 });
+
+    // 3) Per-tenant config from KV (cheap, cached at the edge).
+    const raw = await env.TENANT_KV.get('cfg:' + tenant.tenantId);
+    const cfg = raw ? JSON.parse(raw) : { maxProjects: 100 };
+
+    // 4) Tenant-scoped query: EVERY statement filters WHERE tenant_id = ?
+    const { results } = await env.DB
+      .prepare('SELECT id, name FROM projects WHERE tenant_id = ? ORDER BY name')
+      .bind(tenant.tenantId)
+      .all();
+
+    return Response.json({ tenant: tenant.tenantId, config: cfg, projects: results });
+  }
+};</code></pre></div></li><li class="step"><p class="step__t">6. 在 wrangler 設定綁定</p><p class="step__d">宣告 D1、KV 和 Durable Object 的綁定，Worker 才能用 env.DB、env.TENANT_KV、env.RATE_LIMITER 存取它們。migration 則用來註冊 Durable Object 類別。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">jsonc</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// wrangler.jsonc
+{
+  "name": "saas-api",
+  "main": "src/index.js",
+  "compatibility_date": "2025-01-01",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "saas", "database_id": "&lt;your-d1-id&gt;" }
+  ],
+  "kv_namespaces": [
+    { "binding": "TENANT_KV", "id": "&lt;your-kv-id&gt;" }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "RATE_LIMITER", "class_name": "RateLimiter" }]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["RateLimiter"] }
+  ]
+}</code></pre></div></li></ol><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><span class="codeblock__name">建立資源並部署</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># create the database, the KV namespace, load the schema, then deploy
+npx wrangler d1 create saas
+npx wrangler kv namespace create TENANT_KV
+npx wrangler d1 execute saas --remote --file=./schema.sql
+npx wrangler deploy</code></pre></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">groups</span></span><p class="icard__t">多租戶</p><p class="icard__d">一個運作中的應用程式、一個資料庫，服務很多客戶（租戶）。比起為每個客戶開一份獨立副本，營運更便宜、更單純。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">shield_lock</span></span><p class="icard__t">資料隔離</p><p class="icard__d">保證某個租戶永遠無法讀取或寫入另一個租戶的資料。這裡是靠「永遠用 tenant_id 過濾」來達成。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">fingerprint</span></span><p class="icard__t">tenant_id</p><p class="icard__d">每一列租戶資料上的欄位，標明它屬於哪個租戶。Worker 從 JWT 設定它 —— 絕不取自前端輸入。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">verified_user</span></span><p class="icard__t">JWT 聲明</p><p class="icard__d">JWT 是一個簽章過的權杖；裡面的資料（email、tenant_id）就是它的聲明（claims）。因為由 Access 簽章，Worker 才能信任這些值。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">speed</span></span><p class="icard__t">每租戶限流</p><p class="icard__d">每個租戶透過專屬的 Durable Object 擁有自己的請求額度，所以單一重度租戶不會拖垮其他人的服務品質。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bolt</span></span><p class="icard__t">KV 裡的每租戶設定</p><p class="icard__d">每個租戶的小型設定（方案、功能旗標）放在 KV，用 tenant_id 當鍵 —— 在邊緣以微秒讀取，不必往返資料庫。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>陷阱與計費</h2></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">checklist</span></span><div class="callout__body"><p class="callout__title">讓安全的路成為唯一的路</p><p class="callout__text">把存取 D1 的程式碼包成一個小工具函式，強制每次都要傳入 tenantId，並且自動加上 WHERE tenant_id = ?。只要沒有 tenant 就無法查詢，你就不可能不小心漏掉過濾條件。</p></div></div><ul><li>只要有一個查詢漏掉 WHERE tenant_id = ?，就會跨租戶外洩資料 —— 每一條 SQL 都要檢查。</li><li>一律用 .bind() 把 tenant_id 當參數綁定；絕不要用字串拼接塞進 SQL（那會招來 SQL 注入）。</li><li>每張租戶表都要替 tenant_id 建索引，否則租戶累積資料後，範圍查詢會變慢。</li><li>tenant_id 只信任來自驗證過的 JWT，不要採用網址、請求內容或前端可控的標頭。</li><li>每個限流 Durable Object 都用 tenant_id 命名，計數器才不會在租戶之間互相污染。</li><li>D1、KV、Durable Objects、Workers 都有大方的免費額度；規模變大後依請求／讀／寫計費 —— 最新價格請查官方文件。</li></ul></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="access.html"><span class="material-symbols-rounded">arrow_forward</span>Access</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="kv.html"><span class="material-symbols-rounded">arrow_forward</span>Workers KV</a><a href="durable-objects.html"><span class="material-symbols-rounded">arrow_forward</span>Durable Objects</a><a href="auth-fullstack.html"><span class="material-symbols-rounded">arrow_forward</span>全端身分驗證</a><a href="web-analytics.html"><span class="material-symbols-rounded">arrow_forward</span>Web Analytics</a></div><a class="docs-btn" href="https://developers.cloudflare.com/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

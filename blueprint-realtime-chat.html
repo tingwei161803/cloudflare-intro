@@ -32,7 +32,155 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "架構藍圖：即時聊天室", "description": "即時聊天的參考架構：WebSocket + Durable Objects + D1", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/blueprint-realtime-chat.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="blueprint-realtime-chat">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">forum</span></span><h1 class="lhero__title">架構藍圖：即時聊天室</h1></div><p class="lhero__tagline">每個房間用一個 Durable Object 握住所有開啟的 WebSocket 連線，把訊息廣播給所有人；D1 負責保存歷史紀錄。</p><div class="lhero__stats"><div class="lhero__stat"><b>1</b><span>每房一個 Durable Object</span></div><div class="lhero__stat"><b>∞</b><span>同時房間數</span></div><div class="lhero__stat"><b>3</b><span>串接層數</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要做什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>每個角色負責什麼？</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>訊息歷史資料表</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>訊息往返流程</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>一步步動手做</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>陷阱與小提示</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要做什麼？</h2></div><p class="lead">一個即時聊天室：同一個房間裡的很多人，能「立刻」看到彼此的訊息。我們用 WebSocket（一條持續開啟、雙向的連線），讓伺服器可以主動把新訊息推下來，瀏覽器不必一直重複詢問。</p><p>關鍵在於：誰來握住這些開著的連線，並確保房間裡每個人都收到每則訊息？答案是 Durable Object（DO，可譯為「持久物件」）——一個單一、永遠都在的迷你伺服器。我們讓「每個房間」各擁有一個 Durable Object。前面放一個小小的 Worker 負責把每個瀏覽器路由到正確的房間，而 D1（Cloudflare 的 SQL 資料庫）負責保存訊息歷史。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">meeting_room</span></span><div class="callout__body"><p class="callout__title">把它想成…</p><p class="callout__text">每個聊天室就像一間真實的會議室，門口站著一位專屬主持人。主持人（也就是 Durable Object）手上有「室內所有人」的名單；有人發言時，主持人就把那句話複誦給整個房間聽，並記在房間的紀錄簿（D1）裡。不同的房間名稱 = 不同的主持人。誰在哪個房間，永遠不會搞混。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>整體架構圖</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  B1[&quot;瀏覽器 A&quot;] --&gt;|WebSocket| W[&quot;Worker（路由）&quot;]
+  B2[&quot;瀏覽器 B&quot;] --&gt;|WebSocket| W
+  B3[&quot;瀏覽器 C&quot;] --&gt;|WebSocket| W
+  W --&gt;|&quot;idFromName(room)&quot;| DO[&quot;房間 Durable Object（每房一個）&quot;]
+  DO --&gt;|&quot;廣播&quot;| B1
+  DO --&gt;|&quot;廣播&quot;| B2
+  DO --&gt;|&quot;廣播&quot;| B3
+  DO --&gt;|&quot;儲存歷史&quot;| D1[&quot;D1（訊息歷史）&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>每個角色負責什麼？</h2></div><p>總共有四個角色，每個角色只做一件清楚的事——把職責切乾淨，整個系統才好懂、好維護。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">devices</span></span><p class="icard__t">瀏覽器（用戶端）</p><p class="icard__d">對伺服器開一條 WebSocket，顯示收到的訊息，並把使用者輸入的內容送出去。它從不直接和其他瀏覽器溝通。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">alt_route</span></span><p class="icard__t">Worker（路由器）</p><p class="icard__d">一道無狀態的前門。它從網址讀出房間名稱，依名稱找到那間房的 Durable Object，再把連線轉送過去。這裡不放任何聊天邏輯。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">hub</span></span><p class="icard__t">房間 Durable Object</p><p class="icard__d">整個系統的核心。每個房間一個。它握住那間房所有開啟的 WebSocket，把每則訊息廣播給全部連線，是唯一的協調點（single coordination point）。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">D1（歷史）</p><p class="icard__d">一個 SQL 資料庫，把每則訊息存起來，讓對話在重新整理、甚至房間物件重啟後依然存在。DO 每則訊息寫入一列（row）。</p></div></div><p>為什麼 Durable Object 天生就是「房間」？因為「相同的房間名稱」永遠會對應到「同一個」單一實例（instance），不管在地球哪個角落都一樣。這個單一實例就成了房間所有連線與狀態唯一的所在——不需要鎖（lock）、不需要訊息中介、也沒有競爭條件（race condition）。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>一個名稱 → 一個房間物件</figcaption><div class="mermaid-block" data-mermaid="flowchart LR
+  U1[&quot;使用者 1&quot;] --&gt; R[&quot;房間 = general&quot;]
+  U2[&quot;使用者 2&quot;] --&gt; R
+  U3[&quot;使用者 3&quot;] --&gt; R
+  R --&gt;|&quot;idFromName(general)&quot;| DO[&quot;唯一的房間 DO（general）&quot;]
+  DO --&gt; T[&quot;單一真相來源&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>訊息歷史資料表</h2></div><p>即時訊息是在 Durable Object 的記憶體裡流動；永久的那一份則存在 D1。我們只需要一張資料表 messages，每則聊天訊息一列。room_id 把每則訊息綁回它所屬的房間。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>messages 實體關係</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  ROOMS ||--o{ MESSAGES : 包含
+  ROOMS {
+    text id PK
+    text name
+  }
+  MESSAGES {
+    int id PK
+    text room_id FK
+    text user
+    text body
+    int created_at
+  }"></div></figure><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><span class="codeblock__name">schema.sql — 建立歷史資料表</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>CREATE TABLE IF NOT EXISTS messages (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  room_id    TEXT    NOT NULL,
+  user       TEXT    NOT NULL,
+  body       TEXT    NOT NULL,
+  created_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_messages_room
+  ON messages (room_id, created_at);</code></pre></div><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">info</span></span><div class="callout__body"><p class="callout__title">為什麼 created_at 是數字</p><p class="callout__text">我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。(room_id, created_at) 這個索引讓「載入這個房間最近 50 則訊息」變得很快。</p></div></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>訊息往返流程</h2></div><p>下面是「一則訊息的一生」——從瀏覽器連上線，到 Durable Object 把它廣播給所有人、並存進 D1。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>連線、送出、廣播、保存</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant A as &quot;用戶端 A&quot;
+  participant B as &quot;用戶端 B&quot;
+  participant W as &quot;Worker&quot;
+  participant R as &quot;房間 DO&quot;
+  participant D as &quot;D1&quot;
+  A-&gt;&gt;W: WebSocket 升級, room=lobby
+  W-&gt;&gt;R: idFromName lobby, 轉送請求
+  R--&gt;&gt;A: 101 接受, 連線開啟
+  Note over B,R: 用戶端 B 已經連線
+  A-&gt;&gt;R: 送出一則訊息
+  R-&gt;&gt;D: INSERT INTO messages
+  R--&gt;&gt;A: 廣播給所有人
+  R--&gt;&gt;B: 廣播給所有人"></div></figure><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">campaign</span></span><div class="callout__body"><p class="callout__title">「廣播」= 一進，多出</p><p class="callout__text">一個用戶端送進「一則」訊息；Durable Object 就走訪每一條開著的連線，把它再送回給「所有人」——包含原本的發送者，這樣他自己的訊息也會用和別人一樣的方式顯示出來。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>一步步動手做</h2></div><ol class="steps"><li class="step"><p class="step__t">建立專案與一個 D1 資料庫</p><p class="step__d">先建立一個 Worker，再建立用來存歷史的 D1 資料庫。記下它印出的 database_id——下一步要貼進設定檔。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npm create cloudflare@latest -- chat-room
+cd chat-room
+npx wrangler d1 create chat-history</code></pre></div></li><li class="step"><p class="step__t">設定 wrangler.jsonc</p><p class="step__d">綁定 Durable Object 類別（ROOMS）、為它登記一個 SQLite migration（遷移），再綁定 D1 資料庫（DB）。migration 是在告訴 Cloudflare：ChatRoom 是一個新的、以 SQLite 儲存的類別。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">jsonc</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>{
+  "name": "chat-room",
+  "main": "src/index.js",
+  "compatibility_date": "2025-01-01",
+  "durable_objects": {
+    "bindings": [
+      { "name": "ROOMS", "class_name": "ChatRoom" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["ChatRoom"] }
+  ],
+  "d1_databases": [
+    { "binding": "DB", "database_name": "chat-history", "database_id": "&lt;your-d1-database-id&gt;" }
+  ]
+}</code></pre></div></li><li class="step"><p class="step__t">建立 messages 資料表</p><p class="step__d">把前面「資料模型」那段的 schema.sql 套用到你的 D1 資料庫，讓 messages 資料表先存在，之後才寫得進去。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 execute chat-history --remote --file=./schema.sql</code></pre></div></li><li class="step"><p class="step__t">寫 Worker（路由器）</p><p class="step__d">Worker 只做三件事：確認這是 WebSocket 升級請求、用 env.ROOMS.idFromName(room) 依名稱找到房間的 Durable Object、把請求轉送過去。它也把 ChatRoom 重新匯出（re-export），好讓執行環境找得到這個類別。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>import { ChatRoom } from "./chat-room.js";
+export { ChatRoom };
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const room = url.searchParams.get("room") || "lobby";
+
+    // Only accept WebSocket upgrade requests
+    if (request.headers.get("Upgrade") !== "websocket") {
+      return new Response("Expected a WebSocket upgrade", { status: 426 });
+    }
+
+    // Resolve the ONE Durable Object for this room name
+    const id = env.ROOMS.idFromName(room);
+    const stub = env.ROOMS.get(id);
+
+    // Forward the upgrade request to that room object
+    return stub.fetch(request);
+  },
+};</code></pre></div></li><li class="step"><p class="step__t">寫房間 Durable Object</p><p class="step__d">DO 用 acceptWebSocket 完成 WebSocket 握手（採休眠模式）。每當有訊息進來，webSocketMessage 處理器就會執行：先寫一列到 D1，再把訊息廣播給 getWebSockets() 回傳的每一條連線。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>import { DurableObject } from "cloudflare:workers";
+
+export class ChatRoom extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    this.ctx = ctx;
+    this.env = env;
+  }
+
+  // Completes the WebSocket handshake and registers the socket
+  async fetch(request) {
+    const url = new URL(request.url);
+    const room = url.searchParams.get("room") || "lobby";
+
+    const pair = new WebSocketPair();
+    const client = pair[0];
+    const server = pair[1];
+
+    // Hibernation: let the runtime hold the socket so the DO can sleep
+    this.ctx.acceptWebSocket(server);
+    server.serializeAttachment({ room });
+
+    return new Response(null, { status: 101, webSocket: client });
+  }
+
+  // Runs whenever ANY connected client sends a message
+  async webSocketMessage(ws, raw) {
+    const { user, body } = JSON.parse(raw);
+    const { room } = ws.deserializeAttachment();
+    const created_at = Date.now();
+
+    // 1) Persist to D1 history
+    await this.env.DB
+      .prepare("INSERT INTO messages (room_id, user, body, created_at) VALUES (?, ?, ?, ?)")
+      .bind(room, user, body, created_at)
+      .run();
+
+    // 2) Broadcast to everyone connected to THIS room
+    const payload = JSON.stringify({ user, body, created_at });
+    for (const socket of this.ctx.getWebSockets()) {
+      socket.send(payload);
+    }
+  }
+
+  async webSocketClose(ws, code, reason, wasClean) {
+    ws.close(code, "room closing socket");
+  }
+}</code></pre></div></li><li class="step"><p class="step__t">從瀏覽器連線</p><p class="step__d">在前端，用 ?room=lobby 對 Worker 開一條 WebSocket，把每則進來的訊息畫到畫面上，並把使用者輸入的文字以 JSON 送出。正式環境請用 wss://（加密版）。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>&lt;script&gt;
+  const room = "lobby";
+  const ws = new WebSocket(`wss://chat-room.example.workers.dev/?room=${room}`);
+
+  ws.addEventListener("open", () =&gt; console.log("connected to", room));
+
+  ws.addEventListener("message", (event) =&gt; {
+    const msg = JSON.parse(event.data);
+    addLine(`${msg.user}: ${msg.body}`); // render into your chat list
+  });
+
+  // Call this when the user submits the chat box
+  function send(user, text) {
+    ws.send(JSON.stringify({ user, body: text }));
+  }
+&lt;/script&gt;</code></pre></div></li><li class="step"><p class="step__t">部署</p><p class="step__d">發佈到 Cloudflare 的網路。你用每一個不同的 ?room= 值連線，都會自動拿到屬於它自己的 Durable Object。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler deploy</code></pre></div></li></ol></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cable</span></span><p class="icard__t">WebSocket</p><p class="icard__d">一條會持續開啟、且「雙向」的連線。和一般「先請求、再回應」不同，伺服器可以隨時主動把資料推下來——非常適合聊天。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">swap_horiz</span></span><p class="icard__t">WebSocketPair</p><p class="icard__d">在伺服器端你會建立「一對」互相連動的連線：自己留著一端（server），把另一端（client）放進 101 回應交還給瀏覽器。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bedtime</span></span><p class="icard__t">休眠（Hibernation）</p><p class="icard__d">用 acceptWebSocket() 後，由執行環境替你保管連線。一個閒置的房間物件可以從記憶體被回收，但連線依然活著——所以成千上萬條閒置連線幾乎不花錢。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">campaign</span></span><p class="icard__t">廣播（Broadcast）</p><p class="icard__d">走訪 ctx.getWebSockets()，對每一條 send()。「房間裡所有連線」這份名單就在手上——這正是「一個房間一個物件」如此方便的原因：你要找的人全都在這裡。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">fingerprint</span></span><p class="icard__t">idFromName()</p><p class="icard__d">把房間名稱轉成一個穩定的物件 ID。相同名稱永遠對應到同一個單一實例，哪裡都一樣——「路由到那間房」就是靠這個。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">hub</span></span><p class="icard__t">為什麼用 DO 當房間</p><p class="icard__d">一個房間需要「一個」地方來握住所有成員、並對訊息順序達成一致。Durable Object 正好就是這個：一個單一協調點，不需要鎖，也不需要額外的訊息中介。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>陷阱與小提示</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">balance</span></span><div class="callout__body"><p class="callout__title">一個房間 = 一個瓶頸</p><p class="callout__text">一個房間的所有流量都匯集到它「單一」的物件（軟性上限約每秒 1,000 個請求）。對一個聊天室來說綽綽有餘，但別想把整個網站塞進同一個 DO——請依房間、文件或使用者把工作拆開。</p></div></div><h3>容易踩的坑</h3><ul><li>忘了在 Worker 入口檔把 ChatRoom 類別重新匯出（re-export）——執行環境會找不到它。</li><li>正式環境用 ws:// 而非 wss://；在 HTTPS 頁面上瀏覽器會擋掉不安全的 WebSocket。</li><li>在 webSocketMessage 裡做太重的工作，卡住廣播——順序維持簡單：先存檔，再廣播。</li><li>盲目相信訊息內容——寫進 D1 前先驗證 user 與 body。</li><li>以為 DO 的記憶體會永遠存在——它會休眠，所以請把 D1 當成持久的歷史來源。</li></ul><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">history</span></span><div class="callout__body"><p class="callout__title">加入房間時顯示歷史</p><p class="callout__text">用戶端連上線時，先對 D1 跑 SELECT * FROM messages WHERE room_id = ? ORDER BY created_at DESC LIMIT 50，把這些歷史先送過去——新加入的人就能立刻看到最近的對話，而不是一個空房間。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="durable-objects.html"><span class="material-symbols-rounded">arrow_forward</span>Durable Objects</a><a href="realtime.html"><span class="material-symbols-rounded">arrow_forward</span>Realtime</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="durable-objects-state.html"><span class="material-symbols-rounded">arrow_forward</span>Durable Objects：狀態</a></div><a class="docs-btn" href="https://developers.cloudflare.com/durable-objects/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

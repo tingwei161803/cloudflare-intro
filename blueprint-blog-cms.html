@@ -32,7 +32,163 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "架構藍圖：部落格 / CMS", "description": "一套完全建在 Cloudflare 上的部落格／CMS 參考架構", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/blueprint-blog-cms.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="blueprint-blog-cms">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">rss_feed</span></span><h1 class="lhero__title">架構藍圖：部落格 / CMS</h1></div><p class="lhero__tagline">看 Pages、Workers、D1、R2、KV 與 Images 如何拼成一個真正的內容網站。</p><div class="lhero__stats"><div class="lhero__stat"><b>6</b><span>Cloudflare 產品</span></div><div class="lhero__stat"><b>4</b><span>資料表</span></div><div class="lhero__stat"><b>1</b><span>Worker API</span></div><div class="lhero__stat"><b>~0ms</b><span>邊緣快取讀取</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要蓋什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>各零件的職責</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>資料模型</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>讀取與發布流程</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>動手做：綁定與程式碼</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>重點概念</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>小提示與陷阱</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要蓋什麼？</h2></div><p class="lead">一個部落格或 CMS（內容管理系統，就是負責存放與供應文章的軟體）要做好四件事：把頁面顯示給讀者、跑一個 API、存放文字、存放圖片。Cloudflare 不是用一台大伺服器全包，而是把這些工作拆給數個小而專一的服務，全部都跑在邊緣（edge，指離讀者很近的資料中心）。</p><p>這一頁是「一眼看懂整個系統」的地圖。下面這張圖把每個零件串起來：讀者的瀏覽器同時跟 Pages（前端）和 Worker（API）對話；Worker 從 D1 讀文章、從 R2 讀圖片、從 KV 拿快取；而瀏覽器則透過 Images 抓最佳化過的圖片。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>系統架構</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  B[&quot;瀏覽器&quot;] --&gt;|&quot;頁面 HTML&quot;| P[&quot;Pages 前端&quot;]
+  B --&gt;|&quot;fetch /api&quot;| W[&quot;Worker API&quot;]
+  P --&gt;|&quot;呼叫&quot;| W
+  W --&gt;|&quot;SQL 查詢&quot;| D[&quot;D1 文章與作者&quot;]
+  W --&gt;|&quot;快取讀寫&quot;| K[&quot;KV 快取&quot;]
+  W --&gt;|&quot;物件鍵&quot;| R[&quot;R2 圖片&quot;]
+  B --&gt;|&quot;img src&quot;| I[&quot;Images 縮圖&quot;]
+  I --&gt;|&quot;回源讀取&quot;| R"></div></figure><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">restaurant</span></span><div class="callout__body"><p class="callout__title">把它想成一間餐廳</p><p class="callout__text">Pages 是用餐區（客人看到的），Worker 是服務生（接單、上菜），D1 是食譜本（結構化的文字），R2 是儲藏室（原始食材／檔案），KV 是出餐檯上保溫的菜（馬上再上一份），而 Images 是擺盤台（依需求把每張照片調整大小）。</p></div></div></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>各零件的職責</h2></div><p>每個 Cloudflare 產品都只扮演一個明確的角色。把它們分開，正是讓系統便宜、快、又好理解的關鍵——你可以只動快取而不碰資料庫，或換掉前端卻不用重寫 API。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">web</span></span><p class="icard__t">Pages — 前端</p><p class="icard__d">託管你的 HTML、CSS 與 JavaScript，把部落格介面送到全球。這就是讀者實際在瀏覽器裡打開的東西。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bolt</span></span><p class="icard__t">Workers — API</p><p class="icard__d">大腦。它接收 /api 請求，決定要讀或寫什麼，跟 D1、R2、KV 對話，最後回傳 JSON。你所有的商業邏輯都住在這裡。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">D1 — 結構化資料</p><p class="icard__d">一個 SQL 資料庫，存放文章、作者與標籤——凡是有關聯、要用 SELECT／INSERT 查詢的資料都放這。文字的真實來源。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">inventory_2</span></span><p class="icard__t">R2 — 檔案儲存</p><p class="icard__d">存放大型二進位檔案的物件儲存：封面照、上傳檔、附件。資料庫只存物件鍵（key），真正的位元組住在這裡。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cached</span></span><p class="icard__t">KV — 讀取快取</p><p class="icard__d">一個超快的鍵值（key→value）儲存，用來記住熱門文章的 JSON，讓重複讀取完全跳過資料庫。文章一變更就清掉。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">auto_fix_high</span></span><p class="icard__t">Images — 圖片最佳化</p><p class="icard__d">直接從一個網址即時縮放、裁切、轉檔照片，讓每台裝置都拿到合適的尺寸，你不必自己存好幾份副本。</p></div></div></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>資料模型</h2></div><p>四張表就能描述一個部落格。一位作者寫多篇文章。一篇文章可以掛多個標籤，一個標籤也能出現在多篇文章上——這種「多對多」關係需要一張中介表，叫 post_tags。注意 posts 只存 cover_key（指向 R2 的指標），不存圖片本身的位元組。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>實體關聯圖</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  AUTHORS ||--o{ POSTS : &quot;撰寫&quot;
+  POSTS ||--o{ POST_TAGS : &quot;擁有&quot;
+  TAGS ||--o{ POST_TAGS : &quot;標記&quot;
+  AUTHORS {
+    int id PK
+    text name
+    text email
+  }
+  POSTS {
+    int id PK
+    int author_id FK
+    text title
+    text slug
+    text cover_key
+    int published
+  }
+  TAGS {
+    int id PK
+    text name
+    text slug
+  }
+  POST_TAGS {
+    int post_id FK
+    int tag_id FK
+  }"></div></figure><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><span class="codeblock__name">schema.sql</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>CREATE TABLE authors (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE
+);
+
+CREATE TABLE posts (
+  id INTEGER PRIMARY KEY,
+  author_id INTEGER NOT NULL REFERENCES authors(id),
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  body TEXT NOT NULL,
+  cover_key TEXT,
+  published INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE tags (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE post_tags (
+  post_id INTEGER NOT NULL REFERENCES posts(id),
+  tag_id INTEGER NOT NULL REFERENCES tags(id),
+  PRIMARY KEY (post_id, tag_id)
+);</code></pre></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>讀取與發布流程</h2></div><h3>讀一篇文章（含快取）</h3><p>有人打開一篇文章時，Worker 會先看 KV。如果 JSON 已經在那裡（命中快取），就立刻回傳、完全不碰資料庫。如果不在（未命中），就去查 D1、組好回應，再存進 KV 給下次用。這就是為什麼熱門文章能一直又快又便宜。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>讀取流程：KV 命中 vs 未命中</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as &quot;瀏覽器&quot;
+  participant W as &quot;Worker API&quot;
+  participant K as &quot;KV 快取&quot;
+  participant D as &quot;D1&quot;
+  U-&gt;&gt;W: GET /api/posts/hello
+  W-&gt;&gt;K: 讀取快取鍵
+  alt 命中快取
+    K--&gt;&gt;W: 已快取 JSON
+    W--&gt;&gt;U: JSON x-cache=HIT
+  else 未命中
+    K--&gt;&gt;W: 空值
+    W-&gt;&gt;D: 查詢文章與作者
+    D--&gt;&gt;W: 資料列
+    W-&gt;&gt;K: 寫入快取 TTL=300s
+    W--&gt;&gt;U: JSON x-cache=MISS
+  end"></div></figure><h3>發布一篇文章</h3><p>寫入則是反方向。作者送出文字加上一張封面圖；Worker 把檔案存進 R2、把資料列（和它的標籤）寫進 D1，然後刪掉 KV 裡的快取副本，讓讀者馬上看到新版本。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>發布流程</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant A as &quot;作者&quot;
+  participant W as &quot;Worker API&quot;
+  participant R as &quot;R2&quot;
+  participant D as &quot;D1&quot;
+  participant K as &quot;KV 快取&quot;
+  A-&gt;&gt;W: POST /api/posts + 圖片
+  W-&gt;&gt;R: 儲存封面圖片
+  R--&gt;&gt;W: 物件鍵
+  W-&gt;&gt;D: 寫入 post 與 post_tags
+  D--&gt;&gt;W: 新文章 id
+  W-&gt;&gt;K: 刪除快取文章
+  W--&gt;&gt;A: 201 Created"></div></figure></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>動手做：綁定與程式碼</h2></div><p>綁定（binding）是一個有名字的連接器（例如 DB 或 CACHE），你在 wrangler.jsonc 裡宣告它，Worker 就能用 env.&lt;名稱&gt; 存取資源——程式碼裡不用放連線字串或密鑰。以下：建立資源、宣告綁定、定義結構，再寫 Worker 與前端。</p><ol class="steps"><li class="step"><p class="step__t">建立儲存資源</p><p class="step__d">資料庫、快取命名空間、圖片桶各一條指令。把 Wrangler 印出的 ID 複製起來。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 create blog
+npx wrangler kv namespace create CACHE
+npx wrangler r2 bucket create blog-images</code></pre></div></li><li class="step"><p class="step__t">宣告綁定</p><p class="step__d">把三個綁定都放進 wrangler.jsonc。這樣 Worker 裡就能用 env.DB、env.CACHE 與 env.BUCKET。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">json</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>{
+  "name": "blog-api",
+  "main": "src/index.js",
+  "compatibility_date": "2025-01-01",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "blog", "database_id": "&lt;your-d1-id&gt;" }
+  ],
+  "kv_namespaces": [
+    { "binding": "CACHE", "id": "&lt;your-kv-id&gt;" }
+  ],
+  "r2_buckets": [
+    { "binding": "BUCKET", "bucket_name": "blog-images" }
+  ]
+}</code></pre></div></li><li class="step"><p class="step__t">套用資料庫結構</p><p class="step__d">用 --remote 把「資料模型」段落裡的 schema.sql 套到雲端上真正的資料庫。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 execute blog --remote --file=./schema.sql</code></pre></div></li><li class="step"><p class="step__t">寫 Worker API（讀取路徑）</p><p class="step__d">這個 handler 是整張藍圖的核心：先 KV、再 D1、最後寫回 KV。它也用 R2 的 cover_key 組出 Images 網址。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const slug = url.pathname.split("/").pop();
+    const cacheKey = `post:${slug}`;
+
+    // 1) Try the KV cache first
+    const cached = await env.CACHE.get(cacheKey);
+    if (cached) {
+      return new Response(cached, {
+        headers: { "content-type": "application/json", "x-cache": "HIT" },
+      });
+    }
+
+    // 2) Cache miss -&gt; read post + author from D1
+    const post = await env.DB
+      .prepare(
+        "SELECT p.id, p.title, p.body, p.cover_key, a.name AS author " +
+        "FROM posts p JOIN authors a ON a.id = p.author_id " +
+        "WHERE p.slug = ? AND p.published = 1"
+      )
+      .bind(slug)
+      .first();
+
+    if (!post) return new Response("Not found", { status: 404 });
+
+    // 3) Build an optimised image URL (R2 object served via Images)
+    post.cover_url =
+      `https://img.example.com/cdn-cgi/image/width=1200/${post.cover_key}`;
+
+    const json = JSON.stringify(post);
+
+    // 4) Save to KV for 5 minutes so the next read is instant
+    await env.CACHE.put(cacheKey, json, { expirationTtl: 300 });
+
+    return new Response(json, {
+      headers: { "content-type": "application/json", "x-cache": "MISS" },
+    });
+  },
+};</code></pre></div></li><li class="step"><p class="step__t">串接前端</p><p class="step__d">在 Pages 上，只要用原生 fetch() 打 Worker API 就夠了。頁面把標題、作者與最佳化過的封面圖渲染出來。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>async function loadPost(slug) {
+  const res = await fetch(`/api/posts/${slug}`);
+  if (!res.ok) throw new Error("Post not found");
+  const post = await res.json();
+
+  document.querySelector("#title").textContent = post.title;
+  document.querySelector("#author").textContent = "by " + post.author;
+  document.querySelector("#cover").src = post.cover_url;
+  document.querySelector("#body").innerHTML = post.body;
+}
+
+// Read the slug from the URL, e.g. /blog/hello-world
+loadPost(location.pathname.split("/").pop());</code></pre></div></li><li class="step"><p class="step__t">部署上線</p><p class="step__d">發布 Worker；把你的 repo 接上 Pages 做前端。整個部落格就上線在 Cloudflare 的邊緣了。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler deploy</code></pre></div></li></ol></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>重點概念</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cable</span></span><p class="icard__t">用綁定，不用連線字串</p><p class="icard__d">你用 env.DB／env.CACHE／env.BUCKET 存取 D1、KV、R2。程式碼裡沒有任何密碼會外洩。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">key</span></span><p class="icard__t">快取鍵與 TTL</p><p class="icard__d">每篇文章以 post:&lt;slug&gt; 為鍵快取，並設定 TTL（存活時間）——就算沒人去清，300 秒後也會自動過期。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">delete_sweep</span></span><p class="icard__t">寫入時失效</p><p class="icard__d">文章一變更就刪掉它的 KV 鍵。否則在 TTL 到期前，讀者會一直看到過時的快取版本。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">category</span></span><p class="icard__t">依資料型態選對工具</p><p class="icard__d">關聯式文字 → D1；大型檔案 → R2；熱讀快取 → KV。混用（例如把圖片塞進 D1）會又慢又貴。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">tune</span></span><p class="icard__t">用網址處理圖片</p><p class="icard__d">在網址加上 /cdn-cgi/image/width=1200/ 就能即時縮放——R2 只存一份原圖，所有尺寸都由它供應。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">dynamic_feed</span></span><p class="icard__t">Pages 與 Worker 分工</p><p class="icard__d">Pages 供應靜態介面；Worker 供應 /api。兩者各自部署，所以調整介面絕不會波及你的 API。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>小提示與陷阱</h2></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">payments</span></span><div class="callout__body"><p class="callout__title">免費額度疊起來很夠用</p><p class="callout__text">D1（每天 500 萬列讀取）、KV（每天 10 萬次讀取）、R2（10GB 且免下載流量費）與 Pages（無限靜態請求）各自都有免費額度——小型部落格幾乎零成本就能跑。有了快取，大多數讀取根本用不到 D1 的額度。</p></div></div><ul><li>編輯或下架文章時一定要讓 KV 鍵失效，否則讀者會看到過時內容。</li><li>D1 裡只存 cover_key（一個短字串）；真正的圖片位元組放在 R2。</li><li>在 posts(slug) 上建索引——它是你主要的查找欄位，能讓讀取一直很便宜。</li><li>R2 沒有下載流量費，所以供應圖片比一般雲端儲存便宜很多。</li><li>密鑰（例如管理者 token）放在 wrangler secrets，千萬別寫進 wrangler.jsonc。</li></ul></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="pages-functions-fullstack.html"><span class="material-symbols-rounded">arrow_forward</span>Pages Functions 全端</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="r2.html"><span class="material-symbols-rounded">arrow_forward</span>R2</a><a href="kv.html"><span class="material-symbols-rounded">arrow_forward</span>Workers KV</a><a href="images.html"><span class="material-symbols-rounded">arrow_forward</span>Images</a></div><a class="docs-btn" href="https://developers.cloudflare.com/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

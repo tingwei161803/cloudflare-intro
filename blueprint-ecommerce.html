@@ -32,7 +32,288 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "架構藍圖：線上商店", "description": "在 Cloudflare 上打造電商的參考架構：商店前台、API、資料庫、購物車、圖片，再接上金流。", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/blueprint-ecommerce.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare 開發者入門指南", "url": "https://cloudflare-intro.peteraim.com/"}}</script>
 </head>
 <body data-page="blueprint-ecommerce">
-  <main id="page"></main>
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>整合實戰</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">shopping_cart</span></span><h1 class="lhero__title">架構藍圖：線上商店</h1></div><p class="lhero__tagline">把 Pages、Workers、D1、Durable Objects、R2、KV、Turnstile 串成一條真正撐得住的結帳流程。</p><div class="lhero__stats"><div class="lhero__stat"><b>7</b><span>Cloudflare 產品</span></div><div class="lhero__stat"><b>4</b><span>核心資料表</span></div><div class="lhero__stat"><b>3</b><span>結帳步驟</span></div><div class="lhero__stat"><b>1</b><span>單一平台</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#overview" data-toc="overview"><span class="material-symbols-rounded">insights</span>我們要蓋什麼？</a><a href="#architecture" data-toc="architecture"><span class="material-symbols-rounded">account_tree</span>每個產品的角色</a><a href="#data-model" data-toc="data-model"><span class="material-symbols-rounded">schema</span>資料模型</a><a href="#flow" data-toc="flow"><span class="material-symbols-rounded">swap_vert</span>結帳流程</a><a href="#build" data-toc="build"><span class="material-symbols-rounded">construction</span>動手做：綁定與程式碼</a><a href="#concepts" data-toc="concepts"><span class="material-symbols-rounded">school</span>為什麼能成立：那些難的部分</a><a href="#tips" data-toc="tips"><span class="material-symbols-rounded">tips_and_updates</span>陷阱與小提示</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="overview"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">insights</span></span><h2>我們要蓋什麼？</h2></div><p class="lead">我們要完全用 Cloudflare 蓋一間小型線上商店。客人逛商品、把東西丟進購物車、用信用卡結帳——而所有環節都跑在 Cloudflare 的邊緣網路上，只有一個外部服務：金流商。</p><p>把這頁當成一張接線圖。每個 Cloudflare 產品各司其職：Pages 負責前台、Worker 是 API 大腦、D1 是 SQL 資料庫、Durable Objects 讓每台購物車和庫存數字維持一致、R2 放商品圖片、KV 快取商品目錄，而 Turnstile 加上 WAF 守住結帳關卡。</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">storefront</span></span><div class="callout__body"><p class="callout__title">把它想成…</p><p class="callout__text">一間實體店面：Pages 是櫥窗、Worker 是收銀員、D1 是後台帳本、Durable Object 是你手上那只獨一無二的提籃（別人碰不到）、R2 是放照片的倉庫，而金流商就是銀行的刷卡機。</p></div></div><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>系統架構</figcaption><div class="mermaid-block" data-mermaid="flowchart TD
+  U[&quot;購物者瀏覽器&quot;] --&gt; WAF[&quot;WAF 與 DDoS 防護&quot;]
+  WAF --&gt; P[&quot;Pages 商店前台&quot;]
+  WAF --&gt; W[&quot;Worker API&quot;]
+  P --&gt;|&quot;商品圖片&quot;| R2[&quot;R2 圖片儲存桶&quot;]
+  P --&gt;|&quot;結帳驗證&quot;| TS[&quot;Turnstile&quot;]
+  W --&gt;|&quot;目錄快取&quot;| KV[&quot;Workers KV&quot;]
+  W --&gt;|&quot;商品與訂單&quot;| D1[&quot;D1 資料庫&quot;]
+  W --&gt;|&quot;購物車與庫存&quot;| DO[&quot;購物車 Durable Objects&quot;]
+  W --&gt;|&quot;刷卡扣款&quot;| PAY[&quot;外部金流&quot;]"></div></figure></section><section class="lsec reveal" data-item="" id="architecture"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">account_tree</span></span><h2>每個產品的角色</h2></div><p>整間商店由七個 Cloudflare 產品，加上一個外部金流服務組成。以下是每一個各自負責什麼。</p><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">web</span></span><p class="icard__t">Pages — 前台</p><p class="icard__d">把靜態或 React 商店介面放在全球 CDN 上。瀏覽器最先接觸的就是它。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bolt</span></span><p class="icard__t">Workers — API</p><p class="icard__d">大腦：負責路由 /api 請求、跑商業邏輯，並與每個儲存層溝通。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">database</span></span><p class="icard__t">D1 — SQL 資料庫</p><p class="icard__d">用關聯式資料表存放商品、客戶、訂單與訂單明細。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">lock_clock</span></span><p class="icard__t">Durable Objects — 購物車與庫存</p><p class="icard__d">每台購物車一個實例；把庫存變動排成一列，避免兩個買家把最後一件商品同時賣掉。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">image</span></span><p class="icard__t">R2 — 商品圖片</p><p class="icard__d">存照片的物件儲存，下載免流量費。資料表的 image_key 欄位就指向這裡。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">bolt_outline</span></span><p class="icard__t">KV — 目錄快取</p><p class="icard__d">在邊緣快取商品清單，讓每次瀏覽不必都打到 D1。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">verified_user</span></span><p class="icard__t">Turnstile — 真人驗證</p><p class="icard__d">結帳表單上的友善驗證碼；Worker 會在扣款前驗證它的 token。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">shield</span></span><p class="icard__t">WAF — 防火牆</p><p class="icard__d">在惡意流量與機器人觸及 Pages 或 Worker 之前就先擋下。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">credit_card</span></span><p class="icard__t">金流商 — 外部</p><p class="icard__d">唯一不在 Cloudflare 上的服務。Worker 以伺服器對伺服器方式呼叫它的 API 來刷卡。</p></div></div><div class="callout callout--note"><span class="callout__icon"><span class="material-symbols-rounded">hub</span></span><div class="callout__body"><p class="callout__title">同一平台，多個綁定</p><p class="callout__text">因為每個產品都住在 Cloudflare 上，Worker 透過綁定（env.DB、env.CART、env.IMAGES、env.CATALOG）就能存取它們，不必用網址加金鑰去打網路請求。設定更少、密鑰更少、延遲更低。</p></div></div></section><section class="lsec reveal" data-item="" id="data-model"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">schema</span></span><h2>資料模型</h2></div><p>四張資料表就能撐起一間基本商店。一位客戶可以下很多筆訂單；每筆訂單包含許多訂單明細（order_items）；每筆明細指向一個商品。order_items 這張中介表記錄了每樣商品買了幾個、單價多少。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>實體關聯圖</figcaption><div class="mermaid-block" data-mermaid="erDiagram
+  CUSTOMERS ||--o{ ORDERS : &quot;下單&quot;
+  ORDERS ||--o{ ORDER_ITEMS : &quot;包含&quot;
+  PRODUCTS ||--o{ ORDER_ITEMS : &quot;列於&quot;
+  CUSTOMERS {
+    int id PK
+    text email
+    text name
+  }
+  PRODUCTS {
+    int id PK
+    text title
+    int price_cents
+    int stock
+  }
+  ORDERS {
+    int id PK
+    int customer_id FK
+    text status
+    int total_cents
+  }
+  ORDER_ITEMS {
+    int id PK
+    int order_id FK
+    int product_id FK
+    int qty
+  }"></div></figure><h3>建立資料表</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">sql</span><span style="flex:1"></span><span class="codeblock__name">schema.sql</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>-- schema.sql : the four core tables of the store
+CREATE TABLE customers (
+  id    INTEGER PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  name  TEXT
+);
+
+CREATE TABLE products (
+  id          INTEGER PRIMARY KEY,
+  title       TEXT NOT NULL,
+  price_cents INTEGER NOT NULL,
+  stock       INTEGER NOT NULL DEFAULT 0,
+  image_key   TEXT                      -- object key inside the R2 bucket
+);
+
+CREATE TABLE orders (
+  id          INTEGER PRIMARY KEY,
+  customer_id INTEGER REFERENCES customers(id),
+  email       TEXT,
+  status      TEXT NOT NULL DEFAULT 'pending',  -- pending | paid | failed
+  total_cents INTEGER NOT NULL,
+  created_at  TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE order_items (
+  id               INTEGER PRIMARY KEY,
+  order_id         INTEGER NOT NULL REFERENCES orders(id),
+  product_id       INTEGER NOT NULL REFERENCES products(id),
+  qty              INTEGER NOT NULL,
+  unit_price_cents INTEGER NOT NULL
+);
+
+CREATE INDEX idx_items_order ON order_items(order_id);</code></pre></div><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">payments</span></span><div class="callout__body"><p class="callout__title">金額用整數存</p><p class="callout__text">注意 price_cents 與 total_cents——金額一律用「整數分」存，絕不要用浮點數的「元」。浮點數會亂進位、掉零頭；整數不會。</p></div></div></section><section class="lsec reveal" data-item="" id="flow"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">swap_vert</span></span><h2>結帳流程</h2></div><p>瀏覽很簡單（從 KV／D1 讀取、用 R2 顯示圖片）。真正有趣的是結帳：五件事必須照正確順序發生——而且一旦刷卡失敗，要能乾淨地回滾。</p><figure class="diagram" data-item=""><figcaption class="diagram__title"><span class="material-symbols-rounded">schema</span>結帳時序</figcaption><div class="mermaid-block" data-mermaid="sequenceDiagram
+  participant U as 瀏覽器
+  participant W as &quot;Worker API&quot;
+  participant TS as Turnstile
+  participant DO as &quot;購物車 DO&quot;
+  participant D as D1
+  participant PAY as 金流
+  U-&gt;&gt;W: POST 結帳並附 token
+  W-&gt;&gt;TS: 驗證 token
+  TS--&gt;&gt;W: 確認是真人
+  W-&gt;&gt;DO: 預扣庫存
+  DO-&gt;&gt;D: 扣減庫存
+  D--&gt;&gt;DO: 更新成功
+  DO--&gt;&gt;W: 已預扣與總金額
+  W-&gt;&gt;D: 寫入待付款訂單
+  D--&gt;&gt;W: 訂單編號
+  W-&gt;&gt;PAY: 建立扣款
+  PAY--&gt;&gt;W: 已付款
+  W-&gt;&gt;D: 更新訂單為已付款
+  W--&gt;&gt;U: 訂單完成"></div></figure><ul><li>先驗證 Turnstile token，讓機器人無法猛攻結帳。</li><li>在購物車 Durable Object 內預扣庫存（原子操作、不超賣）。</li><li>把一筆「待付款」訂單寫進 D1，取得訂單編號。</li><li>呼叫外部金流商來刷卡扣款。</li><li>成功就把訂單標為「已付款」；失敗就標為「失敗」並把庫存還回去。</li></ul><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">warning</span></span><div class="callout__body"><p class="callout__title">先預扣，再扣款</p><p class="callout__text">務必在呼叫金流之前先預扣庫存。如果先扣款才發現商品賣完了，你就收了一筆無法出貨的錢——還得辦退款。</p></div></div></section><section class="lsec reveal" data-item="" id="build"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">construction</span></span><h2>動手做：綁定與程式碼</h2></div><p>以下是真正的接線：把 Worker 連到每個產品的 wrangler 綁定、密鑰、前台前端、結帳 Worker，以及購物車 Durable Object。</p><ol class="steps"><li class="step"><p class="step__t">宣告所有綁定</p><p class="step__d">在 wrangler.jsonc 裡綁定 D1、KV、R2 和購物車 Durable Object，讓 Worker 能用 env.DB、env.CATALOG、env.IMAGES、env.CART 存取它們。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">jsonc</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>{
+  "name": "store-api",
+  "main": "src/index.js",
+  "compatibility_date": "2025-01-01",
+
+  "d1_databases": [
+    { "binding": "DB", "database_name": "store-db", "database_id": "&lt;your-d1-id&gt;" }
+  ],
+  "kv_namespaces": [
+    { "binding": "CATALOG", "id": "&lt;your-kv-id&gt;" }
+  ],
+  "r2_buckets": [
+    { "binding": "IMAGES", "bucket_name": "store-images" }
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "CART", "class_name": "Cart" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["Cart"] }
+  ]
+}</code></pre></div></li><li class="step"><p class="step__t">設定密鑰</p><p class="step__d">Turnstile 與金流金鑰絕不寫進程式碼——用加密密鑰推上去。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># Turnstile secret key (verifies the checkout challenge)
+npx wrangler secret put TURNSTILE_SECRET
+
+# Your payment provider API key (Stripe, etc.)
+npx wrangler secret put PAYMENT_KEY</code></pre></div></li><li class="step"><p class="step__t">套用資料表結構</p><p class="step__d">用 schema.sql 在遠端 D1 資料庫建立那四張資料表。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler d1 execute store-db --remote --file=./schema.sql</code></pre></div></li><li class="step"><p class="step__t">上傳圖片到 R2</p><p class="step__d">把每張照片放進儲存桶，再把它的 key 存到商品那一列。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code># Upload a product image to the R2 bucket, then store its key in D1
+npx wrangler r2 object put store-images/tshirt-blue.jpg --file ./tshirt-blue.jpg
+
+npx wrangler d1 execute store-db --remote \
+  --command "UPDATE products SET image_key = 'tshirt-blue.jpg' WHERE id = 1;"</code></pre></div></li><li class="step"><p class="step__t">部署</p><p class="step__d">發布 Worker；Pages 上的前台則由它自己的 git push 來部署。</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">bash</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>npx wrangler deploy</code></pre></div></li></ol><h3>前端（Pages 前台）</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">public/store.js</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// public/store.js -- runs in the browser on the Pages storefront
+const API = "https://store-api.example.workers.dev";
+
+// A stable id for this browser's cart (used to find its Durable Object)
+const cartId = localStorage.getItem("cartId") || crypto.randomUUID();
+localStorage.setItem("cartId", cartId);
+
+// 1) Browse products (images load straight from R2)
+async function loadProducts() {
+  const res = await fetch(`${API}/api/products`);
+  const products = await res.json();
+  for (const p of products) {
+    // &lt;img src="https://images.example.com/&lt;image_key&gt;"&gt; served by R2
+    renderCard(p);
+  }
+}
+
+// 2) Add to cart
+async function addToCart(productId) {
+  await fetch(`${API}/api/cart/add`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ cartId, productId, qty: 1 }),
+  });
+}
+
+// 3) Checkout -- token comes from the Turnstile widget on the page
+async function checkout(email) {
+  const token = window.turnstile.getResponse();   // proves you are human
+  const res = await fetch(`${API}/api/checkout`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ cartId, token, email }),
+  });
+  const { orderId, status } = await res.json();
+  alert(`Order ${orderId}: ${status}`);
+}</code></pre></div><h3>結帳 Worker（API）</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">src/index.js</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/index.js -- the store Worker API (router)
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Browse catalog: serve from the KV cache, fall back to D1
+    if (url.pathname === "/api/products") {
+      let catalog = await env.CATALOG.get("catalog", "json");
+      if (!catalog) {
+        const { results } = await env.DB
+          .prepare("SELECT id, title, price_cents, stock, image_key FROM products")
+          .all();
+        catalog = results;
+        await env.CATALOG.put("catalog", JSON.stringify(results), { expirationTtl: 60 });
+      }
+      return Response.json(catalog);
+    }
+
+    // Add to cart: route to THIS shopper's Cart Durable Object
+    if (url.pathname === "/api/cart/add" &amp;&amp; request.method === "POST") {
+      const { cartId, productId, qty } = await request.json();
+      const stub = env.CART.get(env.CART.idFromName(cartId));
+      return stub.fetch("https://do/add", {
+        method: "POST",
+        body: JSON.stringify({ productId, qty }),
+      });
+    }
+
+    // Checkout
+    if (url.pathname === "/api/checkout" &amp;&amp; request.method === "POST") {
+      const { cartId, token, email } = await request.json();
+
+      // 1) Turnstile: prove the buyer is a human, not a bot
+      if (!(await verifyTurnstile(token, env.TURNSTILE_SECRET)))
+        return new Response("Failed challenge", { status: 403 });
+
+      // 2) Reserve stock atomically inside the Cart Durable Object
+      const cart = env.CART.get(env.CART.idFromName(cartId));
+      const reserved = await (await cart.fetch("https://do/reserve", { method: "POST" })).json();
+      if (!reserved.ok) return new Response("Out of stock", { status: 409 });
+
+      // 3) Create a pending order in D1
+      const order = await env.DB
+        .prepare("INSERT INTO orders (email, status, total_cents) VALUES (?, 'pending', ?) RETURNING id")
+        .bind(email, reserved.total_cents)
+        .first();
+
+      // 4) Charge the external payment provider
+      const charge = await chargePayment(env.PAYMENT_KEY, order.id, reserved.total_cents);
+
+      // 5) Confirm, or roll the stock back on failure
+      const status = charge.paid ? "paid" : "failed";
+      await env.DB.prepare("UPDATE orders SET status = ? WHERE id = ?")
+        .bind(status, order.id).run();
+      if (!charge.paid) await cart.fetch("https://do/release", { method: "POST" });
+
+      return Response.json({ orderId: order.id, status });
+    }
+
+    return new Response("Not found", { status: 404 });
+  },
+};
+
+async function verifyTurnstile(token, secret) {
+  const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ secret, response: token }),
+  });
+  return (await r.json()).success === true;
+}
+
+async function chargePayment(apiKey, orderId, amountCents) {
+  // Swap this for your provider's SDK / REST call
+  const r = await fetch("https://api.payments.example/v1/charges", {
+    method: "POST",
+    headers: { authorization: "Bearer " + apiKey, "content-type": "application/json" },
+    body: JSON.stringify({ amount: amountCents, currency: "twd", reference: orderId }),
+  });
+  return r.json();
+}</code></pre></div><h3>購物車／庫存 Durable Object</h3><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><span class="codeblock__name">src/cart.js</span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>複製</button></div><pre><code>// src/cart.js -- one Durable Object instance per shopper cart.
+// A single DO is single-threaded, so stock checks never race each other.
+export class Cart {
+  constructor(state, env) {
+    this.state = state;   // durable, consistent storage for THIS cart
+    this.env = env;
+  }
+
+  async fetch(request) {
+    const url = new URL(request.url);
+    let items = (await this.state.storage.get("items")) || [];
+
+    if (url.pathname === "/add") {
+      const { productId, qty } = await request.json();
+      items = [...items, { productId, qty }];           // immutable update
+      await this.state.storage.put("items", items);
+      return Response.json({ items });
+    }
+
+    if (url.pathname === "/reserve") {
+      // Decrement stock for every line, all-or-nothing.
+      // 'WHERE stock &gt;= ?' makes each decrement safe under load.
+      let total = 0;
+      for (const it of items) {
+        const row = await this.env.DB
+          .prepare("UPDATE products SET stock = stock - ? WHERE id = ? AND stock &gt;= ? RETURNING price_cents")
+          .bind(it.qty, it.productId, it.qty)
+          .first();
+        if (!row) return Response.json({ ok: false });  // sold out -&gt; abort
+        total += row.price_cents * it.qty;
+      }
+      return Response.json({ ok: true, total_cents: total });
+    }
+
+    if (url.pathname === "/release") {
+      // Payment failed: give the reserved stock back.
+      for (const it of items) {
+        await this.env.DB
+          .prepare("UPDATE products SET stock = stock + ? WHERE id = ?")
+          .bind(it.qty, it.productId).run();
+      }
+      await this.state.storage.delete("items");
+      return Response.json({ ok: true });
+    }
+
+    return new Response("DO route not found", { status: 404 });
+  }
+}</code></pre></div></section><section class="lsec reveal" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>為什麼能成立：那些難的部分</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">shopping_basket</span></span><p class="icard__t">購物車一致性</p><p class="icard__d">每台購物車透過 idFromName(cartId) 對應到剛好一個 Durable Object。該購物車的所有加入／預扣都在同一個實例上、依序執行，所以讀寫不會交錯，也不會掉更新。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">lock</span></span><p class="icard__t">用 DO 管庫存</p><p class="icard__d">Durable Object 是單執行緒。把庫存扣減都導進它，兩個搶最後一件的客人就會一前一後被處理——沒有競態、不會超賣。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">shield_lock</span></span><p class="icard__t">保護結帳</p><p class="icard__d">WAF 在邊緣擋掉惡意流量；Turnstile 證明是真人在結帳；Worker 在呼叫金流之前，會在伺服器端先驗證那個 token。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">cached</span></span><p class="icard__t">先快取，再回源</p><p class="icard__d">瀏覽時先從 KV 讀目錄，只有快取沒命中才查 D1，查完再回填 KV。頁面更快，D1 讀取也少很多。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">link</span></span><p class="icard__t">用綁定，不用網址</p><p class="icard__d">env.DB／env.CART／env.IMAGES 是部署時注入的綁定。自家服務之間不需要連線字串、也不需要 API 金鑰。</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">undo</span></span><p class="icard__t">失敗就回滾</p><p class="icard__d">如果刷卡被拒，訂單標為「失敗」，DO 會把預扣的庫存還回去，讓架上數量始終誠實。</p></div></div></section><section class="lsec reveal" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>陷阱與小提示</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">verified</span></span><div class="callout__body"><p class="callout__title">金流一律在伺服器端驗證</p><p class="callout__text">永遠不要相信瀏覽器說「這筆已付款」。要從 Worker 呼叫金流商的 API（或用有簽章的 webhook）來確認付款，再依結果更新訂單狀態。</p></div></div><ul><li>把 KV 目錄的 TTL 設短（例如 60 秒），或在商品變動時就清掉那個 key，價格才不會過期。</li><li>讓金流呼叫具備冪等性——把訂單編號當作 reference 傳過去，重送的請求就不會重複扣款。</li><li>D1 只存圖片 key；公開的 R2 網址在前端組出來。這讓資料列小、網址也好替換。</li><li>用金流商的 webhook 當後援，以防客人在 Worker 看到「已付款」之前就關掉分頁。</li><li>加一個定時工作（Cron Trigger），把那些開始結帳卻沒完成的購物車所預扣的庫存釋放掉。</li></ul><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">rocket_launch</span></span><div class="callout__body"><p class="callout__title">先小做，再長大</p><p class="callout__text">第一天不必七個產品全上。先從 Pages＋Worker＋D1 開始，有圖片再加 R2、瀏覽量變大再加 KV、出現庫存競態再加 Durable Objects，而在真正收錢之前先把 Turnstile／WAF 補上。</p></div></div></section><div class="lesson-foot"><p class="lesson-foot__label">相關產品</p><div class="related"><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="d1.html"><span class="material-symbols-rounded">arrow_forward</span>D1</a><a href="durable-objects.html"><span class="material-symbols-rounded">arrow_forward</span>Durable Objects</a><a href="r2.html"><span class="material-symbols-rounded">arrow_forward</span>R2</a><a href="turnstile.html"><span class="material-symbols-rounded">arrow_forward</span>Turnstile</a><a href="waf.html"><span class="material-symbols-rounded">arrow_forward</span>WAF</a></div><a class="docs-btn" href="https://developers.cloudflare.com/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>官方文件<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>

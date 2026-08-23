@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CTETKN2KDW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CTETKN2KDW');
+  </script>
+  <title>Turnstile · Cloudflare for Beginners</title>
+  <meta name="description" content="A privacy-friendly CAPTCHA alternative with no annoying puzzles" />
+  <meta name="theme-color" content="#F6821F" />
+  <link rel="canonical" href="https://cloudflare-intro.peteraim.com/en/turnstile.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://cloudflare-intro.peteraim.com/turnstile.html" />
+  <link rel="alternate" hreflang="en" href="https://cloudflare-intro.peteraim.com/en/turnstile.html" />
+  <link rel="alternate" hreflang="x-default" href="https://cloudflare-intro.peteraim.com/turnstile.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Turnstile · Cloudflare for Beginners" />
+  <meta property="og:description" content="A privacy-friendly CAPTCHA alternative with no annoying puzzles" />
+  <meta property="og:url" content="https://cloudflare-intro.peteraim.com/en/turnstile.html" />
+  <meta property="og:site_name" content="Cloudflare for Beginners" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Turnstile · Cloudflare for Beginners" />
+  <meta name="twitter:description" content="A privacy-friendly CAPTCHA alternative with no annoying puzzles" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Turnstile", "description": "A privacy-friendly CAPTCHA alternative with no annoying puzzles", "inLanguage": "en", "url": "https://cloudflare-intro.peteraim.com/en/turnstile.html", "isPartOf": {"@type": "WebSite", "name": "Cloudflare for Beginners", "url": "https://cloudflare-intro.peteraim.com/en/"}}</script>
+</head>
+<body data-page="turnstile">
+  <main id="page">
+<div class="reading-progress" id="readingProgress" aria-hidden="true" style="width: 0%;"></div><div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>Security</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">verified_user</span></span><h1 class="lhero__title">Turnstile</h1></div><p class="lhero__tagline">Proves your visitors are human — usually without making them click a single thing.</p><div class="lhero__stats"><div class="lhero__stat"><b>Free</b><span>Unlimited requests</span></div><div class="lhero__stat"><b>No puzzles</b><span>Invisible challenges</span></div><div class="lhero__stat"><b>300s</b><span>Token validity</span></div></div></div><div class="lesson-layout"><nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner"><a href="#what" data-toc="what" class=""><span class="material-symbols-rounded">lightbulb</span>What is Turnstile?</a><a href="#why" data-toc="why" class=""><span class="material-symbols-rounded">help</span>Why use it?</a><a href="#how" data-toc="how" class=""><span class="material-symbols-rounded">rocket_launch</span>How to add it</a><a href="#concepts" data-toc="concepts" class=""><span class="material-symbols-rounded">school</span>Key concepts</a><a href="#tips" data-toc="tips" class="is-active"><span class="material-symbols-rounded">tips_and_updates</span>Tips &amp; billing</a></div></nav><div class="lesson-body"><section class="lsec reveal is-in" data-item="" id="what"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">lightbulb</span></span><h2>What is Turnstile?</h2></div><p class="lead">Turnstile is Cloudflare's free replacement for CAPTCHA — those 'select all the traffic lights' tests. It checks visitors are real humans, usually without making them solve anything.</p><p>Instead of puzzles, it runs tiny invisible JavaScript checks in the background to gather signals about the browser. From those signals it decides whether the visitor is trustworthy, only showing a simple checkbox when something looks risky.</p><div class="callout callout--analogy"><span class="callout__icon"><span class="material-symbols-rounded">sensor_occupied</span></span><div class="callout__body"><p class="callout__title">Think of it like…</p><p class="callout__text">An automatic door that quietly senses a real person approaching and opens — versus the old turnstile where everyone had to stop and fumble with a token.</p></div></div></section><section class="lsec reveal is-in" data-item="" id="why"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">help</span></span><h2>Why use it?</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">sentiment_satisfied</span></span><p class="icard__t">Better UX</p><p class="icard__d">No frustrating image grids. Most users sail through without doing anything.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">lock_person</span></span><p class="icard__t">Privacy-first</p><p class="icard__d">Doesn't track users across the web or harvest data to sell, unlike some ad-funded CAPTCHAs.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">smart_toy</span></span><p class="icard__t">Stops bots</p><p class="icard__d">Blocks spam sign-ups, fake comments, and automated form abuse.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">accessibility_new</span></span><p class="icard__t">Accessible</p><p class="icard__d">WCAG 2.2 AA compliant, so it works for users with disabilities.</p></div></div></section><section class="lsec reveal is-in" data-item="" id="how"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">rocket_launch</span></span><h2>How to add it</h2></div><p>Turnstile works in two parts: a widget on your page (client side) and a verification check on your server (server side). You always need both — never trust the client alone.</p><ol class="steps"><li class="step"><p class="step__t">Create a widget</p><p class="step__d">In the Cloudflare dashboard go to Turnstile → Add widget. Enter your domain and pick a widget type. You'll get two keys: a Sitekey (public, for the page) and a Secret key (private, for your server).</p></li><li class="step"><p class="step__t">Embed the widget in your page</p><p class="step__d">Add the Turnstile script in the &lt;head&gt;, then drop a div with class cf-turnstile and your sitekey inside your form. It auto-creates a hidden field named cf-turnstile-response when solved.</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">html</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>Copy</button></div><pre><code>&lt;head&gt;
+  &lt;script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;form action="/submit" method="POST"&gt;
+    &lt;input type="email" name="email" placeholder="Email" required /&gt;
+    &lt;!-- Replace YOUR_SITEKEY with your real sitekey --&gt;
+    &lt;div class="cf-turnstile" data-sitekey="YOUR_SITEKEY" data-theme="auto"&gt;&lt;/div&gt;
+    &lt;button type="submit"&gt;Sign up&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/body&gt;</code></pre></div></li><li class="step"><p class="step__t">Verify the token on your server</p><p class="step__d">When the form is submitted, send the cf-turnstile-response token plus your Secret key to Cloudflare's Siteverify API. Only accept the form if the response says success: true.</p><div class="codeblock"><div class="codeblock__bar"><span class="codeblock__dot" style="background:#FF5F56"></span><span class="codeblock__dot" style="background:#FFBD2E"></span><span class="codeblock__dot" style="background:#27C93F"></span><span class="codeblock__lang">js</span><span style="flex:1"></span><button class="copy-btn" type="button" data-copy=""><span class="material-symbols-rounded">content_copy</span>Copy</button></div><pre><code>// Node.js / server-side
+const token = formData.get('cf-turnstile-response');
+
+const res = await fetch(
+  'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      secret: process.env.TURNSTILE_SECRET_KEY, // never hardcode!
+      response: token,
+    }),
+  }
+);
+
+const data = await res.json();
+if (!data.success) {
+  return new Response('Failed the human check', { status: 403 });
+}
+// data.success === true -&gt; continue processing the form</code></pre></div></li></ol><div class="callout callout--tip"><span class="callout__icon"><span class="material-symbols-rounded">science</span></span><div class="callout__body"><p class="callout__title">Test keys for local development</p><p class="callout__text">Use sitekey 1x00000000000000000000AA (always passes) with secret 1x0000000000000000000000000000000AA while developing, so you don't trigger real challenges. Swap in your real keys before going live.</p></div></div></section><section class="lsec reveal is-in" data-item="" id="concepts"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">school</span></span><h2>Key concepts</h2></div><div class="icards"><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">vpn_key</span></span><p class="icard__t">Sitekey</p><p class="icard__d">Public key placed on your page. Safe to expose in HTML.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">password</span></span><p class="icard__t">Secret key</p><p class="icard__d">Private key used only on your server to verify tokens. Keep it secret!</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">toll</span></span><p class="icard__t">Token</p><p class="icard__d">A one-time pass the widget issues after a visitor passes. Valid 300s, usable once.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">check_circle</span></span><p class="icard__t">Siteverify</p><p class="icard__d">The Cloudflare API your server calls to confirm a token is genuine.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">visibility</span></span><p class="icard__t">Managed widget</p><p class="icard__d">Default mode — decides on its own whether to show a checkbox based on risk.</p></div><div class="icard"><span class="icard__icon"><span class="material-symbols-rounded">visibility_off</span></span><p class="icard__t">Invisible widget</p><p class="icard__d">Runs completely in the background with no visible element at all.</p></div></div></section><section class="lsec reveal is-in" data-item="" id="tips"><div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">tips_and_updates</span></span><h2>Tips &amp; billing</h2></div><div class="callout callout--warn"><span class="callout__icon"><span class="material-symbols-rounded">shield</span></span><div class="callout__body"><p class="callout__title">Always verify server-side</p><p class="callout__text">A clever bot can fake the client widget. The Siteverify check on your server is the part that actually keeps you safe — never skip it.</p></div></div><ul><li>Turnstile is free with unlimited verifications, even on the Free plan.</li><li>It does not require your whole site to be proxied through Cloudflare — it works on any site.</li><li>Tokens expire after 300 seconds and can only be validated once, so verify promptly.</li><li>Pick widget size (normal, flexible, compact) and theme (auto/light/dark) with data- attributes.</li></ul></section><div class="lesson-foot"><p class="lesson-foot__label">Related products</p><div class="related"><a href="waf.html"><span class="material-symbols-rounded">arrow_forward</span>WAF</a><a href="workers.html"><span class="material-symbols-rounded">arrow_forward</span>Workers</a><a href="access.html"><span class="material-symbols-rounded">arrow_forward</span>Access</a><a href="ssl-tls.html"><span class="material-symbols-rounded">arrow_forward</span>SSL/TLS</a></div><a class="docs-btn" href="https://developers.cloudflare.com/turnstile/" target="_blank" rel="noopener"><span class="material-symbols-rounded">menu_book</span>Official docs<span class="material-symbols-rounded">open_in_new</span></a></div></div></div>
+</main>
+  <script src="../data/data.js"></script>
+  <script src="../assets/shell.js"></script>
+  <script src="../assets/app.js"></script>
+<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/turnstile.html" hreflang="zh-Hant" rel="alternate" lang="zh-Hant">中文版</a></p>
+</body>
+</html>

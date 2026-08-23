@@ -6,15 +6,16 @@
    tiny toolkit on window.LDW that each page's app.js reuses.
 
    Loaded on EVERY page BEFORE app.js. It:
-     1. reads persisted lang/theme (localStorage, sandbox-safe),
+     1. reads the language from <html lang> and the theme from localStorage,
      2. injects app bar + nav + footer + dialog around <main id="page">,
-     3. wires the language / theme toggles,
-     4. highlights the current page (from <body data-page="...">),
-     5. lets app.js register an onLang() callback so a language switch repaints
-        BOTH the chrome AND the page body — nothing is ever left in one language.
+     3. wires the theme toggle and points the language link at this page's
+        counterpart in the other language,
+     4. highlights the current page (from <body data-page="...">).
 
-   Cross-page persistence is automatic: lang/theme live in localStorage (an
-   origin-wide store), so navigating to another .html restores the same state.
+   Language belongs to the URL, not to the visitor: the Chinese pages live at
+   the root and the English ones under /en/, so switching language is a
+   navigation rather than an in-place repaint. Theme still persists in
+   localStorage (an origin-wide store) and survives moving between pages.
    ========================================================================= */
 (function () {
   "use strict";
@@ -34,9 +35,30 @@
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
 
-  /* ---------- global state ---------- */
+  /* ---------- global state ----------
+     The URL decides the language, so <html lang> is what we read. localStorage
+     must not seed it: a crawler has no localStorage and would always be handed
+     the fallback, which is how the English half of the site ended up with no
+     address of its own. Writing the choice back is gone too; the address
+     carries it now. `lang` stays "zh"/"en" because it is the key into the
+     content dictionaries — the document keeps the precise "zh-Hant". */
+  function langFromDocument() {
+    var declared = (document.documentElement.getAttribute("lang") || "zh").toLowerCase();
+    return declared.indexOf("zh") === 0 ? "zh" : "en";
+  }
+
+  /* the same page in the other language — mirror the path, never guess */
+  var TWIN_DIR = "/en";
+  function altLangHref() {
+    var path = location.pathname || "/";
+    if (path === TWIN_DIR || path.indexOf(TWIN_DIR + "/") === 0) {
+      return path.slice(TWIN_DIR.length) || "/";
+    }
+    return TWIN_DIR + path;
+  }
+
   var state = {
-    lang:  lsGet("lang")  || "zh",
+    lang:  langFromDocument(),
     theme: lsGet("theme") || "light"
   };
 
@@ -62,9 +84,7 @@
     return PAGES[0] || null;
   }
 
-  /* ---------- onLang / onTheme callback registries (app.js plugs in here) ---------- */
-  var langSubscribers = [];
-  function onLang(fn) { if (typeof fn === "function") langSubscribers.push(fn); }
+  /* ---------- onTheme callback registry (app.js plugs in here) ---------- */
   var themeSubscribers = [];
   function onTheme(fn) { if (typeof fn === "function") themeSubscribers.push(fn); }
 
@@ -98,10 +118,13 @@
               '<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>' +
             '<span class="gh-star__count" id="ghStarCount"><span class="material-symbols-rounded" aria-hidden="true">star</span><b>&mdash;</b></span>' +
           '</a>' +
-          '<button class="icon-btn" id="langToggle" type="button" title="Language" aria-label="Toggle language / 切換語言">' +
+          '<a class="icon-btn" id="langToggle" href="' + escapeHtml(altLangHref()) + '" ' +
+             'hreflang="' + (state.lang === "en" ? "zh-Hant" : "en") + '" rel="alternate" ' +
+             'title="Language" aria-label="' +
+             (state.lang === "en" ? "切換到中文版 / View in Chinese" : "View in English / 切換到英文版") + '">' +
             '<span class="material-symbols-rounded">translate</span>' +
-            '<span class="icon-btn__txt" id="langLabel">中</span>' +
-          '</button>' +
+            '<span class="icon-btn__txt" id="langLabel"></span>' +
+          '</a>' +
           '<button class="icon-btn" id="themeToggle" type="button" title="Theme" aria-label="Toggle theme / 切換主題">' +
             '<span class="material-symbols-rounded" id="themeIcon">dark_mode</span>' +
           '</button>' +
@@ -170,7 +193,6 @@
 
   /* ---------- chrome text in the active language ---------- */
   function refreshChrome() {
-    document.documentElement.setAttribute("lang", state.lang);
     var page = currentPage();
     var siteTitle = t(META.title);
     var pageTitle = page ? t(page.title) : "";
@@ -198,10 +220,11 @@
     if (icon) icon.textContent = state.theme === "dark" ? "light_mode" : "dark_mode";
     lsSet("theme", state.theme);
   }
+  /* The toggle is a link now, so it is labelled with the language it leads TO,
+     not the one already on screen. */
   function applyLangChrome() {
     var label = document.getElementById("langLabel");
-    if (label) label.textContent = state.lang === "en" ? "EN" : "中";
-    lsSet("lang", state.lang);
+    if (label) label.textContent = state.lang === "en" ? "中" : "EN";
   }
 
   function wire() {
@@ -209,12 +232,6 @@
       state.theme = state.theme === "dark" ? "light" : "dark";
       applyTheme();
       themeSubscribers.forEach(function (fn) { try { fn(state.theme); } catch (e) {} });
-    });
-    document.getElementById("langToggle").addEventListener("click", function () {
-      state.lang = state.lang === "en" ? "zh" : "en";
-      applyLangChrome();
-      refreshChrome();
-      langSubscribers.forEach(function (fn) { try { fn(state.lang); } catch (e) {} });
     });
   }
 
@@ -245,7 +262,7 @@
     lsGet: lsGet, lsSet: lsSet,
     pages: PAGES, meta: META,
     currentPage: currentPage, currentSlug: currentSlug, pageHref: pageHref,
-    onLang: onLang, onTheme: onTheme,
+    onTheme: onTheme,
     refreshChrome: refreshChrome,
     dialog: function () { return document.getElementById("dialog"); }
   };

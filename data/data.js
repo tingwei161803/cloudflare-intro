@@ -965,7 +965,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Edge",
-          "zh": "邊緣 (Edge)"
+          "zh": "邊緣（Edge）"
         },
         "def": {
           "en": "Servers placed physically close to users all over the world, so data travels a short distance and responses feel fast. Like having a convenience store on every street corner instead of one big warehouse far away.",
@@ -979,7 +979,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "CDN",
-          "zh": "內容傳遞網路 (CDN)"
+          "zh": "內容傳遞網路（CDN）"
         },
         "def": {
           "en": "A worldwide network of servers that keeps copies of a website's files near users, so pages load faster. CDN stands for Content Delivery Network.",
@@ -993,7 +993,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Serverless",
-          "zh": "無伺服器 (Serverless)"
+          "zh": "無伺服器（Serverless）"
         },
         "def": {
           "en": "A way to run code without renting or managing your own servers; the platform automatically runs it and you only pay when it actually runs. You still use servers, you just don't have to think about them.",
@@ -1007,7 +1007,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Worker",
-          "zh": "Worker (邊緣函式)"
+          "zh": "Worker（邊緣函式）"
         },
         "def": {
           "en": "A small piece of code that runs on Cloudflare's edge servers close to users, handling each web request in milliseconds. Think of it as a tiny helper that greets every visitor at the nearest door.",
@@ -1021,7 +1021,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Cold start",
-          "zh": "冷啟動 (Cold start)"
+          "zh": "冷啟動（Cold start）"
         },
         "def": {
           "en": "The short delay when code has to wake up and get ready before handling its first request. Cloudflare Workers are designed to have essentially zero cold start, so there is almost no wait.",
@@ -1035,7 +1035,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Wrangler",
-          "zh": "Wrangler (命令列工具)"
+          "zh": "Wrangler（命令列工具）"
         },
         "def": {
           "en": "Cloudflare's command-line tool for building, testing, and deploying Workers from your computer. It's the main remote control developers use to ship code to the edge.",
@@ -1049,7 +1049,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Workers KV",
-          "zh": "Workers KV (鍵值儲存)"
+          "zh": "Workers KV（鍵值儲存）"
         },
         "def": {
           "en": "A simple storage service that saves data as key-value pairs (a name and its value) and copies it across the globe for fast reads everywhere. Great for settings, small data, and things read far more often than they're changed.",
@@ -1063,7 +1063,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "R2",
-          "zh": "R2 (物件儲存)"
+          "zh": "R2（物件儲存）"
         },
         "def": {
           "en": "Cloudflare's storage for large files like images, videos, and backups, with no fee for downloading your data out. Like a giant online hard drive that doesn't charge you to take files back out.",
@@ -1077,7 +1077,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "D1",
-          "zh": "D1 (SQL 資料庫)"
+          "zh": "D1（SQL 資料庫）"
         },
         "def": {
           "en": "Cloudflare's serverless SQL database, built on SQLite, for storing structured data in tables with rows and columns. Good when you need real queries, like a tidy spreadsheet you can ask questions about.",
@@ -1091,7 +1091,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Durable Object",
-          "zh": "Durable Object (持久物件)"
+          "zh": "Durable Object（持久物件）"
         },
         "def": {
           "en": "A special Worker that remembers its own data and guarantees only one copy exists for a given name, so it's perfect for coordinating things like chat rooms or live counters. Think of it as one trusted clerk who always handles the same desk.",
@@ -1105,7 +1105,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Queue",
-          "zh": "佇列 (Queue)"
+          "zh": "佇列（Queue）"
         },
         "def": {
           "en": "A waiting line for tasks: your app drops jobs in, and they get processed one by one in the background so nothing is lost during busy spikes. Like a deli ticket line that keeps orders in order.",
@@ -1119,7 +1119,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Vectorize",
-          "zh": "Vectorize (向量資料庫)"
+          "zh": "Vectorize（向量資料庫）"
         },
         "def": {
           "en": "A database that stores 'embeddings' (lists of numbers representing meaning) and quickly finds items with similar meaning. It powers search by idea rather than by exact words.",
@@ -1133,7 +1133,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Embedding",
-          "zh": "嵌入向量 (Embedding)"
+          "zh": "嵌入向量（Embedding）"
         },
         "def": {
           "en": "A list of numbers that captures the meaning of a piece of text, image, or audio, so a computer can compare how similar two things are. Words with similar meaning end up with similar numbers.",
@@ -1147,7 +1147,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "RAG",
-          "zh": "檢索增強生成 (RAG)"
+          "zh": "檢索增強生成（RAG）"
         },
         "def": {
           "en": "A technique where an AI first looks up relevant facts from your own documents, then uses them to answer, giving more accurate and up-to-date replies. RAG stands for Retrieval-Augmented Generation.",
@@ -1161,7 +1161,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Inference",
-          "zh": "推論 (Inference)"
+          "zh": "推論（Inference）"
         },
         "def": {
           "en": "The act of actually using a trained AI model to get an answer, such as generating text or classifying an image. Training is teaching the model; inference is asking it to do the work.",
@@ -1175,7 +1175,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "AI Gateway",
-          "zh": "AI Gateway (AI 閘道)"
+          "zh": "AI Gateway（AI 閘道）"
         },
         "def": {
           "en": "A control point that sits between your app and AI models to add caching, rate limits, logging, and cost tracking. Like a smart receptionist that manages and records every request to your AI.",
@@ -1189,7 +1189,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "GPU",
-          "zh": "圖形處理器 (GPU)"
+          "zh": "圖形處理器（GPU）"
         },
         "def": {
           "en": "A specialized chip that does many calculations at once, which makes it ideal for running AI models. Cloudflare runs your AI on GPUs at the edge so you don't have to buy your own.",
@@ -1203,7 +1203,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "WAF",
-          "zh": "網站應用防火牆 (WAF)"
+          "zh": "網站應用防火牆（WAF）"
         },
         "def": {
           "en": "A filter that inspects incoming web traffic and blocks malicious requests like hacking attempts before they reach your site. WAF stands for Web Application Firewall; think of it as a bouncer at the door.",
@@ -1217,7 +1217,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "DDoS",
-          "zh": "分散式阻斷服務攻擊 (DDoS)"
+          "zh": "分散式阻斷服務攻擊（DDoS）"
         },
         "def": {
           "en": "An attack that floods a website with huge amounts of fake traffic to overwhelm it and knock it offline. Like a crowd jamming a shop's doorway so real customers can't get in.",
@@ -1231,7 +1231,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "TLS / SSL",
-          "zh": "傳輸層安全協定 (TLS / SSL)"
+          "zh": "傳輸層安全協定（TLS / SSL）"
         },
         "def": {
           "en": "The technology that encrypts the connection between a browser and a website so others can't read or tamper with the data. SSL is the older name; TLS is the modern version, and both put the padlock in your browser.",
@@ -1245,7 +1245,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Certificate",
-          "zh": "憑證 (Certificate)"
+          "zh": "憑證（Certificate）"
         },
         "def": {
           "en": "A digital ID card that proves a website really is who it claims to be and enables the encrypted padlock connection. A trusted authority issues it, like a government issuing a passport.",
@@ -1259,7 +1259,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "DNS",
-          "zh": "網域名稱系統 (DNS)"
+          "zh": "網域名稱系統（DNS）"
         },
         "def": {
           "en": "The internet's phone book that turns a human-friendly name like example.com into the numeric address computers use to connect. DNS stands for Domain Name System.",
@@ -1273,7 +1273,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "DNS resolver",
-          "zh": "DNS 解析器 (DNS resolver)"
+          "zh": "DNS 解析器（DNS resolver）"
         },
         "def": {
           "en": "The service your device asks to look up a website's address in the DNS phone book. Cloudflare's free resolver, 1.1.1.1, is known for being fast and private.",
@@ -1287,7 +1287,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "CNAME",
-          "zh": "別名紀錄 (CNAME)"
+          "zh": "別名紀錄（CNAME）"
         },
         "def": {
           "en": "A DNS record that points one domain name to another, like a forwarding address. For example, www.example.com can be a CNAME that points to example.com.",
@@ -1301,7 +1301,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Cache",
-          "zh": "快取 (Cache)"
+          "zh": "快取（Cache）"
         },
         "def": {
           "en": "A temporary copy of data kept close to users so it can be served instantly without fetching it again from far away. Like keeping snacks in your desk drawer instead of walking to the store each time.",
@@ -1315,7 +1315,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "TTL",
-          "zh": "存活時間 (TTL)"
+          "zh": "存活時間（TTL）"
         },
         "def": {
           "en": "How long a cached copy or DNS record is allowed to be kept before it must be refreshed. TTL stands for Time To Live; a short TTL means data updates more often.",
@@ -1329,7 +1329,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Egress fee",
-          "zh": "資料流出費 (Egress fee)"
+          "zh": "資料流出費（Egress fee）"
         },
         "def": {
           "en": "A charge some cloud providers add when you download or move your data out of their storage. Cloudflare R2 famously has zero egress fees, so taking your files out is free.",
@@ -1343,7 +1343,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Object storage",
-          "zh": "物件儲存 (Object storage)"
+          "zh": "物件儲存（Object storage）"
         },
         "def": {
           "en": "A way of storing files as standalone 'objects' (the file plus its info) that scales to huge amounts of data. Ideal for photos, videos, and backups; R2 is Cloudflare's object storage.",
@@ -1357,7 +1357,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Key-value",
-          "zh": "鍵值 (Key-value)"
+          "zh": "鍵值（Key-value）"
         },
         "def": {
           "en": "A simple way to store data as pairs: a unique 'key' (the label) and its 'value' (the content), like a word and its definition in a dictionary. Fast to look up when you know the key.",
@@ -1371,7 +1371,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Zero Trust",
-          "zh": "零信任 (Zero Trust)"
+          "zh": "零信任（Zero Trust）"
         },
         "def": {
           "en": "A security approach that never assumes anyone is safe just because they're inside the network; every user and request must prove itself every time. The motto is 'never trust, always verify.'",
@@ -1399,7 +1399,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Access",
-          "zh": "Access (存取控管)"
+          "zh": "Access（存取控管）"
         },
         "def": {
           "en": "A Cloudflare service that puts a login check in front of your internal apps, so only approved people can reach them, no VPN needed. Like a guest list at the door of a private app.",
@@ -1413,7 +1413,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Gateway",
-          "zh": "Gateway (安全閘道)"
+          "zh": "Gateway（安全閘道）"
         },
         "def": {
           "en": "Cloudflare's secure web gateway that filters an organization's internet traffic to block malware and unwanted sites. Think of it as a safety checkpoint for everything your team browses.",
@@ -1427,7 +1427,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Turnstile",
-          "zh": "Turnstile (人機驗證)"
+          "zh": "Turnstile（人機驗證）"
         },
         "def": {
           "en": "Cloudflare's friendly alternative to puzzle CAPTCHAs that quietly checks whether a visitor is a real person, usually without making them click anything. Less annoying, still keeps bots out.",
@@ -1441,7 +1441,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "CAPTCHA",
-          "zh": "驗證碼 (CAPTCHA)"
+          "zh": "驗證碼（CAPTCHA）"
         },
         "def": {
           "en": "Those 'prove you're human' challenges, like picking out traffic lights, used to tell people apart from bots. They can be annoying, which is why tools like Turnstile aim to replace them.",
@@ -1455,7 +1455,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Rate limiting",
-          "zh": "流量限制 (Rate limiting)"
+          "zh": "流量限制（Rate limiting）"
         },
         "def": {
           "en": "A rule that caps how many requests someone can make in a period of time, protecting a site from abuse and overload. Like a 'one free sample per customer' policy.",
@@ -1469,7 +1469,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Bot",
-          "zh": "機器人 (Bot)"
+          "zh": "機器人（Bot）"
         },
         "def": {
           "en": "An automated program that visits websites instead of a human, sometimes helpful (like search engines) and sometimes harmful (like scrapers or attackers). Cloudflare helps tell the good ones from the bad.",
@@ -1483,7 +1483,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Bindings",
-          "zh": "綁定 (Bindings)"
+          "zh": "綁定（Bindings）"
         },
         "def": {
           "en": "Connections you declare so a Worker can use other resources like a database, storage bucket, or AI model, just by referring to a name in your code. They wire your code to the services it needs.",
@@ -1497,7 +1497,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "wrangler.toml",
-          "zh": "wrangler.toml (設定檔)"
+          "zh": "wrangler.toml（設定檔）"
         },
         "def": {
           "en": "The configuration file for a Worker project, where you set its name, entry point, and bindings. It's like the project's settings sheet that Wrangler reads when deploying.",
@@ -1525,7 +1525,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Anycast",
-          "zh": "任播 (Anycast)"
+          "zh": "任播（Anycast）"
         },
         "def": {
           "en": "A networking trick where one address is shared by many servers worldwide, and your request is automatically routed to the nearest one. It's how Cloudflare sends you to a close server without you noticing.",
@@ -1539,7 +1539,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Latency",
-          "zh": "延遲 (Latency)"
+          "zh": "延遲（Latency）"
         },
         "def": {
           "en": "The time it takes for data to travel from one point to another and back, usually measured in milliseconds. Lower latency feels snappier; it's why being close to users matters.",
@@ -1553,7 +1553,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Bandwidth",
-          "zh": "頻寬 (Bandwidth)"
+          "zh": "頻寬（Bandwidth）"
         },
         "def": {
           "en": "How much data can flow through a connection in a given time, like the width of a pipe. More bandwidth means more data can move at once.",
@@ -1567,7 +1567,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "HTTP",
-          "zh": "超文本傳輸協定 (HTTP)"
+          "zh": "超文本傳輸協定（HTTP）"
         },
         "def": {
           "en": "The basic set of rules browsers and servers use to request and send web pages. HTTP stands for HyperText Transfer Protocol; it's the language of the web.",
@@ -1581,7 +1581,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "HTTPS",
-          "zh": "加密超文本傳輸協定 (HTTPS)"
+          "zh": "加密超文本傳輸協定（HTTPS）"
         },
         "def": {
           "en": "HTTP with encryption added by TLS, so the data between you and a website is private and tamper-proof. The 's' stands for secure, and it's shown by the padlock in your browser.",
@@ -1595,7 +1595,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "IP address",
-          "zh": "IP 位址 (IP address)"
+          "zh": "IP 位址（IP address）"
         },
         "def": {
           "en": "A numeric address that identifies a device or server on the internet, like a postal address for data. DNS exists to turn names into these numbers.",
@@ -1609,7 +1609,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Origin server",
-          "zh": "源站伺服器 (Origin server)"
+          "zh": "源站伺服器（Origin server）"
         },
         "def": {
           "en": "The original server where a website's real content lives, before Cloudflare caches and serves copies of it. Cloudflare shields the origin and only bothers it when needed.",
@@ -1623,7 +1623,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Reverse proxy",
-          "zh": "反向代理 (Reverse proxy)"
+          "zh": "反向代理（Reverse proxy）"
         },
         "def": {
           "en": "A server that sits in front of your website, receiving visitors first and then passing requests to your origin. This lets Cloudflare add caching, security, and speed before traffic ever reaches you.",
@@ -1637,7 +1637,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "API",
-          "zh": "應用程式介面 (API)"
+          "zh": "應用程式介面（API）"
         },
         "def": {
           "en": "A defined way for two programs to talk to each other and exchange data, like a waiter taking your order to the kitchen and bringing food back. API stands for Application Programming Interface.",
@@ -1651,7 +1651,7 @@ window.SITE_PAGES = [
       {
         "term": {
           "en": "Cloudflare Pages",
-          "zh": "Cloudflare Pages (網站託管)"
+          "zh": "Cloudflare Pages（網站託管）"
         },
         "def": {
           "en": "A service for hosting websites and front-end apps that builds and deploys them straight from your code repository. Connect your Git project and Cloudflare puts the site online globally.",
@@ -7105,7 +7105,7 @@ window.SITE_PAGES = [
                 "icon": "description",
                 "title": {
                   "en": "Object",
-                  "zh": "物件 (Object)"
+                  "zh": "物件（Object）"
                 },
                 "text": {
                   "en": "A single stored file plus its metadata, found by a unique key (its name/path).",
@@ -7116,7 +7116,7 @@ window.SITE_PAGES = [
                 "icon": "folder",
                 "title": {
                   "en": "Bucket",
-                  "zh": "儲存桶 (Bucket)"
+                  "zh": "儲存桶（Bucket）"
                 },
                 "text": {
                   "en": "A named container that holds many objects, like a top-level folder.",
@@ -8009,7 +8009,7 @@ window.SITE_PAGES = [
                 "icon": "timer",
                 "title": {
                   "en": "Expiration (TTL)",
-                  "zh": "過期時間 (TTL)"
+                  "zh": "過期時間（TTL）"
                 },
                 "text": {
                   "en": "Set expirationTtl so a key auto-deletes itself after N seconds — perfect for caches.",
@@ -11925,7 +11925,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "This opens a browser to authorize cloudflared and pick which domain the tunnel belongs to.",
-                  "zh": "這會開啟瀏覽器,授權 cloudflared 並選擇這條通道要綁哪個網域。"
+                  "zh": "這會開啟瀏覽器，授權 cloudflared 並選擇這條通道要綁哪個網域。"
                 },
                 "code": {
                   "lang": "bash",
@@ -11939,7 +11939,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Give it a name. Cloudflare generates a unique tunnel ID and a credentials file on your machine.",
-                  "zh": "幫它取個名字。Cloudflare 會產生一個唯一的通道 ID,並在你機器上建立一個憑證檔。"
+                  "zh": "幫它取個名字。Cloudflare 會產生一個唯一的通道 ID，並在你機器上建立一個憑證檔。"
                 },
                 "code": {
                   "lang": "bash",
@@ -11953,7 +11953,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Create the DNS record so app.example.com points at your tunnel.",
-                  "zh": "建立 DNS 紀錄,讓 app.example.com 指向你的通道。"
+                  "zh": "建立 DNS 紀錄，讓 app.example.com 指向你的通道。"
                 },
                 "code": {
                   "lang": "bash",
@@ -11967,7 +11967,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "In ~/.cloudflared/config.yml, point the hostname at your local service (e.g. a site on localhost:8080).",
-                  "zh": "在 ~/.cloudflared/config.yml 裡,把網址對應到你的本機服務（例如跑在 localhost:8080 的網站）。"
+                  "zh": "在 ~/.cloudflared/config.yml 裡，把網址對應到你的本機服務（例如跑在 localhost:8080 的網站）。"
                 },
                 "code": {
                   "lang": "yaml",
@@ -11981,7 +11981,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Start the tunnel. Your local service is now live at https://app.example.com. Later, install it as a service so it runs on boot.",
-                  "zh": "啟動通道。你的本機服務現在就上線在 https://app.example.com 了。之後可把它裝成系統服務,開機就自動跑。"
+                  "zh": "啟動通道。你的本機服務現在就上線在 https://app.example.com 了。之後可把它裝成系統服務，開機就自動跑。"
                 },
                 "code": {
                   "lang": "bash",
@@ -12022,7 +12022,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A persistent object with a unique UUID linking your origin to Cloudflare.",
-                  "zh": "一個有唯一 UUID 的長期物件,把你的來源主機跟 Cloudflare 連起來。"
+                  "zh": "一個有唯一 UUID 的長期物件，把你的來源主機跟 Cloudflare 連起來。"
                 }
               },
               {
@@ -12033,7 +12033,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "cloudflared dials out to Cloudflare; nothing ever connects inbound to you.",
-                  "zh": "cloudflared 主動撥出去連 Cloudflare,沒有任何東西能反過來連進你這裡。"
+                  "zh": "cloudflared 主動撥出去連 Cloudflare，沒有任何東西能反過來連進你這裡。"
                 }
               },
               {
@@ -12051,11 +12051,11 @@ window.SITE_PAGES = [
                 "icon": "hub",
                 "title": {
                   "en": "Connector",
-                  "zh": "連接器(Connector)"
+                  "zh": "連接器（Connector）"
                 },
                 "text": {
                   "en": "Each running cloudflared process; you can run several for redundancy.",
-                  "zh": "每個正在跑的 cloudflared 程序;可同時跑多個做備援。"
+                  "zh": "每個正在跑的 cloudflared 程序；可同時跑多個做備援。"
                 }
               },
               {
@@ -12066,7 +12066,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Configure the whole tunnel from the Zero Trust dashboard, no local config file.",
-                  "zh": "從 Zero Trust 儀表板設定整條通道,不用本機設定檔。"
+                  "zh": "從 Zero Trust 儀表板設定整條通道，不用本機設定檔。"
                 }
               }
             ]
@@ -12091,7 +12091,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Pair Tunnel with Cloudflare Access to require a login (Google, GitHub, email PIN) before anyone can reach your service — perfect for private internal tools.",
-              "zh": "把 Tunnel 搭配 Cloudflare Access,在任何人連到你服務前先要求登入(Google、GitHub、email 一次性密碼)—— 拿來保護私人內部工具超合適。"
+              "zh": "把 Tunnel 搭配 Cloudflare Access，在任何人連到你服務前先要求登入（Google、GitHub、email 一次性密碼）—— 拿來保護私人內部工具超合適。"
             }
           },
           {
@@ -12105,9 +12105,9 @@ window.SITE_PAGES = [
               ],
               "zh": [
                 "cloudflared 與 Cloudflare Tunnel 都免費使用。",
-                "通道一旦能用,就把防火牆所有對內連接埠都封掉 —— 只往外連正是它的精髓。",
-                "把 cloudflared 跑成系統服務,讓通道在重開機後依然存活。",
-                "儀表板(遠端管理)流程最好上手;命令列則透過 config.yml 給你更多掌控。"
+                "通道一旦能用，就把防火牆所有對內連接埠都封掉 —— 只往外連正是它的精髓。",
+                "把 cloudflared 跑成系統服務，讓通道在重開機後依然存活。",
+                "儀表板（遠端管理）流程最好上手；命令列則透過 config.yml 給你更多掌控。"
               ]
             }
           }
@@ -12182,7 +12182,7 @@ window.SITE_PAGES = [
         "value": "Zero Trust",
         "label": {
           "en": "Never trust, always verify",
-          "zh": "永不信任,逐次驗證"
+          "zh": "永不信任，逐次驗證"
         }
       },
       {
@@ -12199,21 +12199,21 @@ window.SITE_PAGES = [
         "icon": "lightbulb",
         "heading": {
           "en": "What is Access?",
-          "zh": "Access 是什麼?"
+          "zh": "Access 是什麼？"
         },
         "blocks": [
           {
             "type": "lead",
             "text": {
               "en": "Cloudflare Access puts an identity check in front of your applications. Before anyone can open an app, they must log in and prove they're allowed — based on who they are, not which network they're on.",
-              "zh": "Cloudflare Access 在你的應用程式前面加上一道身分檢查。任何人要打開應用程式前,都必須先登入並證明自己有權限 —— 看的是「他是誰」,而不是「他連在哪個網路上」。"
+              "zh": "Cloudflare Access 在你的應用程式前面加上一道身分檢查。任何人要打開應用程式前，都必須先登入並證明自己有權限 —— 看的是「他是誰」，而不是「他連在哪個網路上」。"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "This is the Zero Trust idea: never automatically trust someone just because they're inside the office network. Every request is verified. Access checks identity using providers you already use, like Google or GitHub, or a one-time PIN sent to an email.",
-              "zh": "這就是「零信任(Zero Trust)」的精神:不會因為某人在辦公室網路裡就自動信任他。每一次請求都要驗證。Access 透過你本來就在用的身分提供者(Google、GitHub 等)或寄到 email 的一次性密碼(PIN)來核對身分。"
+              "zh": "這就是「零信任（Zero Trust）」的精神：不會因為某人在辦公室網路裡就自動信任他。每一次請求都要驗證。Access 透過你本來就在用的身分提供者（Google、GitHub 等）或寄到 email 的一次性密碼（PIN）來核對身分。"
             }
           },
           {
@@ -12226,7 +12226,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "A receptionist who checks your ID at every single door, instead of an old building where badging in once at the lobby lets you wander anywhere.",
-              "zh": "一位在「每一扇門」都查你證件的櫃檯人員 —— 對比老式大樓:只要在大廳刷一次卡,之後就能在裡面到處亂逛。"
+              "zh": "一位在「每一扇門」都查你證件的櫃檯人員 —— 對比老式大樓：只要在大廳刷一次卡，之後就能在裡面到處亂逛。"
             }
           }
         ]
@@ -12243,7 +12243,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "A VPN (Virtual Private Network) drops you onto the whole internal network and trusts you broadly once you're connected. That's risky and clunky. Access grants entry to one specific app at a time, per person.",
-              "zh": "VPN(虛擬私人網路)會把你整個丟進內部網路,連上之後就大範圍地信任你。這既有風險又笨重。Access 則是一次只針對「一個特定應用程式、一個人」放行。"
+              "zh": "VPN（虛擬私人網路）會把你整個丟進內部網路，連上之後就大範圍地信任你。這既有風險又笨重。Access 則是一次只針對「一個特定應用程式、一個人」放行。"
             }
           },
           {
@@ -12257,7 +12257,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Grant access to exactly one app, not the entire network behind it.",
-                  "zh": "只授權某一個應用程式,而不是它背後整個網路。"
+                  "zh": "只授權某一個應用程式，而不是它背後整個網路。"
                 }
               },
               {
@@ -12268,7 +12268,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "For web apps, users just visit a URL and log in — no VPN client needed.",
-                  "zh": "對網頁應用程式來說,使用者只要打開網址登入 —— 不用裝 VPN 用戶端。"
+                  "zh": "對網頁應用程式來說，使用者只要打開網址登入 —— 不用裝 VPN 用戶端。"
                 }
               },
               {
@@ -12302,14 +12302,14 @@ window.SITE_PAGES = [
         "icon": "rocket_launch",
         "heading": {
           "en": "How to protect an app",
-          "zh": "怎麼保護一個應用程式?"
+          "zh": "怎麼保護一個應用程式？"
         },
         "blocks": [
           {
             "type": "p",
             "text": {
               "en": "Everything happens in the Cloudflare Zero Trust dashboard. Here's how to put a login wall in front of an app and decide who gets in.",
-              "zh": "所有設定都在 Cloudflare Zero Trust 儀表板進行。以下教你在應用程式前加一道登入牆,並決定誰能進來。"
+              "zh": "所有設定都在 Cloudflare Zero Trust 儀表板進行。以下教你在應用程式前加一道登入牆，並決定誰能進來。"
             }
           },
           {
@@ -12322,7 +12322,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "In Zero Trust → Settings → Authentication, add an identity provider. The simplest is the built-in One-time PIN, which emails users a code; or connect Google/GitHub.",
-                  "zh": "在 Zero Trust → Settings → Authentication 加入身分提供者。最簡單的是內建的 One-time PIN(一次性密碼),會把驗證碼寄到使用者 email;或接上 Google／GitHub。"
+                  "zh": "在 Zero Trust → Settings → Authentication 加入身分提供者。最簡單的是內建的 One-time PIN（一次性密碼），會把驗證碼寄到使用者 email；或接上 Google／GitHub。"
                 }
               },
               {
@@ -12332,7 +12332,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Go to Access → Applications → Add an application → Self-hosted. Enter the app's domain, e.g. dashboard.example.com (often a Cloudflare Tunnel hostname).",
-                  "zh": "進入 Access → Applications → Add an application → Self-hosted(自架)。輸入應用程式的網域,例如 dashboard.example.com(通常就是一個 Cloudflare Tunnel 的網址)。"
+                  "zh": "進入 Access → Applications → Add an application → Self-hosted（自架）。輸入應用程式的網域，例如 dashboard.example.com（通常就是一個 Cloudflare Tunnel 的網址）。"
                 }
               },
               {
@@ -12342,7 +12342,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Add a policy with action Allow and an Include rule that matches who should get in — for example, emails ending in @yourcompany.com.",
-                  "zh": "新增一條政策,動作設為 Allow(允許),並加一條 Include(包含)規則來指定誰能進 —— 例如結尾是 @yourcompany.com 的 email。"
+                  "zh": "新增一條政策，動作設為 Allow（允許），並加一條 Include（包含）規則來指定誰能進 —— 例如結尾是 @yourcompany.com 的 email。"
                 },
                 "code": {
                   "lang": "text",
@@ -12356,7 +12356,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Save the application. Now visiting the app shows a Cloudflare login screen first; only people matching your policy get through to the app.",
-                  "zh": "儲存應用程式。現在打開這個應用程式會先出現 Cloudflare 登入畫面;只有符合政策的人才能進到應用程式。"
+                  "zh": "儲存應用程式。現在打開這個應用程式會先出現 Cloudflare 登入畫面；只有符合政策的人才能進到應用程式。"
                 }
               }
             ]
@@ -12371,7 +12371,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Include is OR logic (match any), Require is AND logic (must also match), Exclude is NOT (block these). Combine them to express rules like 'company emails, but require MFA, except contractors'.",
-              "zh": "Include 是「或」(符合其一即可)、Require 是「且」(還必須符合)、Exclude 是「非」(把這些擋掉)。組合起來就能表達像「公司 email,但必須通過多因素驗證,排除約聘人員」這種規則。"
+              "zh": "Include 是「或」（符合其一即可）、Require 是「且」（還必須符合）、Exclude 是「非」（把這些擋掉）。組合起來就能表達像「公司 email，但必須通過多因素驗證，排除約聘人員」這種規則。"
             }
           }
         ]
@@ -12395,40 +12395,40 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A model that verifies every request and trusts no one by default, inside or outside.",
-                  "zh": "一種對每個請求都驗證、預設誰都不信任(無論內外)的安全模型。"
+                  "zh": "一種對每個請求都驗證、預設誰都不信任（無論內外）的安全模型。"
                 }
               },
               {
                 "icon": "apps",
                 "title": {
                   "en": "Application",
-                  "zh": "應用程式(Application)"
+                  "zh": "應用程式（Application）"
                 },
                 "text": {
                   "en": "The thing you're protecting — a self-hosted site, an SSH server, or a SaaS app.",
-                  "zh": "你要保護的對象 —— 自架網站、SSH 伺服器,或 SaaS 應用程式。"
+                  "zh": "你要保護的對象 —— 自架網站、SSH 伺服器，或 SaaS 應用程式。"
                 }
               },
               {
                 "icon": "gavel",
                 "title": {
                   "en": "Policy",
-                  "zh": "政策(Policy)"
+                  "zh": "政策（Policy）"
                 },
                 "text": {
                   "en": "A rule deciding Allow, Block, or Bypass for a set of people.",
-                  "zh": "決定一群人是 Allow(允許)、Block(封鎖)還是 Bypass(略過)的規則。"
+                  "zh": "決定一群人是 Allow（允許）、Block（封鎖）還是 Bypass（略過）的規則。"
                 }
               },
               {
                 "icon": "account_circle",
                 "title": {
                   "en": "Identity provider",
-                  "zh": "身分提供者(IdP)"
+                  "zh": "身分提供者（IdP）"
                 },
                 "text": {
                   "en": "Where logins come from: Google, GitHub, Microsoft Entra ID, or email PIN.",
-                  "zh": "登入身分的來源:Google、GitHub、Microsoft Entra ID,或 email 一次性密碼。"
+                  "zh": "登入身分的來源：Google、GitHub、Microsoft Entra ID，或 email 一次性密碼。"
                 }
               },
               {
@@ -12439,7 +12439,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "The simplest login: Cloudflare emails the user a temporary code. No IdP setup needed.",
-                  "zh": "最簡單的登入方式:Cloudflare 把臨時驗證碼寄到使用者 email。不用設定 IdP。"
+                  "zh": "最簡單的登入方式：Cloudflare 把臨時驗證碼寄到使用者 email。不用設定 IdP。"
                 }
               },
               {
@@ -12450,7 +12450,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Optional checks that the user's device is healthy (e.g. disk encrypted) before allowing in.",
-                  "zh": "可選的檢查,確認使用者裝置狀態良好(例如硬碟已加密)才放行。"
+                  "zh": "可選的檢查，確認使用者裝置狀態良好（例如硬碟已加密）才放行。"
                 }
               }
             ]
@@ -12475,7 +12475,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Use Cloudflare Tunnel to connect a private app without opening ports, then put Access in front of it for the login wall. Together they replace a VPN for most internal tools.",
-              "zh": "用 Cloudflare Tunnel 把私有應用程式連出來(不用開連接埠),再用 Access 在前面擋一道登入牆。兩者合起來,就能取代多數內部工具的 VPN。"
+              "zh": "用 Cloudflare Tunnel 把私有應用程式連出來（不用開連接埠），再用 Access 在前面擋一道登入牆。兩者合起來，就能取代多數內部工具的 VPN。"
             }
           },
           {
@@ -12488,10 +12488,10 @@ window.SITE_PAGES = [
                 "Every login attempt is logged, giving you a clear audit trail."
               ],
               "zh": [
-                "Cloudflare 的 Zero Trust 免費方案可涵蓋最多 50 位使用者,完全免費。",
-                "Access 適用於自架網頁應用程式、SSH／遠端桌面,以及許多 SaaS 應用程式。",
-                "先用 One-time PIN 快速測試,之後再接上正式的身分提供者。",
-                "每次登入嘗試都會被記錄,給你清楚的稽核軌跡。"
+                "Cloudflare 的 Zero Trust 免費方案可涵蓋最多 50 位使用者，完全免費。",
+                "Access 適用於自架網頁應用程式、SSH／遠端桌面，以及許多 SaaS 應用程式。",
+                "先用 One-time PIN 快速測試，之後再接上正式的身分提供者。",
+                "每次登入嘗試都會被記錄，給你清楚的稽核軌跡。"
               ]
             }
           }
@@ -12583,21 +12583,21 @@ window.SITE_PAGES = [
         "icon": "lightbulb",
         "heading": {
           "en": "What is Gateway?",
-          "zh": "Gateway 是什麼?"
+          "zh": "Gateway 是什麼？"
         },
         "blocks": [
           {
             "type": "lead",
             "text": {
               "en": "Cloudflare Gateway is a Secure Web Gateway (SWG): it inspects the traffic leaving your devices and decides what's allowed out. It blocks dangerous or unwanted destinations before a connection is ever made.",
-              "zh": "Cloudflare Gateway 是一個「安全網路閘道(Secure Web Gateway,SWG)」:它檢查從你裝置「往外送出」的流量,決定什麼能出去。在連線真正建立之前,就先擋掉危險或不該連的目的地。"
+              "zh": "Cloudflare Gateway 是一個「安全網路閘道（Secure Web Gateway,SWG）」：它檢查從你裝置「往外送出」的流量，決定什麼能出去。在連線真正建立之前，就先擋掉危險或不該連的目的地。"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "While a WAF protects traffic coming into your website, Gateway protects traffic going out from your people and devices — like a filter for your whole team's or family's internet use.",
-              "zh": "WAF 保護的是「進入你網站」的流量;Gateway 保護的則是「你的人與裝置往外連出去」的流量 —— 等於替整個團隊或全家人的上網行為加一層過濾。"
+              "zh": "WAF 保護的是「進入你網站」的流量；Gateway 保護的則是「你的人與裝置往外連出去」的流量 —— 等於替整個團隊或全家人的上網行為加一層過濾。"
             }
           },
           {
@@ -12610,7 +12610,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "A water filter on your tap. Every drop (request) passes through it; clean water flows, but contaminants (malware, phishing, blocked categories) get caught before reaching the glass.",
-              "zh": "水龍頭上的濾水器。每一滴水(每個請求)都流經它;乾淨的水流出來,但雜質(惡意程式、釣魚、被封鎖的分類)在進到杯子前就被攔下。"
+              "zh": "水龍頭上的濾水器。每一滴水（每個請求）都流經它；乾淨的水流出來，但雜質（惡意程式、釣魚、被封鎖的分類）在進到杯子前就被攔下。"
             }
           }
         ]
@@ -12627,7 +12627,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "Gateway can filter at three depths. You can start with just DNS (the easiest) and add the deeper layers later.",
-              "zh": "Gateway 可以在三種深度做過濾。你可以先從最簡單的 DNS 開始,之後再加上更深的層次。"
+              "zh": "Gateway 可以在三種深度做過濾。你可以先從最簡單的 DNS 開始，之後再加上更深的層次。"
             }
           },
           {
@@ -12641,7 +12641,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "The fastest layer. When a device asks 'what's the IP of this domain?', Gateway can refuse to answer for bad domains — blocking them before they load. Sees domain names, not full URLs.",
-                  "zh": "最快的一層。當裝置問「這個網域的 IP 是多少?」時,Gateway 可以對壞網域拒絕回答 —— 在它載入前就擋掉。它看得到網域名稱,但看不到完整網址。"
+                  "zh": "最快的一層。當裝置問「這個網域的 IP 是多少？」時，Gateway 可以對壞網域拒絕回答 —— 在它載入前就擋掉。它看得到網域名稱，但看不到完整網址。"
                 }
               },
               {
@@ -12675,7 +12675,7 @@ window.SITE_PAGES = [
         "icon": "help",
         "heading": {
           "en": "Why use it?",
-          "zh": "為什麼用它?"
+          "zh": "為什麼用它？"
         },
         "blocks": [
           {
@@ -12689,7 +12689,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Stops devices from reaching known-malicious or scam sites organization-wide.",
-                  "zh": "全公司一起,阻止裝置連到已知的惡意或詐騙網站。"
+                  "zh": "全公司一起，阻止裝置連到已知的惡意或詐騙網站。"
                 }
               },
               {
@@ -12722,7 +12722,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "With the WARP client, protection follows remote and travelling employees.",
-                  "zh": "搭配 WARP 用戶端,保護跟著遠端與出差的員工走。"
+                  "zh": "搭配 WARP 用戶端，保護跟著遠端與出差的員工走。"
                 }
               }
             ]
@@ -12734,14 +12734,14 @@ window.SITE_PAGES = [
         "icon": "rocket_launch",
         "heading": {
           "en": "How to set it up",
-          "zh": "怎麼設定?"
+          "zh": "怎麼設定？"
         },
         "blocks": [
           {
             "type": "p",
             "text": {
               "en": "First you decide how traffic reaches Gateway, then you write policies. Here's the quickest path: block malware via a DNS policy.",
-              "zh": "先決定流量怎麼送到 Gateway,再來寫政策。以下是最快的做法:用一條 DNS 政策擋掉惡意程式。"
+              "zh": "先決定流量怎麼送到 Gateway，再來寫政策。以下是最快的做法：用一條 DNS 政策擋掉惡意程式。"
             }
           },
           {
@@ -12754,7 +12754,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Two options. WARP client: install Cloudflare's app on devices — enables all three layers plus identity. DNS location: point your network's DNS to Cloudflare — simplest, DNS filtering only.",
-                  "zh": "兩種選擇。WARP 用戶端:在裝置上安裝 Cloudflare 的 App —— 啟用全部三層加上身分辨識。DNS location:把你網路的 DNS 指向 Cloudflare —— 最簡單,只做 DNS 過濾。"
+                  "zh": "兩種選擇。WARP 用戶端：在裝置上安裝 Cloudflare 的 App —— 啟用全部三層加上身分辨識。DNS location：把你網路的 DNS 指向 Cloudflare —— 最簡單，只做 DNS 過濾。"
                 }
               },
               {
@@ -12764,7 +12764,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "In the Zero Trust dashboard go to Gateway → Firewall policies → DNS, then Add a policy.",
-                  "zh": "在 Zero Trust 儀表板進入 Gateway → Firewall policies → DNS,然後 Add a policy(新增政策)。"
+                  "zh": "在 Zero Trust 儀表板進入 Gateway → Firewall policies → DNS，然後 Add a policy（新增政策）。"
                 }
               },
               {
@@ -12774,7 +12774,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Set a condition matching the Security threats categories, choose action Block, and save. It deploys worldwide in under a minute.",
-                  "zh": "設定條件,選 Security threats(資安威脅)分類,動作選 Block(封鎖),儲存。不到一分鐘就全球生效。"
+                  "zh": "設定條件，選 Security threats（資安威脅）分類，動作選 Block（封鎖），儲存。不到一分鐘就全球生效。"
                 },
                 "code": {
                   "lang": "text",
@@ -12784,11 +12784,11 @@ window.SITE_PAGES = [
               {
                 "title": {
                   "en": "Add a content policy (optional)",
-                  "zh": "加一條內容政策(選用)"
+                  "zh": "加一條內容政策（選用）"
                 },
                 "text": {
                   "en": "Add another DNS policy matching Content Categories (e.g. Adult Themes) with action Block to filter unwanted content.",
-                  "zh": "再加一條 DNS 政策,比對 Content Categories(內容分類,例如成人主題),動作選 Block,過濾不該看的內容。"
+                  "zh": "再加一條 DNS 政策，比對 Content Categories（內容分類，例如成人主題），動作選 Block，過濾不該看的內容。"
                 }
               },
               {
@@ -12798,7 +12798,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Open Logs → Gateway to see which domains were queried and blocked, then tune policies that are too strict.",
-                  "zh": "打開 Logs → Gateway,看哪些網域被查詢、被擋,再調整太嚴格的政策。"
+                  "zh": "打開 Logs → Gateway，看哪些網域被查詢、被擋，再調整太嚴格的政策。"
                 }
               }
             ]
@@ -12820,33 +12820,33 @@ window.SITE_PAGES = [
                 "icon": "shield_moon",
                 "title": {
                   "en": "Secure Web Gateway",
-                  "zh": "安全網路閘道(SWG)"
+                  "zh": "安全網路閘道（SWG）"
                 },
                 "text": {
                   "en": "A security checkpoint all outbound traffic passes through to be filtered.",
-                  "zh": "所有對外流量都會經過的安全檢查哨,在這裡被過濾。"
+                  "zh": "所有對外流量都會經過的安全檢查哨，在這裡被過濾。"
                 }
               },
               {
                 "icon": "policy",
                 "title": {
                   "en": "Policy",
-                  "zh": "政策(Policy)"
+                  "zh": "政策（Policy）"
                 },
                 "text": {
                   "en": "An if-this-then-that rule. Conditions match traffic; actions allow, block, or override.",
-                  "zh": "一條「如果…就…」的規則。條件比對流量;動作決定允許、封鎖或覆寫。"
+                  "zh": "一條「如果…就…」的規則。條件比對流量；動作決定允許、封鎖或覆寫。"
                 }
               },
               {
                 "icon": "category",
                 "title": {
                   "en": "Categories",
-                  "zh": "分類(Categories)"
+                  "zh": "分類（Categories）"
                 },
                 "text": {
                   "en": "Cloudflare groups domains (malware, gambling, social media) so you filter by type, not one by one.",
-                  "zh": "Cloudflare 把網域分群(惡意程式、賭博、社群媒體),讓你按類型過濾,不用一個一個列。"
+                  "zh": "Cloudflare 把網域分群（惡意程式、賭博、社群媒體），讓你按類型過濾，不用一個一個列。"
                 }
               },
               {
@@ -12857,7 +12857,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Cloudflare's device app that sends traffic to Gateway and unlocks network + HTTP filtering.",
-                  "zh": "Cloudflare 的裝置 App,把流量導向 Gateway,並解鎖網路與 HTTP 過濾。"
+                  "zh": "Cloudflare 的裝置 App，把流量導向 Gateway，並解鎖網路與 HTTP 過濾。"
                 }
               },
               {
@@ -12868,7 +12868,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A network whose DNS points at Cloudflare; the no-install way to get DNS filtering.",
-                  "zh": "把 DNS 指向 Cloudflare 的一個網路;免安裝就能做 DNS 過濾的方式。"
+                  "zh": "把 DNS 指向 Cloudflare 的一個網路；免安裝就能做 DNS 過濾的方式。"
                 }
               },
               {
@@ -12904,7 +12904,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "DNS filtering needs no software install and blocks the vast majority of malware and phishing for quick wins. Add the WARP client later when you want network and HTTP filtering.",
-              "zh": "DNS 過濾不用裝任何軟體,就能擋掉絕大多數惡意程式與釣魚,快速見效。等你想做網路與 HTTP 過濾時,再加上 WARP 用戶端。"
+              "zh": "DNS 過濾不用裝任何軟體，就能擋掉絕大多數惡意程式與釣魚，快速見效。等你想做網路與 HTTP 過濾時，再加上 WARP 用戶端。"
             }
           },
           {
@@ -12917,10 +12917,10 @@ window.SITE_PAGES = [
                 "HTTP filtering (inspecting inside HTTPS) requires installing Cloudflare's certificate on devices."
               ],
               "zh": [
-                "Gateway 屬於 Cloudflare Zero Trust;免費方案涵蓋最多 50 位使用者。",
-                "政策依序評估:先 DNS,再網路,最後 HTTP。",
+                "Gateway 屬於 Cloudflare Zero Trust；免費方案涵蓋最多 50 位使用者。",
+                "政策依序評估：先 DNS，再網路，最後 HTTP。",
                 "變更不到一分鐘就全球生效。",
-                "HTTP 過濾(看進 HTTPS 內部)需要在裝置上安裝 Cloudflare 的憑證。"
+                "HTTP 過濾（看進 HTTPS 內部）需要在裝置上安裝 Cloudflare 的憑證。"
               ]
             }
           }
@@ -17355,7 +17355,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "prepare() + bind() keep user input out of the SQL text. The ? placeholders are filled as values, so input can never run as code — this blocks SQL injection.",
-                  "zh": "prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。? 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。"
+                  "zh": "prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。？ 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。"
                 }
               },
               {
@@ -17501,7 +17501,7 @@ window.SITE_PAGES = [
     },
     "subtitle": {
       "en": "Two ways to wire login on Cloudflare: Zero Trust Access, or your own sessions in KV",
-      "zh": "在 Cloudflare 串接登入的兩種做法:零信任 Access,或自己用 KV 管 session"
+      "zh": "在 Cloudflare 串接登入的兩種做法：零信任 Access，或自己用 KV 管 session"
     },
     "hero": {
       "badge": {
@@ -17510,7 +17510,7 @@ window.SITE_PAGES = [
       },
       "tagline": {
         "en": "From a no-code login wall to a hand-built session cookie — see exactly how auth flows across the stack.",
-        "zh": "從免寫程式的登入牆,到手刻的 session cookie —— 看清認證如何在整個技術棧裡流動。"
+        "zh": "從免寫程式的登入牆，到手刻的 session cookie —— 看清認證如何在整個技術棧裡流動。"
       }
     },
     "stats": [
@@ -17549,21 +17549,21 @@ window.SITE_PAGES = [
         "icon": "insights",
         "heading": {
           "en": "What are we wiring up?",
-          "zh": "我們要串接什麼?"
+          "zh": "我們要串接什麼？"
         },
         "blocks": [
           {
             "type": "lead",
             "text": {
               "en": "\"Authentication\" just means proving who a user is before letting them in. On Cloudflare you have two clean ways to do it, and this guide walks through both so you can pick the right one.",
-              "zh": "「認證(Authentication)」其實就是:在放使用者進來之前,先確認他是誰。在 Cloudflare 上有兩種乾淨的做法,本篇會帶你走過兩種,讓你挑對適合自己的那一種。"
+              "zh": "「認證（Authentication）」其實就是：在放使用者進來之前，先確認他是誰。在 Cloudflare 上有兩種乾淨的做法，本篇會帶你走過兩種，讓你挑對適合自己的那一種。"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "Approach A is Cloudflare Access (Zero Trust): identity sits in front of your whole app and you write zero code. Approach B is app-level sessions: your own Worker checks the password, stores a session in Workers KV, and hands the browser a cookie.",
-              "zh": "做法 A 是 Cloudflare Access(零信任):身分驗證直接擋在整個應用程式前面,你完全不用寫程式。做法 B 是應用程式層級的 session:你自己的 Worker 檢查密碼、把 session 存進 Workers KV,再發一個 cookie 給瀏覽器。"
+              "zh": "做法 A 是 Cloudflare Access（零信任）：身分驗證直接擋在整個應用程式前面，你完全不用寫程式。做法 B 是應用程式層級的 session：你自己的 Worker 檢查密碼、把 session 存進 Workers KV，再發一個 cookie 給瀏覽器。"
             }
           },
           {
@@ -17588,7 +17588,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Identity check in front of the app. No code, managed in the Zero Trust dashboard. Great for internal tools.",
-                  "zh": "在應用程式前面做身分檢查。免寫程式,在 Zero Trust 儀表板設定。很適合內部工具。"
+                  "zh": "在應用程式前面做身分檢查。免寫程式，在 Zero Trust 儀表板設定。很適合內部工具。"
                 }
               },
               {
@@ -17614,7 +17614,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Access is hiring a security guard for the whole building's front door. Building your own session is giving each visitor a numbered wristband at your own reception desk and checking that band at every room.",
-              "zh": "Access 就像幫整棟大樓的大門請一位保全。自建 session 則是你在自家櫃檯給每位訪客一條有編號的手環,之後每進一個房間都核對那條手環。"
+              "zh": "Access 就像幫整棟大樓的大門請一位保全。自建 session 則是你在自家櫃檯給每位訪客一條有編號的手環，之後每進一個房間都核對那條手環。"
             }
           }
         ]
@@ -17624,21 +17624,21 @@ window.SITE_PAGES = [
         "icon": "verified_user",
         "heading": {
           "en": "Approach A — Cloudflare Access (no code)",
-          "zh": "做法 A — Cloudflare Access(免寫程式)"
+          "zh": "做法 A — Cloudflare Access（免寫程式）"
         },
         "blocks": [
           {
             "type": "p",
             "text": {
               "en": "Cloudflare Access puts a login wall in front of your app at the edge. The user never reaches your app until Access has confirmed their identity with a provider you trust (Google, GitHub, Microsoft Entra ID, or a one-time email PIN).",
-              "zh": "Cloudflare Access 在邊緣(edge)幫你的應用程式擋一道登入牆。在 Access 用你信任的提供者(Google、GitHub、Microsoft Entra ID,或寄到 email 的一次性密碼)確認身分之前,使用者根本碰不到你的應用程式。"
+              "zh": "Cloudflare Access 在邊緣（edge）幫你的應用程式擋一道登入牆。在 Access 用你信任的提供者（Google、GitHub、Microsoft Entra ID，或寄到 email 的一次性密碼）確認身分之前，使用者根本碰不到你的應用程式。"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "This is Single Sign-On (SSO): the user logs in once with their existing account and Access issues a signed token (a JWT) as a cookie. Your app can stay completely unaware of passwords.",
-              "zh": "這就是單一登入(SSO,Single Sign-On):使用者用既有帳號登入一次,Access 就發一個已簽章的權杖(JWT)當作 cookie。你的應用程式可以完全不用碰密碼。"
+              "zh": "這就是單一登入（SSO,Single Sign-On）：使用者用既有帳號登入一次，Access 就發一個已簽章的權杖（JWT）當作 cookie。你的應用程式可以完全不用碰密碼。"
             }
           },
           {
@@ -17674,7 +17674,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Plug in Google Workspace, GitHub, or Entra ID so people use accounts they already have.",
-                  "zh": "接上 Google Workspace、GitHub 或 Entra ID,大家直接用既有帳號。"
+                  "zh": "接上 Google Workspace、GitHub 或 Entra ID，大家直接用既有帳號。"
                 }
               },
               {
@@ -17685,7 +17685,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Allow only @yourcompany.com emails, require MFA, or restrict by group.",
-                  "zh": "只允許 @yourcompany.com 的 email、要求多因素驗證,或依群組限制。"
+                  "zh": "只允許 @yourcompany.com 的 email、要求多因素驗證，或依群組限制。"
                 }
               },
               {
@@ -17696,7 +17696,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Every login attempt is recorded — who, what, and when — with no extra work.",
-                  "zh": "每次登入嘗試都會被記錄(誰、做了什麼、何時),不用額外做任何事。"
+                  "zh": "每次登入嘗試都會被記錄（誰、做了什麼、何時），不用額外做任何事。"
                 }
               }
             ]
@@ -17711,7 +17711,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Access forwards a signed Cf-Access-Jwt-Assertion header. If you want, your Worker can verify that JWT against Cloudflare's public keys to read the user's email — but you never have to handle the login itself.",
-              "zh": "Access 會轉發一個已簽章的 Cf-Access-Jwt-Assertion 標頭。需要的話,你的 Worker 可以拿 Cloudflare 的公鑰驗證這個 JWT 來讀出使用者 email —— 但你完全不必自己處理登入。"
+              "zh": "Access 會轉發一個已簽章的 Cf-Access-Jwt-Assertion 標頭。需要的話，你的 Worker 可以拿 Cloudflare 的公鑰驗證這個 JWT 來讀出使用者 email —— 但你完全不必自己處理登入。"
             }
           }
         ]
@@ -17728,14 +17728,14 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "When you run your own sign-up and login (public app, custom UI, your own user table), you handle auth in code. The classic, robust pattern is the server-side session backed by a cookie.",
-              "zh": "當你要自己做註冊和登入(公開的應用程式、自訂介面、你自己的使用者資料表)時,認證就由程式碼處理。最經典、最穩健的模式就是「伺服器端 session + cookie」。"
+              "zh": "當你要自己做註冊和登入（公開的應用程式、自訂介面、你自己的使用者資料表）時，認證就由程式碼處理。最經典、最穩健的模式就是「伺服器端 session + cookie」。"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "The Worker checks the password, creates a random session id, stores the real session data in Workers KV with an expiry, and sends the browser a cookie holding only that id. On later requests the browser auto-sends the cookie and the Worker looks the session up in KV.",
-              "zh": "Worker 檢查密碼、產生一個隨機的 session id、把真正的 session 資料連同到期時間存進 Workers KV,然後發給瀏覽器一個「只裝這個 id」的 cookie。之後每次請求,瀏覽器會自動帶上 cookie,Worker 再用它去 KV 查出 session。"
+              "zh": "Worker 檢查密碼、產生一個隨機的 session id、把真正的 session 資料連同到期時間存進 Workers KV，然後發給瀏覽器一個「只裝這個 id」的 cookie。之後每次請求，瀏覽器會自動帶上 cookie,Worker 再用它去 KV 查出 session。"
             }
           },
           {
@@ -17760,7 +17760,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "The cookie holds a random id only. User data lives server-side in KV, never in the browser.",
-                  "zh": "cookie 只裝一個隨機 id。使用者資料放在伺服器端的 KV,絕不放在瀏覽器裡。"
+                  "zh": "cookie 只裝一個隨機 id。使用者資料放在伺服器端的 KV，絕不放在瀏覽器裡。"
                 }
               },
               {
@@ -17782,7 +17782,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Delete the KV key and that session is dead immediately, even before it expires.",
-                  "zh": "刪掉那個 KV key,該 session 立刻失效,就算還沒到期也一樣。"
+                  "zh": "刪掉那個 KV key，該 session 立刻失效，就算還沒到期也一樣。"
                 }
               },
               {
@@ -17793,7 +17793,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Your routes, your cookie flags, your rules. You can add roles, refresh, anything.",
-                  "zh": "你的路由、你的 cookie 旗標、你的規則。可以加角色、加更新機制,什麼都行。"
+                  "zh": "你的路由、你的 cookie 旗標、你的規則。可以加角色、加更新機制，什麼都行。"
                 }
               }
             ]
@@ -17808,7 +17808,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Sessions are read on almost every request and KV is built for read-heavy, globally-replicated lookups with a built-in TTL. That makes it a natural home for session data on Workers.",
-              "zh": "幾乎每個請求都要讀 session,而 KV 正是為「讀多、全球同步、內建 TTL」的查詢而設計的,所以拿來放 Workers 上的 session 資料剛剛好。"
+              "zh": "幾乎每個請求都要讀 session，而 KV 正是為「讀多、全球同步、內建 TTL」的查詢而設計的，所以拿來放 Workers 上的 session 資料剛剛好。"
             }
           }
         ]
@@ -17818,21 +17818,21 @@ window.SITE_PAGES = [
         "icon": "call_split",
         "heading": {
           "en": "Which one should I use?",
-          "zh": "我該用哪一種?"
+          "zh": "我該用哪一種？"
         },
         "blocks": [
           {
             "type": "p",
             "text": {
               "en": "Pick by audience. If you are gating an internal tool or staff dashboard, Access wins — it's faster and safer than anything you'd hand-roll. If you are building a public product where strangers sign up, you need your own sessions.",
-              "zh": "依「對象」來選。如果你要把關的是內部工具或員工後台,Access 勝出 —— 它比你自己手刻的任何東西都更快也更安全。如果你在做一個對外、讓陌生人自行註冊的產品,那你就需要自己的 session。"
+              "zh": "依「對象」來選。如果你要把關的是內部工具或員工後台，Access 勝出 —— 它比你自己手刻的任何東西都更快也更安全。如果你在做一個對外、讓陌生人自行註冊的產品，那你就需要自己的 session。"
             }
           },
           {
             "type": "mermaid",
             "title": {
               "en": "Decision: Access vs build-your-own",
-              "zh": "決策:Access 還是自建 session"
+              "zh": "決策：Access 還是自建 session"
             },
             "code": {
               "en": "flowchart TD\n  Start[\"Need to protect something\"] --> Q1{\"Internal tool or staff app?\"}\n  Q1 -->|Yes| Access[\"Use Cloudflare Access\"]\n  Q1 -->|No| Q2{\"Public app with user accounts?\"}\n  Q2 -->|Yes| Build[\"Build sessions in KV\"]\n  Q2 -->|No| Q3{\"Just block bots on a form?\"}\n  Q3 -->|Yes| Turnstile[\"Add Turnstile\"]\n  Q3 -->|No| Access\n  Access --> Done[\"Login wall ready\"]\n  Build --> Done\n  Turnstile --> Done",
@@ -17850,7 +17850,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Internal apps, admin panels, staging sites, SSH/RDP, or anything for a known set of people.",
-                  "zh": "內部應用程式、管理後台、測試站、SSH／遠端桌面,或任何給「已知一群人」用的東西。"
+                  "zh": "內部應用程式、管理後台、測試站、SSH／遠端桌面，或任何給「已知一群人」用的東西。"
                 }
               },
               {
@@ -17861,7 +17861,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Public sign-up, custom login UI, social accounts, per-user data, or a mobile/SPA backend.",
-                  "zh": "對外開放註冊、自訂登入介面、社群帳號、每位使用者各自的資料,或行動／SPA 後端。"
+                  "zh": "對外開放註冊、自訂登入介面、社群帳號、每位使用者各自的資料，或行動／SPA 後端。"
                 }
               },
               {
@@ -17872,7 +17872,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "If you only need to stop bots on a contact or signup form, add Turnstile and skip auth entirely.",
-                  "zh": "如果你只是要擋住聯絡或註冊表單上的機器人,加個 Turnstile 就好,完全不用做認證。"
+                  "zh": "如果你只是要擋住聯絡或註冊表單上的機器人，加個 Turnstile 就好，完全不用做認證。"
                 }
               }
             ]
@@ -17887,7 +17887,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "It's common to use Access for the admin area and your own KV sessions for end-user accounts in the same project. They don't conflict.",
-              "zh": "同一個專案裡,用 Access 守後台、用自己的 KV session 處理一般使用者帳號,是很常見的組合。兩者並不衝突。"
+              "zh": "同一個專案裡，用 Access 守後台、用自己的 KV session 處理一般使用者帳號，是很常見的組合。兩者並不衝突。"
             }
           }
         ]
@@ -17897,14 +17897,14 @@ window.SITE_PAGES = [
         "icon": "construction",
         "heading": {
           "en": "Build it: a session Worker end to end",
-          "zh": "動手做:一個完整的 session Worker"
+          "zh": "動手做：一個完整的 session Worker"
         },
         "blocks": [
           {
             "type": "p",
             "text": {
               "en": "Here is approach B in full: create the KV namespaces, bind them, seed a demo user, then the Worker (login + middleware + logout) and a tiny front-end. Approach A needs no code — just the dashboard steps from the Access section.",
-              "zh": "以下是做法 B 的完整版:建立 KV 命名空間、綁定、塞一個示範使用者,接著是 Worker(登入 + 中介層 + 登出)和一個小小的前端。做法 A 不用寫程式,照前面 Access 那段的儀表板步驟做即可。"
+              "zh": "以下是做法 B 的完整版：建立 KV 命名空間、綁定、塞一個示範使用者，接著是 Worker（登入 + 中介層 + 登出）和一個小小的前端。做法 A 不用寫程式，照前面 Access 那段的儀表板步驟做即可。"
             }
           },
           {
@@ -17917,7 +17917,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "One stores sessions, one stores the demo users. Wrangler prints an id for each.",
-                  "zh": "一個存 session,一個存示範使用者。Wrangler 會各印出一個 id。"
+                  "zh": "一個存 session，一個存示範使用者。Wrangler 會各印出一個 id。"
                 },
                 "code": {
                   "lang": "bash",
@@ -17931,7 +17931,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Paste the ids so the Worker can reach them as env.SESSIONS and env.USERS.",
-                  "zh": "把 id 貼進來,Worker 就能用 env.SESSIONS 和 env.USERS 取用。"
+                  "zh": "把 id 貼進來，Worker 就能用 env.SESSIONS 和 env.USERS 取用。"
                 },
                 "code": {
                   "lang": "json",
@@ -17945,7 +17945,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Store one user whose passwordHash is the SHA-256 of the password \"hunter2\".",
-                  "zh": "存一位使用者,他的 passwordHash 就是密碼「hunter2」的 SHA-256。"
+                  "zh": "存一位使用者，他的 passwordHash 就是密碼「hunter2」的 SHA-256。"
                 },
                 "code": {
                   "lang": "bash",
@@ -17958,14 +17958,14 @@ window.SITE_PAGES = [
             "type": "h3",
             "text": {
               "en": "The Worker: login, middleware, logout",
-              "zh": "Worker:登入、中介層、登出"
+              "zh": "Worker：登入、中介層、登出"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "Note the password check uses SHA-256 only to keep the demo short. In production, hash passwords with a real KDF (key derivation function) such as Argon2id, scrypt, or bcrypt, or PBKDF2 via Web Crypto with a high iteration count and a per-user salt.",
-              "zh": "注意:這裡密碼檢查只用 SHA-256 是為了讓示範簡短。正式環境請改用真正的 KDF(金鑰衍生函式)來雜湊密碼,例如 Argon2id、scrypt、bcrypt,或用 Web Crypto 的 PBKDF2 搭配高迭代次數與每位使用者各自的鹽(salt)。"
+              "zh": "注意：這裡密碼檢查只用 SHA-256 是為了讓示範簡短。正式環境請改用真正的 KDF（金鑰衍生函式）來雜湊密碼，例如 Argon2id、scrypt、bcrypt，或用 Web Crypto 的 PBKDF2 搭配高迭代次數與每位使用者各自的鹽（salt）。"
             }
           },
           {
@@ -17981,14 +17981,14 @@ window.SITE_PAGES = [
             "type": "h3",
             "text": {
               "en": "The front-end: a login form",
-              "zh": "前端:登入表單"
+              "zh": "前端：登入表單"
             }
           },
           {
             "type": "p",
             "text": {
               "en": "credentials: \"include\" is the key detail — it tells the browser to store the Set-Cookie response and resend the cookie on later requests, so /me just works.",
-              "zh": "credentials: \"include\" 是關鍵 —— 它叫瀏覽器存下回應的 Set-Cookie,並在之後的請求自動帶上 cookie,這樣 /me 才會直接通。"
+              "zh": "credentials: \"include\" 是關鍵 —— 它叫瀏覽器存下回應的 Set-Cookie，並在之後的請求自動帶上 cookie，這樣 /me 才會直接通。"
             }
           },
           {
@@ -18010,7 +18010,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Always serve over HTTPS (the Secure flag needs it), keep cookies HttpOnly so JavaScript can't read them, use a real password KDF, and add rate limiting plus Turnstile on the login route to slow down credential-stuffing.",
-              "zh": "一定要走 HTTPS(Secure 旗標需要它)、cookie 保持 HttpOnly 讓 JavaScript 讀不到、使用真正的密碼 KDF,並在登入路由加上速率限制和 Turnstile,拖慢撞庫攻擊(credential stuffing)。"
+              "zh": "一定要走 HTTPS（Secure 旗標需要它）、cookie 保持 HttpOnly 讓 JavaScript 讀不到、使用真正的密碼 KDF，並在登入路由加上速率限制和 Turnstile，拖慢撞庫攻擊（credential stuffing）。"
             }
           }
         ]
@@ -18020,7 +18020,7 @@ window.SITE_PAGES = [
         "icon": "school",
         "heading": {
           "en": "Key terms, in plain words",
-          "zh": "重點術語,白話版"
+          "zh": "重點術語，白話版"
         },
         "blocks": [
           {
@@ -18034,18 +18034,18 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Never trust by default; verify identity on every request, inside or outside the network. Access is built on this idea.",
-                  "zh": "預設誰都不信任;每個請求都驗證身分,不管在網路內外。Access 就建立在這個概念上。"
+                  "zh": "預設誰都不信任；每個請求都驗證身分，不管在網路內外。Access 就建立在這個概念上。"
                 }
               },
               {
                 "icon": "badge",
                 "title": {
                   "en": "Session",
-                  "zh": "Session(連線階段)"
+                  "zh": "Session（連線階段）"
                 },
                 "text": {
                   "en": "Server-side proof that a user already logged in. Stored in KV here, identified by a random id.",
-                  "zh": "伺服器端「這位使用者已經登入過」的憑證。這裡存在 KV,用一個隨機 id 來辨識。"
+                  "zh": "伺服器端「這位使用者已經登入過」的憑證。這裡存在 KV，用一個隨機 id 來辨識。"
                 }
               },
               {
@@ -18067,7 +18067,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A signed, self-contained token that carries claims (like the user's email). Access issues one after SSO.",
-                  "zh": "一個已簽章、自帶內容的權杖,裡面裝著聲明(claims,例如使用者 email)。Access 在 SSO 後會發一個。"
+                  "zh": "一個已簽章、自帶內容的權杖，裡面裝著聲明（claims，例如使用者 email）。Access 在 SSO 後會發一個。"
                 }
               },
               {
@@ -18078,7 +18078,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Cookie flags: HttpOnly hides it from JavaScript (anti-XSS); Secure sends it only over HTTPS.",
-                  "zh": "Cookie 旗標:HttpOnly 讓 JavaScript 讀不到它(防 XSS);Secure 只在 HTTPS 下傳送。"
+                  "zh": "Cookie 旗標：HttpOnly 讓 JavaScript 讀不到它（防 XSS）；Secure 只在 HTTPS 下傳送。"
                 }
               },
               {
@@ -18100,18 +18100,18 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A slow, salted one-way function (Argon2/bcrypt/scrypt) for storing passwords safely. Not plain SHA-256.",
-                  "zh": "一種慢、加鹽的單向函式(Argon2／bcrypt／scrypt),用來安全地保存密碼。不是單純的 SHA-256。"
+                  "zh": "一種慢、加鹽的單向函式（Argon2／bcrypt／scrypt），用來安全地保存密碼。不是單純的 SHA-256。"
                 }
               },
               {
                 "icon": "login",
                 "title": {
                   "en": "SSO",
-                  "zh": "單一登入(SSO)"
+                  "zh": "單一登入（SSO）"
                 },
                 "text": {
                   "en": "Log in once with one identity provider and gain access to multiple apps. That's the Access experience.",
-                  "zh": "用一個身分提供者登入一次,就能進入多個應用程式。這就是 Access 的體驗。"
+                  "zh": "用一個身分提供者登入一次，就能進入多個應用程式。這就是 Access 的體驗。"
                 }
               }
             ]
@@ -18136,7 +18136,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "The cookie should carry only an opaque session id. Anything you put in a plain cookie is visible and tamperable by the user; keep the real data in KV on the server.",
-              "zh": "cookie 只應該帶一個不透明的 session id。任何放進一般 cookie 的東西,使用者都看得到也能竄改;真正的資料要放在伺服器端的 KV。"
+              "zh": "cookie 只應該帶一個不透明的 session id。任何放進一般 cookie 的東西，使用者都看得到也能竄改；真正的資料要放在伺服器端的 KV。"
             }
           },
           {
@@ -18151,12 +18151,12 @@ window.SITE_PAGES = [
                 "On logout, delete the KV key AND send a Max-Age=0 cookie so both sides forget the session."
               ],
               "zh": [
-                "KV 是最終一致性(eventually consistent):剛建立的 session 幾乎能立刻讀到,但極端情況下要留一點全球同步的時間。",
-                "每個 session 都設 expirationTtl,讓過期的 session 自己清掉;cookie 的 Max-Age 也設成一樣。",
-                "Cloudflare Zero Trust(Access)最多 50 位使用者免費 —— 內部工具超適合。",
-                "KV 以讀／寫／刪次數計費,且有大方的免費額度;每個請求查一次 session 很便宜。",
-                "在登入表單加上 Turnstile,削弱暴力破解和撞庫攻擊。",
-                "登出時,要刪掉 KV key「並且」回送一個 Max-Age=0 的 cookie,讓兩邊都忘掉這個 session。"
+                "KV 是最終一致性（eventually consistent）：剛建立的 session 幾乎能立刻讀到，但極端情況下要留一點全球同步的時間。",
+                "每個 session 都設 expirationTtl，讓過期的 session 自己清掉；cookie 的 Max-Age 也設成一樣。",
+                "Cloudflare Zero Trust（Access）最多 50 位使用者免費 —— 內部工具超適合。",
+                "KV 以讀／寫／刪次數計費，且有大方的免費額度；每個請求查一次 session 很便宜。",
+                "在登入表單加上 Turnstile，削弱暴力破解和撞庫攻擊。",
+                "登出時，要刪掉 KV key「並且」回送一個 Max-Age=0 的 cookie，讓兩邊都忘掉這個 session。"
               ]
             }
           },
@@ -18170,7 +18170,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Internal? Reach for Access first. Public sign-up? Own your sessions in KV. Either way, let Cloudflare's edge do the heavy lifting.",
-              "zh": "內部用?先想到 Access。對外註冊?自己用 KV 掌管 session。不論哪種,都讓 Cloudflare 的邊緣幫你扛重活。"
+              "zh": "內部用？先想到 Access。對外註冊？自己用 KV 掌管 session。不論哪種，都讓 Cloudflare 的邊緣幫你扛重活。"
             }
           }
         ]
@@ -18616,7 +18616,7 @@ window.SITE_PAGES = [
                 "icon": "inventory_2",
                 "title": {
                   "en": "Object storage",
-                  "zh": "物件儲存 (Object storage)"
+                  "zh": "物件儲存（Object storage）"
                 },
                 "text": {
                   "en": "A service for keeping whole files (objects) instead of rows or blocks. Great for images, PDFs, and video.",
@@ -18627,7 +18627,7 @@ window.SITE_PAGES = [
                 "icon": "key",
                 "title": {
                   "en": "Key",
-                  "zh": "鍵 (Key)"
+                  "zh": "鍵（Key）"
                 },
                 "text": {
                   "en": "The unique name/path of an object, like uploads/2026/photo.jpg. You read an object back by its key.",
@@ -18638,7 +18638,7 @@ window.SITE_PAGES = [
                 "icon": "folder",
                 "title": {
                   "en": "Bucket",
-                  "zh": "儲存桶 (Bucket)"
+                  "zh": "儲存桶（Bucket）"
                 },
                 "text": {
                   "en": "A named container that holds many objects, like a top-level folder for your app's files.",
@@ -18671,7 +18671,7 @@ window.SITE_PAGES = [
                 "icon": "link",
                 "title": {
                   "en": "Presigned URL",
-                  "zh": "預簽網址 (Presigned URL)"
+                  "zh": "預簽網址（Presigned URL）"
                 },
                 "text": {
                   "en": "A temporary signed link that lets the browser upload or download directly from R2, bypassing the Worker for large files.",
@@ -19648,7 +19648,7 @@ window.SITE_PAGES = [
                 "icon": "table_rows",
                 "title": {
                   "en": "Relational (SQL)",
-                  "zh": "關聯式 (SQL)"
+                  "zh": "關聯式（SQL）"
                 },
                 "text": {
                   "en": "Data lives in tables with columns and relationships, queried with SQL — JOIN links tables, WHERE filters, ORDER BY sorts. D1 (and your own DB via Hyperdrive) are relational.",
@@ -20358,7 +20358,7 @@ window.SITE_PAGES = [
                 "Keep the migrations/ folder in Git so the whole schema history travels with your code."
               ],
               "zh": [
-                "用 PRAGMA foreign_keys = ON; 開啟外鍵約束，否則 SQLite 會忽略 FK 規則。",
+                "用 PRAGMA foreign_keys = ON；開啟外鍵約束，否則 SQLite 會忽略 FK 規則。",
                 "為每個外鍵、以及任何常用來篩選或排序的欄位都建立索引。",
                 "SQLite 的 ALTER TABLE 能新增欄位、改名，但不容易刪欄位——欄位請事先想清楚再設計。",
                 "新增欄位時優先用 NOT NULL 搭配 DEFAULT，這樣既有的列才不會變不合法。",
@@ -20649,7 +20649,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "post_tags uses (post_id, tag_id) together as its key, so the same post-tag pair can't be linked twice.",
-                  "zh": "post_tags 把 (post_id, tag_id) 兩欄合起來當主鍵，所以同一組貼文-標籤配對不會被連結兩次。"
+                  "zh": "post_tags 把（post_id, tag_id）兩欄合起來當主鍵，所以同一組貼文-標籤配對不會被連結兩次。"
                 }
               }
             ]
@@ -20979,7 +20979,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Insert parents before children: a posts row needs its users row to exist first. For batches where statements depend on each other, you may add PRAGMA defer_foreign_keys = true; to delay the check until the transaction commits.",
-              "zh": "先插父、再插子：一筆 posts 列需要它對應的 users 列先存在。若批次裡的語句彼此相依，可以加上 PRAGMA defer_foreign_keys = true; 把檢查延到交易提交時再做。"
+              "zh": "先插父、再插子：一筆 posts 列需要它對應的 users 列先存在。若批次裡的語句彼此相依，可以加上 PRAGMA defer_foreign_keys = true；把檢查延到交易提交時再做。"
             }
           },
           {
@@ -21085,7 +21085,7 @@ window.SITE_PAGES = [
         "value": "2",
         "label": {
           "en": "Stores wired (KV + D1)",
-          "zh": "串接的儲存 (KV + D1)"
+          "zh": "串接的儲存（KV + D1）"
         }
       }
     ],
@@ -21193,7 +21193,7 @@ window.SITE_PAGES = [
                 "icon": "key",
                 "title": {
                   "en": "The cache key",
-                  "zh": "快取鍵 (key)"
+                  "zh": "快取鍵（key）"
                 },
                 "text": {
                   "en": "A stable name like product:42 that maps one DB row to one KV entry. Same input, same key.",
@@ -25267,7 +25267,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "We store created_at as an integer — milliseconds from Date.now(). Numbers sort cleanly and are easy to turn into any timezone in the browser. The index on (room_id, created_at) makes \"load the last 50 messages for this room\" fast.",
-              "zh": "我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。(room_id, created_at) 這個索引讓「載入這個房間最近 50 則訊息」變得很快。"
+              "zh": "我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。（room_id, created_at）這個索引讓「載入這個房間最近 50 則訊息」變得很快。"
             }
           }
         ]
@@ -26327,7 +26327,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "There are exactly two things the app does: (1) create — turn a long URL into a short code and save it; (2) resolve — take a short code and send the browser to the long URL. Let's see both as a picture.",
-              "zh": "這個應用程式就只做兩件事：(1) 建立——把長網址變成短代碼並存起來；(2) 還原——拿短代碼把瀏覽器送去長網址。我們先用一張圖看懂這兩件事。"
+              "zh": "這個應用程式就只做兩件事：（1）建立——把長網址變成短代碼並存起來；（2）還原——拿短代碼把瀏覽器送去長網址。我們先用一張圖看懂這兩件事。"
             }
           },
           {
@@ -27338,7 +27338,7 @@ window.SITE_PAGES = [
     },
     "subtitle": {
       "en": "See how four common login and authorization flows actually work, drawn step by step as sequence diagrams.",
-      "zh": "用一張張循序圖,一步步看懂四種常見的登入與授權流程到底是怎麼運作的。"
+      "zh": "用一張張循序圖，一步步看懂四種常見的登入與授權流程到底是怎麼運作的。"
     },
     "hero": {
       "badge": {
@@ -27379,14 +27379,14 @@ window.SITE_PAGES = [
         "icon": "insights",
         "heading": {
           "en": "What are we diagramming?",
-          "zh": "我們要圖解什麼?"
+          "zh": "我們要圖解什麼？"
         },
         "blocks": [
           {
             "type": "lead",
             "text": {
               "en": "Authentication can feel abstract because the important parts happen invisibly between the browser, your server, and an identity provider. This guide draws four of the most common login flows as sequence diagrams, so you can literally see who talks to whom, in what order, and what gets passed along.",
-              "zh": "登入驗證之所以難懂,是因為最關鍵的步驟都「看不見」—— 它們發生在瀏覽器、你的伺服器、身分提供者之間。這篇把四種最常見的登入流程畫成循序圖(sequence diagram),讓你親眼看到:誰跟誰說話、順序是什麼、中間傳了什麼東西。"
+              "zh": "登入驗證之所以難懂，是因為最關鍵的步驟都「看不見」—— 它們發生在瀏覽器、你的伺服器、身分提供者之間。這篇把四種最常見的登入流程畫成循序圖（sequence diagram），讓你親眼看到：誰跟誰說話、順序是什麼、中間傳了什麼東西。"
             }
           },
           {
@@ -27395,18 +27395,18 @@ window.SITE_PAGES = [
             "icon": "lightbulb",
             "title": {
               "en": "Authentication vs authorization",
-              "zh": "驗證(Authentication) vs 授權(Authorization)"
+              "zh": "驗證（Authentication） vs 授權（Authorization）"
             },
             "text": {
               "en": "Authentication answers 'who are you?' (showing your ID at the door). Authorization answers 'what are you allowed to do?' (whether your ticket lets you into the VIP room). Every flow below does authentication first, then carries proof of it on each later request.",
-              "zh": "驗證(authentication)回答的是「你是誰?」(在門口出示證件);授權(authorization)回答的是「你被允許做什麼?」(你的票能不能進 VIP 室)。底下每一種流程,都是先做一次驗證,之後每次請求再帶著「我已驗證過」的憑證。"
+              "zh": "驗證（authentication）回答的是「你是誰？」（在門口出示證件）；授權（authorization）回答的是「你被允許做什麼？」（你的票能不能進 VIP 室）。底下每一種流程，都是先做一次驗證，之後每次請求再帶著「我已驗證過」的憑證。"
             }
           },
           {
             "type": "mermaid",
             "title": {
               "en": "Which auth flow should I use?",
-              "zh": "我該用哪一種登入流程?"
+              "zh": "我該用哪一種登入流程？"
             },
             "code": {
               "en": "flowchart TD\n  Start[\"Who is logging in?\"] --> Q1{\"Internal team app?\"}\n  Q1 -->|\"Yes\"| A[\"Cloudflare Access SSO\"]\n  Q1 -->|\"No\"| Q2{\"Web app with a login page?\"}\n  Q2 -->|\"Server sessions\"| S[\"Session cookie\"]\n  Q2 -->|\"API or mobile app\"| J[\"JWT bearer token\"]\n  Q2 -->|\"Sign in with Google\"| O[\"OAuth third-party\"]",
@@ -27427,7 +27427,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "SSO (Single Sign-On) means you log in once with one identity provider and then reach many apps without logging in again. With Cloudflare Access, Cloudflare sits in front of your app and handles the whole login — you write no auth code. After login, Cloudflare gives the browser a signed cookie that your app can trust.",
-              "zh": "SSO(Single Sign-On,單一登入)是指:你只在一個身分提供者登入一次,之後就能進到很多應用程式、不用重複登入。用 Cloudflare Access 時,Cloudflare 會擋在你的應用程式前面、把整個登入流程包辦掉 —— 你完全不用自己寫驗證程式碼。登入後,Cloudflare 會給瀏覽器一個「已簽章的 cookie」,讓你的應用程式可以信任。"
+              "zh": "SSO（Single Sign-On，單一登入）是指：你只在一個身分提供者登入一次，之後就能進到很多應用程式、不用重複登入。用 Cloudflare Access 時，Cloudflare 會擋在你的應用程式前面、把整個登入流程包辦掉 —— 你完全不用自己寫驗證程式碼。登入後，Cloudflare 會給瀏覽器一個「已簽章的 cookie」，讓你的應用程式可以信任。"
             }
           },
           {
@@ -27451,7 +27451,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Your app never sees passwords and you write zero login logic. Cloudflare enforces the policy (who is allowed) and only forwards verified requests. Perfect for internal dashboards and admin panels.",
-              "zh": "你的應用程式永遠看不到密碼,你也不用寫任何登入邏輯。Cloudflare 負責執行政策(誰能進),只把「已驗證」的請求轉給你。拿來保護內部儀表板、後台管理頁面最適合。"
+              "zh": "你的應用程式永遠看不到密碼，你也不用寫任何登入邏輯。Cloudflare 負責執行政策（誰能進），只把「已驗證」的請求轉給你。拿來保護內部儀表板、後台管理頁面最適合。"
             }
           }
         ]
@@ -27468,7 +27468,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "A session is the server's memory of one logged-in visitor. After you log in, the server stores a session record (here in Workers KV) and hands the browser a cookie holding only a random session id. The browser sends that cookie on every later request, and the server looks the id up to know who you are. This is the classic flow for server-rendered web apps.",
-              "zh": "session(連線階段)是伺服器對「某一位已登入訪客」的記憶。登入成功後,伺服器會存一筆 session 紀錄(這裡放在 Workers KV),並發給瀏覽器一個 cookie,裡面只放一串隨機的 session id。瀏覽器之後每次請求都會自動帶上這個 cookie,伺服器再用這個 id 去查出「你是誰」。這是傳統伺服器渲染網頁最經典的流程。"
+              "zh": "session（連線階段）是伺服器對「某一位已登入訪客」的記憶。登入成功後，伺服器會存一筆 session 紀錄（這裡放在 Workers KV），並發給瀏覽器一個 cookie，裡面只放一串隨機的 session id。瀏覽器之後每次請求都會自動帶上這個 cookie，伺服器再用這個 id 去查出「你是誰」。這是傳統伺服器渲染網頁最經典的流程。"
             }
           },
           {
@@ -27492,7 +27492,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Set the cookie as HttpOnly (JavaScript cannot read it), Secure (HTTPS only), and SameSite to reduce CSRF. Give the KV session a TTL so it expires automatically. The cookie itself holds no user data — just the lookup key.",
-              "zh": "把 cookie 設成 HttpOnly(JavaScript 讀不到)、Secure(只走 HTTPS)、SameSite(降低 CSRF 跨站偽造請求)。並給 KV 的 session 設一個 TTL(存活時間)讓它自動過期。cookie 本身不放任何使用者資料 —— 它只是一把查表用的鑰匙。"
+              "zh": "把 cookie 設成 HttpOnly（JavaScript 讀不到）、Secure（只走 HTTPS）、SameSite（降低 CSRF 跨站偽造請求）。並給 KV 的 session 設一個 TTL（存活時間）讓它自動過期。cookie 本身不放任何使用者資料 —— 它只是一把查表用的鑰匙。"
             }
           }
         ]
@@ -27509,7 +27509,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "A JWT (JSON Web Token) is a signed string that carries claims like the user id and an expiry time. Because it is signed with a secret, the server can trust it without storing anything — it just checks the signature. The client sends it in an Authorization header as a 'bearer' token, meaning 'whoever bears this token is allowed in'. This is the go-to flow for APIs, single-page apps, and mobile apps.",
-              "zh": "JWT(JSON Web Token)是一段「已簽章的字串」,裡面帶有 claims(聲明),例如 user id 和到期時間。因為它是用密鑰簽出來的,伺服器不用存任何東西就能信任它 —— 只要驗章就好。用戶端會把它放在 Authorization 標頭裡當作 bearer(持有者)權杖送出,意思是「誰持有這個權杖,誰就能進」。這是 API、單頁應用(SPA)、手機 App 最常用的流程。"
+              "zh": "JWT（JSON Web Token）是一段「已簽章的字串」，裡面帶有 claims（聲明），例如 user id 和到期時間。因為它是用密鑰簽出來的，伺服器不用存任何東西就能信任它 —— 只要驗章就好。用戶端會把它放在 Authorization 標頭裡當作 bearer（持有者）權杖送出，意思是「誰持有這個權杖，誰就能進」。這是 API、單頁應用（SPA）、手機 App 最常用的流程。"
             }
           },
           {
@@ -27542,7 +27542,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "After the signature checks out, also decode the payload and reject the token if its exp (expiry) has passed. Keep tokens short-lived (minutes to an hour) and store the secret in a Worker secret, never in code.",
-              "zh": "簽章驗過之後,還要解開 payload(內容),如果 exp(到期時間)已經過了就拒絕。權杖要設短效期(幾分鐘到一小時),而密鑰要放在 Worker secret(密鑰)裡,絕對不要寫死在程式碼。"
+              "zh": "簽章驗過之後，還要解開 payload（內容），如果 exp（到期時間）已經過了就拒絕。權杖要設短效期（幾分鐘到一小時），而密鑰要放在 Worker secret（密鑰）裡，絕對不要寫死在程式碼。"
             }
           }
         ]
@@ -27559,7 +27559,7 @@ window.SITE_PAGES = [
             "type": "p",
             "text": {
               "en": "OAuth lets users log in with an account they already have, like Google or GitHub, without giving your app their password. Your app redirects the user to the provider, the user approves, and the provider redirects back with a short-lived code. Your app then swaps that code for an access token on the server side. The 'authorization code' style below is the secure, recommended pattern.",
-              "zh": "OAuth 讓使用者用「他原本就有的帳號」(例如 Google、GitHub)登入,而不用把密碼交給你的應用程式。你的應用程式把使用者導向提供者,使用者按下同意,提供者再帶著一組短效的「授權碼(code)」導回來。接著你的應用程式在伺服器端用這組 code 去換取存取權杖(access token)。底下這種「authorization code(授權碼)」流程,就是最安全、最推薦的做法。"
+              "zh": "OAuth 讓使用者用「他原本就有的帳號」（例如 Google、GitHub）登入，而不用把密碼交給你的應用程式。你的應用程式把使用者導向提供者，使用者按下同意，提供者再帶著一組短效的「授權碼（code）」導回來。接著你的應用程式在伺服器端用這組 code 去換取存取權杖（access token）。底下這種「authorization code（授權碼）」流程，就是最安全、最推薦的做法。"
             }
           },
           {
@@ -27579,11 +27579,11 @@ window.SITE_PAGES = [
             "icon": "shield",
             "title": {
               "en": "Code, not token, in the browser",
-              "zh": "瀏覽器拿到的是 code,不是 token"
+              "zh": "瀏覽器拿到的是 code，不是 token"
             },
             "text": {
               "en": "The browser only ever sees a one-time code; the real token is fetched server-to-server so it never leaks. Keep the client secret on the server, and use a state value plus PKCE to block forged callbacks.",
-              "zh": "瀏覽器自始至終只看得到一次性的 code;真正的權杖是伺服器對伺服器去拿的,所以不會外洩。client secret(用戶端密鑰)要留在伺服器,並用 state 參數加上 PKCE 來擋掉偽造的 callback(回呼)。"
+              "zh": "瀏覽器自始至終只看得到一次性的 code；真正的權杖是伺服器對伺服器去拿的，所以不會外洩。client secret（用戶端密鑰）要留在伺服器，並用 state 參數加上 PKCE 來擋掉偽造的 callback（回呼）。"
             }
           }
         ]
@@ -27593,7 +27593,7 @@ window.SITE_PAGES = [
         "icon": "target",
         "heading": {
           "en": "When to use each",
-          "zh": "什麼時候用哪一種?"
+          "zh": "什麼時候用哪一種？"
         },
         "blocks": [
           {
@@ -27607,7 +27607,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Internal tools for your own team. No login code to write — Cloudflare guards the door and enforces who gets in.",
-                  "zh": "給自己團隊用的內部工具。不用寫登入程式碼 —— Cloudflare 替你守門,並決定誰能進。"
+                  "zh": "給自己團隊用的內部工具。不用寫登入程式碼 —— Cloudflare 替你守門，並決定誰能進。"
                 }
               },
               {
@@ -27618,7 +27618,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Traditional, server-rendered websites where the browser is the only client. Simple to reason about and easy to revoke.",
-                  "zh": "傳統、伺服器渲染的網站,而且只有瀏覽器這一種用戶端。觀念簡單,也容易隨時讓登入失效。"
+                  "zh": "傳統、伺服器渲染的網站，而且只有瀏覽器這一種用戶端。觀念簡單，也容易隨時讓登入失效。"
                 }
               },
               {
@@ -27629,7 +27629,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "APIs, single-page apps, mobile apps, and service-to-service calls. Stateless — no session store needed.",
-                  "zh": "API、單頁應用、手機 App,以及服務對服務的呼叫。無狀態(stateless)—— 不需要 session 儲存區。"
+                  "zh": "API、單頁應用、手機 App，以及服務對服務的呼叫。無狀態（stateless）—— 不需要 session 儲存區。"
                 }
               },
               {
@@ -27640,7 +27640,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Let users sign in with Google, GitHub, or similar — or access their data on those services with their permission.",
-                  "zh": "讓使用者用 Google、GitHub 等帳號登入 —— 或在取得他們同意後,存取他們在那些服務上的資料。"
+                  "zh": "讓使用者用 Google、GitHub 等帳號登入 —— 或在取得他們同意後，存取他們在那些服務上的資料。"
                 }
               }
             ]
@@ -27666,7 +27666,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Single Sign-On: log in once, reach many apps without logging in again.",
-                  "zh": "Single Sign-On:登入一次,就能進到很多應用程式、不用重複登入。"
+                  "zh": "Single Sign-On：登入一次，就能進到很多應用程式、不用重複登入。"
                 }
               },
               {
@@ -27677,7 +27677,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "The server's record of one logged-in visitor, usually kept in a store like KV.",
-                  "zh": "伺服器對「某一位已登入訪客」的紀錄,通常存在 KV 這類儲存區。"
+                  "zh": "伺服器對「某一位已登入訪客」的紀錄，通常存在 KV 這類儲存區。"
                 }
               },
               {
@@ -27699,7 +27699,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A signed JSON token holding claims (user id, expiry) that the server can trust without a lookup.",
-                  "zh": "一個已簽章的 JSON 權杖,帶有 claims(user id、到期時間),伺服器不用查表就能信任。"
+                  "zh": "一個已簽章的 JSON 權杖，帶有 claims（user id、到期時間），伺服器不用查表就能信任。"
                 }
               },
               {
@@ -27710,7 +27710,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "Sent as 'Authorization: Bearer <token>'. Whoever holds it is treated as authorized.",
-                  "zh": "用 'Authorization: Bearer <token>' 送出。誰持有它,就被當作已獲授權。"
+                  "zh": "用 'Authorization: Bearer <token>' 送出。誰持有它，就被當作已獲授權。"
                 }
               },
               {
@@ -27721,7 +27721,7 @@ window.SITE_PAGES = [
                 },
                 "text": {
                   "en": "A standard for logging in with another service's account without sharing your password.",
-                  "zh": "一套標準,讓你用別的服務的帳號登入,而不用把密碼分享出去。"
+                  "zh": "一套標準，讓你用別的服務的帳號登入，而不用把密碼分享出去。"
                 }
               }
             ]
@@ -27746,7 +27746,7 @@ window.SITE_PAGES = [
             },
             "text": {
               "en": "Cookies and bearer tokens are like keys — anyone who copies them can impersonate the user. HTTPS keeps them from being read in transit, and is on by default for any Cloudflare-proxied domain.",
-              "zh": "cookie 和 bearer 權杖就像鑰匙 —— 誰複製到就能假冒使用者。HTTPS 能讓它們在傳輸途中不被偷看,而且只要網域掛在 Cloudflare 代理後面,預設就已開啟。"
+              "zh": "cookie 和 bearer 權杖就像鑰匙 —— 誰複製到就能假冒使用者。HTTPS 能讓它們在傳輸途中不被偷看，而且只要網域掛在 Cloudflare 代理後面，預設就已開啟。"
             }
           },
           {
@@ -27760,11 +27760,11 @@ window.SITE_PAGES = [
                 "Give sessions and tokens a short lifetime, and provide a real logout that deletes the server-side session."
               ],
               "zh": [
-                "能避免就別把原始 JWT 或 session id 存在 localStorage —— 用 HttpOnly cookie 對 XSS(跨站腳本)更安全。",
-                "在伺服器端「同時」驗證 JWT 的簽章「和」到期時間;絕對不要只信 payload 內容。",
-                "純內部工具的話,Cloudflare Access 常常能取代上面這一切,完全免寫驗證程式碼。",
-                "在登入表單加上 Turnstile,在機器人碰到你的密碼檢查之前就先擋掉。",
-                "給 session 和權杖設短效期,並做一個真正的登出 —— 會刪掉伺服器端的 session。"
+                "能避免就別把原始 JWT 或 session id 存在 localStorage —— 用 HttpOnly cookie 對 XSS（跨站腳本）更安全。",
+                "在伺服器端「同時」驗證 JWT 的簽章「和」到期時間；絕對不要只信 payload 內容。",
+                "純內部工具的話，Cloudflare Access 常常能取代上面這一切，完全免寫驗證程式碼。",
+                "在登入表單加上 Turnstile，在機器人碰到你的密碼檢查之前就先擋掉。",
+                "給 session 和權杖設短效期，並做一個真正的登出 —— 會刪掉伺服器端的 session。"
               ]
             }
           }
@@ -29262,7 +29262,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "Edge",
-          "zh": "邊緣 (Edge)"
+          "zh": "邊緣（Edge）"
         },
         "right": {
           "en": "Servers located close to your users",
@@ -29282,7 +29282,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "Serverless",
-          "zh": "無伺服器 (Serverless)"
+          "zh": "無伺服器（Serverless）"
         },
         "right": {
           "en": "Run code without managing servers",
@@ -29292,7 +29292,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "Cold start",
-          "zh": "冷啟動 (Cold start)"
+          "zh": "冷啟動（Cold start）"
         },
         "right": {
           "en": "Startup delay when idle code first runs",
@@ -29302,7 +29302,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "Egress",
-          "zh": "流出 (Egress)"
+          "zh": "流出（Egress）"
         },
         "right": {
           "en": "Data leaving the cloud, often billed",
@@ -29312,7 +29312,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "TTL",
-          "zh": "存活時間 (TTL)"
+          "zh": "存活時間（TTL）"
         },
         "right": {
           "en": "How long cached data stays valid",
@@ -29322,7 +29322,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "Zero Trust",
-          "zh": "零信任 (Zero Trust)"
+          "zh": "零信任（Zero Trust）"
         },
         "right": {
           "en": "Never trust, always verify every request",
@@ -29332,7 +29332,7 @@ window.SITE_PAGES = [
       {
         "left": {
           "en": "Anycast",
-          "zh": "任播 (Anycast)"
+          "zh": "任播（Anycast）"
         },
         "right": {
           "en": "One IP routed to the nearest server",
@@ -31265,7 +31265,7 @@ window.SITE_PAGES = [
       {
         "goal": {
           "en": "Build an AI Q&A bot (RAG)",
-          "zh": "做一個 AI 問答機器人 (RAG)"
+          "zh": "做一個 AI 問答機器人（RAG）"
         },
         "palette": [
           {

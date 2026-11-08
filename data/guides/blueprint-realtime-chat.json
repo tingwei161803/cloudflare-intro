@@ -162,7 +162,7 @@
           "title": { "en": "Why created_at is a number", "zh": "為什麼 created_at 是數字" },
           "text": {
             "en": "We store created_at as an integer — milliseconds from Date.now(). Numbers sort cleanly and are easy to turn into any timezone in the browser. The index on (room_id, created_at) makes \"load the last 50 messages for this room\" fast.",
-            "zh": "我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。(room_id, created_at) 這個索引讓「載入這個房間最近 50 則訊息」變得很快。"
+            "zh": "我們把 created_at 存成整數——也就是 Date.now() 的毫秒數。數字排序乾淨，也方便在瀏覽器轉成任何時區。（room_id, created_at）這個索引讓「載入這個房間最近 50 則訊息」變得很快。"
           }
         }
       ]

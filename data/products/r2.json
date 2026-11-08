@@ -216,7 +216,7 @@
           "items": [
             {
               "icon": "description",
-              "title": { "en": "Object", "zh": "物件 (Object)" },
+              "title": { "en": "Object", "zh": "物件（Object）" },
               "text": {
                 "en": "A single stored file plus its metadata, found by a unique key (its name/path).",
                 "zh": "一個存進去的檔案加上它的中繼資料，用唯一的 key（名稱／路徑）來尋找。"
@@ -224,7 +224,7 @@
             },
             {
               "icon": "folder",
-              "title": { "en": "Bucket", "zh": "儲存桶 (Bucket)" },
+              "title": { "en": "Bucket", "zh": "儲存桶（Bucket）" },
               "text": {
                 "en": "A named container that holds many objects, like a top-level folder.",
                 "zh": "裝著很多物件、有名字的容器，可以想成最上層的資料夾。"

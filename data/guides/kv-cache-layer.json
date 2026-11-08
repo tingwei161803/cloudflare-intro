@@ -50,7 +50,7 @@
       "value": "2",
       "label": {
         "en": "Stores wired (KV + D1)",
-        "zh": "串接的儲存 (KV + D1)"
+        "zh": "串接的儲存（KV + D1）"
       }
     }
   ],
@@ -158,7 +158,7 @@
               "icon": "key",
               "title": {
                 "en": "The cache key",
-                "zh": "快取鍵 (key)"
+                "zh": "快取鍵（key）"
               },
               "text": {
                 "en": "A stable name like product:42 that maps one DB row to one KV entry. Same input, same key.",

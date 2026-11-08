@@ -276,7 +276,7 @@
           "items": [
             {
               "icon": "inventory_2",
-              "title": { "en": "Object storage", "zh": "物件儲存 (Object storage)" },
+              "title": { "en": "Object storage", "zh": "物件儲存（Object storage）" },
               "text": {
                 "en": "A service for keeping whole files (objects) instead of rows or blocks. Great for images, PDFs, and video.",
                 "zh": "專門存放「整份檔案（物件）」的服務，而不是資料列或磁碟區塊。最適合圖片、PDF、影片。"
@@ -284,7 +284,7 @@
             },
             {
               "icon": "key",
-              "title": { "en": "Key", "zh": "鍵 (Key)" },
+              "title": { "en": "Key", "zh": "鍵（Key）" },
               "text": {
                 "en": "The unique name/path of an object, like uploads/2026/photo.jpg. You read an object back by its key.",
                 "zh": "物件的唯一名稱／路徑，例如 uploads/2026/photo.jpg。之後就是用這個 key 把物件讀回來。"
@@ -292,7 +292,7 @@
             },
             {
               "icon": "folder",
-              "title": { "en": "Bucket", "zh": "儲存桶 (Bucket)" },
+              "title": { "en": "Bucket", "zh": "儲存桶（Bucket）" },
               "text": {
                 "en": "A named container that holds many objects, like a top-level folder for your app's files.",
                 "zh": "裝著很多物件、有名字的容器，可以想成你 App 檔案的最上層資料夾。"
@@ -316,7 +316,7 @@
             },
             {
               "icon": "link",
-              "title": { "en": "Presigned URL", "zh": "預簽網址 (Presigned URL)" },
+              "title": { "en": "Presigned URL", "zh": "預簽網址（Presigned URL）" },
               "text": {
                 "en": "A temporary signed link that lets the browser upload or download directly from R2, bypassing the Worker for large files.",
                 "zh": "一個有時效、帶簽章的連結，讓瀏覽器直接對 R2 上傳或下載，遇到大檔案時就能繞過 Worker。"

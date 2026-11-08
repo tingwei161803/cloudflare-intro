@@ -158,7 +158,7 @@
               "title": { "en": "Composite PK", "zh": "複合主鍵" },
               "text": {
                 "en": "post_tags uses (post_id, tag_id) together as its key, so the same post-tag pair can't be linked twice.",
-                "zh": "post_tags 把 (post_id, tag_id) 兩欄合起來當主鍵，所以同一組貼文-標籤配對不會被連結兩次。"
+                "zh": "post_tags 把（post_id, tag_id）兩欄合起來當主鍵，所以同一組貼文-標籤配對不會被連結兩次。"
               }
             }
           ]
@@ -389,7 +389,7 @@
           "title": { "en": "D1 enforces foreign keys", "zh": "D1 會強制檢查外鍵" },
           "text": {
             "en": "Insert parents before children: a posts row needs its users row to exist first. For batches where statements depend on each other, you may add PRAGMA defer_foreign_keys = true; to delay the check until the transaction commits.",
-            "zh": "先插父、再插子：一筆 posts 列需要它對應的 users 列先存在。若批次裡的語句彼此相依，可以加上 PRAGMA defer_foreign_keys = true; 把檢查延到交易提交時再做。"
+            "zh": "先插父、再插子：一筆 posts 列需要它對應的 users 列先存在。若批次裡的語句彼此相依，可以加上 PRAGMA defer_foreign_keys = true；把檢查延到交易提交時再做。"
           }
         },
         {

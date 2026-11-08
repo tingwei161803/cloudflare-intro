@@ -176,7 +176,7 @@
               "title": { "en": "Log in", "zh": "登入授權" },
               "text": {
                 "en": "This opens a browser to authorize cloudflared and pick which domain the tunnel belongs to.",
-                "zh": "這會開啟瀏覽器,授權 cloudflared 並選擇這條通道要綁哪個網域。"
+                "zh": "這會開啟瀏覽器，授權 cloudflared 並選擇這條通道要綁哪個網域。"
               },
               "code": {
                 "lang": "bash",
@@ -187,7 +187,7 @@
               "title": { "en": "Create the tunnel", "zh": "建立通道" },
               "text": {
                 "en": "Give it a name. Cloudflare generates a unique tunnel ID and a credentials file on your machine.",
-                "zh": "幫它取個名字。Cloudflare 會產生一個唯一的通道 ID,並在你機器上建立一個憑證檔。"
+                "zh": "幫它取個名字。Cloudflare 會產生一個唯一的通道 ID，並在你機器上建立一個憑證檔。"
               },
               "code": {
                 "lang": "bash",
@@ -198,7 +198,7 @@
               "title": { "en": "Route a hostname to it", "zh": "把網址指到這條通道" },
               "text": {
                 "en": "Create the DNS record so app.example.com points at your tunnel.",
-                "zh": "建立 DNS 紀錄,讓 app.example.com 指向你的通道。"
+                "zh": "建立 DNS 紀錄，讓 app.example.com 指向你的通道。"
               },
               "code": {
                 "lang": "bash",
@@ -209,7 +209,7 @@
               "title": { "en": "Map your local service", "zh": "對應你的本機服務" },
               "text": {
                 "en": "In ~/.cloudflared/config.yml, point the hostname at your local service (e.g. a site on localhost:8080).",
-                "zh": "在 ~/.cloudflared/config.yml 裡,把網址對應到你的本機服務（例如跑在 localhost:8080 的網站）。"
+                "zh": "在 ~/.cloudflared/config.yml 裡，把網址對應到你的本機服務（例如跑在 localhost:8080 的網站）。"
               },
               "code": {
                 "lang": "yaml",
@@ -220,7 +220,7 @@
               "title": { "en": "Run it", "zh": "啟動它" },
               "text": {
                 "en": "Start the tunnel. Your local service is now live at https://app.example.com. Later, install it as a service so it runs on boot.",
-                "zh": "啟動通道。你的本機服務現在就上線在 https://app.example.com 了。之後可把它裝成系統服務,開機就自動跑。"
+                "zh": "啟動通道。你的本機服務現在就上線在 https://app.example.com 了。之後可把它裝成系統服務，開機就自動跑。"
               },
               "code": {
                 "lang": "bash",
@@ -252,7 +252,7 @@
               "title": { "en": "Tunnel", "zh": "通道（Tunnel）" },
               "text": {
                 "en": "A persistent object with a unique UUID linking your origin to Cloudflare.",
-                "zh": "一個有唯一 UUID 的長期物件,把你的來源主機跟 Cloudflare 連起來。"
+                "zh": "一個有唯一 UUID 的長期物件，把你的來源主機跟 Cloudflare 連起來。"
               }
             },
             {
@@ -260,7 +260,7 @@
               "title": { "en": "Outbound-only", "zh": "只往外連" },
               "text": {
                 "en": "cloudflared dials out to Cloudflare; nothing ever connects inbound to you.",
-                "zh": "cloudflared 主動撥出去連 Cloudflare,沒有任何東西能反過來連進你這裡。"
+                "zh": "cloudflared 主動撥出去連 Cloudflare，沒有任何東西能反過來連進你這裡。"
               }
             },
             {
@@ -273,10 +273,10 @@
             },
             {
               "icon": "hub",
-              "title": { "en": "Connector", "zh": "連接器(Connector)" },
+              "title": { "en": "Connector", "zh": "連接器（Connector）" },
               "text": {
                 "en": "Each running cloudflared process; you can run several for redundancy.",
-                "zh": "每個正在跑的 cloudflared 程序;可同時跑多個做備援。"
+                "zh": "每個正在跑的 cloudflared 程序；可同時跑多個做備援。"
               }
             },
             {
@@ -284,7 +284,7 @@
               "title": { "en": "Remotely-managed", "zh": "遠端管理" },
               "text": {
                 "en": "Configure the whole tunnel from the Zero Trust dashboard, no local config file.",
-                "zh": "從 Zero Trust 儀表板設定整條通道,不用本機設定檔。"
+                "zh": "從 Zero Trust 儀表板設定整條通道，不用本機設定檔。"
               }
             }
           ]
@@ -303,7 +303,7 @@
           "title": { "en": "Add a login wall with Access", "zh": "用 Access 加上登入門檻" },
           "text": {
             "en": "Pair Tunnel with Cloudflare Access to require a login (Google, GitHub, email PIN) before anyone can reach your service — perfect for private internal tools.",
-            "zh": "把 Tunnel 搭配 Cloudflare Access,在任何人連到你服務前先要求登入(Google、GitHub、email 一次性密碼)—— 拿來保護私人內部工具超合適。"
+            "zh": "把 Tunnel 搭配 Cloudflare Access，在任何人連到你服務前先要求登入（Google、GitHub、email 一次性密碼）—— 拿來保護私人內部工具超合適。"
           }
         },
         {
@@ -317,9 +317,9 @@
             ],
             "zh": [
               "cloudflared 與 Cloudflare Tunnel 都免費使用。",
-              "通道一旦能用,就把防火牆所有對內連接埠都封掉 —— 只往外連正是它的精髓。",
-              "把 cloudflared 跑成系統服務,讓通道在重開機後依然存活。",
-              "儀表板(遠端管理)流程最好上手;命令列則透過 config.yml 給你更多掌控。"
+              "通道一旦能用，就把防火牆所有對內連接埠都封掉 —— 只往外連正是它的精髓。",
+              "把 cloudflared 跑成系統服務，讓通道在重開機後依然存活。",
+              "儀表板（遠端管理）流程最好上手；命令列則透過 config.yml 給你更多掌控。"
             ]
           }
         }

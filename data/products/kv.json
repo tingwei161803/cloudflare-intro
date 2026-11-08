@@ -232,7 +232,7 @@
             },
             {
               "icon": "timer",
-              "title": { "en": "Expiration (TTL)", "zh": "過期時間 (TTL)" },
+              "title": { "en": "Expiration (TTL)", "zh": "過期時間（TTL）" },
               "text": {
                 "en": "Set expirationTtl so a key auto-deletes itself after N seconds — perfect for caches.",
                 "zh": "設定 expirationTtl，key 就會在 N 秒後自動刪除——很適合做快取。"

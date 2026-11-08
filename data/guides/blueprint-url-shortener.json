@@ -74,7 +74,7 @@
           "type": "p",
           "text": {
             "en": "There are exactly two things the app does: (1) create — turn a long URL into a short code and save it; (2) resolve — take a short code and send the browser to the long URL. Let's see both as a picture.",
-            "zh": "這個應用程式就只做兩件事：(1) 建立——把長網址變成短代碼並存起來；(2) 還原——拿短代碼把瀏覽器送去長網址。我們先用一張圖看懂這兩件事。"
+            "zh": "這個應用程式就只做兩件事：（1）建立——把長網址變成短代碼並存起來；（2）還原——拿短代碼把瀏覽器送去長網址。我們先用一張圖看懂這兩件事。"
           }
         },
         {

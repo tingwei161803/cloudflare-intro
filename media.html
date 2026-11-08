@@ -11,6 +11,7 @@
     gtag('js', new Date());
     gtag('config', 'G-CTETKN2KDW');
   </script>
+  <script>try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
   <title>媒體 Media · Cloudflare 開發者入門指南</title>
   <meta name="description" content="圖片、影片、即時通訊都幫你處理好" />
   <meta name="theme-color" content="#F6821F" />
@@ -29,7 +30,7 @@
   <meta name="twitter:description" content="圖片、影片、即時通訊都幫你處理好" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..700&family=Noto+Sans+TC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles.css" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "媒體 Media · Cloudflare 開發者入門指南", "description": "圖片、影片、即時通訊都幫你處理好", "inLanguage": "zh-Hant", "url": "https://cloudflare-intro.peteraim.com/media.html"}</script>
@@ -40,11 +41,11 @@
 </head>
 <body data-page="media">
   <main id="page">
-<div class="lhero"><span class="lhero__badge"><span class="material-symbols-rounded">sell</span>分類</span><div class="lhero__top"><span class="lhero__icon"><span class="material-symbols-rounded">perm_media</span></span><h1 class="lhero__title">媒體 Media</h1></div><p class="lhero__tagline">上傳、最佳化、儲存與傳遞圖片和影片，還能做即時音訊／視訊——不用自己搭建一套媒體處理流程。</p></div><p class="lead reveal is-in">自己處理媒體要顧轉碼、儲存、播放器和全球 CDN——非常費工。Cloudflare 的媒體產品把這些都包在一個簡單的 API 後面，讓你快速上線照片、影片和即時通話。</p><div class="grid"><a class="prod-card reveal is-in" data-item="" href="images.html"><div class="prod-card__head"><span class="prod-card__icon"><span class="material-symbols-rounded">image</span></span><h3 class="prod-card__name">Cloudflare Images</h3></div><p class="prod-card__sub">在邊緣節點儲存、縮放、最佳化並傳送圖片</p><span class="prod-card__go">開始學 <span class="material-symbols-rounded">arrow_forward</span></span></a><a class="prod-card reveal is-in" data-item="" href="stream.html"><div class="prod-card__head"><span class="prod-card__icon"><span class="material-symbols-rounded">movie</span></span><h3 class="prod-card__name">Cloudflare Stream</h3></div><p class="prod-card__sub">上傳、編碼、儲存並傳送影片，內建可調品質播放器</p><span class="prod-card__go">開始學 <span class="material-symbols-rounded">arrow_forward</span></span></a><a class="prod-card reveal is-in" data-item="" href="realtime.html"><div class="prod-card__head"><span class="prod-card__icon"><span class="material-symbols-rounded">graphic_eq</span></span><h3 class="prod-card__name">Cloudflare Realtime</h3></div><p class="prod-card__sub">即時音訊與影像的 WebRTC 基礎設施（前身為 Calls）</p><span class="prod-card__go">開始學 <span class="material-symbols-rounded">arrow_forward</span></span></a></div>
+<div class="pg pg--category" data-line="media"><header class="phead phead--line"><div class="phead__strip"><span class="phead__line"><span class="bullet" data-line="media" aria-hidden="true">M</span><span>M 線</span></span><div class="route"><ol class="route__list" style="--n:3"><li class="route__stop"><a href="images.html"><span class="route__dot" aria-hidden="true"></span><span class="route__label">Cloudflare Images</span></a></li><li class="route__stop"><a href="stream.html"><span class="route__dot" aria-hidden="true"></span><span class="route__label">Cloudflare Stream</span></a></li><li class="route__stop"><a href="realtime.html"><span class="route__dot" aria-hidden="true"></span><span class="route__label">Cloudflare Realtime</span></a></li></ol></div></div><div class="phead__main"><div class="phead__text"><h1 class="phead__title">媒體 Media</h1><p class="phead__tagline">上傳、最佳化、儲存與傳遞圖片和影片，還能做即時音訊／視訊——不用自己搭建一套媒體處理流程。</p></div></div></header><p class="lead">自己處理媒體要顧轉碼、儲存、播放器和全球 CDN——非常費工。Cloudflare 的媒體產品把這些都包在一個簡單的 API 後面，讓你快速上線照片、影片和即時通話。</p><div class="stops"><a class="stop" href="images.html"><span class="stop__dot" aria-hidden="true"></span><span class="stop__body"><span class="stop__name"><span class="material-symbols-rounded" aria-hidden="true">image</span>Cloudflare Images</span><span class="stop__sub">在邊緣節點儲存、縮放、最佳化並傳送圖片</span></span><span class="stop__go">開始學</span></a><a class="stop" href="stream.html"><span class="stop__dot" aria-hidden="true"></span><span class="stop__body"><span class="stop__name"><span class="material-symbols-rounded" aria-hidden="true">movie</span>Cloudflare Stream</span><span class="stop__sub">上傳、編碼、儲存並傳送影片，內建可調品質播放器</span></span><span class="stop__go">開始學</span></a><a class="stop" href="realtime.html"><span class="stop__dot" aria-hidden="true"></span><span class="stop__body"><span class="stop__name"><span class="material-symbols-rounded" aria-hidden="true">graphic_eq</span>Cloudflare Realtime</span><span class="stop__sub">即時音訊與影像的 WebRTC 基礎設施（前身為 Calls）</span></span><span class="stop__go">開始學</span></a></div></div>
 </main>
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>
   <script src="assets/app.js"></script>
-<p class="lang-alt-link" style="text-align:center;padding:12px;"><a href="/en/media.html" hreflang="en" rel="alternate" lang="en">English version</a></p>
+<p class="lang-alt-link"><a href="/en/media.html" hreflang="en" rel="alternate" lang="en">English version</a></p>
 </body>
 </html>

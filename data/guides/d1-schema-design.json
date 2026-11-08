@@ -371,7 +371,7 @@
               "Keep the migrations/ folder in Git so the whole schema history travels with your code."
             ],
             "zh": [
-              "用 PRAGMA foreign_keys = ON; 開啟外鍵約束，否則 SQLite 會忽略 FK 規則。",
+              "用 PRAGMA foreign_keys = ON；開啟外鍵約束，否則 SQLite 會忽略 FK 規則。",
               "為每個外鍵、以及任何常用來篩選或排序的欄位都建立索引。",
               "SQLite 的 ALTER TABLE 能新增欄位、改名，但不容易刪欄位——欄位請事先想清楚再設計。",
               "新增欄位時優先用 NOT NULL 搭配 DEFAULT，這樣既有的列才不會變不合法。",

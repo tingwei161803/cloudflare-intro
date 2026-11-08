@@ -247,7 +247,7 @@
             },
             {
               "icon": "table_rows",
-              "title": { "en": "Relational (SQL)", "zh": "關聯式 (SQL)" },
+              "title": { "en": "Relational (SQL)", "zh": "關聯式（SQL）" },
               "text": {
                 "en": "Data lives in tables with columns and relationships, queried with SQL — JOIN links tables, WHERE filters, ORDER BY sorts. D1 (and your own DB via Hyperdrive) are relational.",
                 "zh": "資料放在有欄位與關聯的「資料表」裡，用 SQL 查詢——JOIN 串接資料表、WHERE 過濾、ORDER BY 排序。D1（以及透過 Hyperdrive 連的自家資料庫）都是關聯式。"

@@ -25,7 +25,7 @@
       "note": { "en": "Workers serve the site, D1 stores the posts, and R2 holds images. Vectorize (vector search) and Hyperdrive (speeding up external databases) aren't needed here.", "zh": "Workers 提供網站服務、D1 存放文章、R2 放圖片。做向量搜尋的 Vectorize 和加速外部資料庫的 Hyperdrive 在這裡都用不到。" }
     },
     {
-      "goal": { "en": "Build an AI Q&A bot (RAG)", "zh": "做一個 AI 問答機器人 (RAG)" },
+      "goal": { "en": "Build an AI Q&A bot (RAG)", "zh": "做一個 AI 問答機器人（RAG）" },
       "palette": [
         { "label": { "en": "Workers", "zh": "Workers" }, "icon": "bolt" },
         { "label": { "en": "Workers AI", "zh": "Workers AI" }, "icon": "smart_toy" },

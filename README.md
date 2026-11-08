@@ -18,7 +18,7 @@
 
 ## ✨ 功能特色
 
-- 🧭 **79 個頁面** — 總覽首頁 + 新手上路 + 8 個分類頁 + 28 個產品教材頁 + **24 篇整合實戰** + **14 款互動小遊戲** + 詞彙表／測驗／字卡
+- 🧭 **79 個頁面** — 首頁路線圖 + 新手上路 + 8 個分類頁 + 28 個產品教材頁 + **24 篇整合實戰** + **14 款互動小遊戲** + 詞彙表／測驗／字卡
 - 🗂️ **分門別類** — 運算、AI、儲存與資料庫、媒體、安全、效能、整合實戰、遊戲場，八大家族一目了然
 - 🎮 **互動小遊戲（遊戲場）** — 連連看、記憶翻牌、分類挑戰、選型快答（計時＋生命＋連勝）、流程排序、真假快答、架構拼圖，共 14 款；純前端、即時計分、refresh 歸零
 - 🔗 **整合實戰（串接教學）** — 前端 ↔ Worker 後端 ↔ 資料庫的完整串接：CRUD、認證、檔案上傳、架構藍圖、請求流程圖，分「全端基礎 / 資料庫與儲存 / 架構藍圖 / 流程圖解」四組
@@ -26,7 +26,8 @@
 - 🎨 **大量圖示** — 每個概念、情境、步驟都搭配 Material Symbols 圖示，初學者好吸收
 - 📖 **教材式說明** — 每個產品／教學都依「這是什麼 → 為什麼用 → 何時用 → 怎麼開始 → 重點概念 → 小提示」循序漸進，附可直接複製的前端／後端／SQL 範例程式碼
 - 🌏 **中英雙語，一個語言一個網址** — 中文在 root、English 在 `/en/`，例如 `…/workers.html` ↔ `…/en/workers.html`。右上角的切換鈕是真正的連結，會帶你到同一頁的另一語言版本；兩邊互相以 `hreflang` 標註
-- 🌗 **深色 / 淺色模式** — 手動切換，並記住你的選擇
+- 🚇 **路線圖式導覽** — 六大產品家族畫成六條捷運路線，每個產品是一站：首頁是整張路線圖，每個產品頁頂端有該路線的站點列（標出「你在這一站」）、規格表與上一站／下一站
+- 🌗 **深色 / 淺色模式** — 預設跟隨系統設定；手動切換後會記住你的選擇
 - 🔍 **詞彙速查** — 50 個術語可即時搜尋，白話解釋
 - 📝 **隨堂測驗** — 15 題即時回饋 + 計分，檢查學習成果
 - 🃏 **翻卡字卡** — 32 張點擊翻面的記憶卡
@@ -41,14 +42,14 @@
 
 ```
 cloudflare-intro/
-├── index.html              # 總覽首頁（hub）
+├── index.html              # 首頁：六條路線的路線圖
 ├── start.html              # 新手上路
 ├── compute|ai|storage|…    # 6 個分類頁
 ├── workers|r2|d1|…         # 28 個產品教材頁（每個產品一頁）
 ├── glossary|quiz|flashcards.html  # 詞彙表 / 測驗 / 字卡
 ├── en/                     # 英文版，檔名結構與 root 一一對應（79 頁）
 ├── assets/
-│   ├── styles.css          # Material Design 3 + Cloudflare 橘配色
+│   ├── styles.css          # 路線圖設計系統：白底、Archivo 粗體黑體、每條路線一個顏色
 │   ├── shell.js            # 共用框架：app bar、跨頁導覽、頁尾、主題；語言由網址決定
 │   └── app.js              # 版型引擎：home / category / lesson / glossary / quiz / flashcards
 ├── data/
@@ -57,14 +58,14 @@ cloudflare-intro/
 │   └── extra/*.json        # 詞彙表 / 測驗 / 字卡 / 新手上路 / 站台文案
 ├── scripts/
 │   ├── assemble.py         # 把 products + extra + site.json 組成 data/data.js
-│   └── gen_pages.py        # 由 data.js 產生所有 .html 進入點
+│   └── gen_pages.py        # 由 data.js 產生中英兩套 .html 進入點（head、SEO、hreflang）
 └── .nojekyll
 ```
 
 > ⚠️ **非官方**：本網站為個人整理之非官方學習資源，內容整理自 Cloudflare 官方開發者文件，
 > 產品規格、限制與計費可能隨時間調整，**請一律以官方來源為準**。各產品頁底部皆附官方文件連結。
 
-設計與圖示參考：[Material Symbols](https://fonts.google.com/icons) 圖示庫、Material Design 3 配色系統（主色採 Cloudflare 招牌橘 `#F6821F`）。
+設計參考：捷運路線圖的視覺語言（路線色、站點、轉乘站）；字型為 Archivo＋Noto Sans TC，程式碼用 JetBrains Mono；圖示來自 [Material Symbols](https://fonts.google.com/icons)。Cloudflare 招牌橘 `#F6821F` 只用在強調處（「你在這一站」、焦點框、站名 logo）。
 
 ---
 
@@ -81,7 +82,8 @@ uv run python -m http.server 4173
 ```
 
 > 本專案為純靜態網站，不需安裝任何依賴。若要重新產生內容：
-> `uv run python scripts/assemble.py`（重建 `data/data.js`）→ `uv run python scripts/gen_pages.py`（重建所有 `.html`）。
+> `uv run python scripts/assemble.py`（重建 `data/data.js`）→ `uv run python scripts/gen_pages.py`（重建所有 `.html` 的 head 與外框）。
+> 每頁 `<main id="page">` 裡存著一份渲染好的靜態內容，給搜尋引擎與沒開 JS 的讀者看；`gen_pages.py` 會原樣保留它。改了 `assets/app.js` 的版型之後，要用無頭瀏覽器把每頁載入一次、把渲染結果寫回 `<main>`，靜態內容才會跟上。
 
 ---
 

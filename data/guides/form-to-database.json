@@ -451,7 +451,7 @@
               },
               "text": {
                 "en": "prepare() + bind() keep user input out of the SQL text. The ? placeholders are filled as values, so input can never run as code — this blocks SQL injection.",
-                "zh": "prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。? 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。"
+                "zh": "prepare() 加 bind() 把使用者輸入跟 SQL 文字分開。？ 佔位符是當「值」填進去的，所以輸入永遠不會被當程式執行——這能擋下 SQL 注入攻擊。"
               }
             },
             {

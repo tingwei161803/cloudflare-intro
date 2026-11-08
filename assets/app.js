@@ -312,102 +312,163 @@
           "</div>";
       },
 
-      /* ---- home: big hero + category cards + learning tools ---- */
+      /* ---- home: metro map hero + line directory + transfer guides + arcade + tools ---- */
       home: function (p) {
-        var cats = window.SITE_CATEGORIES || [];
-        var products = L.pages.filter(function (q) { return q.nav === false && q.category && q.category !== "start"; });
-        var catCards = cats.map(function (c) {
-          var prods = products.filter(function (q) { return q.category === c.key; });
-          var MAXCHIPS = 6;
-          var chips = prods.slice(0, MAXCHIPS).map(function (q) {
-            return '<a class="prodchip" href="' + esc(q.slug) + '.html">' + esc(t(q.title)) + "</a>";
-          }).join("");
-          if (prods.length > MAXCHIPS) {
-            chips += '<a class="prodchip prodchip--more" href="' + esc(c.key) + '.html">+' + (prods.length - MAXCHIPS) + (L.state.lang === "en" ? " more" : " 篇") + "</a>";
-          }
-          var countLabel = prods.length + (L.state.lang === "en" ? " topics" : " 篇");
-          var more = L.state.lang === "en" ? "Explore" : "看這一類";
-          return '<div class="cat-card reveal" data-item>' +
-            '<a class="cat-card__head" href="' + esc(c.key) + '.html" aria-label="' + esc(t(c.title)) + '">' +
-              '<span class="cat-card__icon"><span class="material-symbols-rounded">' + esc(c.icon || "category") + "</span></span>" +
-              '<div><h3 class="cat-card__name">' + esc(t(c.title)) + "</h3>" +
-              '<span class="cat-card__count">' + esc(String(countLabel)) + "</span></div></a>" +
-            '<p class="cat-card__blurb">' + esc(t(c.blurb)) + "</p>" +
-            '<div class="cat-card__chips">' + chips + "</div>" +
-            '<a class="cat-card__more" href="' + esc(c.key) + '.html">' + esc(more) +
-              ' <span class="material-symbols-rounded">arrow_forward</span></a>' +
-          "</div>";
-        }).join("");
-        var tools = ["start", "glossary", "quiz", "flashcards"].map(function (slug) {
-          var q = L.pages.filter(function (x) { return x.slug === slug; })[0];
-          if (!q) return "";
-          return '<a class="tool-card reveal" data-item href="' + esc(L.pageHref(q)) + '">' +
-            '<span class="tool-card__icon"><span class="material-symbols-rounded">' + esc(q.icon || "school") + "</span></span>" +
-            '<div><p class="tool-card__t">' + esc(t(q.title)) + "</p>" +
-            '<p class="tool-card__d">' + esc(t(q.subtitle)) + "</p></div></a>";
-        }).join("");
         var EN = L.state.lang === "en";
-        var intro = t(p.intro) ? '<p class="lead reveal">' + esc(t(p.intro)) + "</p>" : "";
-        return lheroHTML(p) + intro +
-          '<div class="home-section"><h2 class="home-section__title"><span class="material-symbols-rounded">grid_view</span>' +
-            (EN ? "Browse by category" : "依分類瀏覽") + "</h2>" +
-            '<p class="home-section__sub">' + (EN ? "Six product families make up the Cloudflare developer platform." : "六大產品家族構成了 Cloudflare 開發者平台。") + "</p></div>" +
-          '<div class="cat-grid">' + catCards + "</div>" +
-          '<div class="home-section"><h2 class="home-section__title"><span class="material-symbols-rounded">school</span>' +
-            (EN ? "Learning tools" : "學習工具") + "</h2>" +
-            '<p class="home-section__sub">' + (EN ? "Practice and look things up as you learn." : "邊學邊練習、隨時查得到。") + "</p></div>" +
-          '<div class="tools-grid">' + tools + "</div>";
+        var cats = window.SITE_CATEGORIES || [];
+        var families = cats.filter(function (c) { return MAP_PATHS[c.key]; });
+        var tagline = p.hero && t(p.hero.tagline) ? t(p.hero.tagline) : t(p.subtitle);
+        var start = pageBySlug("start");
+
+        var hero = '<section class="hero">' +
+          '<div class="hero__text">' +
+            '<h1 class="hero__title">' + heroTitle(t(p.title)) + "</h1>" +
+            '<div class="hero__side">' +
+              '<p class="hero__tagline">' + esc(tagline) + "</p>" +
+              '<div class="hero__cta">' +
+                (start ? '<a class="btn btn--ink" href="' + esc(L.pageHref(start)) + '">' +
+                  '<span class="material-symbols-rounded" aria-hidden="true">rocket_launch</span>' + esc(t(start.title)) + "</a>" : "") +
+                '<a class="btn btn--line" href="#lines">' + (EN ? "Browse the lines" : "看全部路線") + "</a>" +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+          '<div class="metro" id="metro">' + metroMap(families) + "</div>" +
+          '<p class="metro__hint" aria-hidden="true"><span class="material-symbols-rounded">swipe</span>' +
+            (EN ? "Swipe to see the whole map" : "左右滑動看完整路線圖") + "</p>" +
+        "</section>";
+
+        var legend = '<section class="legend">' +
+          '<div class="legend__keys" aria-label="' + (EN ? "Map legend" : "圖例") + '">' +
+            '<p class="legend__key"><span class="legend__line" aria-hidden="true"></span>' +
+              (EN ? "A line is a product family" : "一條線＝一個產品家族") + "</p>" +
+            '<p class="legend__key"><span class="legend__stop" aria-hidden="true"></span>' +
+              (EN ? "A stop is one product, with its own lesson" : "一站＝一個產品，各有一篇教材") + "</p>" +
+            '<p class="legend__key"><span class="legend__hub" aria-hidden="true"></span>' +
+              (EN ? "Every line runs through the same global network" : "所有路線都跑在同一張全球網路上") + "</p>" +
+          "</div>" +
+          (t(p.intro) ? '<p class="legend__intro">' + esc(t(p.intro)) + "</p>" : "") +
+          specSheet(p.stats, EN ? "At a glance" : "這份指南") +
+        "</section>";
+
+        var lines = families.map(function (c) {
+          var stops = productsOf(c.key);
+          return '<article class="lrow" data-line="' + esc(c.key) + '">' +
+            '<a class="lrow__head" href="' + esc(c.key) + '.html">' + bullet(c.key) +
+              '<span class="lrow__name">' + esc(t(c.title)) + "</span>" +
+              '<span class="lrow__count">' + stops.length + (EN ? " stops" : " 站") + "</span></a>" +
+            '<p class="lrow__blurb">' + esc(t(c.blurb)) + "</p>" +
+            routeStrip(stops, null) +
+          "</article>";
+        }).join("");
+
+        /* integration guides: a departures board grouped by track */
+        var integ = cats.filter(function (c) { return c.key === "integrations"; })[0];
+        var board = "";
+        if (integ) {
+          var groups = groupBy(productsOf("integrations"));
+          board = '<section class="block" data-line="integrations">' +
+            '<header class="block__head"><a class="block__title" href="integrations.html">' + bullet("integrations") +
+              "<span>" + esc(t(integ.title)) + "</span></a>" +
+              '<p class="block__sub">' + esc(t(integ.blurb)) + "</p></header>" +
+            '<div class="board">' + groups.map(function (g) {
+              return '<div class="board__group"><h3 class="board__name">' + esc(g.name) +
+                ' <span class="board__n">' + g.items.length + "</span></h3><ol class=\"board__list\">" +
+                g.items.map(function (q) {
+                  return '<li><a href="' + esc(L.pageHref(q)) + '"><span class="material-symbols-rounded" aria-hidden="true">' +
+                    esc(q.icon || "east") + "</span>" + esc(t(q.title)) + "</a></li>";
+                }).join("") + "</ol></div>";
+            }).join("") + "</div></section>";
+        }
+
+        /* arcade: ticket stubs */
+        var arc = cats.filter(function (c) { return c.key === "arcade"; })[0];
+        var arcade = "";
+        if (arc) {
+          arcade = '<section class="block" data-line="arcade">' +
+            '<header class="block__head"><a class="block__title" href="arcade.html">' + bullet("arcade") +
+              "<span>" + esc(t(arc.title)) + "</span></a>" +
+              '<p class="block__sub">' + esc(t(arc.blurb)) + "</p></header>" +
+            '<div class="tickets">' + productsOf("arcade").map(function (q) {
+              return '<a class="ticket" href="' + esc(L.pageHref(q)) + '">' +
+                '<span class="ticket__kind">' + esc(t(q.group)) + "</span>" +
+                '<span class="ticket__name">' + esc(t(q.title)) + "</span>" +
+                '<span class="material-symbols-rounded ticket__icon" aria-hidden="true">' + esc(q.icon || "sports_esports") + "</span></a>";
+            }).join("") + "</div></section>";
+        }
+
+        var tools = ["start", "glossary", "quiz", "flashcards"].map(function (slug) {
+          var q = pageBySlug(slug);
+          if (!q) return "";
+          return '<a class="info__item" href="' + esc(L.pageHref(q)) + '">' +
+            '<span class="material-symbols-rounded info__icon" aria-hidden="true">' + esc(q.icon || "school") + "</span>" +
+            '<span class="info__t">' + esc(t(q.title)) + "</span>" +
+            '<span class="info__d">' + esc(t(q.subtitle)) + "</span></a>";
+        }).join("");
+
+        return hero + legend +
+          '<section class="block" id="lines">' +
+            '<header class="block__head"><h2 class="block__title block__title--plain">' + (EN ? "Six lines, 28 stops" : "六條路線，28 站") + "</h2>" +
+            '<p class="block__sub">' + (EN ? "Six product families make up the Cloudflare developer platform. Pick a line, then a stop." : "六大產品家族構成了 Cloudflare 開發者平台。先挑一條線，再挑一站。") + "</p></header>" +
+            '<div class="lrows">' + lines + "</div>" +
+          "</section>" +
+          board + arcade +
+          '<section class="block">' +
+            '<header class="block__head"><h2 class="block__title block__title--plain">' + (EN ? "Learning tools" : "學習工具") + "</h2>" +
+            '<p class="block__sub">' + (EN ? "Practice and look things up as you learn." : "邊學邊練習、隨時查得到。") + "</p></header>" +
+            '<div class="info">' + tools + "</div>" +
+          "</section>";
       },
 
-      /* ---- category: product/guide cards filtered by category, optionally grouped ---- */
+      /* ---- category: the line's route + every stop on it ---- */
       category: function (p) {
-        var products = L.pages.filter(function (q) { return q.nav === false && q.layout !== "category" && q.category === p.key; });
+        var products = productsOf(p.key);
         var EN = L.state.lang === "en";
         var cta = p.key === "arcade" ? (EN ? "Play" : "開始玩") : (EN ? "Learn" : "開始學");
-        function prodCard(q) {
-          return '<a class="prod-card reveal" data-item href="' + esc(q.slug) + '.html">' +
-            '<div class="prod-card__head"><span class="prod-card__icon"><span class="material-symbols-rounded">' + esc(q.icon || "label") + "</span></span>" +
-            '<h3 class="prod-card__name">' + esc(t(q.title)) + "</h3></div>" +
-            '<p class="prod-card__sub">' + esc(t(q.subtitle)) + "</p>" +
-            '<span class="prod-card__go">' + cta + ' <span class="material-symbols-rounded">arrow_forward</span></span></a>';
+        function stopRow(q) {
+          return '<a class="stop" href="' + esc(L.pageHref(q)) + '">' +
+            '<span class="stop__dot" aria-hidden="true"></span>' +
+            '<span class="stop__body"><span class="stop__name">' +
+              '<span class="material-symbols-rounded" aria-hidden="true">' + esc(q.icon || "label") + "</span>" + esc(t(q.title)) + "</span>" +
+              '<span class="stop__sub">' + esc(t(q.subtitle)) + "</span></span>" +
+            '<span class="stop__go">' + cta + "</span></a>";
         }
-        var intro = t(p.intro) ? '<p class="lead reveal">' + esc(t(p.intro)) + "</p>" : "";
-        var body;
+        var intro = t(p.intro) ? '<p class="lead">' + esc(t(p.intro)) + "</p>" : "";
+        var body, strip;
         if (products.some(function (q) { return q.group; })) {
-          var order = [], buckets = {};
-          products.forEach(function (q) {
-            var key = q.group ? t(q.group) : (EN ? "More" : "其他");
-            if (!buckets[key]) { buckets[key] = []; order.push(key); }
-            buckets[key].push(q);
-          });
-          body = order.map(function (key) {
-            return '<div class="home-section"><h2 class="home-section__title">' +
-              '<span class="material-symbols-rounded">folder_open</span>' + esc(key) +
-              ' <span class="group-count">' + buckets[key].length + "</span></h2></div>" +
-              '<div class="grid">' + buckets[key].map(prodCard).join("") + "</div>";
+          var groups = groupBy(products);
+          strip = routeStrip(groups.map(function (g, i) {
+            return { href: "#track-" + (i + 1), label: g.name, note: g.items.length + (EN ? " stops" : " 站") };
+          }), null);
+          body = groups.map(function (g, i) {
+            return '<section class="track" id="track-' + (i + 1) + '">' +
+              '<h2 class="track__name">' + esc(g.name) + ' <span class="track__n">' + g.items.length + "</span></h2>" +
+              '<div class="stops">' + g.items.map(stopRow).join("") + "</div></section>";
           }).join("");
         } else {
-          body = '<div class="grid">' + products.map(prodCard).join("") + "</div>";
+          strip = routeStrip(products, null);
+          body = '<div class="stops">' + products.map(stopRow).join("") + "</div>";
         }
-        return lheroHTML(p) + intro + body;
+        return pageHeader(p, { strip: strip }) + intro + body;
       },
 
-      /* ---- lesson: hero + sticky TOC + sectioned beginner content ---- */
+      /* ---- lesson: line strip + spec sheet + stops-of-this-page TOC ---- */
       lesson: function (p) {
+        var EN = L.state.lang === "en";
         var toc = (p.sections || []).map(function (s) {
-          return '<a href="#' + esc(s.id) + '" data-toc="' + esc(s.id) + '">' +
-            '<span class="material-symbols-rounded">' + esc(s.icon || "chevron_right") + "</span>" + esc(t(s.heading)) + "</a>";
+          return '<a href="#' + esc(s.id) + '" data-toc="' + esc(s.id) + '">' + esc(t(s.heading)) + "</a>";
         }).join("");
         var body = (p.sections || []).map(function (s) {
-          return '<section class="lsec reveal" data-item id="' + esc(s.id) + '">' +
-            '<div class="lsec__head"><span class="lsec__icon"><span class="material-symbols-rounded">' + esc(s.icon || "label") + "</span></span>" +
-            "<h2>" + esc(t(s.heading)) + "</h2></div>" +
+          return '<section class="lsec" id="' + esc(s.id) + '">' +
+            '<h2 class="lsec__head"><span class="material-symbols-rounded" aria-hidden="true">' + esc(s.icon || "label") + "</span>" +
+            esc(t(s.heading)) + "</h2>" +
             renderBlocks(s.blocks) + "</section>";
         }).join("");
         return '<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>' +
-          lheroHTML(p) +
+          pageHeader(p) +
           '<div class="lesson-layout">' +
-            '<nav class="lesson-toc" aria-label="Sections"><div class="lesson-toc__inner">' + toc + "</div></nav>" +
+            '<nav class="lesson-toc" aria-label="' + (EN ? "On this page" : "本頁段落") + '">' +
+              '<p class="lesson-toc__label">' + (EN ? "On this page" : "本頁段落") + "</p>" +
+              '<div class="lesson-toc__inner">' + toc + "</div></nav>" +
             '<div class="lesson-body">' + body + lessonFoot(p) + "</div>" +
           "</div>";
       },
@@ -431,7 +492,7 @@
       flashcards: function (p) {
         var EN = L.state.lang === "en";
         var cards = (p.cards || []).map(function (c, i) {
-          return '<button class="fc reveal" data-item type="button" data-fc="' + i + '" aria-pressed="false">' +
+          return '<button class="fc" data-item type="button" data-fc="' + i + '" aria-pressed="false">' +
             '<div class="fc__inner">' +
               '<div class="fc__face fc__front"><span class="fc__term">' + esc(t(c.front)) + "</span>" +
                 '<span class="fc__hint"><span class="material-symbols-rounded">touch_app</span>' + (EN ? "Flip" : "翻面") + "</span></div>" +
@@ -753,13 +814,13 @@
         teardowns.push(function () { try { map.remove(); } catch (e) {} });
       },
 
-      home: function () { revealAll(); },
-      category: function () { revealAll(); },
+      home: function () { centerMetro(); },
+      category: function () { },
 
       lesson: function () {
         lessonScrollspy();
+
         wireCopy();
-        revealAll();
         renderMermaid();
       },
 
@@ -789,7 +850,6 @@
       },
 
       flashcards: function () {
-        revealAll();
         [].forEach.call(pageEl.querySelectorAll(".fc"), function (card) {
           card.addEventListener("click", function () {
             var on = card.classList.toggle("is-flipped");
@@ -850,7 +910,7 @@
                   : pct >= 50 ? (EN ? "Nice work. Review a few topics and try again." : "不錯喔——複習幾個主題再挑戰一次。")
                   : (EN ? "Good start. Revisit the lessons and retry!" : "好的開始，回去看看教材再試一次！");
           root.innerHTML = '<div class="quiz-card quiz-result" data-item><div class="quiz-result__ring">' + pct + "%</div>" +
-            '<p class="quiz-result__msg">' + esc(msg) + " (" + st.score + "/" + qs.length + ")</p>" +
+            '<p class="quiz-result__msg">' + esc(msg) + (EN ? " (" : "（") + st.score + "/" + qs.length + (EN ? ")" : "）") + "</p>" +
             '<button class="quiz-btn" type="button" data-restart><span class="material-symbols-rounded">replay</span>' +
             (EN ? "Try again" : "再試一次") + "</button></div>";
           root.querySelector("[data-restart]").addEventListener("click", function () {
@@ -1194,22 +1254,215 @@
       for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t2 = arr[i]; arr[i] = arr[j]; arr[j] = t2; }
       return arr;
     }
-    function lheroHTML(p) {
-      var badge = p.hero && t(p.hero.badge)
-        ? '<span class="lhero__badge"><span class="material-symbols-rounded">sell</span>' + esc(t(p.hero.badge)) + "</span>" : "";
-      var tagline = p.hero && t(p.hero.tagline) ? esc(t(p.hero.tagline))
-                  : (t(p.subtitle) ? esc(t(p.subtitle)) : "");
-      var taglineHtml = tagline ? '<p class="lhero__tagline">' + tagline + "</p>" : "";
-      var stats = (p.stats || []).map(function (s) {
-        return '<div class="lhero__stat"><b>' + esc(String(s.value)) + "</b><span>" + esc(t(s.label)) + "</span></div>";
+    /* =====================================================================
+       TRANSIT MAP PIECES
+       Each product family is a "line" with its own colour (set in CSS by
+       [data-line]); each product is a "stop" on it. The letters are only
+       map vernacular — the colours carry the meaning.
+       ===================================================================== */
+    var LINES = { compute: "C", ai: "A", storage: "D", media: "M", security: "S",
+                  performance: "P", integrations: "I", arcade: "G" };
+
+    /* home map geometry (viewBox 1180 × 620, hub in the middle). Octilinear
+       polylines that start at the hub's edge; `side` says which way labels
+       hang (-1 left, 1 right); `alt` alternates labels above/below. */
+    var MAP_W = 1180, MAP_H = 620;
+    var MAP_PATHS = {
+      ai:          { pts: [[545, 278], [545, 200], [375, 30], [150, 30]],  side: -1 },
+      performance: { pts: [[635, 278], [635, 200], [805, 30], [1030, 30]], side: 1 },
+      security:    { pts: [[480, 310], [150, 310]], side: -1, alt: true },
+      compute:     { pts: [[700, 310], [1030, 310]], side: 1, alt: true },
+      media:       { pts: [[545, 342], [545, 420], [375, 590], [260, 590]], side: -1 },
+      storage:     { pts: [[635, 342], [635, 420], [805, 590], [1030, 590]], side: 1 }
+    };
+
+    function pageBySlug(slug) {
+      for (var i = 0; i < L.pages.length; i++) if (L.pages[i].slug === slug) return L.pages[i];
+      return null;
+    }
+    function categoryByKey(key) {
+      return (window.SITE_CATEGORIES || []).filter(function (c) { return c.key === key; })[0] || null;
+    }
+    function productsOf(key) {
+      return L.pages.filter(function (q) { return q.nav === false && q.layout !== "category" && q.category === key; });
+    }
+    function groupBy(list) {
+      var order = [], buckets = {};
+      list.forEach(function (q) {
+        var key = q.group ? t(q.group) : (L.state.lang === "en" ? "More" : "其他");
+        if (!buckets[key]) { buckets[key] = []; order.push(key); }
+        buckets[key].push(q);
+      });
+      return order.map(function (k) { return { name: k, items: buckets[k] }; });
+    }
+    function lineKeyOf(p) {
+      var k = p.layout === "category" ? p.key : p.category;
+      return LINES[k] ? k : null;
+    }
+    /* short family name for tight spots: "運算 Compute" → "運算", "Storage & Databases" → "Storage" */
+    function shortName(c) {
+      var s = t(c.title);
+      if (L.state.lang === "zh") return s.replace(/\s+[A-Za-z&][A-Za-z &]*$/, "") || s;
+      return s.split(" & ")[0];
+    }
+    /* "Cloudflare 開發者入門指南" breaks after the brand name, never mid-phrase */
+    function heroTitle(s) {
+      var i = s.indexOf(" ");
+      return i < 0 ? esc(s) : '<span class="hero__l1">' + esc(s.slice(0, i)) + '</span> <span class="hero__l2">' + esc(s.slice(i + 1)) + "</span>";
+    }
+    /* map labels stay short: "Cloudflare Images" → "Images", "WAF 網站應用程式防火牆" → "WAF" */
+    function stationName(q) {
+      var s = t(q.title).replace(/^Cloudflare\s+/, "");
+      var m = s.match(/^([A-Za-z0-9\/&.\- ]+?)\s+[\u3400-\u9fff]/);
+      return m ? m[1] : s;
+    }
+    function bullet(key) {
+      return '<span class="bullet" data-line="' + esc(key) + '" aria-hidden="true">' + esc(LINES[key] || "") + "</span>";
+    }
+    /* a stop list is either page objects or {href, label, note} */
+    function stopInfo(s) {
+      return s.slug ? { href: L.pageHref(s), label: t(s.title), slug: s.slug } : s;
+    }
+    function routeStrip(stops, hereSlug) {
+      if (!stops || !stops.length) return "";
+      var EN = L.state.lang === "en";
+      /* "架構藍圖：部落格 / CMS", "架構藍圖：線上商店" … drop the prefix every stop shares */
+      var infos = stops.map(stopInfo);
+      var pre = (infos[0].label.match(/^[^：:]+[：:]\s*/) || [""])[0];
+      if (!pre || infos.length < 2 || infos.some(function (o) { return o.label.indexOf(pre) !== 0; })) pre = "";
+      var items = infos.map(function (o) {
+        if (pre) o = { href: o.href, slug: o.slug, note: o.note, label: o.label.slice(pre.length) };
+        var here = hereSlug && o.slug === hereSlug;
+        var inner = '<span class="route__dot" aria-hidden="true"></span>' +
+          '<span class="route__label">' + esc(o.label) + "</span>" +
+          (o.note ? '<span class="route__note">' + esc(o.note) + "</span>" : "") +
+          (here ? '<span class="route__here">' + (EN ? "You are here" : "你在這一站") + "</span>" : "");
+        return '<li class="route__stop' + (here ? " is-here" : "") + '">' +
+          (here ? '<span aria-current="page">' + inner + "</span>" : '<a href="' + esc(o.href) + '">' + inner + "</a>") + "</li>";
       }).join("");
-      return '<div class="lhero">' + badge +
-        '<div class="lhero__top">' +
-          '<span class="lhero__icon"><span class="material-symbols-rounded">' + esc(p.icon || "label") + "</span></span>" +
-          '<h1 class="lhero__title">' + esc(t(p.title)) + "</h1>" +
-        "</div>" + taglineHtml +
-        (stats ? '<div class="lhero__stats">' + stats + "</div>" : "") +
-      "</div>";
+      return '<div class="route"><ol class="route__list" style="--n:' + stops.length + '">' + items + "</ol></div>";
+    }
+    function specSheet(stats, title) {
+      if (!stats || !stats.length) return "";
+      return '<aside class="spec"><p class="spec__title">' + esc(title) + "</p><dl>" +
+        stats.map(function (s) {
+          return '<div class="spec__row"><dt>' + esc(t(s.label)) + "</dt><dd>" + esc(String(s.value)) + "</dd></div>";
+        }).join("") + "</dl></aside>";
+    }
+    function siblingsOf(p) {
+      var key = lineKeyOf(p);
+      if (!key) return [];
+      var all = productsOf(key);
+      if (!p.group) return all;
+      var g = t(p.group);
+      var same = all.filter(function (q) { return t(q.group) === g; });
+      return same.length >= 3 ? same : all;     /* a one- or two-stop group reads better as the whole line */
+    }
+
+    /* page header: line strip (where you are on the line) + title + spec sheet */
+    function pageHeader(p, opts) {
+      opts = opts || {};
+      var EN = L.state.lang === "en";
+      var key = lineKeyOf(p);
+      var cat = key ? categoryByKey(key) : null;
+      var tagline = p.hero && t(p.hero.tagline) ? t(p.hero.tagline) : t(p.subtitle);
+      var strip = opts.strip != null ? opts.strip : (key ? routeStrip(siblingsOf(p), p.slug) : "");
+      var tag = "";
+      if (key && p.layout === "category") {
+        tag = '<span class="phead__line">' + bullet(key) + "<span>" + (EN ? "Line " + LINES[key] : LINES[key] + " 線") + "</span></span>";
+      } else if (cat) {
+        tag = '<a class="phead__line" href="' + esc(key) + '.html">' + bullet(key) + "<span>" + esc(t(cat.title)) + "</span>" +
+          (p.group ? '<span class="phead__group">' + esc(t(p.group)) + "</span>" : "") + "</a>";
+      }
+      return '<header class="phead' + (key ? " phead--line" : "") + '">' +
+        (tag || strip ? '<div class="phead__strip">' + tag + strip + "</div>" : "") +
+        '<div class="phead__main' + (p.stats && p.stats.length ? " has-spec" : "") + '">' +
+          '<div class="phead__text">' +
+            (key ? "" : '<span class="material-symbols-rounded phead__icon" aria-hidden="true">' + esc(p.icon || "label") + "</span>") +
+            '<h1 class="phead__title">' + esc(t(p.title)) + "</h1>" +
+            (tagline ? '<p class="phead__tagline">' + esc(tagline) + "</p>" : "") +
+          "</div>" +
+          specSheet(p.stats, EN ? "Spec sheet" : "規格表") +
+        "</div>" +
+      "</header>";
+    }
+    var lheroHTML = pageHeader;
+
+    /* ---- the home map: six lines out of one hub ---- */
+    function along(pts, d) {
+      for (var i = 0; i < pts.length - 1; i++) {
+        var a = pts[i], b = pts[i + 1];
+        var len = Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2));
+        if (d <= len || i === pts.length - 2) {
+          var k = Math.min(1, d / len);
+          return { x: a[0] + (b[0] - a[0]) * k, y: a[1] + (b[1] - a[1]) * k,
+                   dx: Math.sign(b[0] - a[0]), dy: Math.sign(b[1] - a[1]) };
+        }
+        d -= len;
+      }
+      return null;
+    }
+    function pathLength(pts) {
+      var n = 0;
+      for (var i = 0; i < pts.length - 1; i++) {
+        n += Math.sqrt(Math.pow(pts[i + 1][0] - pts[i][0], 2) + Math.pow(pts[i + 1][1] - pts[i][1], 2));
+      }
+      return n;
+    }
+    function metroMap(families) {
+      var EN = L.state.lang === "en";
+      var lines = families.map(function (c, li) {
+        var geo = MAP_PATHS[c.key];
+        var pts = geo.pts, total = pathLength(pts);
+        var d = "M" + pts.map(function (q) { return q[0] + " " + q[1]; }).join(" L");
+        var stops = productsOf(c.key);
+        var first = 46, last = total - 64;
+        var step = stops.length > 1 ? (last - first) / (stops.length - 1) : 0;
+        var stopSvg = stops.map(function (q, i) {
+          var pt = along(pts, first + step * i);
+          var lx, ly, anchor;
+          if (pt.dy === 0) {                       /* horizontal run */
+            var below = geo.alt ? i % 2 === 1 : pt.y < MAP_H / 2;
+            lx = pt.x; anchor = "middle"; ly = below ? pt.y + 29 : pt.y - 18;
+          } else {                                 /* vertical or diagonal */
+            anchor = geo.side < 0 ? "end" : "start";
+            lx = pt.x + geo.side * 17;
+            ly = pt.dx === 0 ? pt.y + 5 : (pt.dy < 0 ? pt.y + 13 : pt.y - 6);
+          }
+          return '<a class="mstop" href="' + esc(L.pageHref(q)) + '">' +
+            '<circle cx="' + r(pt.x) + '" cy="' + r(pt.y) + '" r="7.5" />' +
+            '<text x="' + r(lx) + '" y="' + r(ly) + '" text-anchor="' + anchor + '">' + esc(stationName(q)) + "</text></a>";
+        }).join("");
+        var end = pts[pts.length - 1];
+        var tx = end[0] + geo.side * 30;
+        var term = '<a class="mterm" href="' + esc(c.key) + '.html">' +
+          '<circle cx="' + end[0] + '" cy="' + end[1] + '" r="19" />' +
+          '<text class="mterm__code" x="' + end[0] + '" y="' + (end[1] + 7) + '" text-anchor="middle">' + esc(LINES[c.key]) + "</text>" +
+          '<text class="mterm__name" x="' + tx + '" y="' + (end[1] + 6) + '" text-anchor="' + (geo.side < 0 ? "end" : "start") + '">' +
+            esc(shortName(c)) + "</text></a>";
+        return '<g class="mline" data-line="' + esc(c.key) + '" style="--i:' + li + '">' +
+          '<path class="mline__path" d="' + d + '" pathLength="1" />' + stopSvg + term + "</g>";
+      }).join("");
+      var hub = '<g class="mhub">' +
+        '<rect x="480" y="278" width="220" height="64" rx="32" />' +
+        '<text class="mhub__t" x="590" y="306" text-anchor="middle">' + (EN ? "Cloudflare network" : "Cloudflare 全球網路") + "</text>" +
+        '<text class="mhub__s" x="590" y="327" text-anchor="middle">' + (EN ? "330+ cities, one platform" : "330+ 城市，同一個平台") + "</text></g>";
+      return '<svg class="metro__svg" viewBox="0 0 ' + MAP_W + " " + MAP_H + '" role="group" aria-label="' +
+        (EN ? "Map of Cloudflare's six product families as metro lines" : "Cloudflare 六大產品家族路線圖") + '">' +
+        lines + hub + "</svg>";
+    }
+    /* narrow screens scroll the map sideways: start with the hub in view */
+    function centerMetro() {
+      var el = document.getElementById("metro");
+      if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+    }
+    /* keep "you are here" visible inside a sideways-scrolling route strip */
+    function centerStrip() {
+      [].forEach.call(pageEl.querySelectorAll(".route"), function (route) {
+        var here = route.querySelector(".is-here");
+        if (!here || route.scrollWidth <= route.clientWidth) return;
+        route.scrollLeft = here.offsetLeft - route.clientWidth / 2 + here.offsetWidth / 2;
+      });
     }
 
     function codeHTML(c) {
@@ -1218,11 +1471,7 @@
       var copyLabel = L.state.lang === "en" ? "Copy" : "複製";
       return '<div class="codeblock">' +
         '<div class="codeblock__bar">' +
-          '<span class="codeblock__dot" style="background:#FF5F56"></span>' +
-          '<span class="codeblock__dot" style="background:#FFBD2E"></span>' +
-          '<span class="codeblock__dot" style="background:#27C93F"></span>' +
-          '<span class="codeblock__lang">' + esc(lang) + "</span>" +
-          '<span style="flex:1"></span>' + name +
+          '<span class="codeblock__lang">' + esc(lang) + "</span>" + name +
           '<button class="copy-btn" type="button" data-copy><span class="material-symbols-rounded">content_copy</span>' + esc(copyLabel) + "</button>" +
         "</div>" +
         "<pre><code>" + esc(c.body || "") + "</code></pre></div>";
@@ -1277,26 +1526,32 @@
     function lessonFoot(p) {
       var EN = L.state.lang === "en";
       var rel = (p.related || []).map(function (rr) {
-        return '<a href="' + esc(rr.slug) + '.html"><span class="material-symbols-rounded">arrow_forward</span>' + esc(t(rr.label)) + "</a>";
+        return '<a href="' + esc(rr.slug) + '.html">' + esc(t(rr.label)) + "</a>";
       }).join("");
       var docs = p.docs ? '<a class="docs-btn" href="' + esc(p.docs) + '" target="_blank" rel="noopener">' +
         '<span class="material-symbols-rounded">menu_book</span>' + (EN ? "Official docs" : "官方文件") +
         '<span class="material-symbols-rounded">open_in_new</span></a>' : "";
-      if (!rel && !docs) return "";
-      return '<div class="lesson-foot">' +
-        (rel ? '<p class="lesson-foot__label">' + (EN ? "Related products" : "相關產品") + "</p><div class=\"related\">" + rel + "</div>" : "") +
+      /* previous / next stop along the whole line */
+      var key = lineKeyOf(p), hop = "";
+      if (key) {
+        var line = productsOf(key), i = -1;
+        for (var k = 0; k < line.length; k++) if (line[k].slug === p.slug) i = k;
+        var prev = i > 0 ? line[i - 1] : null, next = i >= 0 && i < line.length - 1 ? line[i + 1] : null;
+        if (prev || next) {
+          hop = '<nav class="hop" data-line="' + esc(key) + '" aria-label="' + (EN ? "Along this line" : "沿著這條線") + '">' +
+            (prev ? '<a class="hop__prev" href="' + esc(L.pageHref(prev)) + '"><span class="hop__dir">' +
+              '<span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>' + (EN ? "Previous stop" : "上一站") +
+              '</span><span class="hop__name">' + esc(t(prev.title)) + "</span></a>" : "<span></span>") +
+            (next ? '<a class="hop__next" href="' + esc(L.pageHref(next)) + '"><span class="hop__dir">' + (EN ? "Next stop" : "下一站") +
+              '<span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></span>' +
+              '<span class="hop__name">' + esc(t(next.title)) + "</span></a>" : "") +
+          "</nav>";
+        }
+      }
+      if (!rel && !docs && !hop) return "";
+      return '<div class="lesson-foot">' + hop +
+        (rel ? '<div class="related"><p class="related__label">' + (EN ? "Related products" : "相關產品") + "</p>" + rel + "</div>" : "") +
         docs + "</div>";
-    }
-
-    function revealAll() {
-      var els = [].slice.call(pageEl.querySelectorAll(".reveal"));
-      if (!els.length) return;
-      if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("is-in"); }); return; }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); } });
-      }, { threshold: 0.08 });
-      els.forEach(function (el) { io.observe(el); });
-      teardowns.push(function () { io.disconnect(); });
     }
 
     function wireCopy() {
@@ -1368,11 +1623,13 @@
             startOnLoad: false, securityLevel: "strict", logLevel: "fatal",
             theme: dark ? "dark" : "default",
             themeVariables: {
-              fontFamily: '"Roboto Flex","Noto Sans TC",sans-serif',
-              primaryColor: dark ? "#3a2a1d" : "#FFDBC8",
-              primaryBorderColor: "#F6821F",
-              primaryTextColor: dark ? "#EFE0D6" : "#211A15",
-              lineColor: dark ? "#A08D81" : "#85736A"
+              fontFamily: '"Archivo","Noto Sans TC",sans-serif',
+              primaryColor: dark ? "#1E2128" : "#FFFFFF",
+              primaryBorderColor: dark ? "#C9CCD3" : "#16181D",
+              primaryTextColor: dark ? "#ECEDEF" : "#16181D",
+              secondaryColor: dark ? "#262A33" : "#F3F4F6",
+              tertiaryColor: dark ? "#171A20" : "#FAFAFB",
+              lineColor: dark ? "#8A90A0" : "#4A4F5C"
             }
           });
         } catch (e) {}
@@ -1431,10 +1688,14 @@
       var p = L.currentPage();
       if (!p) { pageEl.innerHTML = '<p class="empty">No page data.</p>'; return; }
       var fn = RENDERERS[p.layout] || RENDERERS.gallery;
+      var key = lineKeyOf(p);
       pageEl.className = "page page--" + p.layout;
-      pageEl.innerHTML = fn(p);
+      /* the wrapper sits INSIDE <main>, so the prerendered static copy keeps
+         its layout class and line colour even without JS */
+      pageEl.innerHTML = '<div class="pg pg--' + esc(p.layout) + '"' + (key ? ' data-line="' + key + '"' : "") + ">" + fn(p) + "</div>";
       var w = WIRE[p.layout];
       if (w) w(p);
+      centerStrip();
     }
 
     if (typeof L.onTheme === "function") L.onTheme(function () { renderMermaid(); });
